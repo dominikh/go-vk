@@ -14,7 +14,7 @@ Package `vk` provides bindings for the Vulkan graphics API.
 We use a number of build tags to guard platform-specific functionality.
 
 | Tag  | Description                             |
-|------+-----------------------------------------|
+|------|-----------------------------------------|
 | xlib | Include support for VK_KHR_xlib_surface |
 
 ## Comparison to github.com/vulkan-go/vulkan
