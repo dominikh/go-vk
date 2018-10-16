@@ -1,5 +1,9 @@
 # Vulkan Go bindings
 
+Package `vk` provides bindings for the Vulkan graphics API.
+
+**This package is in its very early stages. It is not in a usable state. This repository is a mirror of local development efforts.**
+
 ## Supported extensions
 
 - VK_KHR_surface
