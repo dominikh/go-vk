@@ -23,6 +23,11 @@ type ImageUsageFlags C.VkImageUsageFlags
 type Format C.VkFormat
 type ColorSpaceKHR C.VkColorSpaceKHR
 type PresentModeKHR C.VkPresentModeKHR
+type CommandPoolCreateFlags C.VkCommandPoolCreateFlags
+type CommandPoolTrimFlags C.VkCommandPoolTrimFlags
+type CommandPoolResetFlags C.VkCommandPoolResetFlags
+type CommandBufferLevel C.VkCommandBufferLevel
+type CommandBufferResetFlags = C.VkCommandBufferResetFlags
 
 const (
 	DEVICE_QUEUE_CREATE_PROTECTED_BIT DeviceQueueCreateFlags = C.VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT
@@ -773,19 +778,19 @@ const (
 )
 
 const (
-	// VK_PRESENT_MODE_IMMEDIATE_KHR specifies that the presentation engine does not wait for a vertical blanking period to update the current image,
+	// PresentModeImmediateKHR specifies that the presentation engine does not wait for a vertical blanking period to update the current image,
 	// meaning this mode may result in visible tearing.
 	// No internal queuing of presentation requests is needed, as the requests are applied immediately.
 	PresentModeImmediateKHR PresentModeKHR = C.VK_PRESENT_MODE_IMMEDIATE_KHR
 
-	// VK_PRESENT_MODE_MAILBOX_KHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
+	// PresentModeMailboxKHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
 	// Tearing cannot be observed. An internal single-entry queue is used to hold pending presentation requests.
 	// If the queue is full when a new presentation request is received, the new request replaces the existing entry,
 	// and any images associated with the prior entry become available for re-use by the application.
 	// One request is removed from the queue and processed during each vertical blanking period in which the queue is non-empty.
 	PresentModeMailboxKHR PresentModeKHR = C.VK_PRESENT_MODE_MAILBOX_KHR
 
-	// VK_PRESENT_MODE_FIFO_KHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
+	// PresentModeFifoKHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
 	// Tearing cannot be observed. An internal queue is used to hold pending presentation requests.
 	// New requests are appended to the end of the queue,
 	// and one request is removed from the beginning of the queue
@@ -794,7 +799,7 @@ const (
 	// This is the only value of presentMode that is required to be supported.
 	PresentModeFifoKHR PresentModeKHR = C.VK_PRESENT_MODE_FIFO_KHR
 
-	// VK_PRESENT_MODE_FIFO_RELAXED_KHR specifies that the presentation engine generally waits for the next vertical blanking period to update the current image.
+	// PresentModeFifoRelaxedKHR specifies that the presentation engine generally waits for the next vertical blanking period to update the current image.
 	// If a vertical blanking period has already passed since the last update of the current image
 	// then the presentation engine does not wait for another vertical blanking period for the update,
 	// meaning this mode may result in visible tearing in this case.
@@ -807,14 +812,14 @@ const (
 	// or after each vertical blanking period in which the queue is non-empty.
 	PresentModeFifoRelaxedKHR PresentModeKHR = C.VK_PRESENT_MODE_FIFO_RELAXED_KHR
 
-	// VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR specifies that the presentation engine and application have concurrent access to a single image,
+	// PresentModeSharedDemandRefreshKHR specifies that the presentation engine and application have concurrent access to a single image,
 	// which is referred to as a shared presentable image.
 	// The presentation engine is only required to update the current image after a new presentation request is received.
 	// Therefore the application must make a presentation request whenever an update is required.
 	// However, the presentation engine may update the current image at any point, meaning this mode may result in visible tearing.
 	PresentModeSharedDemandRefreshKHR PresentModeKHR = C.VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR
 
-	// VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR specifies that the presentation engine and application have concurrent access to a single image,
+	// PresentModeSharedContinuousRefreshKHR specifies that the presentation engine and application have concurrent access to a single image,
 	// which is referred to as a shared presentable image.
 	// The presentation engine periodically updates the current image on its regular refresh cycle.
 	// The application is only required to make one initial presentation request,
@@ -823,6 +828,45 @@ const (
 	// but this does not guarantee the timing of when it will be updated.
 	// This mode may result in visible tearing if rendering to the image is not timed correctly.
 	PresentModeSharedContinuousRefreshKHR PresentModeKHR = C.VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR
+)
+
+const (
+	// CommandPoolCreateTransientBit specifies that command buffers allocated from the pool will be short-lived,
+	// meaning that they will be reset or freed in a relatively short timeframe.
+	// This flag may be used by the implementation to control memory allocation behavior within the pool.
+	CommandPoolCreateTransientBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_TRANSIENT_BIT
+
+	// CommandPoolCreateResetCommandBufferBit allows any command buffer allocated from a pool
+	// to be individually reset to the initial state;
+	// either by calling vkResetCommandBuffer, or via the implicit reset when calling vkBeginCommandBuffer.
+	// If this flag is not set on a pool, then vkResetCommandBuffer must not be called for any command buffer allocated from that pool.
+	CommandPoolCreateResetCommandBufferBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT
+
+	// CommandPoolCreateProtectedBit specifies that command buffers allocated from the pool are protected command buffers.
+	// If the protected memory feature is not enabled, the VK_COMMAND_POOL_CREATE_PROTECTED_BIT bit of flags must not be set.
+	CommandPoolCreateProtectedBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_PROTECTED_BIT
+)
+
+const (
+	// CommandlPoolResetReleaseResourcesBit specifies that resetting a command pool
+	// recycles all of the resources from the command pool back to the system.
+	CommandlPoolResetReleaseResourcesBit CommandPoolResetFlags = C.VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT
+)
+
+const (
+	// CommandBufferLevelPrimary specifies a primary command buffer.
+	CommandBufferLevelPrimary CommandBufferLevel = C.VK_COMMAND_BUFFER_LEVEL_PRIMARY
+
+	// CommandBufferLevelSecondary specifies a secondary command buffer.
+	CommandBufferLevelSecondary CommandBufferLevel = C.VK_COMMAND_BUFFER_LEVEL_SECONDARY
+)
+
+const (
+	// CommandBufferResetReleaseResourcesBit specifies that most or all memory resources
+	// currently owned by the command buffer should be returned to the parent command pool.
+	// If this flag is not set, then the command buffer may hold onto memory resources
+	// and reuse them when recording commands. commandBuffer is moved to the initial state.
+	CommandBufferResetReleaseResourcesBit CommandBufferResetFlags = C.VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT
 )
 
 func (flags DeviceQueueCreateFlags) String() string {

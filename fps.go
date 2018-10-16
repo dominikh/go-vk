@@ -30,6 +30,12 @@ const (
 
 const (
 	vkGetDeviceQueue = iota
+	vkCreateCommandPool
+	vkTrimCommandPool
+	vkResetCommandPool
+	vkAllocateCommandBuffers
+	vkResetCommandBuffer
+	vkFreeCommandBuffers
 
 	deviceMaxPFN
 )
@@ -57,5 +63,11 @@ var instanceFpNames = [...]string{
 }
 
 var deviceFpNames = [...]string{
-	vkGetDeviceQueue: "vkGetDeviceQueue",
+	vkGetDeviceQueue:         "vkGetDeviceQueue",
+	vkCreateCommandPool:      "vkCreateCommandPool",
+	vkTrimCommandPool:        "vkTrimCommandPool",
+	vkResetCommandPool:       "vkResetCommandPool",
+	vkAllocateCommandBuffers: "vkAllocateCommandBuffers",
+	vkResetCommandBuffer:     "vkResetCommandBuffer",
+	vkFreeCommandBuffers:     "vkFreeCommandBuffers",
 }

@@ -18,6 +18,12 @@ package vk
 // VkResult domVkCreateDevice(PFN_vkCreateDevice fp, VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDevice* pDevice);
 // void     domVkGetDeviceQueue(PFN_vkGetDeviceQueue fp, VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue);
 // PFN_vkVoidFunction domVkGetDeviceProcAddr(PFN_vkGetDeviceProcAddr fp, VkDevice device, const char* pName);
+// VkResult domVkCreateCommandPool(PFN_vkCreateCommandPool fp, VkDevice device, const VkCommandPoolCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkCommandPool* pCommandPool);
+// void domVkTrimCommandPool(PFN_vkTrimCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolTrimFlags flags);
+// VkResult domVkResetCommandPool(PFN_vkResetCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
+// VkResult domVkAllocateCommandBuffers(PFN_vkAllocateCommandBuffers fp, VkDevice device, const VkCommandBufferAllocateInfo* pAllocateInfo, VkCommandBuffer* pCommandBuffers);
+// VkResult domVkResetCommandBuffer(PFN_vkResetCommandBuffer fp, VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
+// void domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
 import "C"
 import (
 	"fmt"
@@ -770,11 +776,101 @@ func (dev *Device) Queue(family, index uint32) *Queue {
 	return &Queue{hnd: out}
 }
 
+type CommandPool struct {
+	hnd C.VkCommandPool
+	dev *Device
+}
+
+func (pool *CommandPool) String() string {
+	return fmt.Sprintf("VkCommandPool(%p)", pool.hnd)
+}
+
+type CommandBuffer struct {
+	hnd  C.VkCommandBuffer
+	pool *CommandPool
+}
+
+func (buf *CommandBuffer) String() string {
+	return fmt.Sprintf("VkCommandBuffer(%p)", buf.hnd)
+}
+
+func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
+	res := Result(C.domVkResetCommandBuffer(buf.pool.dev.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
+func (buf *CommandBuffer) Free() {
+	C.domVkFreeCommandBuffers(buf.pool.dev.fps[vkFreeCommandBuffers], buf.pool.dev.hnd, buf.pool.hnd, 1, &buf.hnd)
+}
+
+type CommandPoolCreateInfo struct {
+	Next             unsafe.Pointer
+	Flags            CommandPoolCreateFlags
+	QueueFamilyIndex uint32
+}
+
+func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (*CommandPool, error) {
+	// TODO(dh): support callbacks
+	ptr := (*C.VkCommandPoolCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandPoolCreateInfo{}))))
+	defer C.free(unsafe.Pointer(ptr))
+	ptr.sType = StructureTypeCommandPoolCreateInfo
+	ptr.pNext = info.Next
+	ptr.flags = C.VkCommandPoolCreateFlags(info.Flags)
+	ptr.queueFamilyIndex = C.uint32_t(info.QueueFamilyIndex)
+	var pool C.VkCommandPool
+	res := Result(C.domVkCreateCommandPool(dev.fps[vkCreateCommandPool], dev.hnd, ptr, nil, &pool))
+	if res != Success {
+		return nil, res
+	}
+	return &CommandPool{pool, dev}, nil
+}
+
+func (pool *CommandPool) Trim(flags CommandPoolTrimFlags) {
+	C.domVkTrimCommandPool(pool.dev.fps[vkTrimCommandPool], pool.dev.hnd, pool.hnd, C.VkCommandPoolTrimFlags(flags))
+}
+
 func vkBool(b bool) C.VkBool32 {
 	if b {
 		return C.VK_TRUE
 	}
 	return C.VK_FALSE
+}
+
+func (pool *CommandPool) Reset(flags CommandPoolResetFlags) error {
+	res := Result(C.domVkResetCommandPool(pool.dev.fps[vkResetCommandPool], pool.dev.hnd, pool.hnd, C.VkCommandPoolResetFlags(flags)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
+type CommandBufferAllocateInfo struct {
+	Next               unsafe.Pointer
+	Level              CommandBufferLevel
+	CommandBufferCount uint32
+}
+
+func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
+	ptr := (*C.VkCommandBufferAllocateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferAllocateInfo{}))))
+	defer C.free(unsafe.Pointer(ptr))
+	ptr.sType = StructureTypeCommandBufferAllocateInfo
+	ptr.pNext = info.Next
+	ptr.commandPool = pool.hnd
+	ptr.level = C.VkCommandBufferLevel(info.Level)
+	ptr.commandBufferCount = C.uint32_t(info.CommandBufferCount)
+	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
+	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, &bufs[0]))
+	if res != Success {
+		return nil, res
+	}
+	out := make([]*CommandBuffer, len(bufs))
+	for i, buf := range bufs {
+		out[i] = &CommandBuffer{hnd: buf, pool: pool}
+	}
+	return out, nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
