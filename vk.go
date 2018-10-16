@@ -288,17 +288,24 @@ type PhysicalDeviceSparseProperties struct {
 }
 
 type PhysicalDeviceProperties struct {
-	APIVersion        uint32
-	DriverVersion     uint32
-	VendorID          uint32
-	DeviceID          uint32
-	DeviceType        PhysicalDeviceType
-	DeviceName        string
+	// The version of Vulkan supported by the device.
+	APIVersion uint32
+	// The vendor-specified version of the driver.
+	DriverVersion uint32
+	// A unique identifier for the vendor of the physical device.
+	VendorID uint32
+	// a unique identifier for the physical device among devices available from the vendor.
+	DeviceID   uint32
+	DeviceType PhysicalDeviceType
+	DeviceName string
+	// A universally unique identifier for the device.
 	PipelineCacheUUID []byte
-	Limits            PhysicalDeviceLimits
-	SparseProperties  PhysicalDeviceSparseProperties
+	// Device-specific limits of the physical device.
+	Limits           PhysicalDeviceLimits
+	SparseProperties PhysicalDeviceSparseProperties
 }
 
+// Properties returns general properties of the physical device.
 func (dev *PhysicalDevice) Properties() *PhysicalDeviceProperties {
 	var props C.VkPhysicalDeviceProperties
 	C.domVkGetPhysicalDeviceProperties(dev.instance.fps[vkGetPhysicalDeviceProperties], dev.hnd, &props)

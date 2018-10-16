@@ -29,11 +29,23 @@ const (
 )
 
 const (
-	QueueGraphicsBit      QueueFlags = C.VK_QUEUE_GRAPHICS_BIT
-	QueueComputeBit       QueueFlags = C.VK_QUEUE_COMPUTE_BIT
-	QueueTransferBit      QueueFlags = C.VK_QUEUE_TRANSFER_BIT
+	// QueueGraphicsBit specifies that queues in this queue family support graphics operations.
+	QueueGraphicsBit QueueFlags = C.VK_QUEUE_GRAPHICS_BIT
+
+	// QueueComputeBit specifies that queues in this queue family support compute operations.
+	QueueComputeBit QueueFlags = C.VK_QUEUE_COMPUTE_BIT
+
+	// QueueTransferBit specifies that queues in this queue family support transfer operations.
+	QueueTransferBit QueueFlags = C.VK_QUEUE_TRANSFER_BIT
+
+	// QueueSparseBindingBit specifies that queues in this queue family support sparse memory management operations.
+	// If any of the sparse resource features are enabled, then at least one queue family must support this bit.
 	QueueSparseBindingBit QueueFlags = C.VK_QUEUE_SPARSE_BINDING_BIT
-	QueueProtectedBit     QueueFlags = C.VK_QUEUE_PROTECTED_BIT
+
+	// If QueueProtectedBit is set, then the queues in this queue family support the DeviceQueueCreateProtectedBit bit.
+	// If the protected memory physical device feature is supported,
+	// then at least one queue family of at least one physical device exposed by the implementation must support this bit.
+	QueueProtectedBit QueueFlags = C.VK_QUEUE_PROTECTED_BIT
 )
 
 const (
