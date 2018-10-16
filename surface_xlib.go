@@ -1,3 +1,6 @@
+// Copyright (c) 2015-2018 Khronos Group
+// Copyright (c) 2018 Dominik Honnef
+
 // +build xlib
 
 package vk

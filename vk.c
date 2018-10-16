@@ -1,3 +1,5 @@
+// Copyright (c) 2018 Dominik Honnef
+
 #include <vulkan/vulkan_core.h>
 
 VkResult domVkCreateInstance(PFN_vkCreateInstance fp, const VkInstanceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkInstance* pInstance) {

@@ -1,3 +1,5 @@
+// Copyright (c) 2018 Dominik Honnef
+
 // +build xlib
 
 #include <X11/Xlib.h>
