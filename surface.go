@@ -53,7 +53,7 @@ func (dev *PhysicalDevice) SurfaceCapabilitiesKHR(surface *Surface) (*SurfaceCap
 func (dev *PhysicalDevice) SurfaceFormatsKHR(surface *Surface) ([]SurfaceFormatKHR, Result) {
 	var count C.uint32_t
 	res := Result(C.domVkGetPhysicalDeviceSurfaceFormatsKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceFormatsKHR], dev.hnd, surface.hnd, &count, nil))
-	if res != SUCCESS {
+	if res != Success {
 		return nil, res
 	}
 	out := make([]SurfaceFormatKHR, count)
@@ -64,7 +64,7 @@ func (dev *PhysicalDevice) SurfaceFormatsKHR(surface *Surface) ([]SurfaceFormatK
 func (dev *PhysicalDevice) SurfacePresentModesKHR(surface *Surface) ([]PresentModeKHR, Result) {
 	var count C.uint32_t
 	res := Result(C.domVkGetPhysicalDeviceSurfacePresentModesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfacePresentModesKHR], dev.hnd, surface.hnd, &count, nil))
-	if res != SUCCESS {
+	if res != Success {
 		return nil, res
 	}
 	out := make([]PresentModeKHR, count)

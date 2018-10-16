@@ -27,7 +27,7 @@ func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (*Surf
 	// TODO(dh): support custom allocator
 	cInfo := (*C.VkXlibSurfaceCreateInfoKHR)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkXlibSurfaceCreateInfoKHR{}))))
 	defer C.free(unsafe.Pointer(cInfo))
-	cInfo.sType = STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR
+	cInfo.sType = StructureTypeXlibSurfaceCreateInfoKHR
 	cInfo.pNext = info.Next
 	cInfo.dpy = info.Dpy
 	cInfo.window = info.Window

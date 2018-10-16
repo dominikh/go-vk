@@ -83,7 +83,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	var free1, free2 func()
 
 	ptr := (*C.VkInstanceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkInstanceCreateInfo{}))))
-	ptr.sType = STRUCTURE_TYPE_INSTANCE_CREATE_INFO
+	ptr.sType = StructureTypeInstanceCreateInfo
 	ptr.pNext = info.Next
 	ptr.enabledLayerCount = C.uint32_t(len(info.EnabledLayerNames))
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
@@ -94,7 +94,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	defer free2()
 	if info.ApplicationInfo != nil {
 		ptr.pApplicationInfo = (*C.VkApplicationInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkApplicationInfo{}))))
-		ptr.pApplicationInfo.sType = STRUCTURE_TYPE_APPLICATION_INFO
+		ptr.pApplicationInfo.sType = StructureTypeApplicationInfo
 		ptr.pApplicationInfo.pNext = info.ApplicationInfo.Next
 		ptr.pApplicationInfo.pApplicationName = C.CString(info.ApplicationInfo.ApplicationName)
 		ptr.pApplicationInfo.applicationVersion = C.uint32_t(info.ApplicationInfo.ApplicationVersion)
@@ -108,7 +108,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 
 	var instance C.VkInstance
 	res := Result(C.domVkCreateInstance(vkCreateInstance, ptr, nil, &instance))
-	if res != SUCCESS {
+	if res != Success {
 		return nil, res
 	}
 
@@ -140,13 +140,13 @@ func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
 		devs = (*C.VkPhysicalDevice)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(C.VkPhysicalDevice(nil)))))
 		defer C.free(unsafe.Pointer(devs))
 		res := Result(C.domVkEnumeratePhysicalDevices(ins.fps[vkEnumeratePhysicalDevices], ins.hnd, &count, devs))
-		if res != SUCCESS && res != INCOMPLETE {
+		if res != Success && res != Incomplete {
 			return nil, res
 		}
-		if res == SUCCESS {
+		if res == Success {
 			break
 		}
-		if res == INCOMPLETE {
+		if res == Incomplete {
 			continue
 		}
 		panic(fmt.Sprintf("unexpected result %s", res))
@@ -623,7 +623,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	// TODO(dh): support custom allocators
 	var free1 func()
 	ptr := (*C.VkDeviceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkDeviceCreateInfo{}))))
-	ptr.sType = STRUCTURE_TYPE_DEVICE_CREATE_INFO
+	ptr.sType = StructureTypeDeviceCreateInfo
 	ptr.pNext = info.Next
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
 	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(C.calloc(C.size_t(len(info.QueueCreateInfos)), C.size_t(unsafe.Sizeof(C.VkDeviceQueueCreateInfo{}))))
@@ -631,7 +631,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	arr := (*[1 << 31]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
 		arr[i] = C.VkDeviceQueueCreateInfo{
-			sType:            STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+			sType:            StructureTypeDeviceQueueCreateInfo,
 			pNext:            obj.Next,
 			flags:            C.VkDeviceQueueCreateFlags(obj.Flags),
 			queueFamilyIndex: C.uint32_t(obj.QueueFamilyIndex),
@@ -703,7 +703,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	}
 	var out C.VkDevice
 	res := Result(C.domVkCreateDevice(dev.instance.fps[vkCreateDevice], dev.hnd, ptr, nil, &out))
-	if res != SUCCESS {
+	if res != Success {
 		return nil, res
 	}
 	ldev := &Device{
@@ -712,7 +712,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	}
 	ldev.init()
 
-	return ldev, SUCCESS
+	return ldev, Success
 }
 
 type Device struct {
