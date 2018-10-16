@@ -1,0 +1,176 @@
+List of functions I'm aware of and whether they've been implemented
+yet. This list is not an exhaustive list of all functions in Vulkan,
+only those I've seen so far. I'm still reading the specification.
+
+For now, only core functions will be considered. KHR extensions will
+follow, then vendor extensions.
+
+- [x] vkTrimCommandPool
+- [x] vkResetCommandPool
+- [x] vkGetPhysicalDeviceQueueFamilyProperties
+- [x] vkGetPhysicalDeviceProperties
+- [x] vkGetInstanceProcAddr
+- [x] vkGetDeviceQueue
+- [x] vkGetDeviceProcAddr
+- [x] vkFreeCommandBuffers
+- [x] vkEnumeratePhysicalDevices
+- [x] vkCreateInstance
+- [x] vkCreateDevice
+- [x] vkCreateCommandPool
+- [x] vkAllocateCommandBuffers
+- [x] VkResetCommandBuffer
+- [ ] vkWaitForFences
+- [ ] vkUpdateDescriptorSets
+- [ ] vkUpdateDescriptorSetWithTemplate
+- [ ] vkUnmapMemory
+- [ ] vkSetEvent
+- [ ] vkResetFences
+- [ ] vkResetEvent
+- [ ] vkResetDescriptorPool
+- [ ] vkQueueWaitIdle
+- [ ] vkQueueSubmit
+- [ ] vkQueueSubmit
+- [ ] vkQueueBindSparse
+- [ ] vkMergePipelineCaches
+- [ ] vkMapMemory
+- [ ] vkInvalidateMappedMemoryRanges
+- [ ] vkGetRenderAreaGranularity
+- [ ] vkGetQueryPoolResults
+- [ ] vkGetPipelineCacheData
+- [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
+- [ ] vkGetPhysicalDeviceSparseImageFormatProperties
+- [ ] vkGetPhysicalDeviceQueueFamilyProperties2
+- [ ] vkGetPhysicalDeviceProperties2
+- [ ] vkGetPhysicalDeviceMemoryProperties2
+- [ ] vkGetPhysicalDeviceMemoryProperties
+- [ ] vkGetPhysicalDeviceImageFormatProperties2
+- [ ] vkGetPhysicalDeviceImageFormatProperties
+- [ ] vkGetPhysicalDeviceFormatProperties2
+- [ ] vkGetPhysicalDeviceFormatProperties
+- [ ] vkGetPhysicalDeviceFeatures2
+- [ ] vkGetPhysicalDeviceFeatures
+- [ ] vkGetPhysicalDeviceExternalSemaphoreProperties
+- [ ] vkGetPhysicalDeviceExternalFenceProperties
+- [ ] vkGetPhysicalDeviceExternalBufferProperties
+- [ ] vkGetImageSubresourceLayout
+- [ ] vkGetImageSparseMemoryRequirements2
+- [ ] vkGetImageSparseMemoryRequirements
+- [ ] vkGetImageMemoryRequirements2
+- [ ] vkGetImageMemoryRequirements
+- [ ] vkGetFenceStatus
+- [ ] vkGetEventStatus
+- [ ] vkGetDeviceQueue2
+- [ ] vkGetDeviceMemoryCommitment
+- [ ] vkGetDeviceGroupPeerMemoryFeatures
+- [ ] vkGetDescriptorSetLayoutSupport
+- [ ] vkGetBufferMemoryRequirements2
+- [ ] vkGetBufferMemoryRequirements
+- [ ] vkFreeMemory
+- [ ] vkFreeDescriptorSets
+- [ ] vkFlushMappedMemoryRanges
+- [ ] vkEnumeratePhysicalDeviceGroups
+- [ ] vkEnumerateInstanceVersion
+- [ ] vkEnumerateInstanceLayerProperties
+- [ ] vkEnumerateInstanceExtensionProperties
+- [ ] vkEnumerateDeviceLayerProperties
+- [ ] vkEndCommandBuffer
+- [ ] vkEndCommandBuffer
+- [ ] vkDeviceWaitIdle
+- [ ] vkDeviceWaitIdle
+- [ ] vkDestroyShaderModule
+- [ ] vkDestroySemaphore
+- [ ] vkDestroySamplerYcbcrConversion
+- [ ] vkDestroySampler
+- [ ] vkDestroyRenderPass
+- [ ] vkDestroyQueryPool
+- [ ] vkDestroyPipelineLayout
+- [ ] vkDestroyPipelineCache
+- [ ] vkDestroyPipeline
+- [ ] vkDestroyInstance
+- [ ] vkDestroyImageView
+- [ ] vkDestroyImage
+- [ ] vkDestroyFramebuffer
+- [ ] vkDestroyFence
+- [ ] vkDestroyEvent
+- [ ] vkDestroyDevice
+- [ ] vkDestroyDescriptorUpdateTemplate
+- [ ] vkDestroyDescriptorSetLayout
+- [ ] vkDestroyDescriptorPool
+- [ ] vkDestroyCommandPool
+- [ ] vkDestroyBufferView
+- [ ] vkDestroyBuffer
+- [ ] vkCreateShaderModule
+- [ ] vkCreateSemaphore
+- [ ] vkCreateSamplerYcbcrConversion
+- [ ] vkCreateSampler
+- [ ] vkCreateRenderPass
+- [ ] vkCreateQueryPool
+- [ ] vkCreatePipelineLayout
+- [ ] vkCreatePipelineCache
+- [ ] vkCreateImageView
+- [ ] vkCreateImage
+- [ ] vkCreateGraphicsPipelines
+- [ ] vkCreateFramebuffer
+- [ ] vkCreateFence
+- [ ] vkCreateEvent
+- [ ] vkCreateDescriptorUpdateTemplate
+- [ ] vkCreateDescriptorSetLayout
+- [ ] vkCreateDescriptorPool
+- [ ] vkCreateComputePipelines
+- [ ] vkCreateBufferView
+- [ ] vkCreateBuffer
+- [ ] vkCmdWriteTimestamp
+- [ ] vkCmdWaitEvents
+- [ ] vkCmdUpdateBuffer
+- [ ] vkCmdSetViewport
+- [ ] vkCmdSetStencilWriteMask
+- [ ] vkCmdSetStencilReference
+- [ ] vkCmdSetStencilCompareMask
+- [ ] vkCmdSetScissor
+- [ ] vkCmdSetLineWidth
+- [ ] vkCmdSetEvent
+- [ ] vkCmdSetDeviceMask
+- [ ] vkCmdSetDepthBounds
+- [ ] vkCmdSetDepthBias
+- [ ] vkCmdSetBlendConstants
+- [ ] vkCmdResolveImage
+- [ ] vkCmdResetQueryPool
+- [ ] vkCmdResetEvent
+- [ ] vkCmdPushConstants
+- [ ] vkCmdPipelineBarrier
+- [ ] vkCmdNextSubpass
+- [ ] vkCmdFillBuffer
+- [ ] vkCmdExecuteCommands
+- [ ] vkCmdExecuteCommands
+- [ ] vkCmdEndRenderPass
+- [ ] vkCmdEndQuery
+- [ ] vkCmdDrawIndirect
+- [ ] vkCmdDrawIndexedIndirect
+- [ ] vkCmdDrawIndexed
+- [ ] vkCmdDraw
+- [ ] vkCmdDispatchIndirect
+- [ ] vkCmdDispatchBase
+- [ ] vkCmdDispatch
+- [ ] vkCmdCopyQueryPoolResults
+- [ ] vkCmdCopyImageToBuffer
+- [ ] vkCmdCopyImage
+- [ ] vkCmdCopyBufferToImage
+- [ ] vkCmdCopyBuffer
+- [ ] vkCmdClearDepthStencilImage
+- [ ] vkCmdClearColorImage
+- [ ] vkCmdClearAttachments
+- [ ] vkCmdBlitImage
+- [ ] vkCmdBindVertexBuffers
+- [ ] vkCmdBindPipeline
+- [ ] vkCmdBindIndexBuffer
+- [ ] vkCmdBindDescriptorSets
+- [ ] vkCmdBeginRenderPass
+- [ ] vkCmdBeginQuery
+- [ ] vkBindImageMemory2
+- [ ] vkBindImageMemory
+- [ ] vkBindBufferMemory2
+- [ ] vkBindBufferMemory
+- [ ] vkBeginCommandBuffer
+- [ ] vkBeginCommandBuffer
+- [ ] vkAllocateMemory
+- [ ] vkAllocateDescriptorSets
