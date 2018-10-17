@@ -785,25 +785,10 @@ func (pool *CommandPool) String() string {
 	return fmt.Sprintf("VkCommandPool(%p)", pool.hnd)
 }
 
-type CommandBuffer struct {
-	hnd  C.VkCommandBuffer
-	pool *CommandPool
-}
+type CommandBuffer C.struct_VkCommandBuffer_T
 
 func (buf *CommandBuffer) String() string {
-	return fmt.Sprintf("VkCommandBuffer(%p)", buf.hnd)
-}
-
-func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
-	res := Result(C.domVkResetCommandBuffer(buf.pool.dev.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
-	if res != Success {
-		return res
-	}
-	return nil
-}
-
-func (buf *CommandBuffer) Free() {
-	C.domVkFreeCommandBuffers(buf.pool.dev.fps[vkFreeCommandBuffers], buf.pool.dev.hnd, buf.pool.hnd, 1, &buf.hnd)
+	return fmt.Sprintf("VkCommandBuffer(%p)", buf)
 }
 
 type CommandPoolCreateInfo struct {
@@ -868,9 +853,21 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	}
 	out := make([]*CommandBuffer, len(bufs))
 	for i, buf := range bufs {
-		out[i] = &CommandBuffer{hnd: buf, pool: pool}
+		out[i] = (*CommandBuffer)((*C.struct_VkCommandBuffer_T)(buf))
 	}
 	return out, nil
+}
+
+func (pool *CommandPool) FreeBuffers(bufs []*CommandBuffer) {
+	C.domVkFreeCommandBuffers(pool.dev.fps[vkFreeCommandBuffers], pool.dev.hnd, pool.hnd, C.uint32_t(len(bufs)), (*C.VkCommandBuffer)(unsafe.Pointer(&bufs[0])))
+}
+
+func (pool *CommandPool) ResetBuffer(buf *CommandBuffer, flags CommandBufferResetFlags) error {
+	res := Result(C.domVkResetCommandBuffer(pool.dev.fps[vkResetCommandBuffer], (*C.struct_VkCommandBuffer_T)(buf), C.VkCommandBufferResetFlags(flags)))
+	if res != Success {
+		return res
+	}
+	return nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
