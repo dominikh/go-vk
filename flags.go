@@ -1004,3 +1004,35 @@ func (flags ImageUsageFlags) String() string {
 	}
 	return strings.Join(out, " | ")
 }
+
+func (flags CommandPoolCreateFlags) String() string {
+	var out []string
+	if (flags & CommandPoolCreateTransientBit) != 0 {
+		out = append(out, "CommandPoolCreateTransientBit")
+	}
+	if (flags & CommandPoolCreateResetCommandBufferBit) != 0 {
+		out = append(out, "CommandPoolCreateResetCommandBufferBit")
+	}
+	if (flags & CommandPoolCreateProtectedBit) != 0 {
+		out = append(out, "CommandPoolCreateProtectedBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags CommandPoolTrimFlags) String() string { return "" }
+
+func (flags CommandPoolResetFlags) String() string {
+	var out []string
+	if (flags & CommandlPoolResetReleaseResourcesBit) != 0 {
+		out = append(out, "CommandlPoolResetReleaseResourcesBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags CommandBufferResetFlags) String() string {
+	var out []string
+	if (flags & CommandBufferResetReleaseResourcesBit) != 0 {
+		out = append(out, "CommandBufferResetReleaseResourcesBit")
+	}
+	return strings.Join(out, " | ")
+}
