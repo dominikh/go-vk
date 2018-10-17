@@ -9,6 +9,7 @@ follow, then vendor extensions.
 - [x] vkResetCommandPool
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
 - [x] vkGetPhysicalDeviceProperties
+- [x] vkGetPhysicalDeviceFeatures
 - [x] vkGetInstanceProcAddr
 - [x] vkGetDeviceQueue
 - [x] vkGetDeviceProcAddr
@@ -48,7 +49,6 @@ follow, then vendor extensions.
 - [ ] vkGetPhysicalDeviceFormatProperties2
 - [ ] vkGetPhysicalDeviceFormatProperties
 - [ ] vkGetPhysicalDeviceFeatures2
-- [ ] vkGetPhysicalDeviceFeatures
 - [ ] vkGetPhysicalDeviceExternalSemaphoreProperties
 - [ ] vkGetPhysicalDeviceExternalFenceProperties
 - [ ] vkGetPhysicalDeviceExternalBufferProperties
@@ -141,7 +141,6 @@ follow, then vendor extensions.
 - [ ] vkCmdNextSubpass
 - [ ] vkCmdFillBuffer
 - [ ] vkCmdExecuteCommands
-- [ ] vkCmdExecuteCommands
 - [ ] vkCmdEndRenderPass
 - [ ] vkCmdEndQuery
 - [ ] vkCmdDrawIndirect
@@ -170,7 +169,6 @@ follow, then vendor extensions.
 - [ ] vkBindImageMemory
 - [ ] vkBindBufferMemory2
 - [ ] vkBindBufferMemory
-- [ ] vkBeginCommandBuffer
 - [ ] vkBeginCommandBuffer
 - [ ] vkAllocateMemory
 - [ ] vkAllocateDescriptorSets
