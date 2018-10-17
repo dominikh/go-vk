@@ -846,16 +846,12 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	ptr.commandPool = pool.hnd
 	ptr.level = C.VkCommandBufferLevel(info.Level)
 	ptr.commandBufferCount = C.uint32_t(info.CommandBufferCount)
-	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
-	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, &bufs[0]))
+	bufs := make([]*CommandBuffer, info.CommandBufferCount)
+	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, (*C.VkCommandBuffer)(unsafe.Pointer(&bufs[0]))))
 	if res != Success {
 		return nil, res
 	}
-	out := make([]*CommandBuffer, len(bufs))
-	for i, buf := range bufs {
-		out[i] = (*CommandBuffer)((*C.struct_VkCommandBuffer_T)(buf))
-	}
-	return out, nil
+	return bufs, nil
 }
 
 func (pool *CommandPool) FreeBuffers(bufs []*CommandBuffer) {
