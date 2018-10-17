@@ -8,525 +8,556 @@ package vk
 // #include <vulkan/vulkan_core.h>
 import "C"
 import (
-	"strconv"
 	"strings"
+	"unsafe"
 )
 
-type DeviceQueueCreateFlags C.VkDeviceQueueCreateFlags
-type QueueFlags C.VkQueueFlags
-type PhysicalDeviceType C.VkPhysicalDeviceType
-type Result C.VkResult
-type StructureType C.VkStructureType
-type SurfaceTransformFlagsKHR C.VkSurfaceTransformFlagsKHR
-type CompositeAlphaFlagsKHR C.VkCompositeAlphaFlagsKHR
-type ImageUsageFlags C.VkImageUsageFlags
-type Format C.VkFormat
-type ColorSpaceKHR C.VkColorSpaceKHR
-type PresentModeKHR C.VkPresentModeKHR
-type CommandPoolCreateFlags C.VkCommandPoolCreateFlags
-type CommandPoolTrimFlags C.VkCommandPoolTrimFlags
-type CommandPoolResetFlags C.VkCommandPoolResetFlags
-type CommandBufferLevel C.VkCommandBufferLevel
-type CommandBufferResetFlags = C.VkCommandBufferResetFlags
+func init() {
+	assertSameSize(unsafe.Sizeof(DeviceQueueCreateFlags(0)), unsafe.Sizeof(C.VkDeviceQueueCreateFlags(0)))
+	assertSameSize(unsafe.Sizeof(QueueFlags(0)), unsafe.Sizeof(C.VkQueueFlags(0)))
+	assertSameSize(unsafe.Sizeof(PhysicalDeviceType(0)), unsafe.Sizeof(C.VkPhysicalDeviceType(0)))
+	assertSameSize(unsafe.Sizeof(Result(0)), unsafe.Sizeof(C.VkResult(0)))
+	assertSameSize(unsafe.Sizeof(StructureType(0)), unsafe.Sizeof(C.VkStructureType(0)))
+	assertSameSize(unsafe.Sizeof(SurfaceTransformFlagsKHR(0)), unsafe.Sizeof(C.VkSurfaceTransformFlagsKHR(0)))
+	assertSameSize(unsafe.Sizeof(CompositeAlphaFlagsKHR(0)), unsafe.Sizeof(C.VkCompositeAlphaFlagsKHR(0)))
+	assertSameSize(unsafe.Sizeof(ImageUsageFlags(0)), unsafe.Sizeof(C.VkImageUsageFlags(0)))
+	assertSameSize(unsafe.Sizeof(Format(0)), unsafe.Sizeof(C.VkFormat(0)))
+	assertSameSize(unsafe.Sizeof(ColorSpaceKHR(0)), unsafe.Sizeof(C.VkColorSpaceKHR(0)))
+	assertSameSize(unsafe.Sizeof(PresentModeKHR(0)), unsafe.Sizeof(C.VkPresentModeKHR(0)))
+	assertSameSize(unsafe.Sizeof(CommandPoolCreateFlags(0)), unsafe.Sizeof(C.VkCommandPoolCreateFlags(0)))
+	assertSameSize(unsafe.Sizeof(CommandPoolTrimFlags(0)), unsafe.Sizeof(C.VkCommandPoolTrimFlags(0)))
+	assertSameSize(unsafe.Sizeof(CommandPoolResetFlags(0)), unsafe.Sizeof(C.VkCommandPoolResetFlags(0)))
+	assertSameSize(unsafe.Sizeof(CommandBufferLevel(0)), unsafe.Sizeof(C.VkCommandBufferLevel(0)))
+	assertSameSize(unsafe.Sizeof(CommandBufferResetFlags(0)), unsafe.Sizeof(C.VkCommandBufferResetFlags(0)))
+}
+
+//go:generate stringer -type=PresentModeKHR
+//go:generate stringer -type=CommandBufferLevel
+//go:generate stringer -type=ColorSpaceKHR
+//go:generate stringer -type=Format
+//go:generate stringer -type=StructureType
+//go:generate stringer -type=Result
+//go:generate stringer -type=PhysicalDeviceType
+
+type DeviceQueueCreateFlags uint32
+type QueueFlags uint32
+type PhysicalDeviceType uint32
+type Result int32
+type StructureType uint32
+type SurfaceTransformFlagsKHR uint32
+type CompositeAlphaFlagsKHR uint32
+type ImageUsageFlags uint32
+type Format uint32
+type ColorSpaceKHR uint32
+type PresentModeKHR uint32
+type CommandPoolCreateFlags uint32
+type CommandPoolTrimFlags uint32
+type CommandPoolResetFlags uint32
+type CommandBufferLevel uint32
+type CommandBufferResetFlags uint32
 
 const (
-	DEVICE_QUEUE_CREATE_PROTECTED_BIT DeviceQueueCreateFlags = C.VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT
+	DEVICE_QUEUE_CREATE_PROTECTED_BIT DeviceQueueCreateFlags = 0x00000001
 )
 
 const (
 	// QueueGraphicsBit specifies that queues in this queue family support graphics operations.
-	QueueGraphicsBit QueueFlags = C.VK_QUEUE_GRAPHICS_BIT
+	QueueGraphicsBit QueueFlags = 0x00000001
 
 	// QueueComputeBit specifies that queues in this queue family support compute operations.
-	QueueComputeBit QueueFlags = C.VK_QUEUE_COMPUTE_BIT
+	QueueComputeBit QueueFlags = 0x00000002
 
 	// QueueTransferBit specifies that queues in this queue family support transfer operations.
-	QueueTransferBit QueueFlags = C.VK_QUEUE_TRANSFER_BIT
+	QueueTransferBit QueueFlags = 0x00000004
 
 	// QueueSparseBindingBit specifies that queues in this queue family support sparse memory management operations.
 	// If any of the sparse resource features are enabled, then at least one queue family must support this bit.
-	QueueSparseBindingBit QueueFlags = C.VK_QUEUE_SPARSE_BINDING_BIT
+	QueueSparseBindingBit QueueFlags = 0x00000008
 
 	// If QueueProtectedBit is set, then the queues in this queue family support the DeviceQueueCreateProtectedBit bit.
 	// If the protected memory physical device feature is supported,
 	// then at least one queue family of at least one physical device exposed by the implementation must support this bit.
-	QueueProtectedBit QueueFlags = C.VK_QUEUE_PROTECTED_BIT
+	QueueProtectedBit QueueFlags = 0x00000010
 )
 
 const (
 	// The device does not match any other available types.
-	PhysicalDeviceTypeOther PhysicalDeviceType = C.VK_PHYSICAL_DEVICE_TYPE_OTHER
+	PhysicalDeviceTypeOther PhysicalDeviceType = 0
+
 	// The device is typically one embedded in or tightly coupled with the host.
-	PhysicalDeviceTypeIntegratedGPU PhysicalDeviceType = C.VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
+	PhysicalDeviceTypeIntegratedGPU PhysicalDeviceType = 1
+
 	// The device is typically a separate processor connected to the host via an interlink.
-	PhysicalDeviceTypeDiscreteGPU PhysicalDeviceType = C.VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+	PhysicalDeviceTypeDiscreteGPU PhysicalDeviceType = 2
+
 	// The device is typically a virtual node in a virtualization environment.
-	PhysicalDeviceTypeVirtualGPU PhysicalDeviceType = C.VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU
+	PhysicalDeviceTypeVirtualGPU PhysicalDeviceType = 3
+
 	// The device is typically running on the same processors as the host.
-	PhysicalDeviceTypeCPU PhysicalDeviceType = C.VK_PHYSICAL_DEVICE_TYPE_CPU
+	PhysicalDeviceTypeCPU PhysicalDeviceType = 4
 )
 
 const (
 	// Command successfully completed.
-	Success Result = C.VK_SUCCESS
+	Success Result = 0
 
 	// A fence or query has not yet completed.
-	NotReady Result = C.VK_NOT_READY
+	NotReady Result = 1
 
 	// A wait operation has not completed in the specified time.
-	Timeout Result = C.VK_TIMEOUT
+	Timeout Result = 2
 
 	// An event is signaled.
-	EventSet Result = C.VK_EVENT_SET
+	EventSet Result = 3
 
 	// An event is unsignaled.
-	EventReset Result = C.VK_EVENT_RESET
+	EventReset Result = 4
 
 	// A return array was too small for the result.
-	Incomplete Result = C.VK_INCOMPLETE
+	Incomplete Result = 5
 
 	// A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.
-	SuboptimalKHR Result = C.VK_SUBOPTIMAL_KHR
+	SuboptimalKHR Result = 1000001003
 
 	// A host memory allocation has failed.
-	ErrOutOfHostMemory Result = C.VK_ERROR_OUT_OF_HOST_MEMORY
+	ErrOutOfHostMemory Result = -1
 
 	// A device memory allocation has failed.
-	ErrOutOfDeviceMemory Result = C.VK_ERROR_OUT_OF_DEVICE_MEMORY
+	ErrOutOfDeviceMemory Result = -2
 
 	// Initialization of an object could not be completed for implementation-specific reasons.
-	ErrInitializationFailed Result = C.VK_ERROR_INITIALIZATION_FAILED
+	ErrInitializationFailed Result = -3
 
 	// The logical or physical device has been lost.
-	ErrDeviceLost Result = C.VK_ERROR_DEVICE_LOST
+	ErrDeviceLost Result = -4
 
 	// Mapping of a memory object has failed.
-	ErrMemoryMapFailed Result = C.VK_ERROR_MEMORY_MAP_FAILED
+	ErrMemoryMapFailed Result = -5
 
 	// A requested layer is not present or could not be loaded.
-	ErrLayerNotPresent Result = C.VK_ERROR_LAYER_NOT_PRESENT
+	ErrLayerNotPresent Result = -6
 
 	// A requested extension is not supported.
-	ErrExtensionNotPresent Result = C.VK_ERROR_EXTENSION_NOT_PRESENT
+	ErrExtensionNotPresent Result = -7
 
 	// A requested feature is not supported.
-	ErrFeatureNotPresent Result = C.VK_ERROR_FEATURE_NOT_PRESENT
+	ErrFeatureNotPresent Result = -8
 
 	// The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons.
-	ErrIncompatibleDriver Result = C.VK_ERROR_INCOMPATIBLE_DRIVER
+	ErrIncompatibleDriver Result = -9
 
 	// Too many objects of the type have already been created.
-	ErrTooManyObjects Result = C.VK_ERROR_TOO_MANY_OBJECTS
+	ErrTooManyObjects Result = -10
 
 	// A requested format is not supported on this device.
-	ErrFormatNotSupported Result = C.VK_ERROR_FORMAT_NOT_SUPPORTED
+	ErrFormatNotSupported Result = -11
 
 	// A pool allocation has failed due to fragmentation of the pool’s memory.
-	ErrFragmentedPool Result = C.VK_ERROR_FRAGMENTED_POOL
+	ErrFragmentedPool Result = -12
 
 	// A surface is no longer available.
-	ErrSurfaceLostKHR Result = C.VK_ERROR_SURFACE_LOST_KHR
+	ErrSurfaceLostKHR Result = -1000000000
 
 	// The requested window is already in use by Vulkan or another API in a manner which prevents it from being used again.
-	ErrNativeWindowInUseKHR Result = C.VK_ERROR_NATIVE_WINDOW_IN_USE_KHR
+	ErrNativeWindowInUseKHR Result = -1000000001
 
 	// A surface has changed in such a way that it is no longer compatible with the swapchain,
 	// and further presentation requests using the swapchain will fail.
 	// Applications must query the new surface properties and recreate their swapchain if they wish to continue presenting to the surface.
-	ErrOutOfDateKHR Result = C.VK_ERROR_OUT_OF_DATE_KHR
+	ErrOutOfDateKHR Result = -1000001004
 
 	// The display used by a swapchain does not use the same presentable image layout,
 	// or is incompatible in a way that prevents sharing an image.
-	ErrIncompatibleDisplayKHR Result = C.VK_ERROR_INCOMPATIBLE_DISPLAY_KHR
+	ErrIncompatibleDisplayKHR Result = -1000003001
 
 	// A pool memory allocation has failed.
-	ErrOutOfPoolMemory Result = C.VK_ERROR_OUT_OF_POOL_MEMORY
+	ErrOutOfPoolMemory Result = -1000069000
 
 	// An external handle is not a valid handle of the specified type.
-	ErrInvalidExternalHandle Result = C.VK_ERROR_INVALID_EXTERNAL_HANDLE
+	ErrInvalidExternalHandle Result = -1000072003
 
-	ErrValidationFailedEXT      Result = C.VK_ERROR_VALIDATION_FAILED_EXT
-	ErrInvalidShaderNV          Result = C.VK_ERROR_INVALID_SHADER_NV
-	ErrFragmentationEXT         Result = C.VK_ERROR_FRAGMENTATION_EXT
-	ErrNotPermittedEXT          Result = C.VK_ERROR_NOT_PERMITTED_EXT
-	ErrOutOfPoolMemoryKHR       Result = C.VK_ERROR_OUT_OF_POOL_MEMORY_KHR
-	ErrInvalidExternalHandleKHR Result = C.VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR
+	ErrValidationFailedEXT      Result = -1000011001
+	ErrInvalidShaderNV          Result = -1000012000
+	ErrFragmentationEXT         Result = -1000161000
+	ErrNotPermittedEXT          Result = -1000174001
+	ErrOutOfPoolMemoryKHR       Result = ErrOutOfPoolMemory
+	ErrInvalidExternalHandleKHR Result = ErrInvalidExternalHandle
 )
 
 const (
-	StructureTypeAccelerationStructureCreateInfoNVX                    = C.VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NVX
-	StructureTypeAccelerationStructureMemoryRequirementsInfoNVX        = C.VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_INFO_NVX
-	StructureTypeAcquireNextImageInfoKHR                               = C.VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHR
-	StructureTypeAndroidHardwareBufferFormatPropertiesAndroid          = C.VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID
-	StructureTypeAndroidHardwareBufferPropertiesAndroid                = C.VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID
-	StructureTypeAndroidHardwareBufferUsageAndroid                     = C.VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_USAGE_ANDROID
-	StructureTypeAndroidSurfaceCreateInfoKHR                           = C.VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR
-	StructureTypeAttachmentDescription2KHR                             = C.VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR
-	StructureTypeAttachmentReference2KHR                               = C.VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR
-	StructureTypeApplicationInfo                                       = C.VK_STRUCTURE_TYPE_APPLICATION_INFO
-	StructureTypeBindAccelerationStructureMemoryInfoNVX                = C.VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NVX
-	StructureTypeBindBufferMemoryDeviceGroupInfoKHR                    = C.VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR
-	StructureTypeBindBufferMemoryInfoKHR                               = C.VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR
-	StructureTypeBindImageMemoryDeviceGroupInfoKHR                     = C.VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR
-	StructureTypeBindImageMemoryInfoKHR                                = C.VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR
-	StructureTypeBindImageMemorySwapchainInfoKHR                       = C.VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR
-	StructureTypeBindImagePlaneMemoryINFO                              = C.VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO
-	StructureTypeBindImagePlaneMemoryInfoKHR                           = C.VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO_KHR
-	StructureTypeBufferMemoryRequirementsInfo2                         = C.VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2
-	StructureTypeBufferMemoryRequirementsInfo2KHR                      = C.VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR
-	StructureTypeBindBufferMemoryDeviceGroupInfo                       = C.VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO
-	StructureTypeBindBufferMemoryInfo                                  = C.VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO
-	StructureTypeBindImageMemoryDeviceGroupInfo                        = C.VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO
-	StructureTypeBindImageMemoryInfo                                   = C.VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO
-	StructureTypeBindSparseInfo                                        = C.VK_STRUCTURE_TYPE_BIND_SPARSE_INFO
-	StructureTypeBufferCreateInfo                                      = C.VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO
-	StructureTypeBufferMemoryBarrier                                   = C.VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
-	StructureTypeBufferViewCreateInfo                                  = C.VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO
-	StructureTypeCheckpointDataNV                                      = C.VK_STRUCTURE_TYPE_CHECKPOINT_DATA_NV
-	StructureTypeCmdProcessCommandsInfoNVX                             = C.VK_STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX
-	StructureTypeCmdReserveSpaceForCommandsInfoNVX                     = C.VK_STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX
-	StructureTypeCommandBufferInheritanceConditionalRenderingInfoEXT   = C.VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT
-	StructureTypeConditionalRenderingBeginInfoEXT                      = C.VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT
-	StructureTypeCommandBufferAllocateInfo                             = C.VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO
-	StructureTypeCommandBufferBeginInfo                                = C.VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
-	StructureTypeCommandBufferInheritanceInfo                          = C.VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO
-	StructureTypeCommandPoolCreateInfo                                 = C.VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO
-	StructureTypeComputePipelineCreateInfo                             = C.VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
-	StructureTypeCopyDescriptorSet                                     = C.VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET
-	StructureTypeD3D12FenceSubmitInfoKHR                               = C.VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR
-	StructureTypeDebugMarkerMarkerInfoEXT                              = C.VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT
-	StructureTypeDebugMarkerObjectNameInfoEXT                          = C.VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT
-	StructureTypeDebugMarkerObjectTagInfoEXT                           = C.VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT
-	StructureTypeDebugReportCallbackCreateInfoEXT                      = C.VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT
-	StructureTypeDebugReportCreateInfoEXT                              = C.VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT
-	StructureTypeDebugUtilsLabelEXT                                    = C.VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT
-	StructureTypeDebugUtilsMessengerCallbackDataEXT                    = C.VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CALLBACK_DATA_EXT
-	StructureTypeDebugUtilsMessengerCreateInfoEXT                      = C.VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT
-	StructureTypeDebugUtilsObjectNameInfoEXT                           = C.VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT
-	StructureTypeDebugUtilsObjectTagInfoEXT                            = C.VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT
-	StructureTypeDedicatedAllocationBufferCreateInfoNV                 = C.VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV
-	StructureTypeDedicatedAllocationImageCreateInfoNV                  = C.VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV
-	StructureTypeDedicatedAllocationMemoryAllocateInfoNV               = C.VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV
-	StructureTypeDescriptorAccelerationStructureInfoNVX                = C.VK_STRUCTURE_TYPE_DESCRIPTOR_ACCELERATION_STRUCTURE_INFO_NVX
-	StructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXT         = C.VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT
-	StructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXT          = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT
-	StructureTypeDescriptorSetLayoutSupport                            = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT
-	StructureTypeDescriptorSetLayoutSupportKHR                         = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR
-	StructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExt   = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT
-	StructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXT  = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT
-	StructureTypeDescriptorUpdateTemplateCreateINFO                    = C.VK_STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO
-	StructureTypeDescriptorUpdateTemplateCreateInfoKHR                 = C.VK_STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO_KHR
-	StructureTypeDeviceEventInfoEXT                                    = C.VK_STRUCTURE_TYPE_DEVICE_EVENT_INFO_EXT
-	StructureTypeDeviceGeneratedCommandsFeaturesNVX                    = C.VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX
-	StructureTypeDeviceGeneratedCommandsLimitsNVX                      = C.VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX
-	StructureTypeDeviceGroupBindSparseInfoKHR                          = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO_KHR
-	StructureTypeDeviceGroupCommandBufferBeginInfoKHR                  = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO_KHR
-	StructureTypeDeviceGroupDeviceCreateInfoKHR                        = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO_KHR
-	StructureTypeDeviceGroupPresentCapabilitiesKHR                     = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHR
-	StructureTypeDeviceGroupPresentInfoKHR                             = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_INFO_KHR
-	StructureTypeDeviceGroupRenderPassBeginInfoKHR                     = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO_KHR
-	StructureTypeDeviceGroupSubmitInfoKHR                              = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO_KHR
-	StructureTypeDeviceGroupSwapchainCreateInfoKHR                     = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR
-	StructureTypeDeviceQueueGlobalPriorityCreateInfoEXT                = C.VK_STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT
-	StructureTypeDeviceQueueInfo2                                      = C.VK_STRUCTURE_TYPE_DEVICE_QUEUE_INFO_2
-	StructureTypeDisplayEventInfoEXT                                   = C.VK_STRUCTURE_TYPE_DISPLAY_EVENT_INFO_EXT
-	StructureTypeDisplayModeCreateInfoKHR                              = C.VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR
-	StructureTypeDisplayModeProperties2KHR                             = C.VK_STRUCTURE_TYPE_DISPLAY_MODE_PROPERTIES_2_KHR
-	StructureTypeDisplayPlaneCapabilities2KHR                          = C.VK_STRUCTURE_TYPE_DISPLAY_PLANE_CAPABILITIES_2_KHR
-	StructureTypeDisplayPlaneInfo2KHR                                  = C.VK_STRUCTURE_TYPE_DISPLAY_PLANE_INFO_2_KHR
-	StructureTypeDisplayPlaneProperties2KHR                            = C.VK_STRUCTURE_TYPE_DISPLAY_PLANE_PROPERTIES_2_KHR
-	StructureTypeDisplayPowerInfoEXT                                   = C.VK_STRUCTURE_TYPE_DISPLAY_POWER_INFO_EXT
-	StructureTypeDisplayPresentInfoKHR                                 = C.VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR
-	StructureTypeDisplayProperties2KHR                                 = C.VK_STRUCTURE_TYPE_DISPLAY_PROPERTIES_2_KHR
-	StructureTypeDisplaySurfaceCreateInfoKHR                           = C.VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR
-	StructureTypeDescriptorPoolCreateInfo                              = C.VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO
-	StructureTypeDescriptorSetAllocateInfo                             = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO
-	StructureTypeDescriptorSetLayoutCreateInfo                         = C.VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
-	StructureTypeDeviceCreateInfo                                      = C.VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO
-	StructureTypeDeviceGroupBindSparseInfo                             = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO
-	StructureTypeDeviceGroupCommandBufferBeginInfo                     = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO
-	StructureTypeDeviceGroupDeviceCreateInfo                           = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO
-	StructureTypeDeviceGroupRenderPassBeginInfo                        = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO
-	StructureTypeDeviceGroupSubmitInfo                                 = C.VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO
-	StructureTypeDeviceQueueCreateInfo                                 = C.VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO
-	StructureTypeExportFenceCreateInfo                                 = C.VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO
-	StructureTypeExportFenceCreateInfoKHR                              = C.VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO_KHR
-	StructureTypeExportFenceWin32HandleInfoKHR                         = C.VK_STRUCTURE_TYPE_EXPORT_FENCE_WIN32_HANDLE_INFO_KHR
-	StructureTypeExportMemoryAllocateInfo                              = C.VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO
-	StructureTypeExportMemoryAllocateInfoKHR                           = C.VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_KHR
-	StructureTypeExportMemoryAllocateInfoNV                            = C.VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV
-	StructureTypeExportMemoryWin32HandleInfoKHR                        = C.VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_KHR
-	StructureTypeExportMemoryWin32HandleInfoNV                         = C.VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV
-	StructureTypeExportSemaphoreCreateInfo                             = C.VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO
-	StructureTypeExportSemaphoreCreateInfoKHR                          = C.VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO_KHR
-	StructureTypeExportSemaphoreWin32HandleInfoKHR                     = C.VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR
-	StructureTypeExternalBufferProperties                              = C.VK_STRUCTURE_TYPE_EXTERNAL_BUFFER_PROPERTIES
-	StructureTypeExternalBufferPropertiesKHR                           = C.VK_STRUCTURE_TYPE_EXTERNAL_BUFFER_PROPERTIES_KHR
-	StructureTypeExternalFenceProperties                               = C.VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES
-	StructureTypeExternalFencePropertiesKHR                            = C.VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES_KHR
-	StructureTypeExternalFormatAndroid                                 = C.VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID
-	StructureTypeExternalImageFormatProperties                         = C.VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES
-	StructureTypeExternalImageFormatPropertiesKHR                      = C.VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES_KHR
-	StructureTypeExternalMemoryBufferCreateInfo                        = C.VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_BUFFER_CREATE_INFO
-	StructureTypeExternalMemoryBufferCreateInfoKHR                     = C.VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_BUFFER_CREATE_INFO_KHR
-	StructureTypeExternalMemoryImageCreateInfo                         = C.VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO
-	StructureTypeExternalMemoryImageCreateInfoKHR                      = C.VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_KHR
-	StructureTypeExternalMemoryImageCreateInfoNV                       = C.VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV
-	StructureTypeExternalSemaphoreProperties                           = C.VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES
-	StructureTypeExternalSemaphorePropertiesKHR                        = C.VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES_KHR
-	StructureTypeEventCreateInfo                                       = C.VK_STRUCTURE_TYPE_EVENT_CREATE_INFO
-	StructureTypeFenceGetFdInfoKHR                                     = C.VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR
-	StructureTypeFenceGetWin32HandleInfoKHR                            = C.VK_STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR
-	StructureTypeFormatProperties2                                     = C.VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2
-	StructureTypeFormatProperties2KHR                                  = C.VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2_KHR
-	StructureTypeFenceCreateInfo                                       = C.VK_STRUCTURE_TYPE_FENCE_CREATE_INFO
-	StructureTypeFramebufferCreateInfo                                 = C.VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
-	StructureTypeGeometryAABB_NVX                                      = C.VK_STRUCTURE_TYPE_GEOMETRY_AABB_NVX
-	StructureTypeGeometryInstanceNVX                                   = C.VK_STRUCTURE_TYPE_GEOMETRY_INSTANCE_NVX
-	StructureTypeGeometryNVX                                           = C.VK_STRUCTURE_TYPE_GEOMETRY_NVX
-	StructureTypeGeometryTrianglesNVX                                  = C.VK_STRUCTURE_TYPE_GEOMETRY_TRIANGLES_NVX
-	StructureTypeGraphicsPipelineCreateInfo                            = C.VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-	StructureTypeHdrMetadataEXT                                        = C.VK_STRUCTURE_TYPE_HDR_METADATA_EXT
-	StructureTypeHitShaderModuleCreateInfoNVX                          = C.VK_STRUCTURE_TYPE_HIT_SHADER_MODULE_CREATE_INFO_NVX
-	StructureTypeImageFormatListCreateInfoKHR                          = C.VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR
-	StructureTypeImageFormatProperties2                                = C.VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2
-	StructureTypeImageFormatProperties2KHR                             = C.VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2_KHR
-	StructureTypeImageMemoryRequirementsInfo2                          = C.VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2
-	StructureTypeImageMemoryRequirementsInfo2KHR                       = C.VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2_KHR
-	StructureTypeImagePlaneMemoryRequirementsInfo                      = C.VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO
-	StructureTypeImagePlaneMemoryRequirementsInfoKHR                   = C.VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO_KHR
-	StructureTypeImageSparseMemoryRequirementsInfo2                    = C.VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2
-	StructureTypeImageSparseMemoryRequirementsInfo2KHR                 = C.VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2_KHR
-	StructureTypeImageSwapchainCreateInfoKHR                           = C.VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR
-	StructureTypeImageViewAstcDecodeModeEXT                            = C.VK_STRUCTURE_TYPE_IMAGE_VIEW_ASTC_DECODE_MODE_EXT
-	StructureTypeImageViewUsageCreateInfo                              = C.VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO
-	StructureTypeImageViewUsageCreateInfoKHR                           = C.VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR
-	StructureTypeImportAndroidHardwareBufferInfoAndroid                = C.VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID
-	StructureTypeImportFenceFdInfoKHR                                  = C.VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR
-	StructureTypeImportFenceWin32HandleInfoKHR                         = C.VK_STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR
-	StructureTypeImportMemoryFdInfoKHR                                 = C.VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR
-	StructureTypeImportMemoryHostPointerInfoEXT                        = C.VK_STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT
-	StructureTypeImportMemoryWin32HandleInfoKHR                        = C.VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR
-	StructureTypeImportMemoryWin32HandleInfoNV                         = C.VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV
-	StructureTypeImportSemaphoreFdInfoKHR                              = C.VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR
-	StructureTypeImportSemaphoreWin32HandleInfoKHR                     = C.VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR
-	StructureTypeIndirectCommandsLayoutCreateInfoNVX                   = C.VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX
-	StructureTypeIosSurfaceCreateInfoMVK                               = C.VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK
-	StructureTypeImageCreateInfo                                       = C.VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO
-	StructureTypeImageMemoryBarrier                                    = C.VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-	StructureTypeImageViewCreateInfo                                   = C.VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO
-	StructureTypeInstanceCreateInfo                                    = C.VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO
-	StructureTypeLoaderDeviceCreateInfo                                = C.VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO
-	StructureTypeLoaderInstanceCreateInfo                              = C.VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO
-	StructureTypeMacosSurfaceCreateInfoMVK                             = C.VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK
-	StructureTypeMemoryAllocateFlagsInfoKHR                            = C.VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR
-	StructureTypeMemoryDedicatedAllocateInfoKHR                        = C.VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR
-	StructureTypeMemoryDedicatedRequirementsKHR                        = C.VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR
-	StructureTypeMemoryFdPropertiesKHR                                 = C.VK_STRUCTURE_TYPE_MEMORY_FD_PROPERTIES_KHR
-	StructureTypeMemoryGetAndroidHardwareBufferInfoAndroid             = C.VK_STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID
-	StructureTypeMemoryGetFdInfoKHR                                    = C.VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR
-	StructureTypeMemoryGetWin32HandleInfoKHR                           = C.VK_STRUCTURE_TYPE_MEMORY_GET_WIN32_HANDLE_INFO_KHR
-	StructureTypeMemoryHostPointerPropertiesEXT                        = C.VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT
-	StructureTypeMemoryRequirements2                                   = C.VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2
-	StructureTypeMemoryRequirements2KHR                                = C.VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR
-	StructureTypeMemoryWin32HandlePropertiesKHR                        = C.VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR
-	StructureTypeMirSurfaceCreateInfoKHR                               = C.VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR
-	StructureTypeMultisamplePropertiesEXT                              = C.VK_STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT
-	StructureTypeMappedMemoryRange                                     = C.VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE
-	StructureTypeMemoryAllocateFlagsInfo                               = C.VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO
-	StructureTypeMemoryAllocateInfo                                    = C.VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO
-	StructureTypeMemoryBarrier                                         = C.VK_STRUCTURE_TYPE_MEMORY_BARRIER
-	StructureTypeMemoryDedicatedAllocateInfo                           = C.VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO
-	StructureTypeMemoryDedicatedRequirements                           = C.VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS
-	StructureTypeObjectTableCreateInfoNVX                              = C.VK_STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX
-	StructureTypePhysicalDevice16BitStorageFeaturesKHR                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR
-	StructureTypePhysicalDevice8BitStorageFeaturesKHR                  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR
-	StructureTypePhysicalDeviceAstcDecodeFeaturesEXT                   = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ASTC_DECODE_FEATURES_EXT
-	StructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXT       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT
-	StructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXT     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT
-	StructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NV     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV
-	StructureTypePhysicalDeviceConditionalRenderingFeaturesEXT         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT
-	StructureTypePhysicalDeviceConservativeRasterizationPropertiesEXT  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT
-	StructureTypePhysicalDeviceCornerSampledImageFeaturesNV            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CORNER_SAMPLED_IMAGE_FEATURES_NV
-	StructureTypePhysicalDeviceDescriptorIndexingFeaturesEXT           = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT
-	StructureTypePhysicalDeviceDescriptorIndexingPropertiesEXT         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT
-	StructureTypePhysicalDeviceDiscardRectanglePropertiesEXT           = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DISCARD_RECTANGLE_PROPERTIES_EXT
-	StructureTypePhysicalDeviceExclusiveScissorFeaturesNV              = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXCLUSIVE_SCISSOR_FEATURES_NV
-	StructureTypePhysicalDeviceExternalBufferInfo                      = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO
-	StructureTypePhysicalDeviceExternalBufferInfoKHR                   = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO_KHR
-	StructureTypePhysicalDeviceExternalFenceInfo                       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO
-	StructureTypePhysicalDeviceExternalFenceInfoKHR                    = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO_KHR
-	StructureTypePhysicalDeviceExternalImageFormatInfo                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO
-	StructureTypePhysicalDeviceExternalImageFormatInfoKHR              = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO_KHR
-	StructureTypePhysicalDeviceExternalMemoryHostPropertiesEXT         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT
-	StructureTypePhysicalDeviceExternalSemaphoreInfo                   = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO
-	StructureTypePhysicalDeviceExternalSemaphoreInfoKHR                = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR
-	StructureTypePhysicalDeviceFeatures2                               = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
-	StructureTypePhysicalDeviceFeatures2KHR                            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR
-	StructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNV     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_BARYCENTRIC_FEATURES_NV
-	StructureTypePhysicalDeviceGroupPropertiesKHR                      = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES_KHR
-	StructureTypePhysicalDeviceIdProperties                            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES
-	StructureTypePhysicalDeviceIdPropertiesKHR                         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR
-	StructureTypePhysicalDeviceImageFormatInfo2                        = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2
-	StructureTypePhysicalDeviceImageFormatInfo2KHR                     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR
-	StructureTypePhysicalDeviceInlineUniformBlockFeaturesEXT           = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT
-	StructureTypePhysicalDeviceInlineUniformBlockPropertiesEXT         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT
-	StructureTypePhysicalDeviceMaintenance3Properties                  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES
-	StructureTypePhysicalDeviceMaintenance3PropertiesKHR               = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES_KHR
-	StructureTypePhysicalDeviceMemoryProperties2                       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2
-	StructureTypePhysicalDeviceMemoryProperties2KHR                    = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2_KHR
-	StructureTypePhysicalDeviceMeshShaderFeaturesNV                    = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
-	StructureTypePhysicalDeviceMeshShaderPropertiesNV                  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
-	StructureTypePhysicalDeviceMultiviewFeatures                       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES
-	StructureTypePhysicalDeviceMultiviewFeaturesKHR                    = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHR
-	StructureTypePhysicalDeviceMultiviewPerViewAttributesPropertiesNVX = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PER_VIEW_ATTRIBUTES_PROPERTIES_NVX
-	StructureTypePhysicalDeviceMultiviewProperties                     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES
-	StructureTypePhysicalDeviceMultiviewPropertiesKHR                  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES_KHR
-	StructureTypePhysicalDevicePointClippingProperties                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_POINT_CLIPPING_PROPERTIES
-	StructureTypePhysicalDevicePointClippingPropertiesKHR              = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_POINT_CLIPPING_PROPERTIES_KHR
-	StructureTypePhysicalDeviceProperties2                             = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2
-	StructureTypePhysicalDeviceProperties2KHR                          = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR
-	StructureTypePhysicalDeviceProtectedMemoryFeatures                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_FEATURES
-	StructureTypePhysicalDeviceProtectedMemoryProperties               = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_PROPERTIES
-	StructureTypePhysicalDevicePushDescriptorPropertiesKHR             = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PUSH_DESCRIPTOR_PROPERTIES_KHR
-	StructureTypePhysicalDeviceRaytracingPropertiesNVX                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAYTRACING_PROPERTIES_NVX
-	StructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNV    = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_REPRESENTATIVE_FRAGMENT_TEST_FEATURES_NV
-	StructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXT        = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT
-	StructureTypePhysicalDeviceSamplerYCbCrConversionFeatures          = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES
-	StructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesKHR       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES_KHR
-	StructureTypePhysicalDeviceSampleLocationsPropertiesEXT            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT
-	StructureTypePhysicalDeviceShaderCorePropertiesAMD                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD
-	StructureTypePhysicalDeviceShaderDrawParameterFeatures             = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES
-	StructureTypePhysicalDeviceShaderImageFootprintFeaturesNV          = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_FOOTPRINT_FEATURES_NV
-	StructureTypePhysicalDeviceShadingRateImageFeaturesNV              = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV
-	StructureTypePhysicalDeviceShadingRateImagePropertiesNV            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_PROPERTIES_NV
-	StructureTypePhysicalDeviceSparseImageFormatInfo2                  = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2
-	StructureTypePhysicalDeviceSparseImageFormatInfo2KHR               = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2_KHR
-	StructureTypePhysicalDeviceSurfaceInfo2KHR                         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR
-	StructureTypePhysicalDeviceVariablePointerFeatures                 = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES
-	StructureTypePhysicalDeviceVariablePointerFeaturesKHR              = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES_KHR
-	StructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXT       = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT
-	StructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXT     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT
-	StructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR            = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR
-	StructureTypePipelineColorBlendAdvancedStateCreateInfoEXT          = C.VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT
-	StructureTypePipelineCoverageModulationStateCreateInfoNV           = C.VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV
-	StructureTypePipelineCoverageToColorStateCreateInfoNV              = C.VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV
-	StructureTypePipelineDiscardRectangleStateCreateInfoEXT            = C.VK_STRUCTURE_TYPE_PIPELINE_DISCARD_RECTANGLE_STATE_CREATE_INFO_EXT
-	StructureTypePipelineRasterizationConservativeStateCreateInfoEXT   = C.VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT
-	StructureTypePipelineRasterizationStateRasterizationOrderAMD       = C.VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD
-	StructureTypePipelineRepresentativeFragmentTestStateCreateInfoNV   = C.VK_STRUCTURE_TYPE_PIPELINE_REPRESENTATIVE_FRAGMENT_TEST_STATE_CREATE_INFO_NV
-	StructureTypePipelineSampleLocationsStateCreateInfoEXT             = C.VK_STRUCTURE_TYPE_PIPELINE_SAMPLE_LOCATIONS_STATE_CREATE_INFO_EXT
-	StructureTypePipelineTessellationDomainOriginStateCreateInfo       = C.VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO
-	StructureTypePipelineTessellationDomainOriginStateCreateInfoKHR    = C.VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO_KHR
-	StructureTypePipelineVertexInputDivisorStateCreateInfoEXT          = C.VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT
-	StructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNV    = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_COARSE_SAMPLE_ORDER_STATE_CREATE_INFO_NV
-	StructureTypePipelineViewportExclusiveScissorStateCreateInfoNV     = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_EXCLUSIVE_SCISSOR_STATE_CREATE_INFO_NV
-	StructureTypePipelineViewportShadingRateImageStateCreateInfoNV     = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_SHADING_RATE_IMAGE_STATE_CREATE_INFO_NV
-	StructureTypePipelineViewportSwizzleStateCreateInfoNV              = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_SWIZZLE_STATE_CREATE_INFO_NV
-	StructureTypePipelineViewportWScalingStateCreateInfoNV             = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV
-	StructureTypePresentInfoKHR                                        = C.VK_STRUCTURE_TYPE_PRESENT_INFO_KHR
-	StructureTypePresentRegionsKHR                                     = C.VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR
-	StructureTypePresentTimesInfoGoogle                                = C.VK_STRUCTURE_TYPE_PRESENT_TIMES_INFO_GOOGLE
-	StructureTypeProtectedSubmitInfo                                   = C.VK_STRUCTURE_TYPE_PROTECTED_SUBMIT_INFO
-	StructureTypePhysicalDevice16ItStorageFeatures                     = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES
-	StructureTypePhysicalDeviceGroupProperties                         = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES
-	StructureTypePhysicalDeviceSubgroupProperties                      = C.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES
-	StructureTypePipelineCacheCreateInfo                               = C.VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO
-	StructureTypePipelineColorBlendStateCreateInfo                     = C.VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
-	StructureTypePipelineDepthStencilStateCreateInfo                   = C.VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
-	StructureTypePipelineDynamicStateCreateInfo                        = C.VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
-	StructureTypePipelineInputAssemblyStateCreateInfo                  = C.VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-	StructureTypePipelineLayoutCreateInfo                              = C.VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
-	StructureTypePipelineMultisampleStateCreateInfo                    = C.VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
-	StructureTypePipelineRasterizationStateCreateInfo                  = C.VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
-	StructureTypePipelineShaderStageCreateInfo                         = C.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO
-	StructureTypePipelineTessellationStateCreateInfo                   = C.VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO
-	StructureTypePipelineVertexInputStateCreateInfo                    = C.VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
-	StructureTypePipelineViewportStateCreateInfo                       = C.VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
-	StructureTypeQueueFamilyCheckpointPropertiesNV                     = C.VK_STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_NV
-	StructureTypeQueueFamilyProperties2                                = C.VK_STRUCTURE_TYPE_QUEUE_FAMILY_PROPERTIES_2
-	StructureTypeQueueFamilyProperties2KHR                             = C.VK_STRUCTURE_TYPE_QUEUE_FAMILY_PROPERTIES_2_KHR
-	StructureTypeQueryPoolCreateInfo                                   = C.VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO
-	StructureTypeRaytracingPipelineCreateInfoNVX                       = C.VK_STRUCTURE_TYPE_RAYTRACING_PIPELINE_CREATE_INFO_NVX
-	StructureTypeRenderPassCreateInfo2KHR                              = C.VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR
-	StructureTypeRenderPassInputAttachmentAspectCreateInfo             = C.VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO
-	StructureTypeRenderPassInputAttachmentAspectCreateInfoKHR          = C.VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO_KHR
-	StructureTypeRenderPassMultiviewCreateInfo                         = C.VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO
-	StructureTypeRenderPassMultiviewCreateInfoKHR                      = C.VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR
-	StructureTypeRenderPassSampleLocationsBeginInfoEXT                 = C.VK_STRUCTURE_TYPE_RENDER_PASS_SAMPLE_LOCATIONS_BEGIN_INFO_EXT
-	StructureTypeRenderPassBeginInfo                                   = C.VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-	StructureTypeRenderPassCreateInfo                                  = C.VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO
-	StructureTypeSamplerReductionModeCreateInfoEXT                     = C.VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT
-	StructureTypeSamplerYCbCrConversionCreateInfo                      = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO
-	StructureTypeSamplerYCbCrConversionCreateInfoKHR                   = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO_KHR
-	StructureTypeSamplerYCbCrConversionImageFormatProperties           = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES
-	StructureTypeSamplerYCbCrConversionImageFormatPropertiesKHR        = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES_KHR
-	StructureTypeSamplerYCbCrConversionINFO                            = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO
-	StructureTypeSamplerYCbCrConversionINFO_KHR                        = C.VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO_KHR
-	StructureTypeSampleLocationsInfoEXT                                = C.VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT
-	StructureTypeSemaphoreGetFdInfoKHR                                 = C.VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR
-	StructureTypeSemaphoreGetWin32HandleInfoKHR                        = C.VK_STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR
-	StructureTypeShaderModuleValidationCacheCreateInfoEXT              = C.VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT
-	StructureTypeSharedPresentSurfaceCapabilitiesKHR                   = C.VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR
-	StructureTypeSparseImageFormatProperties2                          = C.VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2
-	StructureTypeSparseImageFormatProperties2KHR                       = C.VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2_KHR
-	StructureTypeSparseImageMemoryRequirements2                        = C.VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2
-	StructureTypeSparseImageMemoryRequirements2KHR                     = C.VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2_KHR
-	StructureTypeSubpassBeginInfoKHR                                   = C.VK_STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR
-	StructureTypeSubpassDependency2KHR                                 = C.VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR
-	StructureTypeSubpassDescription2KHR                                = C.VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR
-	StructureTypeSubpassEndInfoKHR                                     = C.VK_STRUCTURE_TYPE_SUBPASS_END_INFO_KHR
-	StructureTypeSurfaceCapabilities2EXT                               = C.VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT
-	StructureTypeSurfaceCapabilities2KHR                               = C.VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR
-	StructureTypeSurfaceFormat2KHR                                     = C.VK_STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR
-	StructureTypeSwapchainCounterCreateInfoEXT                         = C.VK_STRUCTURE_TYPE_SWAPCHAIN_COUNTER_CREATE_INFO_EXT
-	StructureTypeSwapchainCreateInfoKHR                                = C.VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
-	StructureTypeSamplerCreateInfo                                     = C.VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO
-	StructureTypeSemaphoreCreateInfo                                   = C.VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO
-	StructureTypeShaderModuleCreateInfo                                = C.VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO
-	StructureTypeSubmitInfo                                            = C.VK_STRUCTURE_TYPE_SUBMIT_INFO
-	StructureTypeTextureLodGatherFormatPropertiesAMD                   = C.VK_STRUCTURE_TYPE_TEXTURE_LOD_GATHER_FORMAT_PROPERTIES_AMD
-	StructureTypeValidationCacheCreateInfoEXT                          = C.VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT
-	StructureTypeValidationFlagsEXT                                    = C.VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT
-	StructureTypeViSurfaceCreateInfoNN                                 = C.VK_STRUCTURE_TYPE_VI_SURFACE_CREATE_INFO_NN
-	StructureTypeWaylandSurfaceCreateInfoKHR                           = C.VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR
-	StructureTypeWin32KeyedMutexAcquireReleaseInfoKHR                  = C.VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_KHR
-	StructureTypeWin32KeyedMutexAcquireReleaseInfoNV                   = C.VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV
-	StructureTypeWin32SurfaceCreateInfoKHR                             = C.VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR
-	StructureTypeWriteDescriptorSetInlineUniformBlockEXT               = C.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT
-	StructureTypeWriteDescriptorSet                                    = C.VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET
-	StructureTypeXcbSurfaceCreateInfoKHR                               = C.VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR
-	StructureTypeXlibSurfaceCreateInfoKHR                              = C.VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR
+	StructureTypeAccelerationStructureCreateInfoNVX                    StructureType = 1000165001
+	StructureTypeAccelerationStructureMemoryRequirementsInfoNVX        StructureType = 1000165008
+	StructureTypeAcquireNextImageInfoKHR                               StructureType = 1000060010
+	StructureTypeAndroidHardwareBufferFormatPropertiesAndroid          StructureType = 1000129002
+	StructureTypeAndroidHardwareBufferPropertiesAndroid                StructureType = 1000129001
+	StructureTypeAndroidHardwareBufferUsageAndroid                     StructureType = 1000129000
+	StructureTypeAndroidSurfaceCreateInfoKHR                           StructureType = 1000008000
+	StructureTypeAttachmentDescription2KHR                             StructureType = 1000109000
+	StructureTypeAttachmentReference2KHR                               StructureType = 1000109001
+	StructureTypeApplicationInfo                                       StructureType = 0
+	StructureTypeBindAccelerationStructureMemoryInfoNVX                StructureType = 1000165006
+	StructureTypeBindBufferMemoryDeviceGroupInfoKHR                    StructureType = 1000060013
+	StructureTypeBindBufferMemoryInfoKHR                               StructureType = 1000157000
+	StructureTypeBindImageMemoryDeviceGroupInfoKHR                     StructureType = 1000060014
+	StructureTypeBindImageMemoryInfoKHR                                StructureType = 1000157001
+	StructureTypeBindImageMemorySwapchainInfoKHR                       StructureType = 1000060009
+	StructureTypeBindImagePlaneMemoryINFO                              StructureType = 1000156002
+	StructureTypeBindImagePlaneMemoryInfoKHR                           StructureType = 1000156002
+	StructureTypeBufferMemoryRequirementsInfo2                         StructureType = 1000146000
+	StructureTypeBufferMemoryRequirementsInfo2KHR                      StructureType = 1000146000
+	StructureTypeBindBufferMemoryDeviceGroupInfo                       StructureType = 1000060013
+	StructureTypeBindBufferMemoryInfo                                  StructureType = 1000157000
+	StructureTypeBindImageMemoryDeviceGroupInfo                        StructureType = 1000060014
+	StructureTypeBindImageMemoryInfo                                   StructureType = 1000157001
+	StructureTypeBindSparseInfo                                        StructureType = 7
+	StructureTypeBufferCreateInfo                                      StructureType = 12
+	StructureTypeBufferMemoryBarrier                                   StructureType = 44
+	StructureTypeBufferViewCreateInfo                                  StructureType = 13
+	StructureTypeCheckpointDataNV                                      StructureType = 1000206000
+	StructureTypeCmdProcessCommandsInfoNVX                             StructureType = 1000086002
+	StructureTypeCmdReserveSpaceForCommandsInfoNVX                     StructureType = 1000086003
+	StructureTypeCommandBufferInheritanceConditionalRenderingInfoEXT   StructureType = 1000081000
+	StructureTypeConditionalRenderingBeginInfoEXT                      StructureType = 1000081002
+	StructureTypeCommandBufferAllocateInfo                             StructureType = 40
+	StructureTypeCommandBufferBeginInfo                                StructureType = 42
+	StructureTypeCommandBufferInheritanceInfo                          StructureType = 41
+	StructureTypeCommandPoolCreateInfo                                 StructureType = 39
+	StructureTypeComputePipelineCreateInfo                             StructureType = 29
+	StructureTypeCopyDescriptorSet                                     StructureType = 36
+	StructureTypeD3D12FenceSubmitInfoKHR                               StructureType = 1000078002
+	StructureTypeDebugMarkerMarkerInfoEXT                              StructureType = 1000022002
+	StructureTypeDebugMarkerObjectNameInfoEXT                          StructureType = 1000022000
+	StructureTypeDebugMarkerObjectTagInfoEXT                           StructureType = 1000022001
+	StructureTypeDebugReportCallbackCreateInfoEXT                      StructureType = 1000011000
+	StructureTypeDebugReportCreateInfoEXT                              StructureType = 1000011000
+	StructureTypeDebugUtilsLabelEXT                                    StructureType = 1000128002
+	StructureTypeDebugUtilsMessengerCallbackDataEXT                    StructureType = 1000128003
+	StructureTypeDebugUtilsMessengerCreateInfoEXT                      StructureType = 1000128004
+	StructureTypeDebugUtilsObjectNameInfoEXT                           StructureType = 1000128000
+	StructureTypeDebugUtilsObjectTagInfoEXT                            StructureType = 1000128001
+	StructureTypeDedicatedAllocationBufferCreateInfoNV                 StructureType = 1000026001
+	StructureTypeDedicatedAllocationImageCreateInfoNV                  StructureType = 1000026000
+	StructureTypeDedicatedAllocationMemoryAllocateInfoNV               StructureType = 1000026002
+	StructureTypeDescriptorAccelerationStructureInfoNVX                StructureType = 1000165007
+	StructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXT         StructureType = 1000138003
+	StructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXT          StructureType = 1000161000
+	StructureTypeDescriptorSetLayoutSupport                            StructureType = 1000168001
+	StructureTypeDescriptorSetLayoutSupportKHR                         StructureType = 1000168001
+	StructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExt   StructureType = 1000161003
+	StructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXT  StructureType = 1000161004
+	StructureTypeDescriptorUpdateTemplateCreateINFO                    StructureType = 1000085000
+	StructureTypeDescriptorUpdateTemplateCreateInfoKHR                 StructureType = 1000085000
+	StructureTypeDeviceEventInfoEXT                                    StructureType = 1000091001
+	StructureTypeDeviceGeneratedCommandsFeaturesNVX                    StructureType = 1000086005
+	StructureTypeDeviceGeneratedCommandsLimitsNVX                      StructureType = 1000086004
+	StructureTypeDeviceGroupBindSparseInfoKHR                          StructureType = 1000060006
+	StructureTypeDeviceGroupCommandBufferBeginInfoKHR                  StructureType = 1000060004
+	StructureTypeDeviceGroupDeviceCreateInfoKHR                        StructureType = 1000070001
+	StructureTypeDeviceGroupPresentCapabilitiesKHR                     StructureType = 1000060007
+	StructureTypeDeviceGroupPresentInfoKHR                             StructureType = 1000060011
+	StructureTypeDeviceGroupRenderPassBeginInfoKHR                     StructureType = 1000060003
+	StructureTypeDeviceGroupSubmitInfoKHR                              StructureType = 1000060005
+	StructureTypeDeviceGroupSwapchainCreateInfoKHR                     StructureType = 1000060012
+	StructureTypeDeviceQueueGlobalPriorityCreateInfoEXT                StructureType = 1000174000
+	StructureTypeDeviceQueueInfo2                                      StructureType = 1000145003
+	StructureTypeDisplayEventInfoEXT                                   StructureType = 1000091002
+	StructureTypeDisplayModeCreateInfoKHR                              StructureType = 1000002000
+	StructureTypeDisplayModeProperties2KHR                             StructureType = 1000121002
+	StructureTypeDisplayPlaneCapabilities2KHR                          StructureType = 1000121004
+	StructureTypeDisplayPlaneInfo2KHR                                  StructureType = 1000121003
+	StructureTypeDisplayPlaneProperties2KHR                            StructureType = 1000121001
+	StructureTypeDisplayPowerInfoEXT                                   StructureType = 1000091000
+	StructureTypeDisplayPresentInfoKHR                                 StructureType = 1000003000
+	StructureTypeDisplayProperties2KHR                                 StructureType = 1000121000
+	StructureTypeDisplaySurfaceCreateInfoKHR                           StructureType = 1000002001
+	StructureTypeDescriptorPoolCreateInfo                              StructureType = 33
+	StructureTypeDescriptorSetAllocateInfo                             StructureType = 34
+	StructureTypeDescriptorSetLayoutCreateInfo                         StructureType = 32
+	StructureTypeDeviceCreateInfo                                      StructureType = 3
+	StructureTypeDeviceGroupBindSparseInfo                             StructureType = 1000060006
+	StructureTypeDeviceGroupCommandBufferBeginInfo                     StructureType = 1000060004
+	StructureTypeDeviceGroupDeviceCreateInfo                           StructureType = 1000070001
+	StructureTypeDeviceGroupRenderPassBeginInfo                        StructureType = 1000060003
+	StructureTypeDeviceGroupSubmitInfo                                 StructureType = 1000060005
+	StructureTypeDeviceQueueCreateInfo                                 StructureType = 2
+	StructureTypeExportFenceCreateInfo                                 StructureType = 1000113000
+	StructureTypeExportFenceCreateInfoKHR                              StructureType = 1000113000
+	StructureTypeExportFenceWin32HandleInfoKHR                         StructureType = 1000114001
+	StructureTypeExportMemoryAllocateInfo                              StructureType = 1000072002
+	StructureTypeExportMemoryAllocateInfoKHR                           StructureType = 1000072002
+	StructureTypeExportMemoryAllocateInfoNV                            StructureType = 1000056001
+	StructureTypeExportMemoryWin32HandleInfoKHR                        StructureType = 1000073001
+	StructureTypeExportMemoryWin32HandleInfoNV                         StructureType = 1000057001
+	StructureTypeExportSemaphoreCreateInfo                             StructureType = 1000077000
+	StructureTypeExportSemaphoreCreateInfoKHR                          StructureType = 1000077000
+	StructureTypeExportSemaphoreWin32HandleInfoKHR                     StructureType = 1000078001
+	StructureTypeExternalBufferProperties                              StructureType = 1000071003
+	StructureTypeExternalBufferPropertiesKHR                           StructureType = 1000071003
+	StructureTypeExternalFenceProperties                               StructureType = 1000112001
+	StructureTypeExternalFencePropertiesKHR                            StructureType = 1000112001
+	StructureTypeExternalFormatAndroid                                 StructureType = 1000129005
+	StructureTypeExternalImageFormatProperties                         StructureType = 1000071001
+	StructureTypeExternalImageFormatPropertiesKHR                      StructureType = 1000071001
+	StructureTypeExternalMemoryBufferCreateInfo                        StructureType = 1000072000
+	StructureTypeExternalMemoryBufferCreateInfoKHR                     StructureType = 1000072000
+	StructureTypeExternalMemoryImageCreateInfo                         StructureType = 1000072001
+	StructureTypeExternalMemoryImageCreateInfoKHR                      StructureType = 1000072001
+	StructureTypeExternalMemoryImageCreateInfoNV                       StructureType = 1000056000
+	StructureTypeExternalSemaphoreProperties                           StructureType = 1000076001
+	StructureTypeExternalSemaphorePropertiesKHR                        StructureType = 1000076001
+	StructureTypeEventCreateInfo                                       StructureType = 10
+	StructureTypeFenceGetFdInfoKHR                                     StructureType = 1000115001
+	StructureTypeFenceGetWin32HandleInfoKHR                            StructureType = 1000114002
+	StructureTypeFormatProperties2                                     StructureType = 1000059002
+	StructureTypeFormatProperties2KHR                                  StructureType = 1000059002
+	StructureTypeFenceCreateInfo                                       StructureType = 8
+	StructureTypeFramebufferCreateInfo                                 StructureType = 37
+	StructureTypeGeometryAABB_NVX                                      StructureType = 1000165005
+	StructureTypeGeometryInstanceNVX                                   StructureType = 1000165002
+	StructureTypeGeometryNVX                                           StructureType = 1000165003
+	StructureTypeGeometryTrianglesNVX                                  StructureType = 1000165004
+	StructureTypeGraphicsPipelineCreateInfo                            StructureType = 28
+	StructureTypeHdrMetadataEXT                                        StructureType = 1000105000
+	StructureTypeHitShaderModuleCreateInfoNVX                          StructureType = 1000165010
+	StructureTypeImageFormatListCreateInfoKHR                          StructureType = 1000147000
+	StructureTypeImageFormatProperties2                                StructureType = 1000059003
+	StructureTypeImageFormatProperties2KHR                             StructureType = 1000059003
+	StructureTypeImageMemoryRequirementsInfo2                          StructureType = 1000146001
+	StructureTypeImageMemoryRequirementsInfo2KHR                       StructureType = 1000146001
+	StructureTypeImagePlaneMemoryRequirementsInfo                      StructureType = 1000156003
+	StructureTypeImagePlaneMemoryRequirementsInfoKHR                   StructureType = 1000156003
+	StructureTypeImageSparseMemoryRequirementsInfo2                    StructureType = 1000146002
+	StructureTypeImageSparseMemoryRequirementsInfo2KHR                 StructureType = 1000146002
+	StructureTypeImageSwapchainCreateInfoKHR                           StructureType = 1000060008
+	StructureTypeImageViewAstcDecodeModeEXT                            StructureType = 1000067000
+	StructureTypeImageViewUsageCreateInfo                              StructureType = 1000117002
+	StructureTypeImageViewUsageCreateInfoKHR                           StructureType = 1000117002
+	StructureTypeImportAndroidHardwareBufferInfoAndroid                StructureType = 1000129003
+	StructureTypeImportFenceFdInfoKHR                                  StructureType = 1000115000
+	StructureTypeImportFenceWin32HandleInfoKHR                         StructureType = 1000114000
+	StructureTypeImportMemoryFdInfoKHR                                 StructureType = 1000074000
+	StructureTypeImportMemoryHostPointerInfoEXT                        StructureType = 1000178000
+	StructureTypeImportMemoryWin32HandleInfoKHR                        StructureType = 1000073000
+	StructureTypeImportMemoryWin32HandleInfoNV                         StructureType = 1000057000
+	StructureTypeImportSemaphoreFdInfoKHR                              StructureType = 1000079000
+	StructureTypeImportSemaphoreWin32HandleInfoKHR                     StructureType = 1000078000
+	StructureTypeIndirectCommandsLayoutCreateInfoNVX                   StructureType = 1000086001
+	StructureTypeIosSurfaceCreateInfoMVK                               StructureType = 1000122000
+	StructureTypeImageCreateInfo                                       StructureType = 14
+	StructureTypeImageMemoryBarrier                                    StructureType = 45
+	StructureTypeImageViewCreateInfo                                   StructureType = 15
+	StructureTypeInstanceCreateInfo                                    StructureType = 1
+	StructureTypeLoaderDeviceCreateInfo                                StructureType = 48
+	StructureTypeLoaderInstanceCreateInfo                              StructureType = 47
+	StructureTypeMacosSurfaceCreateInfoMVK                             StructureType = 1000123000
+	StructureTypeMemoryAllocateFlagsInfoKHR                            StructureType = 1000060000
+	StructureTypeMemoryDedicatedAllocateInfoKHR                        StructureType = 1000127001
+	StructureTypeMemoryDedicatedRequirementsKHR                        StructureType = 1000127000
+	StructureTypeMemoryFdPropertiesKHR                                 StructureType = 1000074001
+	StructureTypeMemoryGetAndroidHardwareBufferInfoAndroid             StructureType = 1000129004
+	StructureTypeMemoryGetFdInfoKHR                                    StructureType = 1000074002
+	StructureTypeMemoryGetWin32HandleInfoKHR                           StructureType = 1000073003
+	StructureTypeMemoryHostPointerPropertiesEXT                        StructureType = 1000178001
+	StructureTypeMemoryRequirements2                                   StructureType = 1000146003
+	StructureTypeMemoryRequirements2KHR                                StructureType = 1000146003
+	StructureTypeMemoryWin32HandlePropertiesKHR                        StructureType = 1000073002
+	StructureTypeMirSurfaceCreateInfoKHR                               StructureType = 1000007000
+	StructureTypeMultisamplePropertiesEXT                              StructureType = 1000143004
+	StructureTypeMappedMemoryRange                                     StructureType = 6
+	StructureTypeMemoryAllocateFlagsInfo                               StructureType = 1000060000
+	StructureTypeMemoryAllocateInfo                                    StructureType = 5
+	StructureTypeMemoryBarrier                                         StructureType = 46
+	StructureTypeMemoryDedicatedAllocateInfo                           StructureType = 1000127001
+	StructureTypeMemoryDedicatedRequirements                           StructureType = 1000127000
+	StructureTypeObjectTableCreateInfoNVX                              StructureType = 1000086000
+	StructureTypePhysicalDevice16BitStorageFeaturesKHR                 StructureType = 1000083000
+	StructureTypePhysicalDevice8BitStorageFeaturesKHR                  StructureType = 1000177000
+	StructureTypePhysicalDeviceAstcDecodeFeaturesEXT                   StructureType = 1000067001
+	StructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXT       StructureType = 1000148000
+	StructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXT     StructureType = 1000148001
+	StructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NV     StructureType = 1000201000
+	StructureTypePhysicalDeviceConditionalRenderingFeaturesEXT         StructureType = 1000081001
+	StructureTypePhysicalDeviceConservativeRasterizationPropertiesEXT  StructureType = 1000101000
+	StructureTypePhysicalDeviceCornerSampledImageFeaturesNV            StructureType = 1000050000
+	StructureTypePhysicalDeviceDescriptorIndexingFeaturesEXT           StructureType = 1000161001
+	StructureTypePhysicalDeviceDescriptorIndexingPropertiesEXT         StructureType = 1000161002
+	StructureTypePhysicalDeviceDiscardRectanglePropertiesEXT           StructureType = 1000099000
+	StructureTypePhysicalDeviceExclusiveScissorFeaturesNV              StructureType = 1000205002
+	StructureTypePhysicalDeviceExternalBufferInfo                      StructureType = 1000071002
+	StructureTypePhysicalDeviceExternalBufferInfoKHR                   StructureType = 1000071002
+	StructureTypePhysicalDeviceExternalFenceInfo                       StructureType = 1000112000
+	StructureTypePhysicalDeviceExternalFenceInfoKHR                    StructureType = 1000112000
+	StructureTypePhysicalDeviceExternalImageFormatInfo                 StructureType = 1000071000
+	StructureTypePhysicalDeviceExternalImageFormatInfoKHR              StructureType = 1000071000
+	StructureTypePhysicalDeviceExternalMemoryHostPropertiesEXT         StructureType = 1000178002
+	StructureTypePhysicalDeviceExternalSemaphoreInfo                   StructureType = 1000076000
+	StructureTypePhysicalDeviceExternalSemaphoreInfoKHR                StructureType = 1000076000
+	StructureTypePhysicalDeviceFeatures2                               StructureType = 1000059000
+	StructureTypePhysicalDeviceFeatures2KHR                            StructureType = 1000059000
+	StructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNV     StructureType = 1000203000
+	StructureTypePhysicalDeviceGroupPropertiesKHR                      StructureType = 1000070000
+	StructureTypePhysicalDeviceIdProperties                            StructureType = 1000071004
+	StructureTypePhysicalDeviceIdPropertiesKHR                         StructureType = 1000071004
+	StructureTypePhysicalDeviceImageFormatInfo2                        StructureType = 1000059004
+	StructureTypePhysicalDeviceImageFormatInfo2KHR                     StructureType = 1000059004
+	StructureTypePhysicalDeviceInlineUniformBlockFeaturesEXT           StructureType = 1000138000
+	StructureTypePhysicalDeviceInlineUniformBlockPropertiesEXT         StructureType = 1000138001
+	StructureTypePhysicalDeviceMaintenance3Properties                  StructureType = 1000168000
+	StructureTypePhysicalDeviceMaintenance3PropertiesKHR               StructureType = 1000168000
+	StructureTypePhysicalDeviceMemoryProperties2                       StructureType = 1000059006
+	StructureTypePhysicalDeviceMemoryProperties2KHR                    StructureType = 1000059006
+	StructureTypePhysicalDeviceMeshShaderFeaturesNV                    StructureType = 1000202000
+	StructureTypePhysicalDeviceMeshShaderPropertiesNV                  StructureType = 1000202001
+	StructureTypePhysicalDeviceMultiviewFeatures                       StructureType = 1000053001
+	StructureTypePhysicalDeviceMultiviewFeaturesKHR                    StructureType = 1000053001
+	StructureTypePhysicalDeviceMultiviewPerViewAttributesPropertiesNVX StructureType = 1000097000
+	StructureTypePhysicalDeviceMultiviewProperties                     StructureType = 1000053002
+	StructureTypePhysicalDeviceMultiviewPropertiesKHR                  StructureType = 1000053002
+	StructureTypePhysicalDevicePointClippingProperties                 StructureType = 1000117000
+	StructureTypePhysicalDevicePointClippingPropertiesKHR              StructureType = 1000117000
+	StructureTypePhysicalDeviceProperties2                             StructureType = 1000059001
+	StructureTypePhysicalDeviceProperties2KHR                          StructureType = 1000059001
+	StructureTypePhysicalDeviceProtectedMemoryFeatures                 StructureType = 1000145001
+	StructureTypePhysicalDeviceProtectedMemoryProperties               StructureType = 1000145002
+	StructureTypePhysicalDevicePushDescriptorPropertiesKHR             StructureType = 1000080000
+	StructureTypePhysicalDeviceRaytracingPropertiesNVX                 StructureType = 1000165009
+	StructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNV    StructureType = 1000166000
+	StructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXT        StructureType = 1000130000
+	StructureTypePhysicalDeviceSamplerYCbCrConversionFeatures          StructureType = 1000156004
+	StructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesKHR       StructureType = 1000156004
+	StructureTypePhysicalDeviceSampleLocationsPropertiesEXT            StructureType = 1000143003
+	StructureTypePhysicalDeviceShaderCorePropertiesAMD                 StructureType = 1000185000
+	StructureTypePhysicalDeviceShaderDrawParameterFeatures             StructureType = 1000063000
+	StructureTypePhysicalDeviceShaderImageFootprintFeaturesNV          StructureType = 1000204000
+	StructureTypePhysicalDeviceShadingRateImageFeaturesNV              StructureType = 1000164001
+	StructureTypePhysicalDeviceShadingRateImagePropertiesNV            StructureType = 1000164002
+	StructureTypePhysicalDeviceSparseImageFormatInfo2                  StructureType = 1000059008
+	StructureTypePhysicalDeviceSparseImageFormatInfo2KHR               StructureType = 1000059008
+	StructureTypePhysicalDeviceSurfaceInfo2KHR                         StructureType = 1000119000
+	StructureTypePhysicalDeviceVariablePointerFeatures                 StructureType = 1000120000
+	StructureTypePhysicalDeviceVariablePointerFeaturesKHR              StructureType = 1000120000
+	StructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXT       StructureType = 1000190002
+	StructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXT     StructureType = 1000190000
+	StructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR            StructureType = 1000211000
+	StructureTypePipelineColorBlendAdvancedStateCreateInfoEXT          StructureType = 1000148002
+	StructureTypePipelineCoverageModulationStateCreateInfoNV           StructureType = 1000152000
+	StructureTypePipelineCoverageToColorStateCreateInfoNV              StructureType = 1000149000
+	StructureTypePipelineDiscardRectangleStateCreateInfoEXT            StructureType = 1000099001
+	StructureTypePipelineRasterizationConservativeStateCreateInfoEXT   StructureType = 1000101001
+	StructureTypePipelineRasterizationStateRasterizationOrderAMD       StructureType = 1000018000
+	StructureTypePipelineRepresentativeFragmentTestStateCreateInfoNV   StructureType = 1000166001
+	StructureTypePipelineSampleLocationsStateCreateInfoEXT             StructureType = 1000143002
+	StructureTypePipelineTessellationDomainOriginStateCreateInfo       StructureType = 1000117003
+	StructureTypePipelineTessellationDomainOriginStateCreateInfoKHR    StructureType = 1000117003
+	StructureTypePipelineVertexInputDivisorStateCreateInfoEXT          StructureType = 1000190001
+	StructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNV    StructureType = 1000164005
+	StructureTypePipelineViewportExclusiveScissorStateCreateInfoNV     StructureType = 1000205000
+	StructureTypePipelineViewportShadingRateImageStateCreateInfoNV     StructureType = 1000164000
+	StructureTypePipelineViewportSwizzleStateCreateInfoNV              StructureType = 1000098000
+	StructureTypePipelineViewportWScalingStateCreateInfoNV             StructureType = 1000087000
+	StructureTypePresentInfoKHR                                        StructureType = 1000001001
+	StructureTypePresentRegionsKHR                                     StructureType = 1000084000
+	StructureTypePresentTimesInfoGoogle                                StructureType = 1000092000
+	StructureTypeProtectedSubmitInfo                                   StructureType = 1000145000
+	StructureTypePhysicalDevice16ItStorageFeatures                     StructureType = 1000083000
+	StructureTypePhysicalDeviceGroupProperties                         StructureType = 1000070000
+	StructureTypePhysicalDeviceSubgroupProperties                      StructureType = 1000094000
+	StructureTypePipelineCacheCreateInfo                               StructureType = 17
+	StructureTypePipelineColorBlendStateCreateInfo                     StructureType = 26
+	StructureTypePipelineDepthStencilStateCreateInfo                   StructureType = 25
+	StructureTypePipelineDynamicStateCreateInfo                        StructureType = 27
+	StructureTypePipelineInputAssemblyStateCreateInfo                  StructureType = 20
+	StructureTypePipelineLayoutCreateInfo                              StructureType = 30
+	StructureTypePipelineMultisampleStateCreateInfo                    StructureType = 24
+	StructureTypePipelineRasterizationStateCreateInfo                  StructureType = 23
+	StructureTypePipelineShaderStageCreateInfo                         StructureType = 18
+	StructureTypePipelineTessellationStateCreateInfo                   StructureType = 21
+	StructureTypePipelineVertexInputStateCreateInfo                    StructureType = 19
+	StructureTypePipelineViewportStateCreateInfo                       StructureType = 22
+	StructureTypeQueueFamilyCheckpointPropertiesNV                     StructureType = 1000206001
+	StructureTypeQueueFamilyProperties2                                StructureType = 1000059005
+	StructureTypeQueueFamilyProperties2KHR                             StructureType = 1000059005
+	StructureTypeQueryPoolCreateInfo                                   StructureType = 11
+	StructureTypeRaytracingPipelineCreateInfoNVX                       StructureType = 1000165000
+	StructureTypeRenderPassCreateInfo2KHR                              StructureType = 1000109004
+	StructureTypeRenderPassInputAttachmentAspectCreateInfo             StructureType = 1000117001
+	StructureTypeRenderPassInputAttachmentAspectCreateInfoKHR          StructureType = 1000117001
+	StructureTypeRenderPassMultiviewCreateInfo                         StructureType = 1000053000
+	StructureTypeRenderPassMultiviewCreateInfoKHR                      StructureType = 1000053000
+	StructureTypeRenderPassSampleLocationsBeginInfoEXT                 StructureType = 1000143001
+	StructureTypeRenderPassBeginInfo                                   StructureType = 43
+	StructureTypeRenderPassCreateInfo                                  StructureType = 38
+	StructureTypeSamplerReductionModeCreateInfoEXT                     StructureType = 1000130001
+	StructureTypeSamplerYCbCrConversionCreateInfo                      StructureType = 1000156000
+	StructureTypeSamplerYCbCrConversionCreateInfoKHR                   StructureType = 1000156000
+	StructureTypeSamplerYCbCrConversionImageFormatProperties           StructureType = 1000156005
+	StructureTypeSamplerYCbCrConversionImageFormatPropertiesKHR        StructureType = 1000156005
+	StructureTypeSamplerYCbCrConversionINFO                            StructureType = 1000156001
+	StructureTypeSamplerYCbCrConversionINFO_KHR                        StructureType = 1000156001
+	StructureTypeSampleLocationsInfoEXT                                StructureType = 1000143000
+	StructureTypeSemaphoreGetFdInfoKHR                                 StructureType = 1000079001
+	StructureTypeSemaphoreGetWin32HandleInfoKHR                        StructureType = 1000078003
+	StructureTypeShaderModuleValidationCacheCreateInfoEXT              StructureType = 1000160001
+	StructureTypeSharedPresentSurfaceCapabilitiesKHR                   StructureType = 1000111000
+	StructureTypeSparseImageFormatProperties2                          StructureType = 1000059007
+	StructureTypeSparseImageFormatProperties2KHR                       StructureType = 1000059007
+	StructureTypeSparseImageMemoryRequirements2                        StructureType = 1000146004
+	StructureTypeSparseImageMemoryRequirements2KHR                     StructureType = 1000146004
+	StructureTypeSubpassBeginInfoKHR                                   StructureType = 1000109005
+	StructureTypeSubpassDependency2KHR                                 StructureType = 1000109003
+	StructureTypeSubpassDescription2KHR                                StructureType = 1000109002
+	StructureTypeSubpassEndInfoKHR                                     StructureType = 1000109006
+	StructureTypeSurfaceCapabilities2EXT                               StructureType = 1000090000
+	StructureTypeSurfaceCapabilities2KHR                               StructureType = 1000119001
+	StructureTypeSurfaceFormat2KHR                                     StructureType = 1000119002
+	StructureTypeSwapchainCounterCreateInfoEXT                         StructureType = 1000091003
+	StructureTypeSwapchainCreateInfoKHR                                StructureType = 1000001000
+	StructureTypeSamplerCreateInfo                                     StructureType = 31
+	StructureTypeSemaphoreCreateInfo                                   StructureType = 9
+	StructureTypeShaderModuleCreateInfo                                StructureType = 16
+	StructureTypeSubmitInfo                                            StructureType = 4
+	StructureTypeTextureLodGatherFormatPropertiesAMD                   StructureType = 1000041000
+	StructureTypeValidationCacheCreateInfoEXT                          StructureType = 1000160000
+	StructureTypeValidationFlagsEXT                                    StructureType = 1000061000
+	StructureTypeViSurfaceCreateInfoNN                                 StructureType = 1000062000
+	StructureTypeWaylandSurfaceCreateInfoKHR                           StructureType = 1000006000
+	StructureTypeWin32KeyedMutexAcquireReleaseInfoKHR                  StructureType = 1000075000
+	StructureTypeWin32KeyedMutexAcquireReleaseInfoNV                   StructureType = 1000058000
+	StructureTypeWin32SurfaceCreateInfoKHR                             StructureType = 1000009000
+	StructureTypeWriteDescriptorSetInlineUniformBlockEXT               StructureType = 1000138002
+	StructureTypeWriteDescriptorSet                                    StructureType = 35
+	StructureTypeXcbSurfaceCreateInfoKHR                               StructureType = 1000005000
+	StructureTypeXlibSurfaceCreateInfoKHR                              StructureType = 1000004000
 )
 
 const (
 	// SurfaceTransformIdentityBitKHR specifies that image content is presented without being transformed.
-	SurfaceTransformIdentityBitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR
+	SurfaceTransformIdentityBitKHR SurfaceTransformFlagsKHR = 0x00000001
 
 	// SurfaceTransformRotate90BitKHR  specifies that image content is rotated 90 degrees clockwise.
-	SurfaceTransformRotate90BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR
+	SurfaceTransformRotate90BitKHR SurfaceTransformFlagsKHR = 0x00000002
 
 	// SurfaceTransformRotate180BitKHR specifies that image content is rotated 180 degrees clockwise.
-	SurfaceTransformRotate180BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR
+	SurfaceTransformRotate180BitKHR SurfaceTransformFlagsKHR = 0x00000004
 
 	// SurfaceTransformRotate270BitKHR specifies that image content is rotated 270 degrees clockwise.
-	SurfaceTransformRotate270BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR
+	SurfaceTransformRotate270BitKHR SurfaceTransformFlagsKHR = 0x00000008
 
 	// SurfaceTransformHorizontalMirrorBitKhr specifies that image content is mirrored horizontally.
-	SurfaceTransformHorizontalMirrorBitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR
+	SurfaceTransformHorizontalMirrorBitKHR SurfaceTransformFlagsKHR = 0x00000010
 
 	// SurfaceTransformHorizontalMirrorRotate90BitKHR specifies that image content is mirrored horizontally, then rotated 90 degrees clockwise.
-	SurfaceTransformHorizontalMirrorRotate90BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR
+	SurfaceTransformHorizontalMirrorRotate90BitKHR SurfaceTransformFlagsKHR = 0x00000020
 
 	// SurfaceTransformHorizontalMirrorRotate180BitKHR specifies that image content is mirrored horizontally, then rotated 180 degrees clockwise.
-	SurfaceTransformHorizontalMirrorRotate180BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR
+	SurfaceTransformHorizontalMirrorRotate180BitKHR SurfaceTransformFlagsKHR = 0x00000040
 
 	// SurfaceTransformHorizontalMirrorRotate270BitKHR specifies that image content is mirrored horizontally, then rotated 270 degrees clockwise.
-	SurfaceTransformHorizontalMirrorRotate270BitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR
+	SurfaceTransformHorizontalMirrorRotate270BitKHR SurfaceTransformFlagsKHR = 0x00000080
 
 	// SurfaceTransformInheritBitKHR specifies that the presentation transform is not specified,
 	// and is instead determined by platform-specific considerations and mechanisms outside Vulkan.
-	SurfaceTransformInheritBitKHR SurfaceTransformFlagsKHR = C.VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR
+	SurfaceTransformInheritBitKHR SurfaceTransformFlagsKHR = 0x00000100
 )
 
 const (
@@ -551,244 +582,244 @@ const (
 
 const (
 	// ImageUsageTransferSrcBit specifies that the image can be used as the source of a transfer command.
-	ImageUsageTransferSrcBit ImageUsageFlags = C.VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+	ImageUsageTransferSrcBit ImageUsageFlags = 0x00000001
 
 	// ImageUsageTransferDstBit specifies that the image can be used as the destination of a transfer command.
-	ImageUsageTransferDstBit ImageUsageFlags = C.VK_IMAGE_USAGE_TRANSFER_DST_BIT
+	ImageUsageTransferDstBit ImageUsageFlags = 0x00000002
 
 	// ImageUsageSampledBit specifies that the image can be used to create a VkImageView
 	// suitable for occupying a VkDescriptorSet slot either of type VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
 	// or VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, and be sampled by a shader.
-	ImageUsageSampledBit ImageUsageFlags = C.VK_IMAGE_USAGE_SAMPLED_BIT
+	ImageUsageSampledBit ImageUsageFlags = 0x00000004
 
 	// ImageUsageStorageBit specifies that the image can be used to create a VkImageView
 	// suitable for occupying a VkDescriptorSet slot of type VK_DESCRIPTOR_TYPE_STORAGE_IMAGE.
-	ImageUsageStorageBit ImageUsageFlags = C.VK_IMAGE_USAGE_STORAGE_BIT
+	ImageUsageStorageBit ImageUsageFlags = 0x00000008
 
 	// ImageUsageColorAttachmentBit specifies that the image can be used to create a VkImageView
 	// suitable for use as a color or resolve attachment in a VkFramebuffer.
-	ImageUsageColorAttachmentBit ImageUsageFlags = C.VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+	ImageUsageColorAttachmentBit ImageUsageFlags = 0x00000010
 
 	// ImageUsageDepthStencilAttachmentBit specifies that the image can be used to create a VkImageView
 	// suitable for use as a depth/stencil attachment in a VkFramebuffer.
-	ImageUsageDepthStencilAttachmentBit ImageUsageFlags = C.VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+	ImageUsageDepthStencilAttachmentBit ImageUsageFlags = 0x00000020
 
 	// ImageUsageTransientAttachmentBit specifies that the memory bound to this image will have been allocated
 	// with the VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT (see Memory Allocation for more detail).
 	// This bit can be set for any image that can be used to create a VkImageView
 	// suitable for use as a color, resolve, depth/stencil, or input attachment.
-	ImageUsageTransientAttachmentBit ImageUsageFlags = C.VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT
+	ImageUsageTransientAttachmentBit ImageUsageFlags = 0x00000040
 
 	// ImageUsageInputAttachmentBit specifies that the image can be used to create a VkImageView suitable
 	// for occupying VkDescriptorSet slot of type VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
 	// be read from a shader as an input attachment; and be used as an input attachment in a framebuffer.
-	ImageUsageInputAttachmentBit ImageUsageFlags = C.VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+	ImageUsageInputAttachmentBit ImageUsageFlags = 0x00000080
 )
 
 const (
-	FormatUNDEFINED                  Format = C.VK_FORMAT_UNDEFINED
-	FormatR4G4_UNORM_PACK8           Format = C.VK_FORMAT_R4G4_UNORM_PACK8
-	FormatR4G4B4A4_UNORM_PACK16      Format = C.VK_FORMAT_R4G4B4A4_UNORM_PACK16
-	FormatB4G4R4A4_UNORM_PACK16      Format = C.VK_FORMAT_B4G4R4A4_UNORM_PACK16
-	FormatR5G6B5_UNORM_PACK16        Format = C.VK_FORMAT_R5G6B5_UNORM_PACK16
-	FormatB5G6R5_UNORM_PACK16        Format = C.VK_FORMAT_B5G6R5_UNORM_PACK16
-	FormatR5G5B5A1_UNORM_PACK16      Format = C.VK_FORMAT_R5G5B5A1_UNORM_PACK16
-	FormatB5G5R5A1_UNORM_PACK16      Format = C.VK_FORMAT_B5G5R5A1_UNORM_PACK16
-	FormatA1R5G5B5_UNORM_PACK16      Format = C.VK_FORMAT_A1R5G5B5_UNORM_PACK16
-	FormatR8_UNORM                   Format = C.VK_FORMAT_R8_UNORM
-	FormatR8_SNORM                   Format = C.VK_FORMAT_R8_SNORM
-	FormatR8_USCALED                 Format = C.VK_FORMAT_R8_USCALED
-	FormatR8_SSCALED                 Format = C.VK_FORMAT_R8_SSCALED
-	FormatR8_UINT                    Format = C.VK_FORMAT_R8_UINT
-	FormatR8_SINT                    Format = C.VK_FORMAT_R8_SINT
-	FormatR8_SRGB                    Format = C.VK_FORMAT_R8_SRGB
-	FormatR8G8_UNORM                 Format = C.VK_FORMAT_R8G8_UNORM
-	FormatR8G8_SNORM                 Format = C.VK_FORMAT_R8G8_SNORM
-	FormatR8G8_USCALED               Format = C.VK_FORMAT_R8G8_USCALED
-	FormatR8G8_SSCALED               Format = C.VK_FORMAT_R8G8_SSCALED
-	FormatR8G8_UINT                  Format = C.VK_FORMAT_R8G8_UINT
-	FormatR8G8_SINT                  Format = C.VK_FORMAT_R8G8_SINT
-	FormatR8G8_SRGB                  Format = C.VK_FORMAT_R8G8_SRGB
-	FormatR8G8B8_UNORM               Format = C.VK_FORMAT_R8G8B8_UNORM
-	FormatR8G8B8_SNORM               Format = C.VK_FORMAT_R8G8B8_SNORM
-	FormatR8G8B8_USCALED             Format = C.VK_FORMAT_R8G8B8_USCALED
-	FormatR8G8B8_SSCALED             Format = C.VK_FORMAT_R8G8B8_SSCALED
-	FormatR8G8B8_UINT                Format = C.VK_FORMAT_R8G8B8_UINT
-	FormatR8G8B8_SINT                Format = C.VK_FORMAT_R8G8B8_SINT
-	FormatR8G8B8_SRGB                Format = C.VK_FORMAT_R8G8B8_SRGB
-	FormatB8G8R8_UNORM               Format = C.VK_FORMAT_B8G8R8_UNORM
-	FormatB8G8R8_SNORM               Format = C.VK_FORMAT_B8G8R8_SNORM
-	FormatB8G8R8_USCALED             Format = C.VK_FORMAT_B8G8R8_USCALED
-	FormatB8G8R8_SSCALED             Format = C.VK_FORMAT_B8G8R8_SSCALED
-	FormatB8G8R8_UINT                Format = C.VK_FORMAT_B8G8R8_UINT
-	FormatB8G8R8_SINT                Format = C.VK_FORMAT_B8G8R8_SINT
-	FormatB8G8R8_SRGB                Format = C.VK_FORMAT_B8G8R8_SRGB
-	FormatR8G8B8A8_UNORM             Format = C.VK_FORMAT_R8G8B8A8_UNORM
-	FormatR8G8B8A8_SNORM             Format = C.VK_FORMAT_R8G8B8A8_SNORM
-	FormatR8G8B8A8_USCALED           Format = C.VK_FORMAT_R8G8B8A8_USCALED
-	FormatR8G8B8A8_SSCALED           Format = C.VK_FORMAT_R8G8B8A8_SSCALED
-	FormatR8G8B8A8_UINT              Format = C.VK_FORMAT_R8G8B8A8_UINT
-	FormatR8G8B8A8_SINT              Format = C.VK_FORMAT_R8G8B8A8_SINT
-	FormatR8G8B8A8_SRGB              Format = C.VK_FORMAT_R8G8B8A8_SRGB
-	FormatB8G8R8A8_UNORM             Format = C.VK_FORMAT_B8G8R8A8_UNORM
-	FormatB8G8R8A8_SNORM             Format = C.VK_FORMAT_B8G8R8A8_SNORM
-	FormatB8G8R8A8_USCALED           Format = C.VK_FORMAT_B8G8R8A8_USCALED
-	FormatB8G8R8A8_SSCALED           Format = C.VK_FORMAT_B8G8R8A8_SSCALED
-	FormatB8G8R8A8_UINT              Format = C.VK_FORMAT_B8G8R8A8_UINT
-	FormatB8G8R8A8_SINT              Format = C.VK_FORMAT_B8G8R8A8_SINT
-	FormatB8G8R8A8_SRGB              Format = C.VK_FORMAT_B8G8R8A8_SRGB
-	FormatA8B8G8R8_UNORM_PACK32      Format = C.VK_FORMAT_A8B8G8R8_UNORM_PACK32
-	FormatA8B8G8R8_SNORM_PACK32      Format = C.VK_FORMAT_A8B8G8R8_SNORM_PACK32
-	FormatA8B8G8R8_USCALED_PACK32    Format = C.VK_FORMAT_A8B8G8R8_USCALED_PACK32
-	FormatA8B8G8R8_SSCALED_PACK32    Format = C.VK_FORMAT_A8B8G8R8_SSCALED_PACK32
-	FormatA8B8G8R8_UINT_PACK32       Format = C.VK_FORMAT_A8B8G8R8_UINT_PACK32
-	FormatA8B8G8R8_SINT_PACK32       Format = C.VK_FORMAT_A8B8G8R8_SINT_PACK32
-	FormatA8B8G8R8_SRGB_PACK32       Format = C.VK_FORMAT_A8B8G8R8_SRGB_PACK32
-	FormatA2R10G10B10_UNORM_PACK32   Format = C.VK_FORMAT_A2R10G10B10_UNORM_PACK32
-	FormatA2R10G10B10_SNORM_PACK32   Format = C.VK_FORMAT_A2R10G10B10_SNORM_PACK32
-	FormatA2R10G10B10_USCALED_PACK32 Format = C.VK_FORMAT_A2R10G10B10_USCALED_PACK32
-	FormatA2R10G10B10_SSCALED_PACK32 Format = C.VK_FORMAT_A2R10G10B10_SSCALED_PACK32
-	FormatA2R10G10B10_UINT_PACK32    Format = C.VK_FORMAT_A2R10G10B10_UINT_PACK32
-	FormatA2R10G10B10_SINT_PACK32    Format = C.VK_FORMAT_A2R10G10B10_SINT_PACK32
-	FormatA2B10G10R10_UNORM_PACK32   Format = C.VK_FORMAT_A2B10G10R10_UNORM_PACK32
-	FormatA2B10G10R10_SNORM_PACK32   Format = C.VK_FORMAT_A2B10G10R10_SNORM_PACK32
-	FormatA2B10G10R10_USCALED_PACK32 Format = C.VK_FORMAT_A2B10G10R10_USCALED_PACK32
-	FormatA2B10G10R10_SSCALED_PACK32 Format = C.VK_FORMAT_A2B10G10R10_SSCALED_PACK32
-	FormatA2B10G10R10_UINT_PACK32    Format = C.VK_FORMAT_A2B10G10R10_UINT_PACK32
-	FormatA2B10G10R10_SINT_PACK32    Format = C.VK_FORMAT_A2B10G10R10_SINT_PACK32
-	FormatR16_UNORM                  Format = C.VK_FORMAT_R16_UNORM
-	FormatR16_SNORM                  Format = C.VK_FORMAT_R16_SNORM
-	FormatR16_USCALED                Format = C.VK_FORMAT_R16_USCALED
-	FormatR16_SSCALED                Format = C.VK_FORMAT_R16_SSCALED
-	FormatR16_UINT                   Format = C.VK_FORMAT_R16_UINT
-	FormatR16_SINT                   Format = C.VK_FORMAT_R16_SINT
-	FormatR16_SFLOAT                 Format = C.VK_FORMAT_R16_SFLOAT
-	FormatR16G16_UNORM               Format = C.VK_FORMAT_R16G16_UNORM
-	FormatR16G16_SNORM               Format = C.VK_FORMAT_R16G16_SNORM
-	FormatR16G16_USCALED             Format = C.VK_FORMAT_R16G16_USCALED
-	FormatR16G16_SSCALED             Format = C.VK_FORMAT_R16G16_SSCALED
-	FormatR16G16_UINT                Format = C.VK_FORMAT_R16G16_UINT
-	FormatR16G16_SINT                Format = C.VK_FORMAT_R16G16_SINT
-	FormatR16G16_SFLOAT              Format = C.VK_FORMAT_R16G16_SFLOAT
-	FormatR16G16B16_UNORM            Format = C.VK_FORMAT_R16G16B16_UNORM
-	FormatR16G16B16_SNORM            Format = C.VK_FORMAT_R16G16B16_SNORM
-	FormatR16G16B16_USCALED          Format = C.VK_FORMAT_R16G16B16_USCALED
-	FormatR16G16B16_SSCALED          Format = C.VK_FORMAT_R16G16B16_SSCALED
-	FormatR16G16B16_UINT             Format = C.VK_FORMAT_R16G16B16_UINT
-	FormatR16G16B16_SINT             Format = C.VK_FORMAT_R16G16B16_SINT
-	FormatR16G16B16_SFLOAT           Format = C.VK_FORMAT_R16G16B16_SFLOAT
-	FormatR16G16B16A16_UNORM         Format = C.VK_FORMAT_R16G16B16A16_UNORM
-	FormatR16G16B16A16_SNORM         Format = C.VK_FORMAT_R16G16B16A16_SNORM
-	FormatR16G16B16A16_USCALED       Format = C.VK_FORMAT_R16G16B16A16_USCALED
-	FormatR16G16B16A16_SSCALED       Format = C.VK_FORMAT_R16G16B16A16_SSCALED
-	FormatR16G16B16A16_UINT          Format = C.VK_FORMAT_R16G16B16A16_UINT
-	FormatR16G16B16A16_SINT          Format = C.VK_FORMAT_R16G16B16A16_SINT
-	FormatR16G16B16A16_SFLOAT        Format = C.VK_FORMAT_R16G16B16A16_SFLOAT
-	FormatR32_UINT                   Format = C.VK_FORMAT_R32_UINT
-	FormatR32_SINT                   Format = C.VK_FORMAT_R32_SINT
-	FormatR32_SFLOAT                 Format = C.VK_FORMAT_R32_SFLOAT
-	FormatR32G32_UINT                Format = C.VK_FORMAT_R32G32_UINT
-	FormatR32G32_SINT                Format = C.VK_FORMAT_R32G32_SINT
-	FormatR32G32_SFLOAT              Format = C.VK_FORMAT_R32G32_SFLOAT
-	FormatR32G32B32_UINT             Format = C.VK_FORMAT_R32G32B32_UINT
-	FormatR32G32B32_SINT             Format = C.VK_FORMAT_R32G32B32_SINT
-	FormatR32G32B32_SFLOAT           Format = C.VK_FORMAT_R32G32B32_SFLOAT
-	FormatR32G32B32A32_UINT          Format = C.VK_FORMAT_R32G32B32A32_UINT
-	FormatR32G32B32A32_SINT          Format = C.VK_FORMAT_R32G32B32A32_SINT
-	FormatR32G32B32A32_SFLOAT        Format = C.VK_FORMAT_R32G32B32A32_SFLOAT
-	FormatR64_UINT                   Format = C.VK_FORMAT_R64_UINT
-	FormatR64_SINT                   Format = C.VK_FORMAT_R64_SINT
-	FormatR64_SFLOAT                 Format = C.VK_FORMAT_R64_SFLOAT
-	FormatR64G64_UINT                Format = C.VK_FORMAT_R64G64_UINT
-	FormatR64G64_SINT                Format = C.VK_FORMAT_R64G64_SINT
-	FormatR64G64_SFLOAT              Format = C.VK_FORMAT_R64G64_SFLOAT
-	FormatR64G64B64_UINT             Format = C.VK_FORMAT_R64G64B64_UINT
-	FormatR64G64B64_SINT             Format = C.VK_FORMAT_R64G64B64_SINT
-	FormatR64G64B64_SFLOAT           Format = C.VK_FORMAT_R64G64B64_SFLOAT
-	FormatR64G64B64A64_UINT          Format = C.VK_FORMAT_R64G64B64A64_UINT
-	FormatR64G64B64A64_SINT          Format = C.VK_FORMAT_R64G64B64A64_SINT
-	FormatR64G64B64A64_SFLOAT        Format = C.VK_FORMAT_R64G64B64A64_SFLOAT
-	FormatB10G11R11_UFLOAT_PACK32    Format = C.VK_FORMAT_B10G11R11_UFLOAT_PACK32
-	FormatE5B9G9R9_UFLOAT_PACK32     Format = C.VK_FORMAT_E5B9G9R9_UFLOAT_PACK32
-	FormatD16_UNORM                  Format = C.VK_FORMAT_D16_UNORM
-	FormatX8_D24_UNORM_PACK32        Format = C.VK_FORMAT_X8_D24_UNORM_PACK32
-	FormatD32_SFLOAT                 Format = C.VK_FORMAT_D32_SFLOAT
-	FormatS8_UINT                    Format = C.VK_FORMAT_S8_UINT
-	FormatD16_UNORM_S8_UINT          Format = C.VK_FORMAT_D16_UNORM_S8_UINT
-	FormatD24_UNORM_S8_UINT          Format = C.VK_FORMAT_D24_UNORM_S8_UINT
-	FormatD32_SFLOAT_S8_UINT         Format = C.VK_FORMAT_D32_SFLOAT_S8_UINT
-	FormatBC1_RGB_UNORM_BLOCK        Format = C.VK_FORMAT_BC1_RGB_UNORM_BLOCK
-	FormatBC1_RGB_SRGB_BLOCK         Format = C.VK_FORMAT_BC1_RGB_SRGB_BLOCK
-	FormatBC1_RGBA_UNORM_BLOCK       Format = C.VK_FORMAT_BC1_RGBA_UNORM_BLOCK
-	FormatBC1_RGBA_SRGB_BLOCK        Format = C.VK_FORMAT_BC1_RGBA_SRGB_BLOCK
-	FormatBC2_UNORM_BLOCK            Format = C.VK_FORMAT_BC2_UNORM_BLOCK
-	FormatBC2_SRGB_BLOCK             Format = C.VK_FORMAT_BC2_SRGB_BLOCK
-	FormatBC3_UNORM_BLOCK            Format = C.VK_FORMAT_BC3_UNORM_BLOCK
-	FormatBC3_SRGB_BLOCK             Format = C.VK_FORMAT_BC3_SRGB_BLOCK
-	FormatBC4_UNORM_BLOCK            Format = C.VK_FORMAT_BC4_UNORM_BLOCK
-	FormatBC4_SNORM_BLOCK            Format = C.VK_FORMAT_BC4_SNORM_BLOCK
-	FormatBC5_UNORM_BLOCK            Format = C.VK_FORMAT_BC5_UNORM_BLOCK
-	FormatBC5_SNORM_BLOCK            Format = C.VK_FORMAT_BC5_SNORM_BLOCK
-	FormatBC6H_UFLOAT_BLOCK          Format = C.VK_FORMAT_BC6H_UFLOAT_BLOCK
-	FormatBC6H_SFLOAT_BLOCK          Format = C.VK_FORMAT_BC6H_SFLOAT_BLOCK
-	FormatBC7_UNORM_BLOCK            Format = C.VK_FORMAT_BC7_UNORM_BLOCK
-	FormatBC7_SRGB_BLOCK             Format = C.VK_FORMAT_BC7_SRGB_BLOCK
-	FormatETC2_R8G8B8_UNORM_BLOCK    Format = C.VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK
-	FormatETC2_R8G8B8_SRGB_BLOCK     Format = C.VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK
-	FormatETC2_R8G8B8A1_UNORM_BLOCK  Format = C.VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK
-	FormatETC2_R8G8B8A1_SRGB_BLOCK   Format = C.VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK
-	FormatETC2_R8G8B8A8_UNORM_BLOCK  Format = C.VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK
-	FormatETC2_R8G8B8A8_SRGB_BLOCK   Format = C.VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK
-	FormatEAC_R11_UNORM_BLOCK        Format = C.VK_FORMAT_EAC_R11_UNORM_BLOCK
-	FormatEAC_R11_SNORM_BLOCK        Format = C.VK_FORMAT_EAC_R11_SNORM_BLOCK
-	FormatEAC_R11G11_UNORM_BLOCK     Format = C.VK_FORMAT_EAC_R11G11_UNORM_BLOCK
-	FormatEAC_R11G11_SNORM_BLOCK     Format = C.VK_FORMAT_EAC_R11G11_SNORM_BLOCK
-	FormatASTC_4x4_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_4x4_UNORM_BLOCK
-	FormatASTC_4x4_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_4x4_SRGB_BLOCK
-	FormatASTC_5x4_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_5x4_UNORM_BLOCK
-	FormatASTC_5x4_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_5x4_SRGB_BLOCK
-	FormatASTC_5x5_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_5x5_UNORM_BLOCK
-	FormatASTC_5x5_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_5x5_SRGB_BLOCK
-	FormatASTC_6x5_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_6x5_UNORM_BLOCK
-	FormatASTC_6x5_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_6x5_SRGB_BLOCK
-	FormatASTC_6x6_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_6x6_UNORM_BLOCK
-	FormatASTC_6x6_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_6x6_SRGB_BLOCK
-	FormatASTC_8x5_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_8x5_UNORM_BLOCK
-	FormatASTC_8x5_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_8x5_SRGB_BLOCK
-	FormatASTC_8x6_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_8x6_UNORM_BLOCK
-	FormatASTC_8x6_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_8x6_SRGB_BLOCK
-	FormatASTC_8x8_UNORM_BLOCK       Format = C.VK_FORMAT_ASTC_8x8_UNORM_BLOCK
-	FormatASTC_8x8_SRGB_BLOCK        Format = C.VK_FORMAT_ASTC_8x8_SRGB_BLOCK
-	FormatASTC_10x5_UNORM_BLOCK      Format = C.VK_FORMAT_ASTC_10x5_UNORM_BLOCK
-	FormatASTC_10x5_SRGB_BLOCK       Format = C.VK_FORMAT_ASTC_10x5_SRGB_BLOCK
-	FormatASTC_10x6_UNORM_BLOCK      Format = C.VK_FORMAT_ASTC_10x6_UNORM_BLOCK
-	FormatASTC_10x6_SRGB_BLOCK       Format = C.VK_FORMAT_ASTC_10x6_SRGB_BLOCK
-	FormatASTC_10x8_UNORM_BLOCK      Format = C.VK_FORMAT_ASTC_10x8_UNORM_BLOCK
-	FormatASTC_10x8_SRGB_BLOCK       Format = C.VK_FORMAT_ASTC_10x8_SRGB_BLOCK
-	FormatASTC_10x10_UNORM_BLOCK     Format = C.VK_FORMAT_ASTC_10x10_UNORM_BLOCK
-	FormatASTC_10x10_SRGB_BLOCK      Format = C.VK_FORMAT_ASTC_10x10_SRGB_BLOCK
-	FormatASTC_12x10_UNORM_BLOCK     Format = C.VK_FORMAT_ASTC_12x10_UNORM_BLOCK
-	FormatASTC_12x10_SRGB_BLOCK      Format = C.VK_FORMAT_ASTC_12x10_SRGB_BLOCK
-	FormatASTC_12x12_UNORM_BLOCK     Format = C.VK_FORMAT_ASTC_12x12_UNORM_BLOCK
-	FormatASTC_12x12_SRGB_BLOCK      Format = C.VK_FORMAT_ASTC_12x12_SRGB_BLOCK
+	FormatUNDEFINED                  Format = 0
+	FormatR4G4_UNORM_PACK8           Format = 1
+	FormatR4G4B4A4_UNORM_PACK16      Format = 2
+	FormatB4G4R4A4_UNORM_PACK16      Format = 3
+	FormatR5G6B5_UNORM_PACK16        Format = 4
+	FormatB5G6R5_UNORM_PACK16        Format = 5
+	FormatR5G5B5A1_UNORM_PACK16      Format = 6
+	FormatB5G5R5A1_UNORM_PACK16      Format = 7
+	FormatA1R5G5B5_UNORM_PACK16      Format = 8
+	FormatR8_UNORM                   Format = 9
+	FormatR8_SNORM                   Format = 10
+	FormatR8_USCALED                 Format = 11
+	FormatR8_SSCALED                 Format = 12
+	FormatR8_UINT                    Format = 13
+	FormatR8_SINT                    Format = 14
+	FormatR8_SRGB                    Format = 15
+	FormatR8G8_UNORM                 Format = 16
+	FormatR8G8_SNORM                 Format = 17
+	FormatR8G8_USCALED               Format = 18
+	FormatR8G8_SSCALED               Format = 19
+	FormatR8G8_UINT                  Format = 20
+	FormatR8G8_SINT                  Format = 21
+	FormatR8G8_SRGB                  Format = 22
+	FormatR8G8B8_UNORM               Format = 23
+	FormatR8G8B8_SNORM               Format = 24
+	FormatR8G8B8_USCALED             Format = 25
+	FormatR8G8B8_SSCALED             Format = 26
+	FormatR8G8B8_UINT                Format = 27
+	FormatR8G8B8_SINT                Format = 28
+	FormatR8G8B8_SRGB                Format = 29
+	FormatB8G8R8_UNORM               Format = 30
+	FormatB8G8R8_SNORM               Format = 31
+	FormatB8G8R8_USCALED             Format = 32
+	FormatB8G8R8_SSCALED             Format = 33
+	FormatB8G8R8_UINT                Format = 34
+	FormatB8G8R8_SINT                Format = 35
+	FormatB8G8R8_SRGB                Format = 36
+	FormatR8G8B8A8_UNORM             Format = 37
+	FormatR8G8B8A8_SNORM             Format = 38
+	FormatR8G8B8A8_USCALED           Format = 39
+	FormatR8G8B8A8_SSCALED           Format = 40
+	FormatR8G8B8A8_UINT              Format = 41
+	FormatR8G8B8A8_SINT              Format = 42
+	FormatR8G8B8A8_SRGB              Format = 43
+	FormatB8G8R8A8_UNORM             Format = 44
+	FormatB8G8R8A8_SNORM             Format = 45
+	FormatB8G8R8A8_USCALED           Format = 46
+	FormatB8G8R8A8_SSCALED           Format = 47
+	FormatB8G8R8A8_UINT              Format = 48
+	FormatB8G8R8A8_SINT              Format = 49
+	FormatB8G8R8A8_SRGB              Format = 50
+	FormatA8B8G8R8_UNORM_PACK32      Format = 51
+	FormatA8B8G8R8_SNORM_PACK32      Format = 52
+	FormatA8B8G8R8_USCALED_PACK32    Format = 53
+	FormatA8B8G8R8_SSCALED_PACK32    Format = 54
+	FormatA8B8G8R8_UINT_PACK32       Format = 55
+	FormatA8B8G8R8_SINT_PACK32       Format = 56
+	FormatA8B8G8R8_SRGB_PACK32       Format = 57
+	FormatA2R10G10B10_UNORM_PACK32   Format = 58
+	FormatA2R10G10B10_SNORM_PACK32   Format = 59
+	FormatA2R10G10B10_USCALED_PACK32 Format = 60
+	FormatA2R10G10B10_SSCALED_PACK32 Format = 61
+	FormatA2R10G10B10_UINT_PACK32    Format = 62
+	FormatA2R10G10B10_SINT_PACK32    Format = 63
+	FormatA2B10G10R10_UNORM_PACK32   Format = 64
+	FormatA2B10G10R10_SNORM_PACK32   Format = 65
+	FormatA2B10G10R10_USCALED_PACK32 Format = 66
+	FormatA2B10G10R10_SSCALED_PACK32 Format = 67
+	FormatA2B10G10R10_UINT_PACK32    Format = 68
+	FormatA2B10G10R10_SINT_PACK32    Format = 69
+	FormatR16_UNORM                  Format = 70
+	FormatR16_SNORM                  Format = 71
+	FormatR16_USCALED                Format = 72
+	FormatR16_SSCALED                Format = 73
+	FormatR16_UINT                   Format = 74
+	FormatR16_SINT                   Format = 75
+	FormatR16_SFLOAT                 Format = 76
+	FormatR16G16_UNORM               Format = 77
+	FormatR16G16_SNORM               Format = 78
+	FormatR16G16_USCALED             Format = 79
+	FormatR16G16_SSCALED             Format = 80
+	FormatR16G16_UINT                Format = 81
+	FormatR16G16_SINT                Format = 82
+	FormatR16G16_SFLOAT              Format = 83
+	FormatR16G16B16_UNORM            Format = 84
+	FormatR16G16B16_SNORM            Format = 85
+	FormatR16G16B16_USCALED          Format = 86
+	FormatR16G16B16_SSCALED          Format = 87
+	FormatR16G16B16_UINT             Format = 88
+	FormatR16G16B16_SINT             Format = 89
+	FormatR16G16B16_SFLOAT           Format = 90
+	FormatR16G16B16A16_UNORM         Format = 91
+	FormatR16G16B16A16_SNORM         Format = 92
+	FormatR16G16B16A16_USCALED       Format = 93
+	FormatR16G16B16A16_SSCALED       Format = 94
+	FormatR16G16B16A16_UINT          Format = 95
+	FormatR16G16B16A16_SINT          Format = 96
+	FormatR16G16B16A16_SFLOAT        Format = 97
+	FormatR32_UINT                   Format = 98
+	FormatR32_SINT                   Format = 99
+	FormatR32_SFLOAT                 Format = 100
+	FormatR32G32_UINT                Format = 101
+	FormatR32G32_SINT                Format = 102
+	FormatR32G32_SFLOAT              Format = 103
+	FormatR32G32B32_UINT             Format = 104
+	FormatR32G32B32_SINT             Format = 105
+	FormatR32G32B32_SFLOAT           Format = 106
+	FormatR32G32B32A32_UINT          Format = 107
+	FormatR32G32B32A32_SINT          Format = 108
+	FormatR32G32B32A32_SFLOAT        Format = 109
+	FormatR64_UINT                   Format = 110
+	FormatR64_SINT                   Format = 111
+	FormatR64_SFLOAT                 Format = 112
+	FormatR64G64_UINT                Format = 113
+	FormatR64G64_SINT                Format = 114
+	FormatR64G64_SFLOAT              Format = 115
+	FormatR64G64B64_UINT             Format = 116
+	FormatR64G64B64_SINT             Format = 117
+	FormatR64G64B64_SFLOAT           Format = 118
+	FormatR64G64B64A64_UINT          Format = 119
+	FormatR64G64B64A64_SINT          Format = 120
+	FormatR64G64B64A64_SFLOAT        Format = 121
+	FormatB10G11R11_UFLOAT_PACK32    Format = 122
+	FormatE5B9G9R9_UFLOAT_PACK32     Format = 123
+	FormatD16_UNORM                  Format = 124
+	FormatX8_D24_UNORM_PACK32        Format = 125
+	FormatD32_SFLOAT                 Format = 126
+	FormatS8_UINT                    Format = 127
+	FormatD16_UNORM_S8_UINT          Format = 128
+	FormatD24_UNORM_S8_UINT          Format = 129
+	FormatD32_SFLOAT_S8_UINT         Format = 130
+	FormatBC1_RGB_UNORM_BLOCK        Format = 131
+	FormatBC1_RGB_SRGB_BLOCK         Format = 132
+	FormatBC1_RGBA_UNORM_BLOCK       Format = 133
+	FormatBC1_RGBA_SRGB_BLOCK        Format = 134
+	FormatBC2_UNORM_BLOCK            Format = 135
+	FormatBC2_SRGB_BLOCK             Format = 136
+	FormatBC3_UNORM_BLOCK            Format = 137
+	FormatBC3_SRGB_BLOCK             Format = 138
+	FormatBC4_UNORM_BLOCK            Format = 139
+	FormatBC4_SNORM_BLOCK            Format = 140
+	FormatBC5_UNORM_BLOCK            Format = 141
+	FormatBC5_SNORM_BLOCK            Format = 142
+	FormatBC6H_UFLOAT_BLOCK          Format = 143
+	FormatBC6H_SFLOAT_BLOCK          Format = 144
+	FormatBC7_UNORM_BLOCK            Format = 145
+	FormatBC7_SRGB_BLOCK             Format = 146
+	FormatETC2_R8G8B8_UNORM_BLOCK    Format = 147
+	FormatETC2_R8G8B8_SRGB_BLOCK     Format = 148
+	FormatETC2_R8G8B8A1_UNORM_BLOCK  Format = 149
+	FormatETC2_R8G8B8A1_SRGB_BLOCK   Format = 150
+	FormatETC2_R8G8B8A8_UNORM_BLOCK  Format = 151
+	FormatETC2_R8G8B8A8_SRGB_BLOCK   Format = 152
+	FormatEAC_R11_UNORM_BLOCK        Format = 153
+	FormatEAC_R11_SNORM_BLOCK        Format = 154
+	FormatEAC_R11G11_UNORM_BLOCK     Format = 155
+	FormatEAC_R11G11_SNORM_BLOCK     Format = 156
+	FormatASTC_4x4_UNORM_BLOCK       Format = 157
+	FormatASTC_4x4_SRGB_BLOCK        Format = 158
+	FormatASTC_5x4_UNORM_BLOCK       Format = 159
+	FormatASTC_5x4_SRGB_BLOCK        Format = 160
+	FormatASTC_5x5_UNORM_BLOCK       Format = 161
+	FormatASTC_5x5_SRGB_BLOCK        Format = 162
+	FormatASTC_6x5_UNORM_BLOCK       Format = 163
+	FormatASTC_6x5_SRGB_BLOCK        Format = 164
+	FormatASTC_6x6_UNORM_BLOCK       Format = 165
+	FormatASTC_6x6_SRGB_BLOCK        Format = 166
+	FormatASTC_8x5_UNORM_BLOCK       Format = 167
+	FormatASTC_8x5_SRGB_BLOCK        Format = 168
+	FormatASTC_8x6_UNORM_BLOCK       Format = 169
+	FormatASTC_8x6_SRGB_BLOCK        Format = 170
+	FormatASTC_8x8_UNORM_BLOCK       Format = 171
+	FormatASTC_8x8_SRGB_BLOCK        Format = 172
+	FormatASTC_10x5_UNORM_BLOCK      Format = 173
+	FormatASTC_10x5_SRGB_BLOCK       Format = 174
+	FormatASTC_10x6_UNORM_BLOCK      Format = 175
+	FormatASTC_10x6_SRGB_BLOCK       Format = 176
+	FormatASTC_10x8_UNORM_BLOCK      Format = 177
+	FormatASTC_10x8_SRGB_BLOCK       Format = 178
+	FormatASTC_10x10_UNORM_BLOCK     Format = 179
+	FormatASTC_10x10_SRGB_BLOCK      Format = 180
+	FormatASTC_12x10_UNORM_BLOCK     Format = 181
+	FormatASTC_12x10_SRGB_BLOCK      Format = 182
+	FormatASTC_12x12_UNORM_BLOCK     Format = 183
+	FormatASTC_12x12_SRGB_BLOCK      Format = 184
 )
 
 const (
-	COLOR_SPACE_SRGB_NONLINEAR_KHR ColorSpaceKHR = C.VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
+	COLOR_SPACE_SRGB_NONLINEAR_KHR ColorSpaceKHR = 0
 )
 
 const (
 	// PresentModeImmediateKHR specifies that the presentation engine does not wait for a vertical blanking period to update the current image,
 	// meaning this mode may result in visible tearing.
 	// No internal queuing of presentation requests is needed, as the requests are applied immediately.
-	PresentModeImmediateKHR PresentModeKHR = C.VK_PRESENT_MODE_IMMEDIATE_KHR
+	PresentModeImmediateKHR PresentModeKHR = 0
 
 	// PresentModeMailboxKHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
 	// Tearing cannot be observed. An internal single-entry queue is used to hold pending presentation requests.
 	// If the queue is full when a new presentation request is received, the new request replaces the existing entry,
 	// and any images associated with the prior entry become available for re-use by the application.
 	// One request is removed from the queue and processed during each vertical blanking period in which the queue is non-empty.
-	PresentModeMailboxKHR PresentModeKHR = C.VK_PRESENT_MODE_MAILBOX_KHR
+	PresentModeMailboxKHR PresentModeKHR = 1
 
 	// PresentModeFifoKHR specifies that the presentation engine waits for the next vertical blanking period to update the current image.
 	// Tearing cannot be observed. An internal queue is used to hold pending presentation requests.
@@ -797,7 +828,7 @@ const (
 	// and processed during each vertical blanking period in which the queue is non-empty.
 	//
 	// This is the only value of presentMode that is required to be supported.
-	PresentModeFifoKHR PresentModeKHR = C.VK_PRESENT_MODE_FIFO_KHR
+	PresentModeFifoKHR PresentModeKHR = 2
 
 	// PresentModeFifoRelaxedKHR specifies that the presentation engine generally waits for the next vertical blanking period to update the current image.
 	// If a vertical blanking period has already passed since the last update of the current image
@@ -810,14 +841,14 @@ const (
 	// New requests are appended to the end of the queue,
 	// and one request is removed from the beginning of the queue and processed during
 	// or after each vertical blanking period in which the queue is non-empty.
-	PresentModeFifoRelaxedKHR PresentModeKHR = C.VK_PRESENT_MODE_FIFO_RELAXED_KHR
+	PresentModeFifoRelaxedKHR PresentModeKHR = 3
 
 	// PresentModeSharedDemandRefreshKHR specifies that the presentation engine and application have concurrent access to a single image,
 	// which is referred to as a shared presentable image.
 	// The presentation engine is only required to update the current image after a new presentation request is received.
 	// Therefore the application must make a presentation request whenever an update is required.
 	// However, the presentation engine may update the current image at any point, meaning this mode may result in visible tearing.
-	PresentModeSharedDemandRefreshKHR PresentModeKHR = C.VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR
+	PresentModeSharedDemandRefreshKHR PresentModeKHR = 1000111000
 
 	// PresentModeSharedContinuousRefreshKHR specifies that the presentation engine and application have concurrent access to a single image,
 	// which is referred to as a shared presentable image.
@@ -827,38 +858,38 @@ const (
 	// The application can indicate the image contents have been updated by making a presentation request,
 	// but this does not guarantee the timing of when it will be updated.
 	// This mode may result in visible tearing if rendering to the image is not timed correctly.
-	PresentModeSharedContinuousRefreshKHR PresentModeKHR = C.VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR
+	PresentModeSharedContinuousRefreshKHR PresentModeKHR = 1000111001
 )
 
 const (
 	// CommandPoolCreateTransientBit specifies that command buffers allocated from the pool will be short-lived,
 	// meaning that they will be reset or freed in a relatively short timeframe.
 	// This flag may be used by the implementation to control memory allocation behavior within the pool.
-	CommandPoolCreateTransientBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_TRANSIENT_BIT
+	CommandPoolCreateTransientBit CommandPoolCreateFlags = 0x00000001
 
 	// CommandPoolCreateResetCommandBufferBit allows any command buffer allocated from a pool
 	// to be individually reset to the initial state;
 	// either by calling vkResetCommandBuffer, or via the implicit reset when calling vkBeginCommandBuffer.
 	// If this flag is not set on a pool, then vkResetCommandBuffer must not be called for any command buffer allocated from that pool.
-	CommandPoolCreateResetCommandBufferBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT
+	CommandPoolCreateResetCommandBufferBit CommandPoolCreateFlags = 0x00000002
 
 	// CommandPoolCreateProtectedBit specifies that command buffers allocated from the pool are protected command buffers.
 	// If the protected memory feature is not enabled, the VK_COMMAND_POOL_CREATE_PROTECTED_BIT bit of flags must not be set.
-	CommandPoolCreateProtectedBit CommandPoolCreateFlags = C.VK_COMMAND_POOL_CREATE_PROTECTED_BIT
+	CommandPoolCreateProtectedBit CommandPoolCreateFlags = 0x00000004
 )
 
 const (
 	// CommandlPoolResetReleaseResourcesBit specifies that resetting a command pool
 	// recycles all of the resources from the command pool back to the system.
-	CommandlPoolResetReleaseResourcesBit CommandPoolResetFlags = C.VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT
+	CommandlPoolResetReleaseResourcesBit CommandPoolResetFlags = 0x00000001
 )
 
 const (
 	// CommandBufferLevelPrimary specifies a primary command buffer.
-	CommandBufferLevelPrimary CommandBufferLevel = C.VK_COMMAND_BUFFER_LEVEL_PRIMARY
+	CommandBufferLevelPrimary CommandBufferLevel = 0
 
 	// CommandBufferLevelSecondary specifies a secondary command buffer.
-	CommandBufferLevelSecondary CommandBufferLevel = C.VK_COMMAND_BUFFER_LEVEL_SECONDARY
+	CommandBufferLevelSecondary CommandBufferLevel = 1
 )
 
 const (
@@ -866,8 +897,10 @@ const (
 	// currently owned by the command buffer should be returned to the parent command pool.
 	// If this flag is not set, then the command buffer may hold onto memory resources
 	// and reuse them when recording commands. commandBuffer is moved to the initial state.
-	CommandBufferResetReleaseResourcesBit CommandBufferResetFlags = C.VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT
+	CommandBufferResetReleaseResourcesBit CommandBufferResetFlags = 0x00000001
 )
+
+func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
 	var props []string
@@ -895,88 +928,6 @@ func (flags QueueFlags) String() string {
 		props = append(props, "VK_QUEUE_PROTECTED_BIT")
 	}
 	return strings.Join(props, " | ")
-}
-
-func (typ PhysicalDeviceType) String() string {
-	switch typ {
-	case PhysicalDeviceTypeOther:
-		return "VK_PHYSICAL_DEVICE_TYPE_OTHER"
-	case PhysicalDeviceTypeIntegratedGPU:
-		return "VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU"
-	case PhysicalDeviceTypeDiscreteGPU:
-		return "VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU"
-	case PhysicalDeviceTypeVirtualGPU:
-		return "VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU"
-	case PhysicalDeviceTypeCPU:
-		return "VK_PHYSICAL_DEVICE_TYPE_CPU"
-	default:
-		return strconv.Itoa(int(typ))
-	}
-}
-
-func (res Result) Error() string {
-	switch res {
-	case Success:
-		return "VK_SUCCESS"
-	case NotReady:
-		return "VK_NOT_READY"
-	case Timeout:
-		return "VK_TIMEOUT"
-	case EventSet:
-		return "VK_EVENT_SET"
-	case EventReset:
-		return "VK_EVENT_RESET"
-	case Incomplete:
-		return "VK_INCOMPLETE"
-	case SuboptimalKHR:
-		return "VK_SUBOPTIMAL_KHR"
-	case ErrOutOfHostMemory:
-		return "VK_ERROR_OUT_OF_HOST_MEMORY"
-	case ErrOutOfDeviceMemory:
-		return "VK_ERROR_OUT_OF_DEVICE_MEMORY"
-	case ErrInitializationFailed:
-		return "VK_ERROR_INITIALIZATION_FAILED"
-	case ErrDeviceLost:
-		return "VK_ERROR_DEVICE_LOST"
-	case ErrMemoryMapFailed:
-		return "VK_ERROR_MEMORY_MAP_FAILED"
-	case ErrLayerNotPresent:
-		return "VK_ERROR_LAYER_NOT_PRESENT"
-	case ErrExtensionNotPresent:
-		return "VK_ERROR_EXTENSION_NOT_PRESENT"
-	case ErrFeatureNotPresent:
-		return "VK_ERROR_FEATURE_NOT_PRESENT"
-	case ErrIncompatibleDriver:
-		return "VK_ERROR_INCOMPATIBLE_DRIVER"
-	case ErrTooManyObjects:
-		return "VK_ERROR_TOO_MANY_OBJECTS"
-	case ErrFormatNotSupported:
-		return "VK_ERROR_FORMAT_NOT_SUPPORTED"
-	case ErrFragmentedPool:
-		return "VK_ERROR_FRAGMENTED_POOL"
-	case ErrOutOfPoolMemory:
-		return "VK_ERROR_OUT_OF_POOL_MEMORY"
-	case ErrInvalidExternalHandle:
-		return "VK_ERROR_INVALID_EXTERNAL_HANDLE"
-	case ErrSurfaceLostKHR:
-		return "VK_ERROR_SURFACE_LOST_KHR"
-	case ErrNativeWindowInUseKHR:
-		return "VK_ERROR_NATIVE_WINDOW_IN_USE_KHR"
-	case ErrOutOfDateKHR:
-		return "VK_ERROR_OUT_OF_DATE_KHR"
-	case ErrIncompatibleDisplayKHR:
-		return "VK_ERROR_INCOMPATIBLE_DISPLAY_KHR"
-	case ErrValidationFailedEXT:
-		return "VK_ERROR_VALIDATION_FAILED_EXT"
-	case ErrInvalidShaderNV:
-		return "VK_ERROR_INVALID_SHADER_NV"
-	case ErrFragmentationEXT:
-		return "VK_ERROR_FRAGMENTATION_EXT"
-	case ErrNotPermittedEXT:
-		return "VK_ERROR_NOT_PERMITTED_EXT"
-	default:
-		return strconv.Itoa(int(res))
-	}
 }
 
 func (flags SurfaceTransformFlagsKHR) String() string {

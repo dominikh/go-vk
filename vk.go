@@ -92,7 +92,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	var free1, free2 func()
 
 	ptr := (*C.VkInstanceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkInstanceCreateInfo{}))))
-	ptr.sType = StructureTypeInstanceCreateInfo
+	ptr.sType = C.VkStructureType(StructureTypeInstanceCreateInfo)
 	ptr.pNext = info.Next
 	ptr.enabledLayerCount = C.uint32_t(len(info.EnabledLayerNames))
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
@@ -103,7 +103,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	defer free2()
 	if info.ApplicationInfo != nil {
 		ptr.pApplicationInfo = (*C.VkApplicationInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkApplicationInfo{}))))
-		ptr.pApplicationInfo.sType = StructureTypeApplicationInfo
+		ptr.pApplicationInfo.sType = C.VkStructureType(StructureTypeApplicationInfo)
 		ptr.pApplicationInfo.pNext = info.ApplicationInfo.Next
 		ptr.pApplicationInfo.pApplicationName = C.CString(info.ApplicationInfo.ApplicationName)
 		ptr.pApplicationInfo.applicationVersion = C.uint32_t(info.ApplicationInfo.ApplicationVersion)
@@ -639,7 +639,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	// TODO(dh): support custom allocators
 	var free1 func()
 	ptr := (*C.VkDeviceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkDeviceCreateInfo{}))))
-	ptr.sType = StructureTypeDeviceCreateInfo
+	ptr.sType = C.VkStructureType(StructureTypeDeviceCreateInfo)
 	ptr.pNext = info.Next
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
 	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(C.calloc(C.size_t(len(info.QueueCreateInfos)), C.size_t(unsafe.Sizeof(C.VkDeviceQueueCreateInfo{}))))
@@ -647,7 +647,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	arr := (*[1 << 31]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
 		arr[i] = C.VkDeviceQueueCreateInfo{
-			sType:            StructureTypeDeviceQueueCreateInfo,
+			sType:            C.VkStructureType(StructureTypeDeviceQueueCreateInfo),
 			pNext:            obj.Next,
 			flags:            C.VkDeviceQueueCreateFlags(obj.Flags),
 			queueFamilyIndex: C.uint32_t(obj.QueueFamilyIndex),
@@ -801,7 +801,7 @@ func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (*CommandPool,
 	// TODO(dh): support callbacks
 	ptr := (*C.VkCommandPoolCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandPoolCreateInfo{}))))
 	defer C.free(unsafe.Pointer(ptr))
-	ptr.sType = StructureTypeCommandPoolCreateInfo
+	ptr.sType = C.VkStructureType(StructureTypeCommandPoolCreateInfo)
 	ptr.pNext = info.Next
 	ptr.flags = C.VkCommandPoolCreateFlags(info.Flags)
 	ptr.queueFamilyIndex = C.uint32_t(info.QueueFamilyIndex)
@@ -841,7 +841,7 @@ type CommandBufferAllocateInfo struct {
 func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
 	ptr := (*C.VkCommandBufferAllocateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferAllocateInfo{}))))
 	defer C.free(unsafe.Pointer(ptr))
-	ptr.sType = StructureTypeCommandBufferAllocateInfo
+	ptr.sType = C.VkStructureType(StructureTypeCommandBufferAllocateInfo)
 	ptr.pNext = info.Next
 	ptr.commandPool = pool.hnd
 	ptr.level = C.VkCommandBufferLevel(info.Level)
