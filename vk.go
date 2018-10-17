@@ -5,7 +5,11 @@ package vk
 
 // #cgo pkg-config: vulkan
 // #cgo CFLAGS: -DVK_NO_PROTOTYPES
+//
 // #include <stdlib.h>
+//
+// #define VK_DEFINE_NON_DISPATCHABLE_HANDLE(object) typedef uintptr_t object;
+//
 // #include <vulkan/vulkan_core.h>
 //
 // VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL vkGetInstanceProcAddr(VkInstance instance, const char *pName);
