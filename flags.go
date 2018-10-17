@@ -57,7 +57,7 @@ type CommandBufferLevel uint32
 type CommandBufferResetFlags uint32
 
 const (
-	DEVICE_QUEUE_CREATE_PROTECTED_BIT DeviceQueueCreateFlags = 0x00000001
+	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
 )
 
 const (
@@ -904,8 +904,8 @@ func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
 	var props []string
-	if (flags & DEVICE_QUEUE_CREATE_PROTECTED_BIT) != 0 {
-		props = append(props, "VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT")
+	if (flags & DeviceQueueCreateProtectedBit) != 0 {
+		props = append(props, "DeviceQueueCreateProtectedBit")
 	}
 	return strings.Join(props, " | ")
 }
@@ -913,19 +913,19 @@ func (flags DeviceQueueCreateFlags) String() string {
 func (flags QueueFlags) String() string {
 	var props []string
 	if (flags & QueueGraphicsBit) != 0 {
-		props = append(props, "VK_QUEUE_GRAPHICS_BIT")
+		props = append(props, "QueueGraphicsBit")
 	}
 	if (flags & QueueComputeBit) != 0 {
-		props = append(props, "VK_QUEUE_COMPUTE_BIT")
+		props = append(props, "QueueComputeBit")
 	}
 	if (flags & QueueTransferBit) != 0 {
-		props = append(props, "VK_QUEUE_TRANSFER_BIT")
+		props = append(props, "QueueTransferBit")
 	}
 	if (flags & QueueSparseBindingBit) != 0 {
-		props = append(props, "VK_QUEUE_SPARSE_BINDING_BIT")
+		props = append(props, "QueueSparseBindingBit")
 	}
 	if (flags & QueueProtectedBit) != 0 {
-		props = append(props, "VK_QUEUE_PROTECTED_BIT")
+		props = append(props, "QueueProtectedBit")
 	}
 	return strings.Join(props, " | ")
 }
@@ -933,31 +933,31 @@ func (flags QueueFlags) String() string {
 func (flags SurfaceTransformFlagsKHR) String() string {
 	var out []string
 	if (flags & SurfaceTransformIdentityBitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR")
+		out = append(out, "SurfaceTransformIdentityBitKHR")
 	}
 	if (flags & SurfaceTransformRotate90BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR")
+		out = append(out, "SurfaceTransformRotate90BitKHR")
 	}
 	if (flags & SurfaceTransformRotate180BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR")
+		out = append(out, "SurfaceTransformRotate180BitKHR")
 	}
 	if (flags & SurfaceTransformRotate270BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR")
+		out = append(out, "SurfaceTransformRotate270BitKHR")
 	}
 	if (flags & SurfaceTransformHorizontalMirrorBitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR")
+		out = append(out, "SurfaceTransformHorizontalMirrorBitKHR")
 	}
 	if (flags & SurfaceTransformHorizontalMirrorRotate90BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR")
+		out = append(out, "SurfaceTransformHorizontalMirrorRotate90BitKHR")
 	}
 	if (flags & SurfaceTransformHorizontalMirrorRotate180BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR")
+		out = append(out, "SurfaceTransformHorizontalMirrorRotate180BitKHR")
 	}
 	if (flags & SurfaceTransformHorizontalMirrorRotate270BitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR")
+		out = append(out, "SurfaceTransformHorizontalMirrorRotate270BitKHR")
 	}
 	if (flags & SurfaceTransformInheritBitKHR) != 0 {
-		out = append(out, "VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR")
+		out = append(out, "SurfaceTransformInheritBitKHR")
 	}
 	return strings.Join(out, " | ")
 }
@@ -965,16 +965,16 @@ func (flags SurfaceTransformFlagsKHR) String() string {
 func (flags CompositeAlphaFlagsKHR) String() string {
 	var out []string
 	if (flags & CompositeAlphaOpaqueBitKHR) != 0 {
-		out = append(out, "VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR")
+		out = append(out, "CompositeAlphaOpaqueBitKHR")
 	}
 	if (flags & CompositeAlphaPreMultipliedBitKHR) != 0 {
-		out = append(out, "VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR")
+		out = append(out, "CompositeAlphaPreMultipliedBitKHR")
 	}
 	if (flags & CompositeAlphaPostMultipliedBitKHR) != 0 {
-		out = append(out, "VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR")
+		out = append(out, "CompositeAlphaPostMultipliedBitKHR")
 	}
 	if (flags & CompositeAlphaInheritBitKHR) != 0 {
-		out = append(out, "VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR")
+		out = append(out, "CompositeAlphaInheritBitKHR")
 	}
 	return strings.Join(out, " | ")
 }
@@ -982,25 +982,25 @@ func (flags CompositeAlphaFlagsKHR) String() string {
 func (flags ImageUsageFlags) String() string {
 	var out []string
 	if (flags & ImageUsageTransferSrcBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_TRANSFER_SRC_BIT")
+		out = append(out, "ImageUsageTransferSrcBit")
 	}
 	if (flags & ImageUsageTransferDstBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_TRANSFER_DST_BIT")
+		out = append(out, "ImageUsageTransferDstBit")
 	}
 	if (flags & ImageUsageSampledBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_SAMPLED_BIT")
+		out = append(out, "ImageUsageSampledBit")
 	}
 	if (flags & ImageUsageStorageBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_STORAGE_BIT")
+		out = append(out, "ImageUsageStorageBit")
 	}
 	if (flags & ImageUsageColorAttachmentBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT")
+		out = append(out, "ImageUsageColorAttachmentBit")
 	}
 	if (flags & ImageUsageDepthStencilAttachmentBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT")
+		out = append(out, "ImageUsageDepthStencilAttachmentBit")
 	}
 	if (flags & ImageUsageTransientAttachmentBit) != 0 {
-		out = append(out, "VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT")
+		out = append(out, "ImageUsageTransientAttachmentBit")
 	}
 	return strings.Join(out, " | ")
 }
