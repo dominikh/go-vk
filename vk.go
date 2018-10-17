@@ -28,6 +28,7 @@ package vk
 // VkResult domVkAllocateCommandBuffers(PFN_vkAllocateCommandBuffers fp, VkDevice device, const VkCommandBufferAllocateInfo* pAllocateInfo, VkCommandBuffer* pCommandBuffers);
 // VkResult domVkResetCommandBuffer(PFN_vkResetCommandBuffer fp, VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
 // void domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
+// VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer);
 import "C"
 import (
 	"fmt"
@@ -806,6 +807,14 @@ func (buf *CommandBuffer) Free() {
 
 func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
 	res := Result(C.domVkResetCommandBuffer(buf.pool.dev.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
+func (buf *CommandBuffer) End() error {
+	res := Result(C.domVkEndCommandBuffer(buf.pool.dev.fps[vkEndCommandBuffer], buf.hnd))
 	if res != Success {
 		return res
 	}

@@ -56,3 +56,6 @@ VkResult domVkResetCommandBuffer(PFN_vkResetCommandBuffer fp, VkCommandBuffer co
 void domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers) {
 	(*fp)(device, commandPool, commandBufferCount, pCommandBuffers);
 }
+VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer) {
+	return (*fp)(commandBuffer);
+}

@@ -36,6 +36,7 @@ const (
 	vkAllocateCommandBuffers
 	vkResetCommandBuffer
 	vkFreeCommandBuffers
+	vkEndCommandBuffer
 
 	deviceMaxPFN
 )
@@ -70,4 +71,5 @@ var deviceFpNames = [...]string{
 	vkAllocateCommandBuffers: "vkAllocateCommandBuffers",
 	vkResetCommandBuffer:     "vkResetCommandBuffer",
 	vkFreeCommandBuffers:     "vkFreeCommandBuffers",
+	vkEndCommandBuffer:       "vkEndCommandBuffer",
 }
