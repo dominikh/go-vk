@@ -1205,22 +1205,37 @@ func (flags CommandBufferUsageFlags) String() string {
 func (flags QueryPipelineStatisticFlags) String() string {
 	var out []string
 	if (flags & QueryPipelineStatisticInputAssemblyVerticesBit) != 0 {
+		out = append(out, "QueryPipelineStatisticInputAssemblyVerticesBit")
+	}
+	if (flags & QueryPipelineStatisticInputAssemblyPrimitivesBit) != 0 {
 		out = append(out, "QueryPipelineStatisticInputAssemblyPrimitivesBit")
 	}
 	if (flags & QueryPipelineStatisticVertexShaderInvocationsBit) != 0 {
+		out = append(out, "QueryPipelineStatisticVertexShaderInvocationsBit")
+	}
+	if (flags & QueryPipelineStatisticGeometryShaderInvocationsBit) != 0 {
 		out = append(out, "QueryPipelineStatisticGeometryShaderInvocationsBit")
 	}
 	if (flags & QueryPipelineStatisticGeometryShaderPrimitivesBit) != 0 {
+		out = append(out, "QueryPipelineStatisticGeometryShaderPrimitivesBit")
+	}
+	if (flags & QueryPipelineStatisticClippingInvocationsBit) != 0 {
 		out = append(out, "QueryPipelineStatisticClippingInvocationsBit")
 	}
 	if (flags & QueryPipelineStatisticClippingPrimitivesBit) != 0 {
+		out = append(out, "QueryPipelineStatisticClippingPrimitivesBit")
+	}
+	if (flags & QueryPipelineStatisticFragmentShaderInvocationsBit) != 0 {
 		out = append(out, "QueryPipelineStatisticFragmentShaderInvocationsBit")
 	}
 	if (flags & QueryPipelineStatisticTessellationControlShaderPatchesBit) != 0 {
+		out = append(out, "QueryPipelineStatisticTessellationControlShaderPatchesBit")
+	}
+	if (flags & QueryPipelineStatisticTessellationEvaluationShaderInvocationsBit) != 0 {
 		out = append(out, "QueryPipelineStatisticTessellationEvaluationShaderInvocationsBit")
 	}
 	if (flags & QueryPipelineStatisticComputeShaderInvocationsBit) != 0 {
-		out = append(out, ")")
+		out = append(out, "QueryPipelineStatisticComputeShaderInvocationsBit")
 	}
 	return strings.Join(out, " | ")
 }
@@ -1228,7 +1243,7 @@ func (flags QueryPipelineStatisticFlags) String() string {
 func (flags QueryControlFlags) String() string {
 	var out []string
 	if (flags & QueryControlPreciseBit) != 0 {
-		out = append(out, "}")
+		out = append(out, "QueryControlPreciseBit")
 	}
 	return strings.Join(out, " | ")
 }
@@ -1236,22 +1251,46 @@ func (flags QueryControlFlags) String() string {
 func (flags ImageAspectFlags) String() string {
 	var out []string
 	if (flags & ImageAspectColorBit) != 0 {
-		out = append(out, "ImageAspectDepthBit           ")
+		out = append(out, "ImageAspectColorBit")
+	}
+	if (flags & ImageAspectDepthBit) != 0 {
+		out = append(out, "ImageAspectDepthBit")
 	}
 	if (flags & ImageAspectStencilBit) != 0 {
-		out = append(out, "ImageAspectMetadataBit        ")
+		out = append(out, "ImageAspectStencilBit")
+	}
+	if (flags & ImageAspectMetadataBit) != 0 {
+		out = append(out, "ImageAspectMetadataBit")
 	}
 	if (flags & ImageAspectPlane0Bit) != 0 {
-		out = append(out, "ImageAspectPlane1Bit          ")
+		out = append(out, "ImageAspectPlane0Bit")
+	}
+	if (flags & ImageAspectPlane1Bit) != 0 {
+		out = append(out, "ImageAspectPlane1Bit")
 	}
 	if (flags & ImageAspectPlane2Bit) != 0 {
-		out = append(out, "ImageAspectMemoryPlane0BitEXT ")
+		out = append(out, "ImageAspectPlane2Bit")
+	}
+	if (flags & ImageAspectMemoryPlane0BitEXT) != 0 {
+		out = append(out, "ImageAspectMemoryPlane0BitEXT")
 	}
 	if (flags & ImageAspectMemoryPlane1BitEXT) != 0 {
-		out = append(out, "ImageAspectMemoryPlane2BitEXT ")
+		out = append(out, "ImageAspectMemoryPlane1BitEXT")
+	}
+	if (flags & ImageAspectMemoryPlane2BitEXT) != 0 {
+		out = append(out, "ImageAspectMemoryPlane2BitEXT")
 	}
 	if (flags & ImageAspectMemoryPlane3BitEXT) != 0 {
-		out = append(out, "")
+		out = append(out, "ImageAspectMemoryPlane3BitEXT")
+	}
+	if (flags & ImageAspectPlane0BitKHR) != 0 {
+		out = append(out, "ImageAspectPlane0BitKHR")
+	}
+	if (flags & ImageAspectPlane1BitKHR) != 0 {
+		out = append(out, "ImageAspectPlane1BitKHR")
+	}
+	if (flags & ImageAspectPlane2BitKHR) != 0 {
+		out = append(out, "ImageAspectPlane2BitKHR")
 	}
 	return strings.Join(out, " | ")
 }
