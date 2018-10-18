@@ -62,3 +62,6 @@ VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer comman
 VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo) {
 	return (*fp)(commandBuffer, pBeginInfo);
 }
+void domVkCmdSetLineWidth(PFN_vkCmdSetLineWidth fp, VkCommandBuffer commandBuffer, float lineWidth) {
+	(*fp)(commandBuffer, lineWidth);
+}

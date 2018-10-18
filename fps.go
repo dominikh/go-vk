@@ -38,6 +38,7 @@ const (
 	vkFreeCommandBuffers
 	vkEndCommandBuffer
 	vkBeginCommandBuffer
+	vkCmdSetLineWidth
 
 	deviceMaxPFN
 )
@@ -74,4 +75,5 @@ var deviceFpNames = [...]string{
 	vkFreeCommandBuffers:     "vkFreeCommandBuffers",
 	vkEndCommandBuffer:       "vkEndCommandBuffer",
 	vkBeginCommandBuffer:     "vkBeginCommandBuffer",
+	vkCmdSetLineWidth:        "vkCmdSetLineWidth",
 }

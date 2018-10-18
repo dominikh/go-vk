@@ -30,6 +30,7 @@ package vk
 // void     domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
 // VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer);
 // VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo);
+// void     domVkCmdSetLineWidth(PFN_vkCmdSetLineWidth fp, VkCommandBuffer commandBuffer, float lineWidth);
 import "C"
 import (
 	"fmt"
@@ -864,6 +865,10 @@ func (buf *CommandBuffer) End() error {
 		return res
 	}
 	return nil
+}
+
+func (buf *CommandBuffer) SetLineWidth(lineWidth float32) {
+	C.domVkCmdSetLineWidth(buf.pool.dev.fps[vkCmdSetLineWidth], buf.hnd, C.float(lineWidth))
 }
 
 type CommandPoolCreateInfo struct {

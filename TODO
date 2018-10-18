@@ -19,6 +19,7 @@ follow, then vendor extensions.
 - [x] vkCreateInstance
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
+- [x] vkCmdSetLineWidth
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
 - [x] VkResetCommandBuffer
@@ -31,7 +32,6 @@ follow, then vendor extensions.
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
 - [ ] vkQueueWaitIdle
-- [ ] vkQueueSubmit
 - [ ] vkQueueSubmit
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
@@ -126,7 +126,6 @@ follow, then vendor extensions.
 - [ ] vkCmdSetStencilReference
 - [ ] vkCmdSetStencilCompareMask
 - [ ] vkCmdSetScissor
-- [ ] vkCmdSetLineWidth
 - [ ] vkCmdSetEvent
 - [ ] vkCmdSetDeviceMask
 - [ ] vkCmdSetDepthBounds
