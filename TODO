@@ -8,6 +8,7 @@ follow, then vendor extensions.
 - [x] vkTrimCommandPool
 - [x] vkResetCommandPool
 - [x] vkQueueWaitIdle
+- [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
 - [x] vkGetPhysicalDeviceProperties
 - [x] vkGetPhysicalDeviceFeatures
@@ -18,6 +19,7 @@ follow, then vendor extensions.
 - [x] vkEnumeratePhysicalDevices
 - [x] vkEndCommandBuffer
 - [x] vkDeviceWaitIdle
+- [x] vkCreateSwapchainKHR
 - [x] vkCreateInstance
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool

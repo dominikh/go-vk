@@ -26,7 +26,7 @@ type XlibSurfaceCreateInfoKHR struct {
 	Window XlibWindow
 }
 
-func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (*Surface, error) {
+func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (*SurfaceKHR, error) {
 	// TODO(dh): support custom allocator
 	cInfo := (*C.VkXlibSurfaceCreateInfoKHR)(C.calloc(1, C.sizeof_VkXlibSurfaceCreateInfoKHR))
 	defer C.free(unsafe.Pointer(cInfo))
@@ -39,7 +39,7 @@ func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (*Surf
 	if res != Success {
 		return nil, res
 	}
-	return &Surface{hnd: hnd}, nil
+	return &SurfaceKHR{hnd: hnd}, nil
 }
 
 func (dev *PhysicalDevice) XlibPresentationSupportKHS(queueFamilyIndex uint32, dpy *XlibDisplay, visualID XlibVisualID) bool {

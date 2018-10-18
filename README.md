@@ -8,6 +8,7 @@ Package `vk` provides bindings for the Vulkan graphics API.
 
 - VK_KHR_surface
 - VK_KHR_xlib_surface
+- VK_KHR_swapchain
 
 ## Build tags
 

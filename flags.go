@@ -32,6 +32,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(CommandBufferUsageFlags(0)), C.sizeof_VkCommandBufferUsageFlags)
 	assertSameSize(unsafe.Sizeof(QueryPipelineStatisticFlags(0)), C.sizeof_VkQueryPipelineStatisticFlags)
 	assertSameSize(unsafe.Sizeof(QueryControlFlags(0)), C.sizeof_VkQueryControlFlags)
+	assertSameSize(unsafe.Sizeof(SharingMode(0)), C.sizeof_VkSharingMode)
 }
 
 //go:generate stringer -type=PresentModeKHR
@@ -41,6 +42,7 @@ func init() {
 //go:generate stringer -type=StructureType
 //go:generate stringer -type=Result
 //go:generate stringer -type=PhysicalDeviceType
+//go:generate stringer -type=SharingMode
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -61,6 +63,7 @@ type CommandBufferResetFlags uint32
 type CommandBufferUsageFlags uint32
 type QueryPipelineStatisticFlags uint32
 type QueryControlFlags uint32
+type SharingMode uint32
 
 const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
@@ -992,6 +995,15 @@ const (
 const (
 	// QueryControlPreciseBit specifies the precision of occlusion queries.
 	QueryControlPreciseBit QueryControlFlags = 0x00000001
+)
+
+const (
+	// SharingModeExclusive specifies that access to any range or image subresource
+	// of the object will be exclusive to a single queue family at a time.
+	SharingModeExclusive SharingMode = 0
+	// SharingModeConcurrent specifies that concurrent access to any range or image subresource
+	// of the object from multiple queue families is supported.
+	SharingModeConcurrent SharingMode = 1
 )
 
 func (res Result) Error() string { return res.String() }
