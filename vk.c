@@ -59,3 +59,6 @@ void domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCom
 VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer) {
 	return (*fp)(commandBuffer);
 }
+VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo) {
+	return (*fp)(commandBuffer, pBeginInfo);
+}

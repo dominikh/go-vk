@@ -19,6 +19,7 @@ follow, then vendor extensions.
 - [x] vkCreateInstance
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
+- [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
 - [x] VkResetCommandBuffer
 - [ ] vkWaitForFences
@@ -167,6 +168,5 @@ follow, then vendor extensions.
 - [ ] vkBindImageMemory
 - [ ] vkBindBufferMemory2
 - [ ] vkBindBufferMemory
-- [ ] vkBeginCommandBuffer
 - [ ] vkAllocateMemory
 - [ ] vkAllocateDescriptorSets

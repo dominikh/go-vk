@@ -23,12 +23,13 @@ package vk
 // void     domVkGetDeviceQueue(PFN_vkGetDeviceQueue fp, VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue);
 // PFN_vkVoidFunction domVkGetDeviceProcAddr(PFN_vkGetDeviceProcAddr fp, VkDevice device, const char* pName);
 // VkResult domVkCreateCommandPool(PFN_vkCreateCommandPool fp, VkDevice device, const VkCommandPoolCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkCommandPool* pCommandPool);
-// void domVkTrimCommandPool(PFN_vkTrimCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolTrimFlags flags);
+// void     domVkTrimCommandPool(PFN_vkTrimCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolTrimFlags flags);
 // VkResult domVkResetCommandPool(PFN_vkResetCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
 // VkResult domVkAllocateCommandBuffers(PFN_vkAllocateCommandBuffers fp, VkDevice device, const VkCommandBufferAllocateInfo* pAllocateInfo, VkCommandBuffer* pCommandBuffers);
 // VkResult domVkResetCommandBuffer(PFN_vkResetCommandBuffer fp, VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
-// void domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
+// void     domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
 // VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer);
+// VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo);
 import "C"
 import (
 	"fmt"
@@ -807,6 +808,50 @@ func (buf *CommandBuffer) Free() {
 
 func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
 	res := Result(C.domVkResetCommandBuffer(buf.pool.dev.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
+type CommandBufferBeginInfo struct {
+	Next            unsafe.Pointer
+	Flags           CommandBufferUsageFlags
+	InheritanceInfo *CommandBufferInheritanceInfo
+}
+
+type RenderPass C.VkRenderPass
+type Framebuffer C.VkFramebuffer
+
+type CommandBufferInheritanceInfo struct {
+	Next                 unsafe.Pointer
+	RenderPass           RenderPass
+	Subpass              uint32
+	Framebuffer          Framebuffer
+	OcclusionQueryEnable bool
+	QueryFlags           QueryControlFlags
+	PipelineStatistics   QueryPipelineStatisticFlags
+}
+
+func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
+	ptr := (*C.VkCommandBufferBeginInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferBeginInfo{}))))
+	defer C.free(unsafe.Pointer(ptr))
+	ptr.sType = C.VkStructureType(StructureTypeCommandBufferBeginInfo)
+	ptr.pNext = info.Next
+	ptr.flags = C.VkCommandBufferUsageFlags(info.Flags)
+	if info.InheritanceInfo != nil {
+		ptr.pInheritanceInfo = (*C.VkCommandBufferInheritanceInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferInheritanceInfo{}))))
+		defer C.free(unsafe.Pointer(ptr.pInheritanceInfo))
+		ptr.pInheritanceInfo.sType = C.VkStructureType(StructureTypeCommandBufferInheritanceInfo)
+		ptr.pInheritanceInfo.pNext = info.InheritanceInfo.Next
+		ptr.pInheritanceInfo.renderPass = C.VkRenderPass(info.InheritanceInfo.RenderPass)
+		ptr.pInheritanceInfo.subpass = C.uint32_t(info.InheritanceInfo.Subpass)
+		ptr.pInheritanceInfo.framebuffer = C.VkFramebuffer(info.InheritanceInfo.Framebuffer)
+		ptr.pInheritanceInfo.occlusionQueryEnable = vkBool(info.InheritanceInfo.OcclusionQueryEnable)
+		ptr.pInheritanceInfo.queryFlags = C.VkQueryControlFlags(info.InheritanceInfo.QueryFlags)
+		ptr.pInheritanceInfo.pipelineStatistics = C.VkQueryPipelineStatisticFlags(info.InheritanceInfo.PipelineStatistics)
+	}
+	res := Result(C.domVkBeginCommandBuffer(buf.pool.dev.fps[vkBeginCommandBuffer], buf.hnd, ptr))
 	if res != Success {
 		return res
 	}
