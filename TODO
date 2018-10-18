@@ -22,6 +22,7 @@ follow, then vendor extensions.
 - [x] vkDeviceWaitIdle
 - [x] vkCreateSwapchainKHR
 - [x] vkCreateInstance
+- [x] vkCreateImageView
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCmdSetLineWidth
@@ -40,6 +41,7 @@ follow, then vendor extensions.
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
 - [ ] vkQueueSubmit
+- [ ] vkQueuePresentKHR
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
 - [ ] vkMapMemory
@@ -82,6 +84,7 @@ follow, then vendor extensions.
 - [ ] vkEnumerateInstanceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
 - [ ] vkEnumerateDeviceLayerProperties
+- [ ] vkDestroySwapchainKHR
 - [ ] vkDestroyShaderModule
 - [ ] vkDestroySemaphore
 - [ ] vkDestroySamplerYcbcrConversion
@@ -104,6 +107,7 @@ follow, then vendor extensions.
 - [ ] vkDestroyCommandPool
 - [ ] vkDestroyBufferView
 - [ ] vkDestroyBuffer
+- [ ] vkCreateSharedSwapchainsKHR
 - [ ] vkCreateShaderModule
 - [ ] vkCreateSemaphore
 - [ ] vkCreateSamplerYcbcrConversion
@@ -112,7 +116,6 @@ follow, then vendor extensions.
 - [ ] vkCreateQueryPool
 - [ ] vkCreatePipelineLayout
 - [ ] vkCreatePipelineCache
-- [ ] vkCreateImageView
 - [ ] vkCreateImage
 - [ ] vkCreateGraphicsPipelines
 - [ ] vkCreateFramebuffer
@@ -172,3 +175,4 @@ follow, then vendor extensions.
 - [ ] vkBindBufferMemory
 - [ ] vkAllocateMemory
 - [ ] vkAllocateDescriptorSets
+- [ ] vkAcquireNextImageKHR

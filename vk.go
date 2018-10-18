@@ -36,6 +36,7 @@ package vk
 // void     domVkCmdDraw(PFN_vkCmdDraw fp, VkCommandBuffer commandBuffer, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance);
 // VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue);
 // VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device);
+// VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView);
 import "C"
 import (
 	"fmt"
@@ -984,10 +985,69 @@ func (dev *Device) WaitIdle() error {
 
 type Image struct {
 	hnd C.VkImage
+	dev *Device
 }
 
 func (img *Image) String() string {
 	return fmt.Sprintf("VkImage(%p)", img.hnd)
+}
+
+type ImageView struct {
+	hnd C.VkImageView
+}
+
+type ImageViewCreateInfo struct {
+	Next             unsafe.Pointer
+	ViewType         ImageViewType
+	Format           Format
+	Components       ComponentMapping
+	SubresourceRange ImageSubresourceRange
+}
+
+type ComponentMapping struct {
+	R ComponentSwizzle
+	G ComponentSwizzle
+	B ComponentSwizzle
+	A ComponentSwizzle
+}
+
+type ImageSubresourceRange struct {
+	AspectMask     ImageAspectFlags
+	BaseMipLevel   uint32
+	LevelCount     uint32
+	BaseArrayLayer uint32
+	LayerCount     uint32
+}
+
+func (img *Image) CreateView(info *ImageViewCreateInfo) (*ImageView, error) {
+	// TODO(dh): support custom allocator
+	ptr := (*C.VkImageViewCreateInfo)(C.calloc(1, C.sizeof_VkImageViewCreateInfo))
+	defer C.free(unsafe.Pointer(ptr))
+	ptr.sType = C.VkStructureType(StructureTypeImageViewCreateInfo)
+	ptr.pNext = info.Next
+	ptr.image = img.hnd
+	ptr.viewType = C.VkImageViewType(info.ViewType)
+	ptr.format = C.VkFormat(info.Format)
+	ptr.components = C.VkComponentMapping{
+		r: C.VkComponentSwizzle(info.Components.R),
+		g: C.VkComponentSwizzle(info.Components.G),
+		b: C.VkComponentSwizzle(info.Components.B),
+		a: C.VkComponentSwizzle(info.Components.A),
+	}
+	ptr.subresourceRange = C.VkImageSubresourceRange{
+		aspectMask:     C.VkImageAspectFlags(info.SubresourceRange.AspectMask),
+		baseMipLevel:   C.uint32_t(info.SubresourceRange.BaseMipLevel),
+		levelCount:     C.uint32_t(info.SubresourceRange.LevelCount),
+		baseArrayLayer: C.uint32_t(info.SubresourceRange.BaseArrayLayer),
+		layerCount:     C.uint32_t(info.SubresourceRange.LayerCount),
+	}
+
+	var hnd C.VkImageView
+	res := Result(C.domVkCreateImageView(img.dev.fps[vkCreateImageView], img.dev.hnd, ptr, nil, &hnd))
+	if res != Success {
+		return nil, res
+	}
+	return &ImageView{hnd: hnd}, nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

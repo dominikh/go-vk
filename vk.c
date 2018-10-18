@@ -80,3 +80,6 @@ VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue) {
 VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device) {
 	return (*fp)(device);
 }
+VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView) {
+	return (*fp)(device, pCreateInfo, pAllocator, pView);
+}

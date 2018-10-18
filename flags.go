@@ -33,6 +33,9 @@ func init() {
 	assertSameSize(unsafe.Sizeof(QueryPipelineStatisticFlags(0)), C.sizeof_VkQueryPipelineStatisticFlags)
 	assertSameSize(unsafe.Sizeof(QueryControlFlags(0)), C.sizeof_VkQueryControlFlags)
 	assertSameSize(unsafe.Sizeof(SharingMode(0)), C.sizeof_VkSharingMode)
+	assertSameSize(unsafe.Sizeof(ImageViewType(0)), C.sizeof_VkImageViewType)
+	assertSameSize(unsafe.Sizeof(ComponentSwizzle(0)), C.sizeof_VkComponentSwizzle)
+	assertSameSize(unsafe.Sizeof(ImageAspectFlags(0)), C.sizeof_VkImageAspectFlags)
 }
 
 //go:generate stringer -type=PresentModeKHR
@@ -43,6 +46,8 @@ func init() {
 //go:generate stringer -type=Result
 //go:generate stringer -type=PhysicalDeviceType
 //go:generate stringer -type=SharingMode
+//go:generate stringer -type=ImageViewType
+//go:generate stringer -type=ComponentSwizzle
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -64,6 +69,9 @@ type CommandBufferUsageFlags uint32
 type QueryPipelineStatisticFlags uint32
 type QueryControlFlags uint32
 type SharingMode uint32
+type ImageViewType uint32
+type ComponentSwizzle uint32
+type ImageAspectFlags uint32
 
 const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
@@ -1006,6 +1014,43 @@ const (
 	SharingModeConcurrent SharingMode = 1
 )
 
+const (
+	ImageViewType1D        ImageViewType = 0
+	ImageViewType2D        ImageViewType = 1
+	ImageViewType3D        ImageViewType = 2
+	ImageViewTypeCube      ImageViewType = 3
+	ImageViewType1DArray   ImageViewType = 4
+	ImageViewType2DArray   ImageViewType = 5
+	ImageViewTypeCubeArray ImageViewType = 6
+)
+
+const (
+	ComponentSwizzleIdentity ComponentSwizzle = 0
+	ComponentSwizzleZero     ComponentSwizzle = 1
+	ComponentSwizzleOne      ComponentSwizzle = 2
+	ComponentSwizzleR        ComponentSwizzle = 3
+	ComponentSwizzleG        ComponentSwizzle = 4
+	ComponentSwizzleB        ComponentSwizzle = 5
+	ComponentSwizzleA        ComponentSwizzle = 6
+)
+
+const (
+	ImageAspectColorBit           ImageAspectFlags = 0x00000001
+	ImageAspectDepthBit           ImageAspectFlags = 0x00000002
+	ImageAspectStencilBit         ImageAspectFlags = 0x00000004
+	ImageAspectMetadataBit        ImageAspectFlags = 0x00000008
+	ImageAspectPlane0Bit          ImageAspectFlags = 0x00000010
+	ImageAspectPlane1Bit          ImageAspectFlags = 0x00000020
+	ImageAspectPlane2Bit          ImageAspectFlags = 0x00000040
+	ImageAspectMemoryPlane0BitEXT ImageAspectFlags = 0x00000080
+	ImageAspectMemoryPlane1BitEXT ImageAspectFlags = 0x00000100
+	ImageAspectMemoryPlane2BitEXT ImageAspectFlags = 0x00000200
+	ImageAspectMemoryPlane3BitEXT ImageAspectFlags = 0x00000400
+	ImageAspectPlane0BitKHR       ImageAspectFlags = ImageAspectPlane0Bit
+	ImageAspectPlane1BitKHR       ImageAspectFlags = ImageAspectPlane1Bit
+	ImageAspectPlane2BitKHR       ImageAspectFlags = ImageAspectPlane2Bit
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -1184,6 +1229,29 @@ func (flags QueryControlFlags) String() string {
 	var out []string
 	if (flags & QueryControlPreciseBit) != 0 {
 		out = append(out, "}")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags ImageAspectFlags) String() string {
+	var out []string
+	if (flags & ImageAspectColorBit) != 0 {
+		out = append(out, "ImageAspectDepthBit           ")
+	}
+	if (flags & ImageAspectStencilBit) != 0 {
+		out = append(out, "ImageAspectMetadataBit        ")
+	}
+	if (flags & ImageAspectPlane0Bit) != 0 {
+		out = append(out, "ImageAspectPlane1Bit          ")
+	}
+	if (flags & ImageAspectPlane2Bit) != 0 {
+		out = append(out, "ImageAspectMemoryPlane0BitEXT ")
+	}
+	if (flags & ImageAspectMemoryPlane1BitEXT) != 0 {
+		out = append(out, "ImageAspectMemoryPlane2BitEXT ")
+	}
+	if (flags & ImageAspectMemoryPlane3BitEXT) != 0 {
+		out = append(out, "")
 	}
 	return strings.Join(out, " | ")
 }

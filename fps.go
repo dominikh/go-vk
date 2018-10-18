@@ -44,6 +44,7 @@ const (
 	vkCmdDraw
 	vkQueueWaitIdle
 	vkDeviceWaitIdle
+	vkCreateImageView
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -92,4 +93,5 @@ var deviceFpNames = [...]string{
 	vkDeviceWaitIdle:         "vkDeviceWaitIdle",
 	vkCreateSwapchainKHR:     "vkCreateSwapchainKHR",
 	vkGetSwapchainImagesKHR:  "vkGetSwapchainImagesKHR",
+	vkCreateImageView:        "vkCreateImageView",
 }
