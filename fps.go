@@ -42,6 +42,7 @@ const (
 	vkCmdSetDepthBias
 	vkCmdSetBlendConstants
 	vkCmdDraw
+	vkQueueWaitIdle
 
 	deviceMaxPFN
 )
@@ -82,4 +83,5 @@ var deviceFpNames = [...]string{
 	vkCmdSetDepthBias:        "vkCmdSetDepthBias",
 	vkCmdSetBlendConstants:   "vkCmdSetBlendConstants",
 	vkCmdDraw:                "vkCmdDraw",
+	vkQueueWaitIdle:          "vkQueueWaitIdle",
 }

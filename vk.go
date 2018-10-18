@@ -34,6 +34,7 @@ package vk
 // void     domVkCmdSetDepthBias(PFN_vkCmdSetDepthBias fp, VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor);
 // void     domVkCmdSetBlendConstants(PFN_vkCmdSetBlendConstants fp, VkCommandBuffer commandBuffer, const float blendConstants[4]);
 // void     domVkCmdDraw(PFN_vkCmdDraw fp, VkCommandBuffer commandBuffer, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance);
+// VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue);
 import "C"
 import (
 	"fmt"
@@ -774,16 +775,25 @@ func (dev *Device) getDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 
 type Queue struct {
 	hnd C.VkQueue
+	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
 }
 
 func (q *Queue) String() string {
 	return fmt.Sprintf("VkQueue(%p)", q.hnd)
 }
 
+func (q *Queue) WaitIdle() error {
+	res := Result(C.domVkQueueWaitIdle(q.fps[vkQueueWaitIdle], q.hnd))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
 func (dev *Device) Queue(family, index uint32) *Queue {
 	var out C.VkQueue
 	C.domVkGetDeviceQueue(dev.fps[vkGetDeviceQueue], dev.hnd, C.uint32_t(family), C.uint32_t(index), &out)
-	return &Queue{hnd: out}
+	return &Queue{hnd: out, fps: &dev.fps}
 }
 
 type CommandPool struct {

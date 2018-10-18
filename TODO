@@ -7,6 +7,7 @@ follow, then vendor extensions.
 
 - [x] vkTrimCommandPool
 - [x] vkResetCommandPool
+- [x] vkQueueWaitIdle
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
 - [x] vkGetPhysicalDeviceProperties
 - [x] vkGetPhysicalDeviceFeatures
@@ -34,7 +35,6 @@ follow, then vendor extensions.
 - [ ] vkResetFences
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
-- [ ] vkQueueWaitIdle
 - [ ] vkQueueSubmit
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
