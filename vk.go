@@ -97,7 +97,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	// TODO(dh): support a custom allocator
 	var free1, free2 func()
 
-	ptr := (*C.VkInstanceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkInstanceCreateInfo{}))))
+	ptr := (*C.VkInstanceCreateInfo)(C.calloc(1, C.sizeof_VkInstanceCreateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeInstanceCreateInfo)
 	ptr.pNext = info.Next
 	ptr.enabledLayerCount = C.uint32_t(len(info.EnabledLayerNames))
@@ -108,7 +108,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	defer free1()
 	defer free2()
 	if info.ApplicationInfo != nil {
-		ptr.pApplicationInfo = (*C.VkApplicationInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkApplicationInfo{}))))
+		ptr.pApplicationInfo = (*C.VkApplicationInfo)(C.calloc(1, C.sizeof_VkApplicationInfo))
 		ptr.pApplicationInfo.sType = C.VkStructureType(StructureTypeApplicationInfo)
 		ptr.pApplicationInfo.pNext = info.ApplicationInfo.Next
 		ptr.pApplicationInfo.pApplicationName = C.CString(info.ApplicationInfo.ApplicationName)
@@ -152,7 +152,7 @@ func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
 	count := C.uint32_t(1)
 	var devs *C.VkPhysicalDevice
 	for {
-		devs = (*C.VkPhysicalDevice)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(C.VkPhysicalDevice(nil)))))
+		devs = (*C.VkPhysicalDevice)(C.calloc(C.size_t(count), C.sizeof_VkPhysicalDevice))
 		defer C.free(unsafe.Pointer(devs))
 		res := Result(C.domVkEnumeratePhysicalDevices(ins.fps[vkEnumeratePhysicalDevices], ins.hnd, &count, devs))
 		if res != Success && res != Incomplete {
@@ -609,7 +609,7 @@ type Extent3D struct {
 func (dev *PhysicalDevice) QueueFamilyProperties() []*QueueFamilyProperties {
 	var count C.uint32_t
 	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, nil)
-	props := (*C.VkQueueFamilyProperties)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(C.VkQueueFamilyProperties{}))))
+	props := (*C.VkQueueFamilyProperties)(C.calloc(C.size_t(count), C.sizeof_VkQueueFamilyProperties))
 	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, props)
 	var out []*QueueFamilyProperties
 	for _, prop := range (*[1 << 31]C.VkQueueFamilyProperties)(unsafe.Pointer(props))[:count] {
@@ -644,11 +644,11 @@ type DeviceCreateInfo struct {
 func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result) {
 	// TODO(dh): support custom allocators
 	var free1 func()
-	ptr := (*C.VkDeviceCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkDeviceCreateInfo{}))))
+	ptr := (*C.VkDeviceCreateInfo)(C.calloc(1, C.sizeof_VkDeviceCreateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeDeviceCreateInfo)
 	ptr.pNext = info.Next
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
-	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(C.calloc(C.size_t(len(info.QueueCreateInfos)), C.size_t(unsafe.Sizeof(C.VkDeviceQueueCreateInfo{}))))
+	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(C.calloc(C.size_t(len(info.QueueCreateInfos)), C.sizeof_VkDeviceQueueCreateInfo))
 	defer C.free(unsafe.Pointer(ptr.pQueueCreateInfos))
 	arr := (*[1 << 31]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
@@ -665,7 +665,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	ptr.ppEnabledExtensionNames, free1 = externStrings(info.EnabledExtensionNames)
 	defer free1()
 	if info.EnabledFeatures != nil {
-		ptr.pEnabledFeatures = (*C.VkPhysicalDeviceFeatures)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkPhysicalDeviceFeatures{}))))
+		ptr.pEnabledFeatures = (*C.VkPhysicalDeviceFeatures)(C.calloc(1, C.sizeof_VkPhysicalDeviceFeatures))
 		ptr.pEnabledFeatures.robustBufferAccess = vkBool(info.EnabledFeatures.RobustBufferAccess)
 		ptr.pEnabledFeatures.fullDrawIndexUint32 = vkBool(info.EnabledFeatures.FullDrawIndexUint32)
 		ptr.pEnabledFeatures.imageCubeArray = vkBool(info.EnabledFeatures.ImageCubeArray)
@@ -834,13 +834,13 @@ type CommandBufferInheritanceInfo struct {
 }
 
 func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
-	ptr := (*C.VkCommandBufferBeginInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferBeginInfo{}))))
+	ptr := (*C.VkCommandBufferBeginInfo)(C.calloc(1, C.sizeof_VkCommandBufferBeginInfo))
 	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferBeginInfo)
 	ptr.pNext = info.Next
 	ptr.flags = C.VkCommandBufferUsageFlags(info.Flags)
 	if info.InheritanceInfo != nil {
-		ptr.pInheritanceInfo = (*C.VkCommandBufferInheritanceInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferInheritanceInfo{}))))
+		ptr.pInheritanceInfo = (*C.VkCommandBufferInheritanceInfo)(C.calloc(1, C.sizeof_VkCommandBufferInheritanceInfo))
 		defer C.free(unsafe.Pointer(ptr.pInheritanceInfo))
 		ptr.pInheritanceInfo.sType = C.VkStructureType(StructureTypeCommandBufferInheritanceInfo)
 		ptr.pInheritanceInfo.pNext = info.InheritanceInfo.Next
@@ -874,7 +874,7 @@ type CommandPoolCreateInfo struct {
 
 func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (*CommandPool, error) {
 	// TODO(dh): support callbacks
-	ptr := (*C.VkCommandPoolCreateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandPoolCreateInfo{}))))
+	ptr := (*C.VkCommandPoolCreateInfo)(C.calloc(1, C.sizeof_VkCommandPoolCreateInfo))
 	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeCommandPoolCreateInfo)
 	ptr.pNext = info.Next
@@ -914,7 +914,7 @@ type CommandBufferAllocateInfo struct {
 }
 
 func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
-	ptr := (*C.VkCommandBufferAllocateInfo)(C.calloc(1, C.size_t(unsafe.Sizeof(C.VkCommandBufferAllocateInfo{}))))
+	ptr := (*C.VkCommandBufferAllocateInfo)(C.calloc(1, C.sizeof_VkCommandBufferAllocateInfo))
 	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferAllocateInfo)
 	ptr.pNext = info.Next
