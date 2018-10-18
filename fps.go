@@ -39,6 +39,7 @@ const (
 	vkEndCommandBuffer
 	vkBeginCommandBuffer
 	vkCmdSetLineWidth
+	vkCmdSetDepthBias
 
 	deviceMaxPFN
 )
@@ -76,4 +77,5 @@ var deviceFpNames = [...]string{
 	vkEndCommandBuffer:       "vkEndCommandBuffer",
 	vkBeginCommandBuffer:     "vkBeginCommandBuffer",
 	vkCmdSetLineWidth:        "vkCmdSetLineWidth",
+	vkCmdSetDepthBias:        "vkCmdSetDepthBias",
 }

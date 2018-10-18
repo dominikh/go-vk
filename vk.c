@@ -65,3 +65,6 @@ VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer co
 void domVkCmdSetLineWidth(PFN_vkCmdSetLineWidth fp, VkCommandBuffer commandBuffer, float lineWidth) {
 	(*fp)(commandBuffer, lineWidth);
 }
+void domVkCmdSetDepthBias(PFN_vkCmdSetDepthBias fp, VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor) {
+	(*fp)(commandBuffer, depthBiasConstantFactor, depthBiasClamp, depthBiasSlopeFactor);
+}

@@ -31,6 +31,7 @@ package vk
 // VkResult domVkEndCommandBuffer(PFN_vkEndCommandBuffer fp, VkCommandBuffer commandBuffer);
 // VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo);
 // void     domVkCmdSetLineWidth(PFN_vkCmdSetLineWidth fp, VkCommandBuffer commandBuffer, float lineWidth);
+// void     domVkCmdSetDepthBias(PFN_vkCmdSetDepthBias fp, VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor);
 import "C"
 import (
 	"fmt"
@@ -869,6 +870,10 @@ func (buf *CommandBuffer) End() error {
 
 func (buf *CommandBuffer) SetLineWidth(lineWidth float32) {
 	C.domVkCmdSetLineWidth(buf.pool.dev.fps[vkCmdSetLineWidth], buf.hnd, C.float(lineWidth))
+}
+
+func (buf *CommandBuffer) SetDepthBias(constantFactor, clamp, slopeFactor float32) {
+	C.domVkCmdSetDepthBias(buf.pool.dev.fps[vkCmdSetDepthBias], buf.hnd, C.float(constantFactor), C.float(clamp), C.float(slopeFactor))
 }
 
 type CommandPoolCreateInfo struct {
