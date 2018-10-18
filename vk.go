@@ -101,6 +101,13 @@ func externStrings(ss []string) (**C.char, func()) {
 	}
 }
 
+func externFloat32(vs []float32) *C.float {
+	if len(vs) == 0 {
+		return nil
+	}
+	return (*C.float)(C.CBytes((*[1 << 31]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
+}
+
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	// TODO(dh): support a custom allocator
 	var free1, free2 func()
@@ -666,8 +673,9 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 			flags:            C.VkDeviceQueueCreateFlags(obj.Flags),
 			queueFamilyIndex: C.uint32_t(obj.QueueFamilyIndex),
 			queueCount:       C.uint32_t(len(obj.QueuePriorities)),
-			pQueuePriorities: (*C.float)(&obj.QueuePriorities[0]),
+			pQueuePriorities: externFloat32(obj.QueuePriorities),
 		}
+		defer C.free(unsafe.Pointer(arr[i].pQueuePriorities))
 	}
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
 	ptr.ppEnabledExtensionNames, free1 = externStrings(info.EnabledExtensionNames)
@@ -1067,7 +1075,8 @@ func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (*ShaderModu
 	ptr.sType = C.VkStructureType(StructureTypeShaderModuleCreateInfo)
 	ptr.pNext = info.Next
 	ptr.codeSize = C.size_t(len(info.Code))
-	ptr.pCode = (*C.uint32_t)(unsafe.Pointer(&info.Code[0]))
+	ptr.pCode = (*C.uint32_t)(C.CBytes(info.Code))
+	defer C.free(unsafe.Pointer(ptr.pCode))
 	var hnd C.VkShaderModule
 	res := Result(C.domVkCreateShaderModule(dev.fps[vkCreateShaderModule], dev.hnd, ptr, nil, &hnd))
 	if res != Success {
