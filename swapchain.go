@@ -9,6 +9,7 @@ package vk
 // #include <stdlib.h>
 //
 // VkResult domVkCreateSwapchainKHR(PFN_vkCreateSwapchainKHR fp, VkDevice device, const VkSwapchainCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSwapchainKHR* pSwapchain);
+// VkResult domVkGetSwapchainImagesKHR(PFN_vkGetSwapchainImagesKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint32_t* pSwapchainImageCount, VkImage* pSwapchainImages);
 import "C"
 
 import (
@@ -35,6 +36,7 @@ type SwapchainCreateInfoKHR struct {
 
 type SwapchainKHR struct {
 	hnd C.VkSwapchainKHR
+	dev *Device
 }
 
 func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (*SwapchainKHR, error) {
@@ -71,5 +73,23 @@ func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (*SwapchainK
 	if res != Success {
 		return nil, res
 	}
-	return &SwapchainKHR{hnd: out}, nil
+	return &SwapchainKHR{hnd: out, dev: dev}, nil
+}
+
+func (chain *SwapchainKHR) Images() ([]*Image, error) {
+	var count C.uint32_t
+	res := Result(C.domVkGetSwapchainImagesKHR(chain.dev.fps[vkGetSwapchainImagesKHR], chain.dev.hnd, chain.hnd, &count, nil))
+	if res != Success {
+		return nil, res
+	}
+	images := make([]C.VkImage, count)
+	res = Result(C.domVkGetSwapchainImagesKHR(chain.dev.fps[vkGetSwapchainImagesKHR], chain.dev.hnd, chain.hnd, &count, &images[0]))
+	if res != Success {
+		return nil, res
+	}
+	out := make([]*Image, count)
+	for i, img := range images {
+		out[i] = &Image{hnd: img}
+	}
+	return out, nil
 }

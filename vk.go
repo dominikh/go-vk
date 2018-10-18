@@ -982,6 +982,14 @@ func (dev *Device) WaitIdle() error {
 	return nil
 }
 
+type Image struct {
+	hnd C.VkImage
+}
+
+func (img *Image) String() string {
+	return fmt.Sprintf("VkImage(%p)", img.hnd)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 

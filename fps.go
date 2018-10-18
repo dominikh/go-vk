@@ -47,6 +47,7 @@ const (
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
+	vkGetSwapchainImagesKHR
 
 	deviceMaxPFN
 )
@@ -90,4 +91,5 @@ var deviceFpNames = [...]string{
 	vkQueueWaitIdle:          "vkQueueWaitIdle",
 	vkDeviceWaitIdle:         "vkDeviceWaitIdle",
 	vkCreateSwapchainKHR:     "vkCreateSwapchainKHR",
+	vkGetSwapchainImagesKHR:  "vkGetSwapchainImagesKHR",
 }
