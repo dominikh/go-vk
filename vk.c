@@ -77,3 +77,6 @@ void domVkCmdDraw(PFN_vkCmdDraw fp, VkCommandBuffer commandBuffer, uint32_t vert
 VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue) {
 	return (*fp)(queue);
 }
+VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device) {
+	return (*fp)(device);
+}

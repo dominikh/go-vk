@@ -43,6 +43,7 @@ const (
 	vkCmdSetBlendConstants
 	vkCmdDraw
 	vkQueueWaitIdle
+	vkDeviceWaitIdle
 
 	deviceMaxPFN
 )
@@ -84,4 +85,5 @@ var deviceFpNames = [...]string{
 	vkCmdSetBlendConstants:   "vkCmdSetBlendConstants",
 	vkCmdDraw:                "vkCmdDraw",
 	vkQueueWaitIdle:          "vkQueueWaitIdle",
+	vkDeviceWaitIdle:         "vkDeviceWaitIdle",
 }

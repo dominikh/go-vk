@@ -35,6 +35,7 @@ package vk
 // void     domVkCmdSetBlendConstants(PFN_vkCmdSetBlendConstants fp, VkCommandBuffer commandBuffer, const float blendConstants[4]);
 // void     domVkCmdDraw(PFN_vkCmdDraw fp, VkCommandBuffer commandBuffer, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance);
 // VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue);
+// VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device);
 import "C"
 import (
 	"fmt"
@@ -971,6 +972,14 @@ func (pool *CommandPool) FreeBuffers(bufs []*CommandBuffer) {
 	}
 	C.domVkFreeCommandBuffers(pool.dev.fps[vkFreeCommandBuffers], pool.dev.hnd, pool.hnd, C.uint32_t(len(bufs)), &ptrs[0])
 	pool.freePtrs = ptrs[:0]
+}
+
+func (dev *Device) WaitIdle() error {
+	res := Result(C.domVkDeviceWaitIdle(dev.fps[vkDeviceWaitIdle], dev.hnd))
+	if res != Success {
+		return res
+	}
+	return nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

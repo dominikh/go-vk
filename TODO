@@ -17,6 +17,7 @@ follow, then vendor extensions.
 - [x] vkFreeCommandBuffers
 - [x] vkEnumeratePhysicalDevices
 - [x] vkEndCommandBuffer
+- [x] vkDeviceWaitIdle
 - [x] vkCreateInstance
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
@@ -78,7 +79,6 @@ follow, then vendor extensions.
 - [ ] vkEnumerateInstanceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
 - [ ] vkEnumerateDeviceLayerProperties
-- [ ] vkDeviceWaitIdle
 - [ ] vkDestroyShaderModule
 - [ ] vkDestroySemaphore
 - [ ] vkDestroySamplerYcbcrConversion
