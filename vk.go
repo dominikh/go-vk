@@ -933,7 +933,7 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	}
 	out := make([]*CommandBuffer, info.CommandBufferCount)
 	for i, buf := range bufs {
-		out[i] = &CommandBuffer{hnd: buf}
+		out[i] = &CommandBuffer{hnd: buf, pool: pool}
 	}
 	return out, nil
 }
