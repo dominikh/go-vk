@@ -26,9 +26,6 @@ We hide Vulkan's sType structure field, populating it automatically;
 we fully support slices, making `count` fields unnecessary,
 and we support Go strings, not requiring the user to ensure they're null-terminated.
 
-Their C binding generator generates code for copying data between Go and C structs.
-Where possible, we exploit identical memory layouts between Go and C structures to avoid unnecessary copies.
-
 vulkan-go/vulkan uses vkGetInstanceProcAddr for both instance and device commands,
 which means all device command calls have to go through the Vulkan loader's dispatch code.
 We use vkGetDeviceProcAddr and implement our own dispatch, which should theoretically be slightly faster.
