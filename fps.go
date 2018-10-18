@@ -41,6 +41,7 @@ const (
 	vkCmdSetLineWidth
 	vkCmdSetDepthBias
 	vkCmdSetBlendConstants
+	vkCmdDraw
 
 	deviceMaxPFN
 )
@@ -80,4 +81,5 @@ var deviceFpNames = [...]string{
 	vkCmdSetLineWidth:        "vkCmdSetLineWidth",
 	vkCmdSetDepthBias:        "vkCmdSetDepthBias",
 	vkCmdSetBlendConstants:   "vkCmdSetBlendConstants",
+	vkCmdDraw:                "vkCmdDraw",
 }

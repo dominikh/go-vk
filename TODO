@@ -22,6 +22,7 @@ follow, then vendor extensions.
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetBlendConstants
+- [x] vkCmdDraw
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
 - [x] VkResetCommandBuffer
@@ -144,7 +145,6 @@ follow, then vendor extensions.
 - [ ] vkCmdDrawIndirect
 - [ ] vkCmdDrawIndexedIndirect
 - [ ] vkCmdDrawIndexed
-- [ ] vkCmdDraw
 - [ ] vkCmdDispatchIndirect
 - [ ] vkCmdDispatchBase
 - [ ] vkCmdDispatch

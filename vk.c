@@ -71,3 +71,6 @@ void domVkCmdSetDepthBias(PFN_vkCmdSetDepthBias fp, VkCommandBuffer commandBuffe
 void domVkCmdSetBlendConstants(PFN_vkCmdSetBlendConstants fp, VkCommandBuffer commandBuffer, const float blendConstants[4]) {
 	(*fp)(commandBuffer, blendConstants);
 }
+void domVkCmdDraw(PFN_vkCmdDraw fp, VkCommandBuffer commandBuffer, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) {
+	(*fp)(commandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
+}
