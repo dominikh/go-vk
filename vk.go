@@ -37,6 +37,7 @@ package vk
 // VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue);
 // VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device);
 // VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView);
+// VkResult domVkCreateShaderModule(PFN_vkCreateShaderModule fp, VkDevice device, const VkShaderModuleCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkShaderModule* pShaderModule);
 import "C"
 import (
 	"fmt"
@@ -1048,6 +1049,31 @@ func (img *Image) CreateView(info *ImageViewCreateInfo) (*ImageView, error) {
 		return nil, res
 	}
 	return &ImageView{hnd: hnd}, nil
+}
+
+type ShaderModule struct {
+	hnd C.VkShaderModule
+}
+
+type ShaderModuleCreateInfo struct {
+	Next unsafe.Pointer
+	Code []byte
+}
+
+func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (*ShaderModule, error) {
+	// TODO(dh): support custom allocator
+	ptr := (*C.VkShaderModuleCreateInfo)(C.calloc(1, C.sizeof_VkShaderModuleCreateInfo))
+	defer C.free(unsafe.Pointer(ptr))
+	ptr.sType = C.VkStructureType(StructureTypeShaderModuleCreateInfo)
+	ptr.pNext = info.Next
+	ptr.codeSize = C.size_t(len(info.Code))
+	ptr.pCode = (*C.uint32_t)(unsafe.Pointer(&info.Code[0]))
+	var hnd C.VkShaderModule
+	res := Result(C.domVkCreateShaderModule(dev.fps[vkCreateShaderModule], dev.hnd, ptr, nil, &hnd))
+	if res != Success {
+		return nil, res
+	}
+	return &ShaderModule{hnd: hnd}, nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
