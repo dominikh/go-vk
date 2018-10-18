@@ -796,20 +796,16 @@ func (pool *CommandPool) String() string {
 }
 
 type CommandBuffer struct {
-	hnd  C.VkCommandBuffer
-	pool *CommandPool
+	hnd C.VkCommandBuffer
+	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
 }
 
 func (buf *CommandBuffer) String() string {
 	return fmt.Sprintf("VkCommandBuffer(%p)", buf)
 }
 
-func (buf *CommandBuffer) Free() {
-	C.domVkFreeCommandBuffers(buf.pool.dev.fps[vkFreeCommandBuffers], buf.pool.dev.hnd, buf.pool.hnd, 1, &buf.hnd)
-}
-
 func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
-	res := Result(C.domVkResetCommandBuffer(buf.pool.dev.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
+	res := Result(C.domVkResetCommandBuffer(buf.fps[vkResetCommandBuffer], buf.hnd, C.VkCommandBufferResetFlags(flags)))
 	if res != Success {
 		return res
 	}
@@ -853,7 +849,7 @@ func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
 		ptr.pInheritanceInfo.queryFlags = C.VkQueryControlFlags(info.InheritanceInfo.QueryFlags)
 		ptr.pInheritanceInfo.pipelineStatistics = C.VkQueryPipelineStatisticFlags(info.InheritanceInfo.PipelineStatistics)
 	}
-	res := Result(C.domVkBeginCommandBuffer(buf.pool.dev.fps[vkBeginCommandBuffer], buf.hnd, ptr))
+	res := Result(C.domVkBeginCommandBuffer(buf.fps[vkBeginCommandBuffer], buf.hnd, ptr))
 	if res != Success {
 		return res
 	}
@@ -861,7 +857,7 @@ func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
 }
 
 func (buf *CommandBuffer) End() error {
-	res := Result(C.domVkEndCommandBuffer(buf.pool.dev.fps[vkEndCommandBuffer], buf.hnd))
+	res := Result(C.domVkEndCommandBuffer(buf.fps[vkEndCommandBuffer], buf.hnd))
 	if res != Success {
 		return res
 	}
@@ -869,11 +865,11 @@ func (buf *CommandBuffer) End() error {
 }
 
 func (buf *CommandBuffer) SetLineWidth(lineWidth float32) {
-	C.domVkCmdSetLineWidth(buf.pool.dev.fps[vkCmdSetLineWidth], buf.hnd, C.float(lineWidth))
+	C.domVkCmdSetLineWidth(buf.fps[vkCmdSetLineWidth], buf.hnd, C.float(lineWidth))
 }
 
 func (buf *CommandBuffer) SetDepthBias(constantFactor, clamp, slopeFactor float32) {
-	C.domVkCmdSetDepthBias(buf.pool.dev.fps[vkCmdSetDepthBias], buf.hnd, C.float(constantFactor), C.float(clamp), C.float(slopeFactor))
+	C.domVkCmdSetDepthBias(buf.fps[vkCmdSetDepthBias], buf.hnd, C.float(constantFactor), C.float(clamp), C.float(slopeFactor))
 }
 
 type CommandPoolCreateInfo struct {
@@ -938,7 +934,7 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	}
 	out := make([]*CommandBuffer, info.CommandBufferCount)
 	for i, buf := range bufs {
-		out[i] = &CommandBuffer{hnd: buf, pool: pool}
+		out[i] = &CommandBuffer{hnd: buf, fps: &pool.dev.fps}
 	}
 	return out, nil
 }
