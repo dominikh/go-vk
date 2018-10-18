@@ -21,6 +21,7 @@ follow, then vendor extensions.
 - [x] vkCreateCommandPool
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetDepthBias
+- [x] vkCmdSetBlendConstants
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
 - [x] VkResetCommandBuffer
@@ -130,7 +131,6 @@ follow, then vendor extensions.
 - [ ] vkCmdSetEvent
 - [ ] vkCmdSetDeviceMask
 - [ ] vkCmdSetDepthBounds
-- [ ] vkCmdSetBlendConstants
 - [ ] vkCmdResolveImage
 - [ ] vkCmdResetQueryPool
 - [ ] vkCmdResetEvent

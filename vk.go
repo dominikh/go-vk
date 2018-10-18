@@ -32,6 +32,7 @@ package vk
 // VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo);
 // void     domVkCmdSetLineWidth(PFN_vkCmdSetLineWidth fp, VkCommandBuffer commandBuffer, float lineWidth);
 // void     domVkCmdSetDepthBias(PFN_vkCmdSetDepthBias fp, VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor);
+// void     domVkCmdSetBlendConstants(PFN_vkCmdSetBlendConstants fp, VkCommandBuffer commandBuffer, const float blendConstants[4]);
 import "C"
 import (
 	"fmt"
@@ -870,6 +871,10 @@ func (buf *CommandBuffer) SetLineWidth(lineWidth float32) {
 
 func (buf *CommandBuffer) SetDepthBias(constantFactor, clamp, slopeFactor float32) {
 	C.domVkCmdSetDepthBias(buf.fps[vkCmdSetDepthBias], buf.hnd, C.float(constantFactor), C.float(clamp), C.float(slopeFactor))
+}
+
+func (buf *CommandBuffer) SetBlendConstants(blendConstants [4]float32) {
+	C.domVkCmdSetBlendConstants(buf.fps[vkCmdSetBlendConstants], buf.hnd, (*C.float)(unsafe.Pointer(&blendConstants[0])))
 }
 
 type CommandPoolCreateInfo struct {
