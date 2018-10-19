@@ -39,6 +39,7 @@ package vk
 // VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView);
 // VkResult domVkCreateShaderModule(PFN_vkCreateShaderModule fp, VkDevice device, const VkShaderModuleCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkShaderModule* pShaderModule);
 // VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
+// VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice device, const VkPipelineLayoutCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineLayout* pPipelineLayout);
 import "C"
 import (
 	"fmt"
@@ -1381,6 +1382,48 @@ type PipelineLayoutCreateInfo struct {
 	Next               unsafe.Pointer
 	SetLayouts         []DescriptorSetLayout
 	PushConstantRanges []PushConstantRange
+}
+
+func (info PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineLayoutCreateInfo)
+	size1 := C.sizeof_VkDescriptorSetLayout * uintptr(len(info.SetLayouts))
+	size2 := C.sizeof_VkPushConstantRange * uintptr(len(info.PushConstantRanges))
+	size := size0 + size1 + size2
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineLayoutCreateInfo)(alloc)
+	setLayouts := (*C.VkDescriptorSetLayout)(unsafe.Pointer(uintptr(alloc) + size0))
+	push := (*C.VkPushConstantRange)(unsafe.Pointer(uintptr(alloc) + size0 + size1))
+	*cinfo = C.VkPipelineLayoutCreateInfo{
+		sType:                  C.VkStructureType(StructureTypePipelineLayoutCreateInfo),
+		pNext:                  info.Next,
+		flags:                  0,
+		setLayoutCount:         C.uint32_t(len(info.SetLayouts)),
+		pSetLayouts:            setLayouts,
+		pushConstantRangeCount: C.uint32_t(len(info.PushConstantRanges)),
+		pPushConstantRanges:    push,
+	}
+	setLayoutsArr := (*[1 << 31]C.VkDescriptorSetLayout)(unsafe.Pointer(setLayouts))[:len(info.SetLayouts)]
+	pushArr := (*[1 << 31]C.VkPushConstantRange)(unsafe.Pointer(push))[:len(info.PushConstantRanges)]
+	for i := range setLayoutsArr {
+		setLayoutsArr[i] = info.SetLayouts[i].hnd
+	}
+	for i := range pushArr {
+		pushArr[i] = *(*C.VkPushConstantRange)(unsafe.Pointer(&info.PushConstantRanges[i]))
+	}
+
+	return cinfo
+}
+
+func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (*PipelineLayout, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
+	var hnd C.VkPipelineLayout
+	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return nil, res
+	}
+	return &PipelineLayout{hnd}, nil
 }
 
 type DescriptorSetLayout struct {
