@@ -38,6 +38,7 @@ package vk
 // VkResult domVkDeviceWaitIdle(PFN_vkDeviceWaitIdle fp, VkDevice device);
 // VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView);
 // VkResult domVkCreateShaderModule(PFN_vkCreateShaderModule fp, VkDevice device, const VkShaderModuleCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkShaderModule* pShaderModule);
+// VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
 import "C"
 import (
 	"fmt"
@@ -48,8 +49,7 @@ import (
 const debug = true
 
 type (
-	DeviceSize       = uint64
-	SampleCountFlags = uint32
+	DeviceSize = uint64
 )
 
 var vkEnumerateInstanceVersion C.PFN_vkEnumerateInstanceVersion
@@ -841,8 +841,13 @@ type CommandBufferBeginInfo struct {
 	InheritanceInfo *CommandBufferInheritanceInfo
 }
 
-type RenderPass C.VkRenderPass
-type Framebuffer C.VkFramebuffer
+type RenderPass struct {
+	hnd C.VkRenderPass
+}
+
+type Framebuffer struct {
+	hnd C.VkFramebuffer
+}
 
 type CommandBufferInheritanceInfo struct {
 	Next                 unsafe.Pointer
@@ -865,9 +870,9 @@ func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
 		defer C.free(unsafe.Pointer(ptr.pInheritanceInfo))
 		ptr.pInheritanceInfo.sType = C.VkStructureType(StructureTypeCommandBufferInheritanceInfo)
 		ptr.pInheritanceInfo.pNext = info.InheritanceInfo.Next
-		ptr.pInheritanceInfo.renderPass = C.VkRenderPass(info.InheritanceInfo.RenderPass)
+		ptr.pInheritanceInfo.renderPass = C.VkRenderPass(info.InheritanceInfo.RenderPass.hnd)
 		ptr.pInheritanceInfo.subpass = C.uint32_t(info.InheritanceInfo.Subpass)
-		ptr.pInheritanceInfo.framebuffer = C.VkFramebuffer(info.InheritanceInfo.Framebuffer)
+		ptr.pInheritanceInfo.framebuffer = C.VkFramebuffer(info.InheritanceInfo.Framebuffer.hnd)
 		ptr.pInheritanceInfo.occlusionQueryEnable = vkBool(info.InheritanceInfo.OcclusionQueryEnable)
 		ptr.pInheritanceInfo.queryFlags = C.VkQueryControlFlags(info.InheritanceInfo.QueryFlags)
 		ptr.pInheritanceInfo.pipelineStatistics = C.VkQueryPipelineStatisticFlags(info.InheritanceInfo.PipelineStatistics)
@@ -1083,6 +1088,476 @@ func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (*ShaderModu
 		return nil, res
 	}
 	return &ShaderModule{hnd: hnd}, nil
+}
+
+type PipelineShaderStageCreateInfo struct {
+	Next   unsafe.Pointer
+	Stage  ShaderStageFlags
+	Module *ShaderModule
+	Name   string
+	// TODO(dh): support specialization info
+}
+
+type PipelineVertexInputStateCreateInfo struct {
+	Next                        unsafe.Pointer
+	VertexBindingDescriptions   []VertexInputBindingDescription
+	VertexAttributeDescriptions []VertexInputAttributeDescription
+}
+
+func (info PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStateCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineVertexInputStateCreateInfo)
+	size1 := uintptr(len(info.VertexBindingDescriptions)) * C.sizeof_VkVertexInputBindingDescription
+	size2 := uintptr(len(info.VertexAttributeDescriptions)) * C.sizeof_VkVertexInputAttributeDescription
+	size := size0 + size1 + size2
+
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineVertexInputStateCreateInfo)(alloc)
+	bindings := (*C.VkVertexInputBindingDescription)(unsafe.Pointer(uintptr(alloc) + size0))
+	attribs := (*C.VkVertexInputAttributeDescription)(unsafe.Pointer(uintptr(alloc) + size0 + size1))
+	*cinfo = C.VkPipelineVertexInputStateCreateInfo{
+		sType: C.VkStructureType(StructureType(StructureTypePipelineVertexInputStateCreateInfo)),
+		pNext: info.Next,
+		flags: 0,
+		vertexBindingDescriptionCount:   C.uint32_t(len(info.VertexBindingDescriptions)),
+		pVertexBindingDescriptions:      bindings,
+		vertexAttributeDescriptionCount: C.uint32_t(len(info.VertexAttributeDescriptions)),
+		pVertexAttributeDescriptions:    attribs,
+	}
+	bindingsArr := (*[1 << 31]C.VkVertexInputBindingDescription)(unsafe.Pointer(bindings))[:len(info.VertexBindingDescriptions)]
+	attribsArr := (*[1 << 31]C.VkVertexInputAttributeDescription)(unsafe.Pointer(attribs))[:len(info.VertexAttributeDescriptions)]
+	for i := range bindingsArr {
+		bindingsArr[i] = *(*C.VkVertexInputBindingDescription)(unsafe.Pointer(&info.VertexBindingDescriptions[i]))
+	}
+	for i := range attribsArr {
+		attribsArr[i] = *(*C.VkVertexInputAttributeDescription)(unsafe.Pointer(&info.VertexAttributeDescriptions[i]))
+	}
+	return cinfo
+}
+
+type VertexInputBindingDescription struct {
+	Binding   uint32
+	Stride    uint32
+	InputRate VertexInputRate
+}
+
+type VertexInputAttributeDescription struct {
+	Location uint32
+	Binding  uint32
+	Format   Format
+	Offset   uint32
+}
+
+type PipelineInputAssemblyStateCreateInfo struct {
+	Next                   unsafe.Pointer
+	Topology               PrimitiveTopology
+	PrimitiveRestartEnable bool
+}
+
+func (info PipelineInputAssemblyStateCreateInfo) c() *C.VkPipelineInputAssemblyStateCreateInfo {
+	cinfo := (*C.VkPipelineInputAssemblyStateCreateInfo)(C.calloc(1, C.sizeof_VkPipelineInputAssemblyStateCreateInfo))
+	*cinfo = C.VkPipelineInputAssemblyStateCreateInfo{
+		sType:                  C.VkStructureType(StructureTypePipelineInputAssemblyStateCreateInfo),
+		pNext:                  info.Next,
+		flags:                  0,
+		topology:               C.VkPrimitiveTopology(info.Topology),
+		primitiveRestartEnable: vkBool(info.PrimitiveRestartEnable),
+	}
+	return cinfo
+}
+
+type Viewport struct {
+	X        float32
+	Y        float32
+	Width    float32
+	Height   float32
+	MinDepth float32
+	MaxDepth float32
+}
+
+type Rect2D struct {
+	Offset Offset2D
+	Extent Extent2D
+}
+
+type Offset2D struct {
+	X int32
+	Y int32
+}
+
+type PipelineViewportStateCreateInfo struct {
+	Next      unsafe.Pointer
+	Viewports []Viewport
+	Scissors  []Rect2D
+}
+
+func (info PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineViewportStateCreateInfo)
+	size1 := uintptr(len(info.Viewports)) * C.sizeof_VkViewport
+	size2 := uintptr(len(info.Scissors)) * C.sizeof_VkRect2D
+	size := size0 + size1 + size2
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineViewportStateCreateInfo)(alloc)
+	viewports := (*C.VkViewport)(unsafe.Pointer(uintptr(alloc) + size0))
+	scissors := (*C.VkRect2D)(unsafe.Pointer(uintptr(alloc) + size0 + size1))
+	*cinfo = C.VkPipelineViewportStateCreateInfo{
+		sType:         C.VkStructureType(StructureTypePipelineViewportStateCreateInfo),
+		pNext:         info.Next,
+		flags:         0,
+		viewportCount: C.uint32_t(len(info.Viewports)),
+		pViewports:    viewports,
+		scissorCount:  C.uint32_t(len(info.Scissors)),
+		pScissors:     scissors,
+	}
+	viewportsArr := (*[1 << 31]C.VkViewport)(unsafe.Pointer(viewports))[:len(info.Viewports)]
+	scissorsArr := (*[1 << 31]C.VkRect2D)(unsafe.Pointer(scissors))[:len(info.Scissors)]
+	for i := range viewportsArr {
+		viewportsArr[i] = *(*C.VkViewport)(unsafe.Pointer(&info.Viewports[i]))
+	}
+	for i := range scissorsArr {
+		scissorsArr[i] = *(*C.VkRect2D)(unsafe.Pointer(&info.Scissors[i]))
+	}
+	return cinfo
+}
+
+type PipelineRasterizationStateCreateInfo struct {
+	Next                    unsafe.Pointer
+	DepthClampEnable        bool
+	RasterizerDiscardEnable bool
+	PolygonMode             PolygonMode
+	CullMode                CullModeFlags
+	FrontFace               FrontFace
+	DepthBiasEnable         bool
+	DepthBiasConstantFactor float32
+	DepthBiasClamp          float32
+	DepthBiasSlopeFactor    float32
+	LineWidth               float32
+}
+
+func (info PipelineRasterizationStateCreateInfo) c() *C.VkPipelineRasterizationStateCreateInfo {
+	cinfo := (*C.VkPipelineRasterizationStateCreateInfo)(C.calloc(1, C.sizeof_VkPipelineRasterizationStateCreateInfo))
+	*cinfo = C.VkPipelineRasterizationStateCreateInfo{
+		sType:                   C.VkStructureType(StructureTypePipelineRasterizationStateCreateInfo),
+		pNext:                   info.Next,
+		flags:                   0,
+		depthClampEnable:        vkBool(info.DepthClampEnable),
+		rasterizerDiscardEnable: vkBool(info.RasterizerDiscardEnable),
+		polygonMode:             C.VkPolygonMode(info.PolygonMode),
+		cullMode:                C.VkCullModeFlags(info.CullMode),
+		frontFace:               C.VkFrontFace(info.FrontFace),
+		depthBiasEnable:         vkBool(info.DepthBiasEnable),
+		depthBiasConstantFactor: C.float(info.DepthBiasConstantFactor),
+		depthBiasClamp:          C.float(info.DepthBiasClamp),
+		depthBiasSlopeFactor:    C.float(info.DepthBiasSlopeFactor),
+		lineWidth:               C.float(info.LineWidth),
+	}
+	return cinfo
+}
+
+type PipelineMultisampleStateCreateInfo struct {
+	Next                  unsafe.Pointer
+	RasterizationSamples  SampleCountFlags
+	SampleShadingEnable   bool
+	MinSampleShading      float32
+	SampleMask            []SampleMask
+	AlphaToCoverageEnable bool
+	AlphaToOneEnable      bool
+}
+
+func (info PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStateCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineMultisampleStateCreateInfo)
+	size1 := uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineMultisampleStateCreateInfo)(alloc)
+	sampleMask := (*C.VkSampleMask)(unsafe.Pointer(uintptr(alloc) + size0))
+	*cinfo = C.VkPipelineMultisampleStateCreateInfo{
+		sType:                 C.VkStructureType(StructureTypePipelineMultisampleStateCreateInfo),
+		pNext:                 info.Next,
+		flags:                 0,
+		rasterizationSamples:  C.VkSampleCountFlagBits(info.RasterizationSamples),
+		sampleShadingEnable:   vkBool(info.SampleShadingEnable),
+		minSampleShading:      C.float(info.MinSampleShading),
+		pSampleMask:           sampleMask,
+		alphaToCoverageEnable: vkBool(info.AlphaToCoverageEnable),
+		alphaToOneEnable:      vkBool(info.AlphaToOneEnable),
+	}
+	sampleMaskArr := (*[1 << 31]C.VkSampleMask)(unsafe.Pointer(sampleMask))[:len(info.SampleMask)]
+	for i := range sampleMaskArr {
+		sampleMaskArr[i] = C.VkSampleMask(info.SampleMask[i])
+	}
+	return cinfo
+}
+
+type SampleMask uint32
+
+type PipelineColorBlendAttachmentState struct {
+	BlendEnable         bool
+	SrcColorBlendFactor BlendFactor
+	DstColorBlendFactor BlendFactor
+	ColorBlendOp        BlendOp
+	SrcAlphaBlendFactor BlendFactor
+	DstAlphaBlendFactor BlendFactor
+	AlphaBlendOp        BlendOp
+	ColorWriteMask      ColorComponentFlags
+}
+
+type PipelineColorBlendStateCreateInfo struct {
+	Next           unsafe.Pointer
+	LogicOpEnable  bool
+	LogicOp        LogicOp
+	Attachments    []PipelineColorBlendAttachmentState
+	BlendConstants [4]float32
+}
+
+func (info PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineColorBlendStateCreateInfo)
+	size1 := C.sizeof_VkPipelineColorBlendAttachmentState * uintptr(len(info.Attachments))
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineColorBlendStateCreateInfo)(alloc)
+	attachments := (*C.VkPipelineColorBlendAttachmentState)(unsafe.Pointer(uintptr(alloc) + size0))
+	*cinfo = C.VkPipelineColorBlendStateCreateInfo{
+		sType:           C.VkStructureType(StructureTypePipelineColorBlendStateCreateInfo),
+		pNext:           info.Next,
+		flags:           0,
+		logicOpEnable:   vkBool(info.LogicOpEnable),
+		logicOp:         C.VkLogicOp(info.LogicOp),
+		attachmentCount: C.uint32_t(len(info.Attachments)),
+		pAttachments:    attachments,
+		blendConstants: [4]C.float{
+			C.float(info.BlendConstants[0]),
+			C.float(info.BlendConstants[1]),
+			C.float(info.BlendConstants[2]),
+			C.float(info.BlendConstants[3]),
+		},
+	}
+	attachmentsArr := (*[1 << 31]C.VkPipelineColorBlendAttachmentState)(unsafe.Pointer(attachments))[:len(info.Attachments)]
+	for i := range attachmentsArr {
+		attachmentsArr[i] = C.VkPipelineColorBlendAttachmentState{
+			blendEnable:         vkBool(info.Attachments[i].BlendEnable),
+			srcColorBlendFactor: C.VkBlendFactor(info.Attachments[i].SrcColorBlendFactor),
+			dstColorBlendFactor: C.VkBlendFactor(info.Attachments[i].DstColorBlendFactor),
+			colorBlendOp:        C.VkBlendOp(info.Attachments[i].ColorBlendOp),
+			srcAlphaBlendFactor: C.VkBlendFactor(info.Attachments[i].SrcAlphaBlendFactor),
+			dstAlphaBlendFactor: C.VkBlendFactor(info.Attachments[i].DstAlphaBlendFactor),
+			alphaBlendOp:        C.VkBlendOp(info.Attachments[i].AlphaBlendOp),
+			colorWriteMask:      C.VkColorComponentFlags(info.Attachments[i].ColorWriteMask),
+		}
+	}
+	return cinfo
+}
+
+type PipelineDynamicStateCreateInfo struct {
+	Next          unsafe.Pointer
+	DynamicStates []DynamicState
+}
+
+func (info PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateInfo {
+	size0 := uintptr(C.sizeof_VkPipelineDynamicStateCreateInfo)
+	size1 := C.sizeof_VkDynamicState * uintptr(len(info.DynamicStates))
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkPipelineDynamicStateCreateInfo)(alloc)
+	dynamicStates := (*C.VkDynamicState)(unsafe.Pointer(uintptr(alloc) + size0))
+	*cinfo = C.VkPipelineDynamicStateCreateInfo{
+		sType:             C.VkStructureType(StructureTypePipelineDynamicStateCreateInfo),
+		pNext:             info.Next,
+		flags:             0,
+		dynamicStateCount: C.uint32_t(len(info.DynamicStates)),
+		pDynamicStates:    dynamicStates,
+	}
+	dynamicStatesArr := (*[1 << 31]C.VkDynamicState)(unsafe.Pointer(dynamicStates))[:len(info.DynamicStates)]
+	for i := range dynamicStatesArr {
+		dynamicStatesArr[i] = C.VkDynamicState(info.DynamicStates[i])
+	}
+	return cinfo
+}
+
+type PipelineLayout struct {
+	hnd C.VkPipelineLayout
+}
+
+type PipelineLayoutCreateInfo struct {
+	Next               unsafe.Pointer
+	SetLayouts         []DescriptorSetLayout
+	PushConstantRanges []PushConstantRange
+}
+
+type DescriptorSetLayout struct {
+	hnd C.VkDescriptorSetLayout
+}
+
+type PushConstantRange struct {
+	StageFlags ShaderStageFlags
+	Offset     uint32
+	Size       uint32
+}
+
+type PipelineTessellationStateCreateInfo struct {
+	Next               unsafe.Pointer
+	PatchControlPoints uint32
+}
+
+func (info PipelineTessellationStateCreateInfo) c() *C.VkPipelineTessellationStateCreateInfo {
+	cinfo := (*C.VkPipelineTessellationStateCreateInfo)(C.calloc(1, C.sizeof_VkPipelineTessellationStateCreateInfo))
+	*cinfo = C.VkPipelineTessellationStateCreateInfo{
+		sType:              C.VkStructureType(StructureTypePipelineTessellationStateCreateInfo),
+		pNext:              info.Next,
+		flags:              0,
+		patchControlPoints: C.uint32_t(info.PatchControlPoints),
+	}
+	return cinfo
+}
+
+type PipelineDepthStencilStateCreateInfo struct {
+	Next                  unsafe.Pointer
+	DepthTestEnable       bool
+	DepthWriteEnable      bool
+	DepthCompareOp        CompareOp
+	DepthBoundsTestEnable bool
+	StencilTestEnable     bool
+	Front                 StencilOpState
+	Back                  StencilOpState
+	MinDepthBounds        float32
+	MaxDepthBounds        float32
+}
+
+func (info PipelineDepthStencilStateCreateInfo) c() *C.VkPipelineDepthStencilStateCreateInfo {
+	cinfo := (*C.VkPipelineDepthStencilStateCreateInfo)(C.calloc(1, C.sizeof_VkPipelineDepthStencilStateCreateInfo))
+	*cinfo = C.VkPipelineDepthStencilStateCreateInfo{
+		sType:                 C.VkStructureType(StructureTypePipelineDepthStencilStateCreateInfo),
+		pNext:                 info.Next,
+		flags:                 0,
+		depthTestEnable:       vkBool(info.DepthTestEnable),
+		depthWriteEnable:      vkBool(info.DepthWriteEnable),
+		depthCompareOp:        C.VkCompareOp(info.DepthCompareOp),
+		depthBoundsTestEnable: vkBool(info.DepthBoundsTestEnable),
+		stencilTestEnable:     vkBool(info.StencilTestEnable),
+		front:                 *(*C.VkStencilOpState)(unsafe.Pointer(&info.Front)),
+		back:                  *(*C.VkStencilOpState)(unsafe.Pointer(&info.Back)),
+		minDepthBounds:        C.float(info.MinDepthBounds),
+		maxDepthBounds:        C.float(info.MaxDepthBounds),
+	}
+	return cinfo
+}
+
+type StencilOpState struct {
+	FailOp      StencilOp
+	PassOp      StencilOp
+	DepthFailOp StencilOp
+	CompareOp   CompareOp
+	CompareMask uint32
+	WriteMask   uint32
+	Reference   uint32
+}
+
+type Pipeline struct {
+	hnd C.VkPipeline
+}
+
+type GraphicsPipelineCreateInfo struct {
+	Next               unsafe.Pointer
+	Flags              PipelineCreateFlags
+	Stages             []PipelineShaderStageCreateInfo
+	VertexInputState   *PipelineVertexInputStateCreateInfo
+	InputAssemblyState *PipelineInputAssemblyStateCreateInfo
+	TessellationState  *PipelineTessellationStateCreateInfo
+	ViewportState      *PipelineViewportStateCreateInfo
+	RasterizationState *PipelineRasterizationStateCreateInfo
+	MultisampleState   *PipelineMultisampleStateCreateInfo
+	DepthStencilState  *PipelineDepthStencilStateCreateInfo
+	ColorBlendState    *PipelineColorBlendStateCreateInfo
+	DynamicState       *PipelineDynamicStateCreateInfo
+	Layout             *PipelineLayout
+	RenderPass         *RenderPass
+	Subpass            uint32
+	BasePipelineHandle *Pipeline
+	BasePipelineIndex  int32
+}
+
+func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) ([]*Pipeline, error) {
+	// TODO(dh): support pipeline cache
+	// TODO(dh): support custom allocators
+	ptrs := (*C.VkGraphicsPipelineCreateInfo)(C.calloc(C.size_t(len(infos)), C.sizeof_VkGraphicsPipelineCreateInfo))
+	defer C.free(unsafe.Pointer(ptrs))
+
+	ptrsArr := (*[1 << 31]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))
+	for i := range ptrsArr {
+		ptr := &ptrsArr[i]
+		info := &infos[i]
+
+		ptr.sType = C.VkStructureType(StructureTypeGraphicsPipelineCreateInfo)
+		ptr.pNext = info.Next
+		ptr.flags = C.VkPipelineCreateFlags(info.Flags)
+		ptr.stageCount = C.uint32_t(len(info.Stages))
+
+		ptr.pStages = (*C.VkPipelineShaderStageCreateInfo)(C.calloc(C.size_t(len(info.Stages)), C.sizeof_VkPipelineShaderStageCreateInfo))
+		defer C.free(unsafe.Pointer(ptr.pStages))
+		arr := (*[1 << 31]C.VkPipelineShaderStageCreateInfo)(unsafe.Pointer(ptr.pStages))[:len(info.Stages)]
+		for i := range arr {
+			arr[i] = C.VkPipelineShaderStageCreateInfo{
+				sType:  C.VkStructureType(StructureTypePipelineShaderStageCreateInfo),
+				pNext:  info.Stages[i].Next,
+				stage:  C.VkShaderStageFlagBits(info.Stages[i].Stage),
+				module: info.Stages[i].Module.hnd,
+				pName:  C.CString(info.Stages[i].Name),
+			}
+			defer C.free(unsafe.Pointer(arr[i].pName))
+		}
+
+		if info.VertexInputState != nil {
+			ptr.pVertexInputState = info.VertexInputState.c()
+			defer C.free(unsafe.Pointer(ptr.pVertexInputState))
+		}
+		if info.InputAssemblyState != nil {
+			ptr.pInputAssemblyState = info.InputAssemblyState.c()
+			defer C.free(unsafe.Pointer(ptr.pVertexInputState))
+		}
+		if info.TessellationState != nil {
+			ptr.pTessellationState = info.TessellationState.c()
+			defer C.free(unsafe.Pointer(ptr.pTessellationState))
+		}
+		if info.ViewportState != nil {
+			ptr.pViewportState = info.ViewportState.c()
+			defer C.free(unsafe.Pointer(ptr.pViewportState))
+		}
+		if info.RasterizationState != nil {
+			ptr.pRasterizationState = info.RasterizationState.c()
+			defer C.free(unsafe.Pointer(ptr.pRasterizationState))
+		}
+		if info.MultisampleState != nil {
+			ptr.pMultisampleState = info.MultisampleState.c()
+			defer C.free(unsafe.Pointer(ptr.pMultisampleState))
+		}
+		if info.DepthStencilState != nil {
+			ptr.pDepthStencilState = info.DepthStencilState.c()
+			defer C.free(unsafe.Pointer(ptr.pDepthStencilState))
+		}
+		if info.ColorBlendState != nil {
+			ptr.pColorBlendState = info.ColorBlendState.c()
+			defer C.free(unsafe.Pointer(ptr.pColorBlendState))
+		}
+		if info.DynamicState != nil {
+			ptr.pDynamicState = info.DynamicState.c()
+			defer C.free(unsafe.Pointer(ptr.pDynamicState))
+		}
+		ptr.layout = info.Layout.hnd
+		ptr.renderPass = info.RenderPass.hnd
+		ptr.subpass = C.uint32_t(info.Subpass)
+		ptr.basePipelineHandle = info.BasePipelineHandle.hnd
+		ptr.basePipelineIndex = C.int32_t(info.BasePipelineIndex)
+	}
+
+	hnds := make([]C.VkPipeline, len(infos))
+	res := Result(C.domVkCreateGraphicsPipelines(dev.fps[vkCreateGraphicsPipelines], dev.hnd, 0, C.uint32_t(len(infos)), ptrs, nil, &hnds[0]))
+	if res != Success {
+		return nil, res
+	}
+	out := make([]*Pipeline, len(infos))
+	for i, hnd := range hnds {
+		out[i] = &Pipeline{hnd}
+	}
+	return out, nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

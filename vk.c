@@ -86,3 +86,6 @@ VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const V
 VkResult domVkCreateShaderModule(PFN_vkCreateShaderModule fp, VkDevice device, const VkShaderModuleCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkShaderModule* pShaderModule) {
 	return (*fp)(device, pCreateInfo, pAllocator, pShaderModule);
 }
+VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines) {
+	return (*fp)(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
+}

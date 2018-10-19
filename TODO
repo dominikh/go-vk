@@ -24,6 +24,7 @@ follow, then vendor extensions.
 - [x] vkCreateShaderModule
 - [x] vkCreateInstance
 - [x] vkCreateImageView
+- [x] vkCreateGraphicsPipelines
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCmdSetLineWidth
@@ -117,7 +118,6 @@ follow, then vendor extensions.
 - [ ] vkCreatePipelineLayout
 - [ ] vkCreatePipelineCache
 - [ ] vkCreateImage
-- [ ] vkCreateGraphicsPipelines
 - [ ] vkCreateFramebuffer
 - [ ] vkCreateFence
 - [ ] vkCreateEvent

@@ -46,6 +46,7 @@ const (
 	vkDeviceWaitIdle
 	vkCreateImageView
 	vkCreateShaderModule
+	vkCreateGraphicsPipelines
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -77,23 +78,24 @@ var instanceFpNames = [...]string{
 }
 
 var deviceFpNames = [...]string{
-	vkGetDeviceQueue:         "vkGetDeviceQueue",
-	vkCreateCommandPool:      "vkCreateCommandPool",
-	vkTrimCommandPool:        "vkTrimCommandPool",
-	vkResetCommandPool:       "vkResetCommandPool",
-	vkAllocateCommandBuffers: "vkAllocateCommandBuffers",
-	vkResetCommandBuffer:     "vkResetCommandBuffer",
-	vkFreeCommandBuffers:     "vkFreeCommandBuffers",
-	vkEndCommandBuffer:       "vkEndCommandBuffer",
-	vkBeginCommandBuffer:     "vkBeginCommandBuffer",
-	vkCmdSetLineWidth:        "vkCmdSetLineWidth",
-	vkCmdSetDepthBias:        "vkCmdSetDepthBias",
-	vkCmdSetBlendConstants:   "vkCmdSetBlendConstants",
-	vkCmdDraw:                "vkCmdDraw",
-	vkQueueWaitIdle:          "vkQueueWaitIdle",
-	vkDeviceWaitIdle:         "vkDeviceWaitIdle",
-	vkCreateSwapchainKHR:     "vkCreateSwapchainKHR",
-	vkGetSwapchainImagesKHR:  "vkGetSwapchainImagesKHR",
-	vkCreateImageView:        "vkCreateImageView",
-	vkCreateShaderModule:     "vkCreateShaderModule",
+	vkGetDeviceQueue:          "vkGetDeviceQueue",
+	vkCreateCommandPool:       "vkCreateCommandPool",
+	vkTrimCommandPool:         "vkTrimCommandPool",
+	vkResetCommandPool:        "vkResetCommandPool",
+	vkAllocateCommandBuffers:  "vkAllocateCommandBuffers",
+	vkResetCommandBuffer:      "vkResetCommandBuffer",
+	vkFreeCommandBuffers:      "vkFreeCommandBuffers",
+	vkEndCommandBuffer:        "vkEndCommandBuffer",
+	vkBeginCommandBuffer:      "vkBeginCommandBuffer",
+	vkCmdSetLineWidth:         "vkCmdSetLineWidth",
+	vkCmdSetDepthBias:         "vkCmdSetDepthBias",
+	vkCmdSetBlendConstants:    "vkCmdSetBlendConstants",
+	vkCmdDraw:                 "vkCmdDraw",
+	vkQueueWaitIdle:           "vkQueueWaitIdle",
+	vkDeviceWaitIdle:          "vkDeviceWaitIdle",
+	vkCreateSwapchainKHR:      "vkCreateSwapchainKHR",
+	vkGetSwapchainImagesKHR:   "vkGetSwapchainImagesKHR",
+	vkCreateImageView:         "vkCreateImageView",
+	vkCreateShaderModule:      "vkCreateShaderModule",
+	vkCreateGraphicsPipelines: "vkCreateGraphicsPipelines",
 }

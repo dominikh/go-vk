@@ -36,18 +36,24 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ImageViewType(0)), C.sizeof_VkImageViewType)
 	assertSameSize(unsafe.Sizeof(ComponentSwizzle(0)), C.sizeof_VkComponentSwizzle)
 	assertSameSize(unsafe.Sizeof(ImageAspectFlags(0)), C.sizeof_VkImageAspectFlags)
+	assertSameSize(unsafe.Sizeof(ShaderStageFlags(0)), C.sizeof_VkShaderStageFlags)
+	assertSameSize(unsafe.Sizeof(VertexInputRate(0)), C.sizeof_VkVertexInputRate)
+	assertSameSize(unsafe.Sizeof(PrimitiveTopology(0)), C.sizeof_VkPrimitiveTopology)
+	assertSameSize(unsafe.Sizeof(PolygonMode(0)), C.sizeof_VkPolygonMode)
+	assertSameSize(unsafe.Sizeof(CullModeFlags(0)), C.sizeof_VkCullModeFlags)
+	assertSameSize(unsafe.Sizeof(FrontFace(0)), C.sizeof_VkFrontFace)
+	assertSameSize(unsafe.Sizeof(SampleCountFlags(0)), C.sizeof_VkSampleCountFlagBits)
+	assertSameSize(unsafe.Sizeof(BlendFactor(0)), C.sizeof_VkBlendFactor)
+	assertSameSize(unsafe.Sizeof(BlendOp(0)), C.sizeof_VkBlendOp)
+	assertSameSize(unsafe.Sizeof(ColorComponentFlags(0)), C.sizeof_VkColorComponentFlags)
+	assertSameSize(unsafe.Sizeof(LogicOp(0)), C.sizeof_VkLogicOp)
+	assertSameSize(unsafe.Sizeof(DynamicState(0)), C.sizeof_VkDynamicState)
+	assertSameSize(unsafe.Sizeof(PipelineCreateFlags(0)), C.sizeof_VkPipelineCreateFlags)
+	assertSameSize(unsafe.Sizeof(CompareOp(0)), C.sizeof_VkCompareOp)
+	assertSameSize(unsafe.Sizeof(StencilOp(0)), C.sizeof_VkStencilOp)
 }
 
-//go:generate stringer -type=PresentModeKHR
-//go:generate stringer -type=CommandBufferLevel
-//go:generate stringer -type=ColorSpaceKHR
-//go:generate stringer -type=Format
-//go:generate stringer -type=StructureType
-//go:generate stringer -type=Result
-//go:generate stringer -type=PhysicalDeviceType
-//go:generate stringer -type=SharingMode
-//go:generate stringer -type=ImageViewType
-//go:generate stringer -type=ComponentSwizzle
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -72,6 +78,21 @@ type SharingMode uint32
 type ImageViewType uint32
 type ComponentSwizzle uint32
 type ImageAspectFlags uint32
+type ShaderStageFlags uint32
+type VertexInputRate uint32
+type PrimitiveTopology uint32
+type PolygonMode uint32
+type CullModeFlags uint32
+type FrontFace uint32
+type SampleCountFlags uint32
+type BlendFactor uint32
+type BlendOp uint32
+type ColorComponentFlags uint32
+type LogicOp uint32
+type DynamicState uint32
+type PipelineCreateFlags uint32
+type CompareOp uint32
+type StencilOp uint32
 
 const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
@@ -1051,6 +1072,226 @@ const (
 	ImageAspectPlane2BitKHR       ImageAspectFlags = ImageAspectPlane2Bit
 )
 
+const (
+	ShaderStageVertexBit                 ShaderStageFlags = 0x00000001
+	ShaderStageTessellationControlBit    ShaderStageFlags = 0x00000002
+	ShaderStageTessellationEvaluationBit ShaderStageFlags = 0x00000004
+	ShaderStageGeometryBit               ShaderStageFlags = 0x00000008
+	ShaderStageFragmentBit               ShaderStageFlags = 0x00000010
+	ShaderStageComputeBit                ShaderStageFlags = 0x00000020
+	ShaderStageAllGraphics               ShaderStageFlags = 0x0000001F
+	ShaderStageAll                       ShaderStageFlags = 0x7FFFFFFF
+	ShaderStageRaygenBitNVX              ShaderStageFlags = 0x00000100
+	ShaderStageAnyHitBitNVX              ShaderStageFlags = 0x00000200
+	ShaderStageClosestHitBitNVX          ShaderStageFlags = 0x00000400
+	ShaderStageMissBitNVX                ShaderStageFlags = 0x00000800
+	ShaderStageIntersectionBitNVX        ShaderStageFlags = 0x00001000
+	ShaderStageCallableBitNVX            ShaderStageFlags = 0x00002000
+	ShaderStageTaskBitNV                 ShaderStageFlags = 0x00000040
+	ShaderStageMeshBitNV                 ShaderStageFlags = 0x00000080
+)
+
+const (
+	VertexInputRateVertex   VertexInputRate = 0
+	VertexInputRateInstance VertexInputRate = 1
+)
+
+const (
+	PrimitiveTopologyPointList                  PrimitiveTopology = 0
+	PrimitiveTopologyLineList                   PrimitiveTopology = 1
+	PrimitiveTopologyLineStrip                  PrimitiveTopology = 2
+	PrimitiveTopologyTriangleList               PrimitiveTopology = 3
+	PrimitiveTopologyTriangleStrip              PrimitiveTopology = 4
+	PrimitiveTopologyTriangleFan                PrimitiveTopology = 5
+	PrimitiveTopologyLineListWithAdjacency      PrimitiveTopology = 6
+	PrimitiveTopologyLineStripWithAdjacency     PrimitiveTopology = 7
+	PrimitiveTopologyTriangleListWithAdjacency  PrimitiveTopology = 8
+	PrimitiveTopologyTriangleStripWithAdjacency PrimitiveTopology = 9
+	PrimitiveTopologyPatchList                  PrimitiveTopology = 10
+)
+
+const (
+	PolygonModeFill            PolygonMode = 0
+	PolygonModeLine            PolygonMode = 1
+	PolygonModePoint           PolygonMode = 2
+	PolygonModeFillRectangleNV PolygonMode = 1000153000
+)
+
+const (
+	CullModeNone         CullModeFlags = 0
+	CullModeFrontBit     CullModeFlags = 0x00000001
+	CullModeBackBit      CullModeFlags = 0x00000002
+	CullModeFrontAndBack CullModeFlags = 0x00000003
+)
+
+const (
+	FrontFaceCounterClockwise FrontFace = 0
+	FrontFaceClockwise        FrontFace = 1
+)
+
+const (
+	SampleCount1Bit  SampleCountFlags = 0x00000001
+	SampleCount2Bit  SampleCountFlags = 0x00000002
+	SampleCount4Bit  SampleCountFlags = 0x00000004
+	SampleCount8Bit  SampleCountFlags = 0x00000008
+	SampleCount16Bit SampleCountFlags = 0x00000010
+	SampleCount32Bit SampleCountFlags = 0x00000020
+	SampleCount64Bit SampleCountFlags = 0x00000040
+)
+
+const (
+	BlendFactorZero                  BlendFactor = 0
+	BlendFactorOne                   BlendFactor = 1
+	BlendFactorSrcColor              BlendFactor = 2
+	BlendFactorOneMinusSrcColor      BlendFactor = 3
+	BlendFactorDstColor              BlendFactor = 4
+	BlendFactorOneMinusDstColor      BlendFactor = 5
+	BlendFactorSrcAlpha              BlendFactor = 6
+	BlendFactorOneMinusSrcAlpha      BlendFactor = 7
+	BlendFactorDstAlpha              BlendFactor = 8
+	BlendFactorOneMinusDstAlpha      BlendFactor = 9
+	BlendFactorConstantColor         BlendFactor = 10
+	BlendFactorOneMinusConstantColor BlendFactor = 11
+	BlendFactorConstantAlpha         BlendFactor = 12
+	BlendFactorOneMinusConstantAlpha BlendFactor = 13
+	BlendFactorSrcAlphaSaturate      BlendFactor = 14
+	BlendFactorSrc1Color             BlendFactor = 15
+	BlendFactorOneMinusSrc1Color     BlendFactor = 16
+	BlendFactorSrc1Alpha             BlendFactor = 17
+	BlendFactorOneMinusSrc1Alpha     BlendFactor = 18
+)
+
+const (
+	BlendOpAdd                 BlendOp = 0
+	BlendOpSubtract            BlendOp = 1
+	BlendOpReverseSubtract     BlendOp = 2
+	BlendOpMin                 BlendOp = 3
+	BlendOpMax                 BlendOp = 4
+	BlendOpZeroEXT             BlendOp = 1000148000
+	BlendOpSrcEXT              BlendOp = 1000148001
+	BlendOpDstEXT              BlendOp = 1000148002
+	BlendOpSrcOverEXT          BlendOp = 1000148003
+	BlendOpDstOverEXT          BlendOp = 1000148004
+	BlendOpSrcInEXT            BlendOp = 1000148005
+	BlendOpDstInEXT            BlendOp = 1000148006
+	BlendOpSrcOutEXT           BlendOp = 1000148007
+	BlendOpDstOutEXT           BlendOp = 1000148008
+	BlendOpSrcAtopEXT          BlendOp = 1000148009
+	BlendOpDstAtopEXT          BlendOp = 1000148010
+	BlendOpXorEXT              BlendOp = 1000148011
+	BlendOpMultiplyEXT         BlendOp = 1000148012
+	BlendOpScreenEXT           BlendOp = 1000148013
+	BlendOpOverlayEXT          BlendOp = 1000148014
+	BlendOpDarkenEXT           BlendOp = 1000148015
+	BlendOpLightenEXT          BlendOp = 1000148016
+	BlendOpColordodgeEXT       BlendOp = 1000148017
+	BlendOpColorburnEXT        BlendOp = 1000148018
+	BlendOpHardlightEXT        BlendOp = 1000148019
+	BlendOpSoftlightEXT        BlendOp = 1000148020
+	BlendOpDifferenceEXT       BlendOp = 1000148021
+	BlendOpExclusionEXT        BlendOp = 1000148022
+	BlendOpInvertEXT           BlendOp = 1000148023
+	BlendOpInvertRGB_EXT       BlendOp = 1000148024
+	BlendOpLineardodgeEXT      BlendOp = 1000148025
+	BlendOpLinearburnEXT       BlendOp = 1000148026
+	BlendOpVividlightEXT       BlendOp = 1000148027
+	BlendOpLinearlightEXT      BlendOp = 1000148028
+	BlendOpPinlightEXT         BlendOp = 1000148029
+	BlendOpHardmixEXT          BlendOp = 1000148030
+	BlendOpHSLHueEXT           BlendOp = 1000148031
+	BlendOpHSLSaturationEXT    BlendOp = 1000148032
+	BlendOpHSLColorEXT         BlendOp = 1000148033
+	BlendOpHSLLuminosityEXT    BlendOp = 1000148034
+	BlendOpPlusEXT             BlendOp = 1000148035
+	BlendOpPlusClampedEXT      BlendOp = 1000148036
+	BlendOpPlusClampedAlphaEXT BlendOp = 1000148037
+	BlendOpPlusDarkerEXT       BlendOp = 1000148038
+	BlendOpMinusEXT            BlendOp = 1000148039
+	BlendOpMinusClampedEXT     BlendOp = 1000148040
+	BlendOpContrastEXT         BlendOp = 1000148041
+	BlendOpInvertOVG_EXT       BlendOp = 1000148042
+	BlendOpRedEXT              BlendOp = 1000148043
+	BlendOpGreenEXT            BlendOp = 1000148044
+	BlendOpBlueEXT             BlendOp = 1000148045
+)
+
+const (
+	ColorComponentR ColorComponentFlags = 0x00000001
+	ColorComponentG ColorComponentFlags = 0x00000002
+	ColorComponentB ColorComponentFlags = 0x00000004
+	ColorComponentA ColorComponentFlags = 0x00000008
+)
+
+const (
+	LogicOpClear        LogicOp = 0
+	LogicOpAnd          LogicOp = 1
+	LogicOpAndReverse   LogicOp = 2
+	LogicOpCopy         LogicOp = 3
+	LogicOpAndInverted  LogicOp = 4
+	LogicOpNoOp         LogicOp = 5
+	LogicOpXor          LogicOp = 6
+	LogicOpOr           LogicOp = 7
+	LogicOpNor          LogicOp = 8
+	LogicOpEquivalent   LogicOp = 9
+	LogicOpInvert       LogicOp = 10
+	LogicOpOrReverse    LogicOp = 11
+	LogicOpCopyInverted LogicOp = 12
+	LogicOpOrInverted   LogicOp = 13
+	LogicOpNand         LogicOp = 14
+	LogicOpSet          LogicOp = 15
+)
+
+const (
+	DynamicStateViewport                     DynamicState = 0
+	DynamicStateScissor                      DynamicState = 1
+	DynamicStateLineWidth                    DynamicState = 2
+	DynamicStateDepthBias                    DynamicState = 3
+	DynamicStateBlendConstants               DynamicState = 4
+	DynamicStateDepthBounds                  DynamicState = 5
+	DynamicStateStencilCompareMask           DynamicState = 6
+	DynamicStateStencilWriteMask             DynamicState = 7
+	DynamicStateStencilReference             DynamicState = 8
+	DynamicStateViewportWScalingNV           DynamicState = 1000087000
+	DynamicStateDiscardRectangleEXT          DynamicState = 1000099000
+	DynamicStateSampleLocationsEXT           DynamicState = 1000143000
+	DynamicStateViewportShadingRatePaletteNV DynamicState = 1000164004
+	DynamicStateViewportCoarseSampleOrderNV  DynamicState = 1000164006
+	DynamicStateExclusiveScissorNV           DynamicState = 1000205001
+)
+
+const (
+	PipelineCreateDisableOptimizationBit         PipelineCreateFlags = 0x00000001
+	PipelineCreateAllowDerivativesBit            PipelineCreateFlags = 0x00000002
+	PipelineCreateDerivativeBit                  PipelineCreateFlags = 0x00000004
+	PipelineCreateViewIndexFromDeviceIndexBit    PipelineCreateFlags = 0x00000008
+	PipelineCreateDispatchBase                   PipelineCreateFlags = 0x00000010
+	PipelineCreateDeferCompileBitNVX             PipelineCreateFlags = 0x00000020
+	PipelineCreateViewIndexFromDeviceIndexBitKHR PipelineCreateFlags = PipelineCreateViewIndexFromDeviceIndexBit
+	PipelineCreateDispatchBaseKHR                PipelineCreateFlags = PipelineCreateDispatchBase
+)
+
+const (
+	CompareOpNever          CompareOp = 0
+	CompareOpLess           CompareOp = 1
+	CompareOpEqual          CompareOp = 2
+	CompareOpLessOrEqual    CompareOp = 3
+	CompareOpGreater        CompareOp = 4
+	CompareOpNotEqual       CompareOp = 5
+	CompareOpGreaterOrEqual CompareOp = 6
+	CompareOpAlways         CompareOp = 7
+)
+
+const (
+	StencilOpKeep              StencilOp = 0
+	StencilOpZero              StencilOp = 1
+	StencilOpReplace           StencilOp = 2
+	StencilOpIncrementAndClamp StencilOp = 3
+	StencilOpDecrementAndClamp StencilOp = 4
+	StencilOpInvert            StencilOp = 5
+	StencilOpIncrementAndWrap  StencilOp = 6
+	StencilOpDecrementAndWrap  StencilOp = 7
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -1291,6 +1532,145 @@ func (flags ImageAspectFlags) String() string {
 	}
 	if (flags & ImageAspectPlane2BitKHR) != 0 {
 		out = append(out, "ImageAspectPlane2BitKHR")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags ShaderStageFlags) String() string {
+	var out []string
+	if (flags & ShaderStageVertexBit) != 0 {
+		out = append(out, "ShaderStageVertexBit")
+	}
+	if (flags & ShaderStageTessellationControlBit) != 0 {
+		out = append(out, "ShaderStageTessellationControlBit")
+	}
+	if (flags & ShaderStageTessellationEvaluationBit) != 0 {
+		out = append(out, "ShaderStageTessellationEvaluationBit")
+	}
+	if (flags & ShaderStageGeometryBit) != 0 {
+		out = append(out, "ShaderStageGeometryBit")
+	}
+	if (flags & ShaderStageFragmentBit) != 0 {
+		out = append(out, "ShaderStageFragmentBit")
+	}
+	if (flags & ShaderStageComputeBit) != 0 {
+		out = append(out, "ShaderStageComputeBit")
+	}
+	if (flags & ShaderStageAllGraphics) != 0 {
+		out = append(out, "ShaderStageAllGraphics")
+	}
+	if (flags & ShaderStageAll) != 0 {
+		out = append(out, "ShaderStageAll")
+	}
+	if (flags & ShaderStageRaygenBitNVX) != 0 {
+		out = append(out, "ShaderStageRaygenBitNVX")
+	}
+	if (flags & ShaderStageAnyHitBitNVX) != 0 {
+		out = append(out, "ShaderStageAnyHitBitNVX")
+	}
+	if (flags & ShaderStageClosestHitBitNVX) != 0 {
+		out = append(out, "ShaderStageClosestHitBitNVX")
+	}
+	if (flags & ShaderStageMissBitNVX) != 0 {
+		out = append(out, "ShaderStageMissBitNVX")
+	}
+	if (flags & ShaderStageIntersectionBitNVX) != 0 {
+		out = append(out, "ShaderStageIntersectionBitNVX")
+	}
+	if (flags & ShaderStageCallableBitNVX) != 0 {
+		out = append(out, "ShaderStageCallableBitNVX")
+	}
+	if (flags & ShaderStageTaskBitNV) != 0 {
+		out = append(out, "ShaderStageTaskBitNV")
+	}
+	if (flags & ShaderStageMeshBitNV) != 0 {
+		out = append(out, "ShaderStageMeshBitNV")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags CullModeFlags) String() string {
+	var out []string
+	if (flags & CullModeNone) != 0 {
+		out = append(out, "CullModeNone")
+	}
+	if (flags & CullModeFrontBit) != 0 {
+		out = append(out, "CullModeFrontBit")
+	}
+	if (flags & CullModeBackBit) != 0 {
+		out = append(out, "CullModeBackBit")
+	}
+	if (flags & CullModeFrontAndBack) != 0 {
+		out = append(out, "CullModeFrontAndBack")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags SampleCountFlags) String() string {
+	var out []string
+	if (flags & SampleCount1Bit) != 0 {
+		out = append(out, "SampleCount1Bit")
+	}
+	if (flags & SampleCount2Bit) != 0 {
+		out = append(out, "SampleCount2Bit")
+	}
+	if (flags & SampleCount4Bit) != 0 {
+		out = append(out, "SampleCount4Bit")
+	}
+	if (flags & SampleCount8Bit) != 0 {
+		out = append(out, "SampleCount8Bit")
+	}
+	if (flags & SampleCount16Bit) != 0 {
+		out = append(out, "SampleCount16Bit")
+	}
+	if (flags & SampleCount32Bit) != 0 {
+		out = append(out, "SampleCount32Bit")
+	}
+	if (flags & SampleCount64Bit) != 0 {
+		out = append(out, "SampleCount64Bit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags ColorComponentFlags) String() string {
+	var out []string
+	if (flags & ColorComponentR) != 0 {
+		out = append(out, "ColorComponentR")
+	}
+	if (flags & ColorComponentG) != 0 {
+		out = append(out, "ColorComponentG")
+	}
+	if (flags & ColorComponentB) != 0 {
+		out = append(out, "ColorComponentB")
+	}
+	if (flags & ColorComponentA) != 0 {
+		out = append(out, "ColorComponentA")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags PipelineCreateFlags) String() string {
+	var out []string
+	if (flags & PipelineCreateDisableOptimizationBit) != 0 {
+		out = append(out, "PipelineCreateDisableOptimizationBit")
+	}
+	if (flags & PipelineCreateAllowDerivativesBit) != 0 {
+		out = append(out, "PipelineCreateAllowDerivativesBit")
+	}
+	if (flags & PipelineCreateDerivativeBit) != 0 {
+		out = append(out, "PipelineCreateDerivativeBit")
+	}
+	if (flags & PipelineCreateViewIndexFromDeviceIndexBit) != 0 {
+		out = append(out, "PipelineCreateViewIndexFromDeviceIndexBit")
+	}
+	if (flags & PipelineCreateDispatchBase) != 0 {
+		out = append(out, "PipelineCreateDispatchBase")
+	}
+	if (flags & PipelineCreateViewIndexFromDeviceIndexBitKHR) != 0 {
+		out = append(out, "PipelineCreateViewIndexFromDeviceIndexBitKHR")
+	}
+	if (flags & PipelineCreateDispatchBaseKHR) != 0 {
+		out = append(out, "PipelineCreateDispatchBaseKHR")
 	}
 	return strings.Join(out, " | ")
 }
