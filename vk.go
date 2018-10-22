@@ -1505,7 +1505,7 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	ptrs := (*C.VkGraphicsPipelineCreateInfo)(C.calloc(C.size_t(len(infos)), C.sizeof_VkGraphicsPipelineCreateInfo))
 	defer C.free(unsafe.Pointer(ptrs))
 
-	ptrsArr := (*[math.MaxInt32]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))
+	ptrsArr := (*[math.MaxInt32]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))[:len(infos)]
 	for i := range ptrsArr {
 		ptr := &ptrsArr[i]
 		info := &infos[i]
@@ -1535,7 +1535,7 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 		}
 		if info.InputAssemblyState != nil {
 			ptr.pInputAssemblyState = info.InputAssemblyState.c()
-			defer C.free(unsafe.Pointer(ptr.pVertexInputState))
+			defer C.free(unsafe.Pointer(ptr.pInputAssemblyState))
 		}
 		if info.TessellationState != nil {
 			ptr.pTessellationState = info.TessellationState.c()
@@ -1568,7 +1568,9 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 		ptr.layout = info.Layout.hnd
 		ptr.renderPass = info.RenderPass.hnd
 		ptr.subpass = C.uint32_t(info.Subpass)
-		ptr.basePipelineHandle = info.BasePipelineHandle.hnd
+		if info.BasePipelineHandle != nil {
+			ptr.basePipelineHandle = info.BasePipelineHandle.hnd
+		}
 		ptr.basePipelineIndex = C.int32_t(info.BasePipelineIndex)
 	}
 
