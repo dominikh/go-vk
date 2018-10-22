@@ -51,9 +51,18 @@ func init() {
 	assertSameSize(unsafe.Sizeof(PipelineCreateFlags(0)), C.sizeof_VkPipelineCreateFlags)
 	assertSameSize(unsafe.Sizeof(CompareOp(0)), C.sizeof_VkCompareOp)
 	assertSameSize(unsafe.Sizeof(StencilOp(0)), C.sizeof_VkStencilOp)
+	assertSameSize(unsafe.Sizeof(AttachmentDescriptionFlags(0)), C.sizeof_VkAttachmentDescriptionFlags)
+	assertSameSize(unsafe.Sizeof(AttachmentStoreOp(0)), C.sizeof_VkAttachmentStoreOp)
+	assertSameSize(unsafe.Sizeof(AttachmentLoadOp(0)), C.sizeof_VkAttachmentLoadOp)
+	assertSameSize(unsafe.Sizeof(ImageLayout(0)), C.sizeof_VkImageLayout)
+	assertSameSize(unsafe.Sizeof(PipelineBindPoint(0)), C.sizeof_VkPipelineBindPoint)
+	assertSameSize(unsafe.Sizeof(SubpassDescriptionFlags(0)), C.sizeof_VkSubpassDescriptionFlags)
+	assertSameSize(unsafe.Sizeof(PipelineStageFlags(0)), C.sizeof_VkPipelineStageFlags)
+	assertSameSize(unsafe.Sizeof(AccessFlags(0)), C.sizeof_VkAccessFlags)
+	assertSameSize(unsafe.Sizeof(DependencyFlags(0)), C.sizeof_VkDependencyFlags)
 }
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -93,6 +102,15 @@ type DynamicState uint32
 type PipelineCreateFlags uint32
 type CompareOp uint32
 type StencilOp uint32
+type AttachmentDescriptionFlags uint32
+type AttachmentLoadOp uint32
+type AttachmentStoreOp uint32
+type ImageLayout uint32
+type PipelineBindPoint uint32
+type SubpassDescriptionFlags uint32
+type PipelineStageFlags uint32
+type AccessFlags uint32
+type DependencyFlags uint32
 
 const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
@@ -1292,6 +1310,116 @@ const (
 	StencilOpDecrementAndWrap  StencilOp = 7
 )
 
+const (
+	AttachmentDescriptionMayAliasBit AttachmentDescriptionFlags = 0x00000001
+)
+
+const (
+	AttachmentLoadOpLoad     AttachmentLoadOp = 0
+	AttachmentLoadOpClear    AttachmentLoadOp = 1
+	AttachmentLoadOpDontCare AttachmentLoadOp = 2
+)
+
+const (
+	AttachmentStoreOpStore    AttachmentStoreOp = 0
+	AttachmentStoreOpDontCare AttachmentStoreOp = 1
+)
+
+const (
+	ImageLayoutUndefined                                ImageLayout = 0
+	ImageLayoutGeneral                                  ImageLayout = 1
+	ImageLayoutColorAttachmentOptimal                   ImageLayout = 2
+	ImageLayoutDepthStencilAttachmentOptimal            ImageLayout = 3
+	ImageLayoutDepthStencilReadOnlyOptimal              ImageLayout = 4
+	ImageLayoutShaderReadOnlyOptimal                    ImageLayout = 5
+	ImageLayoutTransferSrcOptimal                       ImageLayout = 6
+	ImageLayoutTransferDstOptimal                       ImageLayout = 7
+	ImageLayoutPreinitialized                           ImageLayout = 8
+	ImageLayoutDepthReadOnlyStencilAttachmentOptimal    ImageLayout = 1000117000
+	ImageLayoutDepthAttachmentStencilReadOnlyOptimal    ImageLayout = 1000117001
+	ImageLayoutPresentSrcKHR                            ImageLayout = 1000001002
+	ImageLayoutSharedPresentKHR                         ImageLayout = 1000111000
+	ImageLayoutShadingRateOptimalNV                     ImageLayout = 1000164003
+	ImageLayoutDepthReadOnlyStencilAttachmentOptimalKHR ImageLayout = ImageLayoutDepthReadOnlyStencilAttachmentOptimal
+	ImageLayoutDepthAttachmentStencilReadOnlyOptimalKHR ImageLayout = ImageLayoutDepthAttachmentStencilReadOnlyOptimal
+)
+
+const (
+	PipelineBindPointGraphics      PipelineBindPoint = 0
+	PipelineBindPointCompute       PipelineBindPoint = 1
+	PipelineBindPointRaytracingNVX PipelineBindPoint = 1000165000
+)
+
+const (
+	SubpassDescriptionPerViewAttributesBitNVX    SubpassDescriptionFlags = 0x00000001
+	SubpassDescriptionPerViewPositionXOnlyBitNVX SubpassDescriptionFlags = 0x00000002
+)
+
+const (
+	PipelineStageTopOfPipeBit                    PipelineStageFlags = 0x00000001
+	PipelineStageDrawIndirectBit                 PipelineStageFlags = 0x00000002
+	PipelineStageVertexInputBit                  PipelineStageFlags = 0x00000004
+	PipelineStageVertexShaderBit                 PipelineStageFlags = 0x00000008
+	PipelineStageTessellationControlShaderBit    PipelineStageFlags = 0x00000010
+	PipelineStageTessellationEvaluationShaderBit PipelineStageFlags = 0x00000020
+	PipelineStageGeometryShaderBit               PipelineStageFlags = 0x00000040
+	PipelineStageFragmentShaderBit               PipelineStageFlags = 0x00000080
+	PipelineStageEarlyFragmentTestsBit           PipelineStageFlags = 0x00000100
+	PipelineStageLateFragmentTestsBit            PipelineStageFlags = 0x00000200
+	PipelineStageColorAttachmentOutputBit        PipelineStageFlags = 0x00000400
+	PipelineStageComputeShaderBit                PipelineStageFlags = 0x00000800
+	PipelineStageTransferBit                     PipelineStageFlags = 0x00001000
+	PipelineStageBottomOfPipeBit                 PipelineStageFlags = 0x00002000
+	PipelineStageHostBit                         PipelineStageFlags = 0x00004000
+	PipelineStageAllGraphicsBit                  PipelineStageFlags = 0x00008000
+	PipelineStageAllCommandsBit                  PipelineStageFlags = 0x00010000
+	PipelineStageTransformFeedbackBitEXT         PipelineStageFlags = 0x01000000
+	PipelineStageConditionalRenderingBitEXT      PipelineStageFlags = 0x00040000
+	PipelineStageCommandProcessBitNVX            PipelineStageFlags = 0x00020000
+	PipelineStageShadingRateImageBitNV           PipelineStageFlags = 0x00400000
+	PipelineStageRaytracingBitNVX                PipelineStageFlags = 0x00200000
+	PipelineStageTaskShaderBitNV                 PipelineStageFlags = 0x00080000
+	PipelineStageMeshShaderBitNV                 PipelineStageFlags = 0x00100000
+)
+
+const (
+	AccessIndirectCommandReadBit               AccessFlags = 0x00000001
+	AccessIndexReadBit                         AccessFlags = 0x00000002
+	AccessVertexAttributeReadBit               AccessFlags = 0x00000004
+	AccessUniformReadBit                       AccessFlags = 0x00000008
+	AccessInputAttachmentReadBit               AccessFlags = 0x00000010
+	AccessShaderReadBit                        AccessFlags = 0x00000020
+	AccessShaderWriteBit                       AccessFlags = 0x00000040
+	AccessColorAttachmentReadBit               AccessFlags = 0x00000080
+	AccessColorAttachmentWriteBit              AccessFlags = 0x00000100
+	AccessDepthStencilAttachmentReadBit        AccessFlags = 0x00000200
+	AccessDepthStencilAttachmentWriteBit       AccessFlags = 0x00000400
+	AccessTransferReadBit                      AccessFlags = 0x00000800
+	AccessTransferWriteBit                     AccessFlags = 0x00001000
+	AccessHostReadBit                          AccessFlags = 0x00002000
+	AccessHostWriteBit                         AccessFlags = 0x00004000
+	AccessMemoryReadBit                        AccessFlags = 0x00008000
+	AccessMemoryWriteBit                       AccessFlags = 0x00010000
+	AccessTransformFeedbackWriteBitEXT         AccessFlags = 0x02000000
+	AccessTransformFeedbackCounterReadBitEXT   AccessFlags = 0x04000000
+	AccessTransformFeedbackCounterWriteBitEXT  AccessFlags = 0x08000000
+	AccessConditionalRenderingReadBitEXT       AccessFlags = 0x00100000
+	AccessCommandProcessReadBitNVX             AccessFlags = 0x00020000
+	AccessCommandProcessWriteBitNVX            AccessFlags = 0x00040000
+	AccessColorAttachmentReadNoncoherentBitEXT AccessFlags = 0x00080000
+	AccessShadingRateImageReadBitNV            AccessFlags = 0x00800000
+	AccessAccelerationStructureReadBitNVX      AccessFlags = 0x00200000
+	AccessAccelerationStructureWriteBitNVX     AccessFlags = 0x00400000
+)
+
+const (
+	DependencyByRegionBit       DependencyFlags = 0x00000001
+	DependencyDeviceGroupBit    DependencyFlags = 0x00000004
+	DependencyViewLocalBit      DependencyFlags = 0x00000002
+	DependencyViewLocalBitKHR   DependencyFlags = DependencyViewLocalBit
+	DependencyDeviceGroupBitKHR DependencyFlags = DependencyDeviceGroupBit
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -1671,6 +1799,208 @@ func (flags PipelineCreateFlags) String() string {
 	}
 	if (flags & PipelineCreateDispatchBaseKHR) != 0 {
 		out = append(out, "PipelineCreateDispatchBaseKHR")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags AttachmentDescriptionFlags) String() string {
+	var out []string
+	if (flags & AttachmentDescriptionMayAliasBit) != 0 {
+		out = append(out, "AttachmentDescriptionMayAliasBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags SubpassDescriptionFlags) String() string {
+	var out []string
+	if (flags & SubpassDescriptionPerViewAttributesBitNVX) != 0 {
+		out = append(out, "SubpassDescriptionPerViewAttributesBitNVX")
+	}
+	if (flags & SubpassDescriptionPerViewPositionXOnlyBitNVX) != 0 {
+		out = append(out, "SubpassDescriptionPerViewPositionXOnlyBitNVX")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags PipelineStageFlags) String() string {
+	var out []string
+	if (flags & PipelineStageTopOfPipeBit) != 0 {
+		out = append(out, "PipelineStageTopOfPipeBit")
+	}
+	if (flags & PipelineStageDrawIndirectBit) != 0 {
+		out = append(out, "PipelineStageDrawIndirectBit")
+	}
+	if (flags & PipelineStageVertexInputBit) != 0 {
+		out = append(out, "PipelineStageVertexInputBit")
+	}
+	if (flags & PipelineStageVertexShaderBit) != 0 {
+		out = append(out, "PipelineStageVertexShaderBit")
+	}
+	if (flags & PipelineStageTessellationControlShaderBit) != 0 {
+		out = append(out, "PipelineStageTessellationControlShaderBit")
+	}
+	if (flags & PipelineStageTessellationEvaluationShaderBit) != 0 {
+		out = append(out, "PipelineStageTessellationEvaluationShaderBit")
+	}
+	if (flags & PipelineStageGeometryShaderBit) != 0 {
+		out = append(out, "PipelineStageGeometryShaderBit")
+	}
+	if (flags & PipelineStageFragmentShaderBit) != 0 {
+		out = append(out, "PipelineStageFragmentShaderBit")
+	}
+	if (flags & PipelineStageEarlyFragmentTestsBit) != 0 {
+		out = append(out, "PipelineStageEarlyFragmentTestsBit")
+	}
+	if (flags & PipelineStageLateFragmentTestsBit) != 0 {
+		out = append(out, "PipelineStageLateFragmentTestsBit")
+	}
+	if (flags & PipelineStageColorAttachmentOutputBit) != 0 {
+		out = append(out, "PipelineStageColorAttachmentOutputBit")
+	}
+	if (flags & PipelineStageComputeShaderBit) != 0 {
+		out = append(out, "PipelineStageComputeShaderBit")
+	}
+	if (flags & PipelineStageTransferBit) != 0 {
+		out = append(out, "PipelineStageTransferBit")
+	}
+	if (flags & PipelineStageBottomOfPipeBit) != 0 {
+		out = append(out, "PipelineStageBottomOfPipeBit")
+	}
+	if (flags & PipelineStageHostBit) != 0 {
+		out = append(out, "PipelineStageHostBit")
+	}
+	if (flags & PipelineStageAllGraphicsBit) != 0 {
+		out = append(out, "PipelineStageAllGraphicsBit")
+	}
+	if (flags & PipelineStageAllCommandsBit) != 0 {
+		out = append(out, "PipelineStageAllCommandsBit")
+	}
+	if (flags & PipelineStageTransformFeedbackBitEXT) != 0 {
+		out = append(out, "PipelineStageTransformFeedbackBitEXT")
+	}
+	if (flags & PipelineStageConditionalRenderingBitEXT) != 0 {
+		out = append(out, "PipelineStageConditionalRenderingBitEXT")
+	}
+	if (flags & PipelineStageCommandProcessBitNVX) != 0 {
+		out = append(out, "PipelineStageCommandProcessBitNVX")
+	}
+	if (flags & PipelineStageShadingRateImageBitNV) != 0 {
+		out = append(out, "PipelineStageShadingRateImageBitNV")
+	}
+	if (flags & PipelineStageRaytracingBitNVX) != 0 {
+		out = append(out, "PipelineStageRaytracingBitNVX")
+	}
+	if (flags & PipelineStageTaskShaderBitNV) != 0 {
+		out = append(out, "PipelineStageTaskShaderBitNV")
+	}
+	if (flags & PipelineStageMeshShaderBitNV) != 0 {
+		out = append(out, "PipelineStageMeshShaderBitNV")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags AccessFlags) String() string {
+	var out []string
+	if (flags & AccessIndirectCommandReadBit) != 0 {
+		out = append(out, "AccessIndirectCommandReadBit")
+	}
+	if (flags & AccessIndexReadBit) != 0 {
+		out = append(out, "AccessIndexReadBit")
+	}
+	if (flags & AccessVertexAttributeReadBit) != 0 {
+		out = append(out, "AccessVertexAttributeReadBit")
+	}
+	if (flags & AccessUniformReadBit) != 0 {
+		out = append(out, "AccessUniformReadBit")
+	}
+	if (flags & AccessInputAttachmentReadBit) != 0 {
+		out = append(out, "AccessInputAttachmentReadBit")
+	}
+	if (flags & AccessShaderReadBit) != 0 {
+		out = append(out, "AccessShaderReadBit")
+	}
+	if (flags & AccessShaderWriteBit) != 0 {
+		out = append(out, "AccessShaderWriteBit")
+	}
+	if (flags & AccessColorAttachmentReadBit) != 0 {
+		out = append(out, "AccessColorAttachmentReadBit")
+	}
+	if (flags & AccessColorAttachmentWriteBit) != 0 {
+		out = append(out, "AccessColorAttachmentWriteBit")
+	}
+	if (flags & AccessDepthStencilAttachmentReadBit) != 0 {
+		out = append(out, "AccessDepthStencilAttachmentReadBit")
+	}
+	if (flags & AccessDepthStencilAttachmentWriteBit) != 0 {
+		out = append(out, "AccessDepthStencilAttachmentWriteBit")
+	}
+	if (flags & AccessTransferReadBit) != 0 {
+		out = append(out, "AccessTransferReadBit")
+	}
+	if (flags & AccessTransferWriteBit) != 0 {
+		out = append(out, "AccessTransferWriteBit")
+	}
+	if (flags & AccessHostReadBit) != 0 {
+		out = append(out, "AccessHostReadBit")
+	}
+	if (flags & AccessHostWriteBit) != 0 {
+		out = append(out, "AccessHostWriteBit")
+	}
+	if (flags & AccessMemoryReadBit) != 0 {
+		out = append(out, "AccessMemoryReadBit")
+	}
+	if (flags & AccessMemoryWriteBit) != 0 {
+		out = append(out, "AccessMemoryWriteBit")
+	}
+	if (flags & AccessTransformFeedbackWriteBitEXT) != 0 {
+		out = append(out, "AccessTransformFeedbackWriteBitEXT")
+	}
+	if (flags & AccessTransformFeedbackCounterReadBitEXT) != 0 {
+		out = append(out, "AccessTransformFeedbackCounterReadBitEXT")
+	}
+	if (flags & AccessTransformFeedbackCounterWriteBitEXT) != 0 {
+		out = append(out, "AccessTransformFeedbackCounterWriteBitEXT")
+	}
+	if (flags & AccessConditionalRenderingReadBitEXT) != 0 {
+		out = append(out, "AccessConditionalRenderingReadBitEXT")
+	}
+	if (flags & AccessCommandProcessReadBitNVX) != 0 {
+		out = append(out, "AccessCommandProcessReadBitNVX")
+	}
+	if (flags & AccessCommandProcessWriteBitNVX) != 0 {
+		out = append(out, "AccessCommandProcessWriteBitNVX")
+	}
+	if (flags & AccessColorAttachmentReadNoncoherentBitEXT) != 0 {
+		out = append(out, "AccessColorAttachmentReadNoncoherentBitEXT")
+	}
+	if (flags & AccessShadingRateImageReadBitNV) != 0 {
+		out = append(out, "AccessShadingRateImageReadBitNV")
+	}
+	if (flags & AccessAccelerationStructureReadBitNVX) != 0 {
+		out = append(out, "AccessAccelerationStructureReadBitNVX")
+	}
+	if (flags & AccessAccelerationStructureWriteBitNVX) != 0 {
+		out = append(out, "AccessAccelerationStructureWriteBitNVX")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags DependencyFlags) String() string {
+	var out []string
+	if (flags & DependencyByRegionBit) != 0 {
+		out = append(out, "DependencyByRegionBit")
+	}
+	if (flags & DependencyDeviceGroupBit) != 0 {
+		out = append(out, "DependencyDeviceGroupBit")
+	}
+	if (flags & DependencyViewLocalBit) != 0 {
+		out = append(out, "DependencyViewLocalBit")
+	}
+	if (flags & DependencyViewLocalBitKHR) != 0 {
+		out = append(out, "DependencyViewLocalBitKHR")
+	}
+	if (flags & DependencyDeviceGroupBitKHR) != 0 {
+		out = append(out, "DependencyDeviceGroupBitKHR")
 	}
 	return strings.Join(out, " | ")
 }

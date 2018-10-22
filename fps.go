@@ -48,6 +48,7 @@ const (
 	vkCreateShaderModule
 	vkCreateGraphicsPipelines
 	vkCreatePipelineLayout
+	vkCreateRenderPass
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -100,4 +101,5 @@ var deviceFpNames = [...]string{
 	vkCreateShaderModule:      "vkCreateShaderModule",
 	vkCreateGraphicsPipelines: "vkCreateGraphicsPipelines",
 	vkCreatePipelineLayout:    "vkCreatePipelineLayout",
+	vkCreateRenderPass:        "vkCreateRenderPass",
 }

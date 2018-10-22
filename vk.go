@@ -40,12 +40,17 @@ package vk
 // VkResult domVkCreateShaderModule(PFN_vkCreateShaderModule fp, VkDevice device, const VkShaderModuleCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkShaderModule* pShaderModule);
 // VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
 // VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice device, const VkPipelineLayoutCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineLayout* pPipelineLayout);
+// VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
 import "C"
 import (
 	"fmt"
+	"math"
 	"os"
 	"unsafe"
 )
+
+// XXX add assertions that some of our structs are the same size as the C structs.
+// any struct used in ucopy must have an assertion.
 
 const debug = true
 
@@ -90,7 +95,7 @@ func externStrings(ss []string) (**C.char, func()) {
 
 	ptr := C.calloc(C.size_t(len(ss)), C.size_t(unsafe.Sizeof(uintptr(0))))
 	ptrs = append(ptrs, ptr)
-	slice := (*[1 << 31]*C.char)(ptr)[:len(ss)]
+	slice := (*[math.MaxInt32]*C.char)(ptr)[:len(ss)]
 	for i, s := range ss {
 		slice[i] = C.CString(s)
 		ptrs = append(ptrs, unsafe.Pointer(slice[i]))
@@ -106,7 +111,7 @@ func externFloat32(vs []float32) *C.float {
 	if len(vs) == 0 {
 		return nil
 	}
-	return (*C.float)(C.CBytes((*[1 << 31]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
+	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
 }
 
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
@@ -183,7 +188,7 @@ func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
 		panic(fmt.Sprintf("unexpected result %s", res))
 	}
 	var out []*PhysicalDevice
-	for _, dev := range (*[1 << 31]C.VkPhysicalDevice)(unsafe.Pointer(devs))[:count] {
+	for _, dev := range (*[math.MaxInt32]C.VkPhysicalDevice)(unsafe.Pointer(devs))[:count] {
 		out = append(out, &PhysicalDevice{dev, ins})
 	}
 	return out, nil
@@ -628,7 +633,8 @@ func (dev *PhysicalDevice) QueueFamilyProperties() []*QueueFamilyProperties {
 	props := (*C.VkQueueFamilyProperties)(C.calloc(C.size_t(count), C.sizeof_VkQueueFamilyProperties))
 	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, props)
 	var out []*QueueFamilyProperties
-	for _, prop := range (*[1 << 31]C.VkQueueFamilyProperties)(unsafe.Pointer(props))[:count] {
+	for _, prop := range (*[math.MaxInt32]C.VkQueueFamilyProperties)(unsafe.Pointer(props))[:count] {
+		// XXX can we use ucopy here?
 		out = append(out, &QueueFamilyProperties{
 			QueueFlags:         QueueFlags(prop.queueFlags),
 			QueueCount:         uint32(prop.queueCount),
@@ -666,7 +672,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
 	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(C.calloc(C.size_t(len(info.QueueCreateInfos)), C.sizeof_VkDeviceQueueCreateInfo))
 	defer C.free(unsafe.Pointer(ptr.pQueueCreateInfos))
-	arr := (*[1 << 31]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
+	arr := (*[math.MaxInt32]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
 		arr[i] = C.VkDeviceQueueCreateInfo{
 			sType:            C.VkStructureType(StructureTypeDeviceQueueCreateInfo),
@@ -1124,14 +1130,8 @@ func (info PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputState
 		vertexAttributeDescriptionCount: C.uint32_t(len(info.VertexAttributeDescriptions)),
 		pVertexAttributeDescriptions:    attribs,
 	}
-	bindingsArr := (*[1 << 31]C.VkVertexInputBindingDescription)(unsafe.Pointer(bindings))[:len(info.VertexBindingDescriptions)]
-	attribsArr := (*[1 << 31]C.VkVertexInputAttributeDescription)(unsafe.Pointer(attribs))[:len(info.VertexAttributeDescriptions)]
-	for i := range bindingsArr {
-		bindingsArr[i] = *(*C.VkVertexInputBindingDescription)(unsafe.Pointer(&info.VertexBindingDescriptions[i]))
-	}
-	for i := range attribsArr {
-		attribsArr[i] = *(*C.VkVertexInputAttributeDescription)(unsafe.Pointer(&info.VertexAttributeDescriptions[i]))
-	}
+	ucopy(unsafe.Pointer(bindings), unsafe.Pointer(&info.VertexBindingDescriptions), C.sizeof_VkVertexInputBindingDescription)
+	ucopy(unsafe.Pointer(attribs), unsafe.Pointer(&info.VertexAttributeDescriptions), C.sizeof_VkVertexInputAttributeDescription)
 	return cinfo
 }
 
@@ -1209,14 +1209,8 @@ func (info PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreate
 		scissorCount:  C.uint32_t(len(info.Scissors)),
 		pScissors:     scissors,
 	}
-	viewportsArr := (*[1 << 31]C.VkViewport)(unsafe.Pointer(viewports))[:len(info.Viewports)]
-	scissorsArr := (*[1 << 31]C.VkRect2D)(unsafe.Pointer(scissors))[:len(info.Scissors)]
-	for i := range viewportsArr {
-		viewportsArr[i] = *(*C.VkViewport)(unsafe.Pointer(&info.Viewports[i]))
-	}
-	for i := range scissorsArr {
-		scissorsArr[i] = *(*C.VkRect2D)(unsafe.Pointer(&info.Scissors[i]))
-	}
+	ucopy(unsafe.Pointer(viewports), unsafe.Pointer(&info.Viewports), C.sizeof_VkViewport)
+	ucopy(unsafe.Pointer(scissors), unsafe.Pointer(&info.Scissors), C.sizeof_VkRect2D)
 	return cinfo
 }
 
@@ -1282,10 +1276,7 @@ func (info PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleState
 		alphaToCoverageEnable: vkBool(info.AlphaToCoverageEnable),
 		alphaToOneEnable:      vkBool(info.AlphaToOneEnable),
 	}
-	sampleMaskArr := (*[1 << 31]C.VkSampleMask)(unsafe.Pointer(sampleMask))[:len(info.SampleMask)]
-	for i := range sampleMaskArr {
-		sampleMaskArr[i] = C.VkSampleMask(info.SampleMask[i])
-	}
+	ucopy(unsafe.Pointer(sampleMask), unsafe.Pointer(&info.SampleMask), C.sizeof_VkSampleMask)
 	return cinfo
 }
 
@@ -1332,7 +1323,7 @@ func (info PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateCr
 			C.float(info.BlendConstants[3]),
 		},
 	}
-	attachmentsArr := (*[1 << 31]C.VkPipelineColorBlendAttachmentState)(unsafe.Pointer(attachments))[:len(info.Attachments)]
+	attachmentsArr := (*[math.MaxInt32]C.VkPipelineColorBlendAttachmentState)(unsafe.Pointer(attachments))[:len(info.Attachments)]
 	for i := range attachmentsArr {
 		attachmentsArr[i] = C.VkPipelineColorBlendAttachmentState{
 			blendEnable:         vkBool(info.Attachments[i].BlendEnable),
@@ -1367,10 +1358,7 @@ func (info PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateIn
 		dynamicStateCount: C.uint32_t(len(info.DynamicStates)),
 		pDynamicStates:    dynamicStates,
 	}
-	dynamicStatesArr := (*[1 << 31]C.VkDynamicState)(unsafe.Pointer(dynamicStates))[:len(info.DynamicStates)]
-	for i := range dynamicStatesArr {
-		dynamicStatesArr[i] = C.VkDynamicState(info.DynamicStates[i])
-	}
+	ucopy(unsafe.Pointer(dynamicStates), unsafe.Pointer(&info.DynamicStates), C.sizeof_VkDynamicState)
 	return cinfo
 }
 
@@ -1402,15 +1390,8 @@ func (info PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 		pushConstantRangeCount: C.uint32_t(len(info.PushConstantRanges)),
 		pPushConstantRanges:    push,
 	}
-	setLayoutsArr := (*[1 << 31]C.VkDescriptorSetLayout)(unsafe.Pointer(setLayouts))[:len(info.SetLayouts)]
-	pushArr := (*[1 << 31]C.VkPushConstantRange)(unsafe.Pointer(push))[:len(info.PushConstantRanges)]
-	for i := range setLayoutsArr {
-		setLayoutsArr[i] = info.SetLayouts[i].hnd
-	}
-	for i := range pushArr {
-		pushArr[i] = *(*C.VkPushConstantRange)(unsafe.Pointer(&info.PushConstantRanges[i]))
-	}
-
+	ucopy(unsafe.Pointer(setLayouts), unsafe.Pointer(&info.SetLayouts), C.sizeof_VkDescriptorSetLayout)
+	ucopy(unsafe.Pointer(push), unsafe.Pointer(&info.PushConstantRanges), C.sizeof_VkPushConstantRange)
 	return cinfo
 }
 
@@ -1524,7 +1505,7 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	ptrs := (*C.VkGraphicsPipelineCreateInfo)(C.calloc(C.size_t(len(infos)), C.sizeof_VkGraphicsPipelineCreateInfo))
 	defer C.free(unsafe.Pointer(ptrs))
 
-	ptrsArr := (*[1 << 31]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))
+	ptrsArr := (*[math.MaxInt32]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))
 	for i := range ptrsArr {
 		ptr := &ptrsArr[i]
 		info := &infos[i]
@@ -1536,7 +1517,7 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 
 		ptr.pStages = (*C.VkPipelineShaderStageCreateInfo)(C.calloc(C.size_t(len(info.Stages)), C.sizeof_VkPipelineShaderStageCreateInfo))
 		defer C.free(unsafe.Pointer(ptr.pStages))
-		arr := (*[1 << 31]C.VkPipelineShaderStageCreateInfo)(unsafe.Pointer(ptr.pStages))[:len(info.Stages)]
+		arr := (*[math.MaxInt32]C.VkPipelineShaderStageCreateInfo)(unsafe.Pointer(ptr.pStages))[:len(info.Stages)]
 		for i := range arr {
 			arr[i] = C.VkPipelineShaderStageCreateInfo{
 				sType:  C.VkStructureType(StructureTypePipelineShaderStageCreateInfo),
@@ -1601,6 +1582,140 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 		out[i] = &Pipeline{hnd}
 	}
 	return out, nil
+}
+
+type AttachmentDescription struct {
+	Flags          AttachmentDescriptionFlags
+	Format         Format
+	Samples        SampleCountFlags
+	LoadOp         AttachmentLoadOp
+	StoreOp        AttachmentStoreOp
+	StencilLoadOp  AttachmentLoadOp
+	StencilStoreOp AttachmentStoreOp
+	InitialLayout  ImageLayout
+	FinalLayout    ImageLayout
+}
+
+type AttachmentReference struct {
+	Attachment uint32
+	Layout     ImageLayout
+}
+
+type SubpassDescription struct {
+	Flags                  SubpassDescriptionFlags
+	PipelineBindPoint      PipelineBindPoint
+	InputAttachments       []AttachmentReference
+	ColorAttachments       []AttachmentReference
+	ResolveAttachments     []AttachmentReference
+	DepthStencilAttachment *AttachmentReference
+	PreserveAttachments    []uint32
+}
+
+type RenderPassCreateInfo struct {
+	Next         unsafe.Pointer
+	Attachments  []AttachmentDescription
+	Subpasses    []SubpassDescription
+	Dependencies []SubpassDependency
+}
+
+type SubpassDependency struct {
+	SrcSubpass      uint32
+	DstSubpass      uint32
+	SrcStageMask    PipelineStageFlags
+	DstStageMask    PipelineStageFlags
+	SrcAccessMask   AccessFlags
+	DstAccessMask   AccessFlags
+	DependencyFlags DependencyFlags
+}
+
+func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (*RenderPass, error) {
+	// TODO(dh): support custom allocators
+	size0 := uintptr(C.sizeof_VkRenderPassCreateInfo)
+	size1 := C.sizeof_VkAttachmentDescription * uintptr(len(info.Attachments))
+	size2 := C.sizeof_VkSubpassDescription * uintptr(len(info.Subpasses))
+	size3 := C.sizeof_VkSubpassDependency * uintptr(len(info.Dependencies))
+	size := size0 + size1 + size2 + size3
+	alloc := C.calloc(1, C.size_t(size))
+	defer C.free(alloc)
+	cinfo := (*C.VkRenderPassCreateInfo)(alloc)
+	attachments := (*C.VkAttachmentDescription)(unsafe.Pointer(uintptr(alloc) + size0))
+	subpasses := (*C.VkSubpassDescription)(unsafe.Pointer(uintptr(alloc) + size0 + size1))
+	dependencies := (*C.VkSubpassDependency)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2))
+	*cinfo = C.VkRenderPassCreateInfo{
+		sType:           C.VkStructureType(StructureTypeRenderPassCreateInfo),
+		pNext:           info.Next,
+		flags:           0,
+		attachmentCount: C.uint32_t(len(info.Attachments)),
+		pAttachments:    attachments,
+		subpassCount:    C.uint32_t(len(info.Subpasses)),
+		pSubpasses:      subpasses,
+		dependencyCount: C.uint32_t(len(info.Dependencies)),
+		pDependencies:   dependencies,
+	}
+	ucopy(unsafe.Pointer(attachments), unsafe.Pointer(&info.Attachments), C.sizeof_VkAttachmentDescription)
+	subpassesArr := (*[math.MaxInt32]C.VkSubpassDescription)(unsafe.Pointer(subpasses))[:len(info.Subpasses)]
+	for i := range subpassesArr {
+		subpass := &info.Subpasses[i]
+		csubpass := &subpassesArr[i]
+		*csubpass = C.VkSubpassDescription{
+			flags:                   C.VkSubpassDescriptionFlags(subpass.Flags),
+			pipelineBindPoint:       C.VkPipelineBindPoint(subpass.PipelineBindPoint),
+			inputAttachmentCount:    C.uint32_t(len(subpass.InputAttachments)),
+			colorAttachmentCount:    C.uint32_t(len(subpass.ColorAttachments)),
+			preserveAttachmentCount: C.uint32_t(len(subpass.PreserveAttachments)),
+			pInputAttachments:       (*C.VkAttachmentReference)(calloc(C.size_t(len(subpass.InputAttachments)), C.sizeof_VkAttachmentReference)),
+			pColorAttachments:       (*C.VkAttachmentReference)(calloc(C.size_t(len(subpass.ColorAttachments)), C.sizeof_VkAttachmentReference)),
+			pPreserveAttachments:    (*C.uint32_t)(calloc(C.size_t(len(subpass.PreserveAttachments)), C.sizeof_uint32_t)),
+		}
+		ucopy(unsafe.Pointer(csubpass.pInputAttachments), unsafe.Pointer(&subpass.InputAttachments), C.sizeof_VkAttachmentReference)
+		ucopy(unsafe.Pointer(csubpass.pColorAttachments), unsafe.Pointer(&subpass.ColorAttachments), C.sizeof_VkAttachmentReference)
+		if len(subpass.ResolveAttachments) > 0 {
+			csubpass.pResolveAttachments = (*C.VkAttachmentReference)(calloc(C.size_t(len(subpass.ResolveAttachments)), C.sizeof_VkAttachmentReference))
+			defer C.free(unsafe.Pointer(csubpass.pResolveAttachments))
+			ucopy(unsafe.Pointer(csubpass.pResolveAttachments), unsafe.Pointer(&subpass.ResolveAttachments), C.sizeof_VkAttachmentReference)
+		}
+		if subpass.DepthStencilAttachment != nil {
+			csubpass.pDepthStencilAttachment = (*C.VkAttachmentReference)(calloc(1, C.sizeof_VkAttachmentReference))
+			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(&subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
+		}
+		ucopy(unsafe.Pointer(csubpass.pPreserveAttachments), unsafe.Pointer(&subpass.PreserveAttachments), C.sizeof_uint32_t)
+	}
+	ucopy(unsafe.Pointer(dependencies), unsafe.Pointer(&info.Dependencies), C.sizeof_VkSubpassDependency)
+	var hnd C.VkRenderPass
+	res := Result(C.domVkCreateRenderPass(dev.fps[vkCreateRenderPass], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return nil, res
+	}
+	return &RenderPass{hnd: hnd}, nil
+}
+
+func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
+	if nmemb == 0 {
+		return nil
+	}
+	return C.calloc(nmemb, size)
+}
+
+// ucopy copies data from src to dst,
+// where dst must be a C pointer and src must be a pointer to a Go slice.
+func ucopy(dst, src unsafe.Pointer, size uintptr) {
+	elems := *(*int)(unsafe.Pointer(uintptr(src) + unsafe.Sizeof(uintptr(0))))
+	if elems == 0 {
+		return
+	}
+	// Access the slice's underlying data
+	src = (*(*unsafe.Pointer)(src))
+	copy(
+		(*[math.MaxInt32]byte)(dst)[:uintptr(elems)*size],
+		(*[math.MaxInt32]byte)(src)[:uintptr(elems)*size],
+	)
+}
+
+func ucopy1(dst, src unsafe.Pointer, size uintptr) {
+	copy(
+		(*[math.MaxInt32]byte)(dst)[:size],
+		(*[math.MaxInt32]byte)(src)[:size],
+	)
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
