@@ -53,6 +53,7 @@ const (
 	vkCmdBeginRenderPass
 	vkCmdBindPipeline
 	vkCmdEndRenderPass
+	vkCreateSemaphore
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -110,4 +111,5 @@ var deviceFpNames = [...]string{
 	vkCmdBeginRenderPass:      "vkCmdBeginRenderPass",
 	vkCmdBindPipeline:         "vkCmdBindPipeline",
 	vkCmdEndRenderPass:        "vkCmdEndRenderPass",
+	vkCreateSemaphore:         "vkCreateSemaphore",
 }

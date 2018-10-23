@@ -22,6 +22,7 @@ follow, then vendor extensions.
 - [x] vkDeviceWaitIdle
 - [x] vkCreateSwapchainKHR
 - [x] vkCreateShaderModule
+- [x] vkCreateSemaphore
 - [x] vkCreateRenderPass
 - [x] vkCreatePipelineLayout
 - [x] vkCreateInstance
@@ -116,7 +117,6 @@ follow, then vendor extensions.
 - [ ] vkDestroyBufferView
 - [ ] vkDestroyBuffer
 - [ ] vkCreateSharedSwapchainsKHR
-- [ ] vkCreateSemaphore
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkCreateSampler
 - [ ] vkCreateQueryPool

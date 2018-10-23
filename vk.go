@@ -45,6 +45,7 @@ package vk
 // void     domVkCmdBeginRenderPass(PFN_vkCmdBeginRenderPass fp, VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo* pRenderPassBegin, VkSubpassContents contents);
 // void     domVkCmdBindPipeline(PFN_vkCmdBindPipeline fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
 // void     domVkCmdEndRenderPass(PFN_vkCmdEndRenderPass fp, VkCommandBuffer commandBuffer);
+// VkResult domVkCreateSemaphore(PFN_vkCreateSemaphore fp, VkDevice device, const VkSemaphoreCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSemaphore* pSemaphore);
 import "C"
 import (
 	"fmt"
@@ -1823,6 +1824,36 @@ func (ClearColorValueFloat32s) isClearValue() {}
 func (ClearColorValueInt32s) isClearValue()   {}
 func (ClearColorValueUint32s) isClearValue()  {}
 func (ClearDepthStencilValue) isClearValue()  {}
+
+type Semaphore struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSemaphore)
+	hnd C.VkSemaphore
+}
+
+type SemaphoreCreateInfo struct {
+	Next unsafe.Pointer
+}
+
+func (info SemaphoreCreateInfo) c() *C.VkSemaphoreCreateInfo {
+	cinfo := (*C.VkSemaphoreCreateInfo)(C.calloc(1, C.sizeof_VkSemaphoreCreateInfo))
+	*cinfo = C.VkSemaphoreCreateInfo{
+		sType: C.VkStructureType(StructureTypeSemaphoreCreateInfo),
+		pNext: info.Next,
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
+	var hnd C.VkSemaphore
+	res := Result(C.domVkCreateSemaphore(dev.fps[vkCreateSemaphore], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return Semaphore{}, res
+	}
+	return Semaphore{hnd}, nil
+}
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
 	if nmemb == 0 {
