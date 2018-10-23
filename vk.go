@@ -156,6 +156,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 }
 
 type Instance struct {
+	// VK_DEFINE_HANDLE(VkInstance)
 	hnd C.VkInstance
 	fps [instanceMaxPFN]C.PFN_vkVoidFunction
 }
@@ -196,6 +197,7 @@ func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
 }
 
 type PhysicalDevice struct {
+	// VK_DEFINE_HANDLE(VkPhysicalDevice)
 	hnd      C.VkPhysicalDevice
 	instance *Instance
 }
@@ -762,6 +764,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 }
 
 type Device struct {
+	// VK_DEFINE_HANDLE(VkDevice)
 	hnd C.VkDevice
 
 	fps                 [deviceMaxPFN]C.PFN_vkVoidFunction
@@ -793,6 +796,7 @@ func (dev *Device) getDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 }
 
 type Queue struct {
+	// VK_DEFINE_HANDLE(VkQueue)
 	hnd C.VkQueue
 	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
 }
@@ -816,6 +820,7 @@ func (dev *Device) Queue(family, index uint32) *Queue {
 }
 
 type CommandPool struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkCommandPool)
 	hnd C.VkCommandPool
 	dev *Device
 
@@ -827,6 +832,7 @@ func (pool *CommandPool) String() string {
 }
 
 type CommandBuffer struct {
+	// VK_DEFINE_HANDLE(VkCommandBuffer)
 	hnd C.VkCommandBuffer
 	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
 }
@@ -850,10 +856,12 @@ type CommandBufferBeginInfo struct {
 }
 
 type RenderPass struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkRenderPass)
 	hnd C.VkRenderPass
 }
 
 type Framebuffer struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkFramebuffer)
 	hnd C.VkFramebuffer
 }
 
@@ -1006,15 +1014,17 @@ func (dev *Device) WaitIdle() error {
 }
 
 type Image struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImage)
 	hnd C.VkImage
 	dev *Device
 }
 
-func (img *Image) String() string {
+func (img Image) String() string {
 	return fmt.Sprintf("VkImage(%p)", img.hnd)
 }
 
 type ImageView struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImageView)
 	hnd C.VkImageView
 }
 
@@ -1041,7 +1051,7 @@ type ImageSubresourceRange struct {
 	LayerCount     uint32
 }
 
-func (img *Image) CreateView(info *ImageViewCreateInfo) (*ImageView, error) {
+func (img Image) CreateView(info *ImageViewCreateInfo) (ImageView, error) {
 	// TODO(dh): support custom allocator
 	ptr := (*C.VkImageViewCreateInfo)(C.calloc(1, C.sizeof_VkImageViewCreateInfo))
 	defer C.free(unsafe.Pointer(ptr))
@@ -1067,12 +1077,13 @@ func (img *Image) CreateView(info *ImageViewCreateInfo) (*ImageView, error) {
 	var hnd C.VkImageView
 	res := Result(C.domVkCreateImageView(img.dev.fps[vkCreateImageView], img.dev.hnd, ptr, nil, &hnd))
 	if res != Success {
-		return nil, res
+		return ImageView{}, res
 	}
-	return &ImageView{hnd: hnd}, nil
+	return ImageView{hnd: hnd}, nil
 }
 
 type ShaderModule struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkShaderModule)
 	hnd C.VkShaderModule
 }
 
@@ -1081,7 +1092,7 @@ type ShaderModuleCreateInfo struct {
 	Code []byte
 }
 
-func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (*ShaderModule, error) {
+func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (ShaderModule, error) {
 	// TODO(dh): support custom allocator
 	ptr := (*C.VkShaderModuleCreateInfo)(C.calloc(1, C.sizeof_VkShaderModuleCreateInfo))
 	defer C.free(unsafe.Pointer(ptr))
@@ -1093,15 +1104,15 @@ func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (*ShaderModu
 	var hnd C.VkShaderModule
 	res := Result(C.domVkCreateShaderModule(dev.fps[vkCreateShaderModule], dev.hnd, ptr, nil, &hnd))
 	if res != Success {
-		return nil, res
+		return ShaderModule{}, res
 	}
-	return &ShaderModule{hnd: hnd}, nil
+	return ShaderModule{hnd: hnd}, nil
 }
 
 type PipelineShaderStageCreateInfo struct {
 	Next   unsafe.Pointer
 	Stage  ShaderStageFlags
-	Module *ShaderModule
+	Module ShaderModule
 	Name   string
 	// TODO(dh): support specialization info
 }
@@ -1364,6 +1375,7 @@ func (info PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateIn
 }
 
 type PipelineLayout struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkPipelineLayout)
 	hnd C.VkPipelineLayout
 }
 
@@ -1396,19 +1408,20 @@ func (info PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 	return cinfo
 }
 
-func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (*PipelineLayout, error) {
+func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (PipelineLayout, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
 	defer C.free(unsafe.Pointer(cinfo))
 	var hnd C.VkPipelineLayout
 	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, cinfo, nil, &hnd))
 	if res != Success {
-		return nil, res
+		return PipelineLayout{}, res
 	}
-	return &PipelineLayout{hnd}, nil
+	return PipelineLayout{hnd}, nil
 }
 
 type DescriptorSetLayout struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSetLayout)
 	hnd C.VkDescriptorSetLayout
 }
 
@@ -1477,6 +1490,7 @@ type StencilOpState struct {
 }
 
 type Pipeline struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkPipeline)
 	hnd C.VkPipeline
 }
 
@@ -1493,14 +1507,14 @@ type GraphicsPipelineCreateInfo struct {
 	DepthStencilState  *PipelineDepthStencilStateCreateInfo
 	ColorBlendState    *PipelineColorBlendStateCreateInfo
 	DynamicState       *PipelineDynamicStateCreateInfo
-	Layout             *PipelineLayout
-	RenderPass         *RenderPass
+	Layout             PipelineLayout
+	RenderPass         RenderPass
 	Subpass            uint32
 	BasePipelineHandle *Pipeline
 	BasePipelineIndex  int32
 }
 
-func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) ([]*Pipeline, error) {
+func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) ([]Pipeline, error) {
 	// TODO(dh): support pipeline cache
 	// TODO(dh): support custom allocators
 	ptrs := (*C.VkGraphicsPipelineCreateInfo)(C.calloc(C.size_t(len(infos)), C.sizeof_VkGraphicsPipelineCreateInfo))
@@ -1580,9 +1594,9 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	if res != Success {
 		return nil, res
 	}
-	out := make([]*Pipeline, len(infos))
+	out := make([]Pipeline, len(infos))
 	for i, hnd := range hnds {
-		out[i] = &Pipeline{hnd}
+		out[i] = Pipeline{hnd}
 	}
 	return out, nil
 }
@@ -1631,7 +1645,7 @@ type SubpassDependency struct {
 	DependencyFlags DependencyFlags
 }
 
-func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (*RenderPass, error) {
+func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, error) {
 	// TODO(dh): support custom allocators
 	size0 := uintptr(C.sizeof_VkRenderPassCreateInfo)
 	size1 := C.sizeof_VkAttachmentDescription * uintptr(len(info.Attachments))
@@ -1687,14 +1701,14 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (*RenderPass, er
 	var hnd C.VkRenderPass
 	res := Result(C.domVkCreateRenderPass(dev.fps[vkCreateRenderPass], dev.hnd, cinfo, nil, &hnd))
 	if res != Success {
-		return nil, res
+		return RenderPass{}, res
 	}
-	return &RenderPass{hnd: hnd}, nil
+	return RenderPass{hnd: hnd}, nil
 }
 
 type FramebufferCreateInfo struct {
 	Next        unsafe.Pointer
-	RenderPass  *RenderPass
+	RenderPass  RenderPass
 	Attachments []ImageView
 	Width       uint32
 	Height      uint32
@@ -1722,16 +1736,16 @@ func (info FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
 	return cinfo
 }
 
-func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (*Framebuffer, error) {
+func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
 	defer C.free(unsafe.Pointer(cinfo))
 	var hnd C.VkFramebuffer
 	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, cinfo, nil, &hnd))
 	if res != Success {
-		return nil, res
+		return Framebuffer{}, res
 	}
-	return &Framebuffer{hnd}, nil
+	return Framebuffer{hnd}, nil
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {

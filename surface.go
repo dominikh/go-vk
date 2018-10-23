@@ -20,6 +20,7 @@ func init() {
 }
 
 type SurfaceKHR struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSurfaceKHR)
 	hnd C.VkSurfaceKHR
 }
 
@@ -41,7 +42,7 @@ type SurfaceFormatKHR struct {
 	ColorSpace ColorSpaceKHR
 }
 
-func (dev *PhysicalDevice) SurfaceSupportKHR(queueFamilyIndex uint32, surface *SurfaceKHR) (bool, error) {
+func (dev *PhysicalDevice) SurfaceSupportKHR(queueFamilyIndex uint32, surface SurfaceKHR) (bool, error) {
 	var out C.VkBool32
 	res := Result(C.domVkGetPhysicalDeviceSurfaceSupportKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceSupportKHR], dev.hnd, C.uint32_t(queueFamilyIndex), surface.hnd, &out))
 	if res != Success {
@@ -50,7 +51,7 @@ func (dev *PhysicalDevice) SurfaceSupportKHR(queueFamilyIndex uint32, surface *S
 	return out == C.VK_TRUE, nil
 }
 
-func (dev *PhysicalDevice) SurfaceCapabilitiesKHR(surface *SurfaceKHR) (*SurfaceCapabilities, error) {
+func (dev *PhysicalDevice) SurfaceCapabilitiesKHR(surface SurfaceKHR) (*SurfaceCapabilities, error) {
 	var out SurfaceCapabilities
 	res := Result(C.domVkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceCapabilitiesKHR], dev.hnd, surface.hnd, (*C.VkSurfaceCapabilitiesKHR)(unsafe.Pointer(&out))))
 	if res != Success {
@@ -59,7 +60,7 @@ func (dev *PhysicalDevice) SurfaceCapabilitiesKHR(surface *SurfaceKHR) (*Surface
 	return &out, nil
 }
 
-func (dev *PhysicalDevice) SurfaceFormatsKHR(surface *SurfaceKHR) ([]SurfaceFormatKHR, error) {
+func (dev *PhysicalDevice) SurfaceFormatsKHR(surface SurfaceKHR) ([]SurfaceFormatKHR, error) {
 	var count C.uint32_t
 	res := Result(C.domVkGetPhysicalDeviceSurfaceFormatsKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceFormatsKHR], dev.hnd, surface.hnd, &count, nil))
 	if res != Success {
@@ -73,7 +74,7 @@ func (dev *PhysicalDevice) SurfaceFormatsKHR(surface *SurfaceKHR) ([]SurfaceForm
 	return out, nil
 }
 
-func (dev *PhysicalDevice) SurfacePresentModesKHR(surface *SurfaceKHR) ([]PresentModeKHR, error) {
+func (dev *PhysicalDevice) SurfacePresentModesKHR(surface SurfaceKHR) ([]PresentModeKHR, error) {
 	var count C.uint32_t
 	res := Result(C.domVkGetPhysicalDeviceSurfacePresentModesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfacePresentModesKHR], dev.hnd, surface.hnd, &count, nil))
 	if res != Success {

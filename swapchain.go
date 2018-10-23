@@ -18,7 +18,7 @@ import (
 
 type SwapchainCreateInfoKHR struct {
 	Next               unsafe.Pointer
-	Surface            *SurfaceKHR
+	Surface            SurfaceKHR
 	MinImageCount      uint32
 	ImageFormat        Format
 	ImageColorSpace    ColorSpaceKHR
@@ -35,11 +35,12 @@ type SwapchainCreateInfoKHR struct {
 }
 
 type SwapchainKHR struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSwapchainKHR)
 	hnd C.VkSwapchainKHR
 	dev *Device
 }
 
-func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (*SwapchainKHR, error) {
+func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (SwapchainKHR, error) {
 	// TODO(dh): support custom allocator
 	ptr := (*C.VkSwapchainCreateInfoKHR)(C.calloc(1, C.sizeof_VkSwapchainCreateInfoKHR))
 	defer C.free(unsafe.Pointer(ptr))
@@ -71,12 +72,12 @@ func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (*SwapchainK
 	var out C.VkSwapchainKHR
 	res := Result(C.domVkCreateSwapchainKHR(dev.fps[vkCreateSwapchainKHR], dev.hnd, ptr, nil, &out))
 	if res != Success {
-		return nil, res
+		return SwapchainKHR{}, res
 	}
-	return &SwapchainKHR{hnd: out, dev: dev}, nil
+	return SwapchainKHR{hnd: out, dev: dev}, nil
 }
 
-func (chain *SwapchainKHR) Images() ([]*Image, error) {
+func (chain SwapchainKHR) Images() ([]Image, error) {
 	var count C.uint32_t
 	res := Result(C.domVkGetSwapchainImagesKHR(chain.dev.fps[vkGetSwapchainImagesKHR], chain.dev.hnd, chain.hnd, &count, nil))
 	if res != Success {
@@ -87,9 +88,9 @@ func (chain *SwapchainKHR) Images() ([]*Image, error) {
 	if res != Success {
 		return nil, res
 	}
-	out := make([]*Image, count)
+	out := make([]Image, count)
 	for i, img := range images {
-		out[i] = &Image{hnd: img, dev: chain.dev}
+		out[i] = Image{hnd: img, dev: chain.dev}
 	}
 	return out, nil
 }
