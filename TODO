@@ -22,9 +22,12 @@ follow, then vendor extensions.
 - [x] vkDeviceWaitIdle
 - [x] vkCreateSwapchainKHR
 - [x] vkCreateShaderModule
+- [x] vkCreateRenderPass
+- [x] vkCreatePipelineLayout
 - [x] vkCreateInstance
 - [x] vkCreateImageView
 - [x] vkCreateGraphicsPipelines
+- [x] vkCreateFramebuffer
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCmdSetLineWidth
@@ -113,12 +116,9 @@ follow, then vendor extensions.
 - [ ] vkCreateSemaphore
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkCreateSampler
-- [ ] vkCreateRenderPass
 - [ ] vkCreateQueryPool
-- [ ] vkCreatePipelineLayout
 - [ ] vkCreatePipelineCache
 - [ ] vkCreateImage
-- [ ] vkCreateFramebuffer
 - [ ] vkCreateFence
 - [ ] vkCreateEvent
 - [ ] vkCreateDescriptorUpdateTemplate
