@@ -95,3 +95,6 @@ VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice devic
 VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass) {
 	return (*fp)(device, pCreateInfo, pAllocator, pRenderPass);
 }
+VkResult domVkCreateFramebuffer(PFN_vkCreateFramebuffer fp, VkDevice device, const VkFramebufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFramebuffer* pFramebuffer) {
+	return (*fp)(device, pCreateInfo, pAllocator, pFramebuffer);
+}

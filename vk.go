@@ -41,6 +41,7 @@ package vk
 // VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
 // VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice device, const VkPipelineLayoutCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineLayout* pPipelineLayout);
 // VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
+// VkResult domVkCreateFramebuffer(PFN_vkCreateFramebuffer fp, VkDevice device, const VkFramebufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFramebuffer* pFramebuffer);
 import "C"
 import (
 	"fmt"
@@ -1689,6 +1690,48 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (*RenderPass, er
 		return nil, res
 	}
 	return &RenderPass{hnd: hnd}, nil
+}
+
+type FramebufferCreateInfo struct {
+	Next        unsafe.Pointer
+	RenderPass  *RenderPass
+	Attachments []ImageView
+	Width       uint32
+	Height      uint32
+	Layers      uint32
+}
+
+func (info FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
+	size0 := uintptr(C.sizeof_VkFramebufferCreateInfo)
+	size1 := uintptr(C.sizeof_VkImageView) * uintptr(len(info.Attachments))
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkFramebufferCreateInfo)(alloc)
+	*cinfo = C.VkFramebufferCreateInfo{
+		sType:           C.VkStructureType(StructureTypeFramebufferCreateInfo),
+		pNext:           info.Next,
+		flags:           0,
+		renderPass:      info.RenderPass.hnd,
+		attachmentCount: C.uint32_t(len(info.Attachments)),
+		pAttachments:    (*C.VkImageView)(unsafe.Pointer(uintptr(alloc) + size0)),
+		width:           C.uint32_t(info.Width),
+		height:          C.uint32_t(info.Height),
+		layers:          C.uint32_t(info.Layers),
+	}
+	ucopy(unsafe.Pointer(cinfo.pAttachments), unsafe.Pointer(&info.Attachments), C.sizeof_VkImageView)
+	return cinfo
+}
+
+func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (*Framebuffer, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
+	var hnd C.VkFramebuffer
+	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return nil, res
+	}
+	return &Framebuffer{hnd}, nil
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
