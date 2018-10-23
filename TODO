@@ -33,7 +33,10 @@ follow, then vendor extensions.
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetBlendConstants
+- [x] vkCmdEndRenderPass
 - [x] vkCmdDraw
+- [x] vkCmdBindPipeline
+- [x] vkCmdBeginRenderPass
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
 - [x] VkResetCommandBuffer
@@ -146,7 +149,6 @@ follow, then vendor extensions.
 - [ ] vkCmdNextSubpass
 - [ ] vkCmdFillBuffer
 - [ ] vkCmdExecuteCommands
-- [ ] vkCmdEndRenderPass
 - [ ] vkCmdEndQuery
 - [ ] vkCmdDrawIndirect
 - [ ] vkCmdDrawIndexedIndirect
@@ -164,10 +166,8 @@ follow, then vendor extensions.
 - [ ] vkCmdClearAttachments
 - [ ] vkCmdBlitImage
 - [ ] vkCmdBindVertexBuffers
-- [ ] vkCmdBindPipeline
 - [ ] vkCmdBindIndexBuffer
 - [ ] vkCmdBindDescriptorSets
-- [ ] vkCmdBeginRenderPass
 - [ ] vkCmdBeginQuery
 - [ ] vkBindImageMemory2
 - [ ] vkBindImageMemory

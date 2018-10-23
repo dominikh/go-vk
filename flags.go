@@ -60,9 +60,10 @@ func init() {
 	assertSameSize(unsafe.Sizeof(PipelineStageFlags(0)), C.sizeof_VkPipelineStageFlags)
 	assertSameSize(unsafe.Sizeof(AccessFlags(0)), C.sizeof_VkAccessFlags)
 	assertSameSize(unsafe.Sizeof(DependencyFlags(0)), C.sizeof_VkDependencyFlags)
+	assertSameSize(unsafe.Sizeof(SubpassContents(0)), C.sizeof_VkSubpassContents)
 }
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -111,6 +112,7 @@ type SubpassDescriptionFlags uint32
 type PipelineStageFlags uint32
 type AccessFlags uint32
 type DependencyFlags uint32
+type SubpassContents uint32
 
 const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
@@ -1418,6 +1420,11 @@ const (
 	DependencyViewLocalBit      DependencyFlags = 0x00000002
 	DependencyViewLocalBitKHR   DependencyFlags = DependencyViewLocalBit
 	DependencyDeviceGroupBitKHR DependencyFlags = DependencyDeviceGroupBit
+)
+
+const (
+	SubpassContentsInline                  SubpassContents = 0
+	SubpassContentsSecondaryCommandBuffers SubpassContents = 1
 )
 
 func (res Result) Error() string { return res.String() }

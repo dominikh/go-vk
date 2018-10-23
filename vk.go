@@ -42,6 +42,9 @@ package vk
 // VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice device, const VkPipelineLayoutCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineLayout* pPipelineLayout);
 // VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
 // VkResult domVkCreateFramebuffer(PFN_vkCreateFramebuffer fp, VkDevice device, const VkFramebufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFramebuffer* pFramebuffer);
+// void     domVkCmdBeginRenderPass(PFN_vkCmdBeginRenderPass fp, VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo* pRenderPassBegin, VkSubpassContents contents);
+// void     domVkCmdBindPipeline(PFN_vkCmdBindPipeline fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
+// void     domVkCmdEndRenderPass(PFN_vkCmdEndRenderPass fp, VkCommandBuffer commandBuffer);
 import "C"
 import (
 	"fmt"
@@ -924,6 +927,53 @@ func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstIns
 	C.domVkCmdDraw(buf.fps[vkCmdDraw], buf.hnd, C.uint32_t(vertexCount), C.uint32_t(instanceCount), C.uint32_t(firstVertex), C.uint32_t(firstInstance))
 }
 
+func (info RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
+	size0 := uintptr(C.sizeof_VkRenderPassBeginInfo)
+	size1 := C.sizeof_VkClearValue * uintptr(len(info.ClearValues))
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkRenderPassBeginInfo)(alloc)
+	*cinfo = C.VkRenderPassBeginInfo{
+		sType:           C.VkStructureType(StructureTypeRenderPassBeginInfo),
+		pNext:           info.Next,
+		renderPass:      info.RenderPass.hnd,
+		framebuffer:     info.Framebuffer.hnd,
+		clearValueCount: C.uint32_t(len(info.ClearValues)),
+		pClearValues:    (*C.VkClearValue)(unsafe.Pointer(uintptr(alloc) + size0)),
+	}
+	ucopy1(unsafe.Pointer(&cinfo.renderArea), unsafe.Pointer(&info.RenderArea), C.sizeof_VkRect2D)
+	arr := (*[1 << 31]C.VkClearValue)(unsafe.Pointer(cinfo.pClearValues))[:len(info.ClearValues)]
+	for i := range arr {
+		switch v := info.ClearValues[i].(type) {
+		case ClearColorValueFloat32s:
+			copy(arr[i][:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearColorValueInt32s:
+			copy(arr[i][:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearColorValueUint32s:
+			copy(arr[i][:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearDepthStencilValue:
+			ucopy1(unsafe.Pointer(&arr[i]), unsafe.Pointer(&v), C.sizeof_VkClearDepthStencilValue)
+		default:
+			panic(fmt.Sprintf("unreachable: %T", v))
+		}
+	}
+	return cinfo
+}
+
+func (buf *CommandBuffer) BeginRenderPass(info *RenderPassBeginInfo, contents SubpassContents) {
+	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
+	C.domVkCmdBeginRenderPass(buf.fps[vkCmdBeginRenderPass], buf.hnd, cinfo, C.VkSubpassContents(contents))
+}
+
+func (buf *CommandBuffer) EndRenderPass() {
+	C.domVkCmdEndRenderPass(buf.fps[vkCmdEndRenderPass], buf.hnd)
+}
+
+func (buf *CommandBuffer) BindPipeline(pipelineBindPoint PipelineBindPoint, pipeline Pipeline) {
+	C.domVkCmdBindPipeline(buf.fps[vkCmdBindPipeline], buf.hnd, C.VkPipelineBindPoint(pipelineBindPoint), pipeline.hnd)
+}
+
 type CommandPoolCreateInfo struct {
 	Next             unsafe.Pointer
 	Flags            CommandPoolCreateFlags
@@ -1747,6 +1797,32 @@ func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, 
 	}
 	return Framebuffer{hnd}, nil
 }
+
+type RenderPassBeginInfo struct {
+	Next        unsafe.Pointer
+	RenderPass  RenderPass
+	Framebuffer Framebuffer
+	RenderArea  Rect2D
+	ClearValues []ClearValue
+}
+
+type ClearValue interface {
+	isClearValue()
+}
+
+type ClearColorValueFloat32s [4]float32
+type ClearColorValueInt32s [4]int32
+type ClearColorValueUint32s [4]uint32
+
+type ClearDepthStencilValue struct {
+	Depth   float32
+	Stencil uint32
+}
+
+func (ClearColorValueFloat32s) isClearValue() {}
+func (ClearColorValueInt32s) isClearValue()   {}
+func (ClearColorValueUint32s) isClearValue()  {}
+func (ClearDepthStencilValue) isClearValue()  {}
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
 	if nmemb == 0 {

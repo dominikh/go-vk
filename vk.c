@@ -98,3 +98,12 @@ VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const
 VkResult domVkCreateFramebuffer(PFN_vkCreateFramebuffer fp, VkDevice device, const VkFramebufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFramebuffer* pFramebuffer) {
 	return (*fp)(device, pCreateInfo, pAllocator, pFramebuffer);
 }
+void domVkCmdBeginRenderPass(PFN_vkCmdBeginRenderPass fp, VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo* pRenderPassBegin, VkSubpassContents contents) {
+	(*fp)(commandBuffer, pRenderPassBegin, contents);
+}
+void domVkCmdBindPipeline(PFN_vkCmdBindPipeline fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline) {
+	(*fp)(commandBuffer, pipelineBindPoint, pipeline);
+}
+void domVkCmdEndRenderPass(PFN_vkCmdEndRenderPass fp, VkCommandBuffer commandBuffer) {
+	(*fp)(commandBuffer);
+}
