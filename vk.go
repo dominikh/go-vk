@@ -46,6 +46,7 @@ package vk
 // void     domVkCmdBindPipeline(PFN_vkCmdBindPipeline fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
 // void     domVkCmdEndRenderPass(PFN_vkCmdEndRenderPass fp, VkCommandBuffer commandBuffer);
 // VkResult domVkCreateSemaphore(PFN_vkCreateSemaphore fp, VkDevice device, const VkSemaphoreCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSemaphore* pSemaphore);
+// VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence);
 import "C"
 import (
 	"fmt"
@@ -943,7 +944,7 @@ func (info RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 		pClearValues:    (*C.VkClearValue)(unsafe.Pointer(uintptr(alloc) + size0)),
 	}
 	ucopy1(unsafe.Pointer(&cinfo.renderArea), unsafe.Pointer(&info.RenderArea), C.sizeof_VkRect2D)
-	arr := (*[1 << 31]C.VkClearValue)(unsafe.Pointer(cinfo.pClearValues))[:len(info.ClearValues)]
+	arr := (*[math.MaxInt32]C.VkClearValue)(unsafe.Pointer(cinfo.pClearValues))[:len(info.ClearValues)]
 	for i := range arr {
 		switch v := info.ClearValues[i].(type) {
 		case ClearColorValueFloat32s:
@@ -1853,6 +1854,78 @@ func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error)
 		return Semaphore{}, res
 	}
 	return Semaphore{hnd}, nil
+}
+
+type SubmitInfo struct {
+	Next             unsafe.Pointer
+	WaitSemaphores   []Semaphore
+	WaitDstStageMask []PipelineStageFlags
+	CommandBuffers   []*CommandBuffer
+	SignalSemaphores []Semaphore
+}
+
+func (queue *Queue) Submit(infos []SubmitInfo) error {
+	// TODO(dh): support fence
+	var (
+		waitSemaphoreCount   uintptr
+		commandBufferCount   uintptr
+		signalSemaphoreCount uintptr
+	)
+	for _, info := range infos {
+		waitSemaphoreCount += uintptr(len(info.WaitSemaphores))
+		commandBufferCount += uintptr(len(info.CommandBuffers))
+		signalSemaphoreCount += uintptr(len(info.SignalSemaphores))
+	}
+	size0 := C.sizeof_VkSubmitInfo * uintptr(len(infos))
+	size1 := C.sizeof_VkSemaphore * waitSemaphoreCount
+	size2 := C.sizeof_VkPipelineStageFlags * waitSemaphoreCount
+	size3 := C.sizeof_VkCommandBuffer * commandBufferCount
+	size4 := C.sizeof_VkSemaphore * signalSemaphoreCount
+	size := size0 + size1 + size2 + size3 + size4
+	alloc := uintptr(C.calloc(1, C.size_t(size)))
+	defer C.free(unsafe.Pointer(alloc))
+
+	cinfos := alloc
+	waitSemaphores := alloc + size0
+	waitDstStageMask := alloc + size0 + size1
+	commandBuffers := alloc + size0 + size1 + size2
+	signalSemaphores := alloc + size0 + size1 + size2 + size3
+
+	for _, info := range infos {
+		if len(info.WaitSemaphores) != len(info.WaitDstStageMask) {
+			panic("WaitSemaphores and WaitDstStageMask must have same length")
+		}
+		*(*C.VkSubmitInfo)(unsafe.Pointer(cinfos)) = C.VkSubmitInfo{
+			sType:                C.VkStructureType(StructureTypeSubmitInfo),
+			pNext:                info.Next,
+			waitSemaphoreCount:   C.uint32_t(len(info.WaitSemaphores)),
+			pWaitSemaphores:      (*C.VkSemaphore)(unsafe.Pointer(waitSemaphores)),
+			pWaitDstStageMask:    (*C.VkPipelineStageFlags)(unsafe.Pointer(waitDstStageMask)),
+			commandBufferCount:   C.uint32_t(len(info.CommandBuffers)),
+			pCommandBuffers:      (*C.VkCommandBuffer)(unsafe.Pointer(commandBuffers)),
+			signalSemaphoreCount: C.uint32_t(len(info.SignalSemaphores)),
+			pSignalSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(signalSemaphores)),
+		}
+		ucopy(unsafe.Pointer(waitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
+		ucopy(unsafe.Pointer(waitDstStageMask), unsafe.Pointer(&info.WaitDstStageMask), C.sizeof_VkPipelineStageFlags)
+		ucopy(unsafe.Pointer(signalSemaphores), unsafe.Pointer(&info.SignalSemaphores), C.sizeof_VkSemaphore)
+		arr := (*[math.MaxInt32]C.VkCommandBuffer)(unsafe.Pointer(commandBuffers))[:len(info.CommandBuffers)]
+		for i := range arr {
+			arr[i] = info.CommandBuffers[i].hnd
+		}
+
+		cinfos += C.sizeof_VkSubmitInfo
+		waitSemaphores += C.sizeof_VkSemaphore * uintptr(len(info.WaitSemaphores))
+		waitDstStageMask += C.sizeof_VkPipelineStageFlags * uintptr(len(info.WaitSemaphores))
+		commandBuffers += C.sizeof_VkCommandBuffer * uintptr(len(info.CommandBuffers))
+		signalSemaphores += C.sizeof_VkSemaphore * uintptr(len(info.SignalSemaphores))
+	}
+
+	res := Result(C.domVkQueueSubmit(queue.fps[vkQueueSubmit], queue.hnd, C.uint32_t(len(infos)), (*C.VkSubmitInfo)(unsafe.Pointer(alloc)), nil))
+	if res != Success {
+		return res
+	}
+	return nil
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {

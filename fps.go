@@ -54,6 +54,7 @@ const (
 	vkCmdBindPipeline
 	vkCmdEndRenderPass
 	vkCreateSemaphore
+	vkQueueSubmit
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -114,4 +115,5 @@ var deviceFpNames = [...]string{
 	vkCmdEndRenderPass:        "vkCmdEndRenderPass",
 	vkCreateSemaphore:         "vkCreateSemaphore",
 	vkAcquireNextImageKHR:     "vkAcquireNextImageKHR",
+	vkQueueSubmit:             "vkQueueSubmit",
 }
