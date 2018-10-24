@@ -10,9 +10,11 @@ package vk
 //
 // VkResult domVkCreateSwapchainKHR(PFN_vkCreateSwapchainKHR fp, VkDevice device, const VkSwapchainCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSwapchainKHR* pSwapchain);
 // VkResult domVkGetSwapchainImagesKHR(PFN_vkGetSwapchainImagesKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint32_t* pSwapchainImageCount, VkImage* pSwapchainImages);
+// VkResult domVkAcquireNextImageKHR(PFN_vkAcquireNextImageKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t* pImageIndex);
 import "C"
 
 import (
+	"time"
 	"unsafe"
 )
 
@@ -93,4 +95,15 @@ func (chain SwapchainKHR) Images() ([]Image, error) {
 		out[i] = Image{hnd: img, dev: chain.dev}
 	}
 	return out, nil
+}
+
+func (chain SwapchainKHR) AcquireNextImage(timeout time.Duration, semaphore *Semaphore) (uint32, error) {
+	// TODO(dh): support fences
+	var idx C.uint32_t
+	var sem C.VkSemaphore
+	if semaphore != nil {
+		sem = semaphore.hnd
+	}
+	res := Result(C.domVkAcquireNextImageKHR(chain.dev.fps[vkAcquireNextImageKHR], chain.dev.hnd, chain.hnd, C.uint64_t(timeout), sem, nil, &idx))
+	return uint32(idx), res
 }

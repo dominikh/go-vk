@@ -58,6 +58,7 @@ const (
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
 	vkGetSwapchainImagesKHR
+	vkAcquireNextImageKHR
 
 	deviceMaxPFN
 )
@@ -112,4 +113,5 @@ var deviceFpNames = [...]string{
 	vkCmdBindPipeline:         "vkCmdBindPipeline",
 	vkCmdEndRenderPass:        "vkCmdEndRenderPass",
 	vkCreateSemaphore:         "vkCreateSemaphore",
+	vkAcquireNextImageKHR:     "vkAcquireNextImageKHR",
 }

@@ -40,6 +40,7 @@ follow, then vendor extensions.
 - [x] vkCmdBeginRenderPass
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateCommandBuffers
+- [x] vkAcquireNextImageKHR
 - [x] VkResetCommandBuffer
 - [ ] vkWaitForFences
 - [ ] vkUpdateDescriptorSets
@@ -175,4 +176,3 @@ follow, then vendor extensions.
 - [ ] vkBindBufferMemory
 - [ ] vkAllocateMemory
 - [ ] vkAllocateDescriptorSets
-- [ ] vkAcquireNextImageKHR
