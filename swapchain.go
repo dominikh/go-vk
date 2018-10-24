@@ -11,9 +11,11 @@ package vk
 // VkResult domVkCreateSwapchainKHR(PFN_vkCreateSwapchainKHR fp, VkDevice device, const VkSwapchainCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSwapchainKHR* pSwapchain);
 // VkResult domVkGetSwapchainImagesKHR(PFN_vkGetSwapchainImagesKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint32_t* pSwapchainImageCount, VkImage* pSwapchainImages);
 // VkResult domVkAcquireNextImageKHR(PFN_vkAcquireNextImageKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t* pImageIndex);
+// VkResult domVkQueuePresentKHR(PFN_vkQueuePresentKHR fp, VkQueue queue, const VkPresentInfoKHR* pPresentInfo);
 import "C"
 
 import (
+	"math"
 	"time"
 	"unsafe"
 )
@@ -106,4 +108,50 @@ func (chain SwapchainKHR) AcquireNextImage(timeout time.Duration, semaphore *Sem
 	}
 	res := Result(C.domVkAcquireNextImageKHR(chain.dev.fps[vkAcquireNextImageKHR], chain.dev.hnd, chain.hnd, C.uint64_t(timeout), sem, nil, &idx))
 	return uint32(idx), res
+}
+
+type PresentInfoKHR struct {
+	Next           unsafe.Pointer
+	WaitSemaphores []Semaphore
+	Swapchains     []SwapchainKHR
+	ImageIndices   []uint32
+}
+
+func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
+	size0 := uintptr(C.sizeof_VkPresentInfoKHR)
+	size1 := C.sizeof_VkSemaphore * uintptr(len(info.WaitSemaphores))
+	size2 := C.sizeof_VkSwapchainKHR * uintptr(len(info.Swapchains))
+	size3 := C.sizeof_uint32_t * uintptr(len(info.ImageIndices))
+	size4 := C.sizeof_VkResult * uintptr(len(info.Swapchains))
+	size := size0 + size1 + size2 + size3 + size4
+	alloc := C.calloc(1, C.size_t(size))
+	defer C.free(alloc)
+	cinfo := (*C.VkPresentInfoKHR)(alloc)
+	*cinfo = C.VkPresentInfoKHR{
+		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
+		pNext:              info.Next,
+		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
+		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(uintptr(alloc) + size0)),
+		swapchainCount:     C.uint32_t(len(info.Swapchains)),
+		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Pointer(uintptr(alloc) + size0 + size1)),
+		pImageIndices:      (*C.uint32_t)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2)),
+	}
+	if len(results) != 0 {
+		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(alloc) + size3))
+	}
+	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
+	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)
+	arr := (*[math.MaxInt32]C.VkSwapchainKHR)(unsafe.Pointer(cinfo.pSwapchains))[:len(info.Swapchains)]
+	for i := range arr {
+		arr[i] = info.Swapchains[i].hnd
+	}
+
+	res := Result(C.domVkQueuePresentKHR(queue.fps[vkQueuePresentKHR], queue.hnd, cinfo))
+	if len(results) != 0 {
+		copy(results, (*[math.MaxInt32]Result)(unsafe.Pointer(cinfo.pResults))[:len(info.Swapchains)])
+	}
+	if res != Success {
+		return res
+	}
+	return nil
 }

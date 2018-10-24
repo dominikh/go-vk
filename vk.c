@@ -113,3 +113,6 @@ VkResult domVkCreateSemaphore(PFN_vkCreateSemaphore fp, VkDevice device, const V
 VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence) {
 	return (*fp)(queue, submitCount, pSubmits, fence);
 }
+VkResult domVkQueuePresentKHR(PFN_vkQueuePresentKHR fp, VkQueue queue, const VkPresentInfoKHR* pPresentInfo) {
+	return (*fp)(queue, pPresentInfo);
+}

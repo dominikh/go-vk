@@ -60,6 +60,7 @@ const (
 	vkCreateSwapchainKHR
 	vkGetSwapchainImagesKHR
 	vkAcquireNextImageKHR
+	vkQueuePresentKHR
 
 	deviceMaxPFN
 )
@@ -116,4 +117,5 @@ var deviceFpNames = [...]string{
 	vkCreateSemaphore:         "vkCreateSemaphore",
 	vkAcquireNextImageKHR:     "vkAcquireNextImageKHR",
 	vkQueueSubmit:             "vkQueueSubmit",
+	vkQueuePresentKHR:         "vkQueuePresentKHR",
 }

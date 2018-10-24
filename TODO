@@ -9,6 +9,7 @@ follow, then vendor extensions.
 - [x] vkResetCommandPool
 - [x] vkQueueWaitIdle
 - [x] vkQueueSubmit
+- [x] vkQueuePresentKHR
 - [x] vkGetSwapchainImagesKHR
 - [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
@@ -51,7 +52,6 @@ follow, then vendor extensions.
 - [ ] vkResetFences
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
-- [ ] vkQueuePresentKHR
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
 - [ ] vkMapMemory

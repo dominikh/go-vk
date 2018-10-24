@@ -115,6 +115,10 @@ type DependencyFlags uint32
 type SubpassContents uint32
 
 const (
+	SubpassExternal = C.VK_SUBPASS_EXTERNAL
+)
+
+const (
 	DeviceQueueCreateProtectedBit DeviceQueueCreateFlags = 0x00000001
 )
 
