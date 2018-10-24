@@ -671,7 +671,7 @@ type DeviceCreateInfo struct {
 	EnabledFeatures       *PhysicalDeviceFeatures
 }
 
-func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result) {
+func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error) {
 	// TODO(dh): support custom allocators
 	var free1 func()
 	ptr := (*C.VkDeviceCreateInfo)(C.calloc(1, C.sizeof_VkDeviceCreateInfo))
@@ -765,7 +765,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, Result
 	}
 	ldev.init()
 
-	return ldev, Success
+	return ldev, nil
 }
 
 type Device struct {

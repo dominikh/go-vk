@@ -107,7 +107,10 @@ func (chain SwapchainKHR) AcquireNextImage(timeout time.Duration, semaphore *Sem
 		sem = semaphore.hnd
 	}
 	res := Result(C.domVkAcquireNextImageKHR(chain.dev.fps[vkAcquireNextImageKHR], chain.dev.hnd, chain.hnd, C.uint64_t(timeout), sem, nil, &idx))
-	return uint32(idx), res
+	if res != Success {
+		return uint32(idx), res
+	}
+	return uint32(idx), nil
 }
 
 type PresentInfoKHR struct {
