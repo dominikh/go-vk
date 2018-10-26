@@ -116,3 +116,6 @@ VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCo
 VkResult domVkQueuePresentKHR(PFN_vkQueuePresentKHR fp, VkQueue queue, const VkPresentInfoKHR* pPresentInfo) {
 	return (*fp)(queue, pPresentInfo);
 }
+VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties) {
+	return (*fp)(physicalDevice, pLayerName, pPropertyCount, pProperties);
+}

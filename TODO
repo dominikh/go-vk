@@ -20,6 +20,7 @@ follow, then vendor extensions.
 - [x] vkGetDeviceProcAddr
 - [x] vkFreeCommandBuffers
 - [x] vkEnumeratePhysicalDevices
+- [x] vkEnumerateDeviceExtensionProperties
 - [x] vkEndCommandBuffer
 - [x] vkDeviceWaitIdle
 - [x] vkCreateSwapchainKHR

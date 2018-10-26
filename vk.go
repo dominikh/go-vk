@@ -47,8 +47,10 @@ package vk
 // void     domVkCmdEndRenderPass(PFN_vkCmdEndRenderPass fp, VkCommandBuffer commandBuffer);
 // VkResult domVkCreateSemaphore(PFN_vkCreateSemaphore fp, VkDevice device, const VkSemaphoreCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSemaphore* pSemaphore);
 // VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence);
+// VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties);
 import "C"
 import (
+	"bytes"
 	"fmt"
 	"math"
 	"os"
@@ -501,6 +503,40 @@ func (dev *PhysicalDevice) Properties() *PhysicalDeviceProperties {
 			ResidencyNonResidentStrict:               props.sparseProperties.residencyNonResidentStrict == C.VK_TRUE,
 		},
 	}
+}
+
+type ExtensionProperties struct {
+	Name        string
+	SpecVersion uint32
+}
+
+func (dev *PhysicalDevice) ExtensionProperties(layer string) ([]ExtensionProperties, error) {
+	var count C.uint32_t
+	var cLayer *C.char
+	if layer != "" {
+		cLayer := C.CString(layer)
+		defer C.free(unsafe.Pointer(cLayer))
+	}
+	res := Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, nil))
+	if res != Success {
+		return nil, res
+	}
+	properties := make([]C.VkExtensionProperties, count)
+	res = Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, &properties[0]))
+	if res != Success {
+		return nil, res
+	}
+	out := make([]ExtensionProperties, count)
+
+	for i, s := range properties {
+		name := (*[256]byte)(unsafe.Pointer(&s.extensionName))[:]
+		idx := bytes.IndexByte(name, 0)
+		out[i] = ExtensionProperties{
+			Name:        string(name[:idx]),
+			SpecVersion: uint32(s.specVersion),
+		}
+	}
+	return out, nil
 }
 
 type PhysicalDeviceFeatures struct {
