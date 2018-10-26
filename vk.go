@@ -64,6 +64,9 @@ type (
 	DeviceSize = uint64
 )
 
+const APIVersion10 = uint32(C.VK_API_VERSION_1_0)
+const APIVersion11 = uint32(C.VK_API_VERSION_1_1)
+
 var vkEnumerateInstanceVersion C.PFN_vkEnumerateInstanceVersion
 var vkEnumerateInstanceExtensionProperties C.PFN_vkEnumerateInstanceExtensionProperties
 var vkEnumerateInstanceLayerProperties C.PFN_vkEnumerateInstanceLayerProperties
@@ -78,6 +81,10 @@ func init() {
 		C.PFN_vkEnumerateInstanceLayerProperties(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceLayerProperties"))
 	vkCreateInstance =
 		C.PFN_vkCreateInstance(mustVkGetInstanceProcAddr(nil, "vkCreateInstance"))
+}
+
+func MakeVersion(major, minor, patch uint32) uint32 {
+	return major<<22 | minor<<12 | patch
 }
 
 type InstanceCreateInfo struct {
