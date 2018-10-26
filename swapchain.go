@@ -140,7 +140,7 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 		pImageIndices:      (*C.uint32_t)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2)),
 	}
 	if len(results) != 0 {
-		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(alloc) + size3))
+		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2 + size3))
 	}
 	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
 	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)
