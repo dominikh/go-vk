@@ -49,12 +49,14 @@ package vk
 // VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence);
 // VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties);
 // VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence);
+// VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);
 import "C"
 import (
 	"bytes"
 	"fmt"
 	"math"
 	"os"
+	"time"
 	"unsafe"
 )
 
@@ -76,6 +78,8 @@ var vkEnumerateInstanceLayerProperties C.PFN_vkEnumerateInstanceLayerProperties
 var vkCreateInstance C.PFN_vkCreateInstance
 
 func init() {
+	assertSameSize(unsafe.Sizeof(Fence{}), C.sizeof_VkFence)
+
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
 	vkEnumerateInstanceExtensionProperties =
@@ -2004,6 +2008,18 @@ func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
 		return Fence{}, res
 	}
 	return Fence{hnd: hnd}, nil
+}
+
+func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Duration) error {
+	var ptr *C.VkFence
+	if len(fences) > 0 {
+		ptr = (*C.VkFence)(unsafe.Pointer(&fences[0]))
+	}
+	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), ptr, vkBool(waitAll), C.uint64_t(timeout)))
+	if res != Success {
+		return res
+	}
+	return nil
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {

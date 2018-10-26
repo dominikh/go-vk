@@ -5,6 +5,7 @@ only those I've seen so far. I'm still reading the specification.
 For now, only core functions will be considered. KHR extensions will
 follow, then vendor extensions.
 
+- [x] vkWaitForFences
 - [x] vkTrimCommandPool
 - [x] vkResetCommandPool
 - [x] vkQueueWaitIdle
@@ -46,7 +47,6 @@ follow, then vendor extensions.
 - [x] vkAllocateCommandBuffers
 - [x] vkAcquireNextImageKHR
 - [x] VkResetCommandBuffer
-- [ ] vkWaitForFences
 - [ ] vkUpdateDescriptorSets
 - [ ] vkUpdateDescriptorSetWithTemplate
 - [ ] vkUnmapMemory

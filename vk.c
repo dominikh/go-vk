@@ -122,3 +122,6 @@ VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionP
 VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence) {
 	return (*fp)(device, pCreateInfo, pAllocator, pFence);
 }
+VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout) {
+	return (*fp)(device, fenceCount, pFences, waitAll, timeout);
+}

@@ -57,6 +57,7 @@ const (
 	vkCreateSemaphore
 	vkQueueSubmit
 	vkCreateFence
+	vkWaitForFences
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -122,4 +123,5 @@ var deviceFpNames = [...]string{
 	vkQueueSubmit:             "vkQueueSubmit",
 	vkQueuePresentKHR:         "vkQueuePresentKHR",
 	vkCreateFence:             "vkCreateFence",
+	vkWaitForFences:           "vkWaitForFences",
 }
