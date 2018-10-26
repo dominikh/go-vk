@@ -679,7 +679,7 @@ const (
 )
 
 const (
-	FormatUNDEFINED                  Format = 0
+	FormatUndefined                  Format = 0
 	FormatR4G4_UNORM_PACK8           Format = 1
 	FormatR4G4B4A4_UNORM_PACK16      Format = 2
 	FormatB4G4R4A4_UNORM_PACK16      Format = 3
