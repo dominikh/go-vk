@@ -666,7 +666,7 @@ type DeviceQueueCreateInfo struct {
 
 type DeviceCreateInfo struct {
 	Next                  unsafe.Pointer
-	QueueCreateInfos      []*DeviceQueueCreateInfo
+	QueueCreateInfos      []DeviceQueueCreateInfo
 	EnabledExtensionNames []string
 	EnabledFeatures       *PhysicalDeviceFeatures
 }
