@@ -1328,7 +1328,12 @@ func (info PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleState
 	size := size0 + size1
 	alloc := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineMultisampleStateCreateInfo)(alloc)
-	sampleMask := (*C.VkSampleMask)(unsafe.Pointer(uintptr(alloc) + size0))
+	var sampleMask *C.VkSampleMask
+	if info.SampleMask != nil {
+		sampleMask = (*C.VkSampleMask)(unsafe.Pointer(uintptr(alloc) + size0))
+		ucopy(unsafe.Pointer(sampleMask), unsafe.Pointer(&info.SampleMask), C.sizeof_VkSampleMask)
+	}
+
 	*cinfo = C.VkPipelineMultisampleStateCreateInfo{
 		sType:                 C.VkStructureType(StructureTypePipelineMultisampleStateCreateInfo),
 		pNext:                 info.Next,
@@ -1340,7 +1345,6 @@ func (info PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleState
 		alphaToCoverageEnable: vkBool(info.AlphaToCoverageEnable),
 		alphaToOneEnable:      vkBool(info.AlphaToOneEnable),
 	}
-	ucopy(unsafe.Pointer(sampleMask), unsafe.Pointer(&info.SampleMask), C.sizeof_VkSampleMask)
 	return cinfo
 }
 
