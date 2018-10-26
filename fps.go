@@ -58,6 +58,7 @@ const (
 	vkQueueSubmit
 	vkCreateFence
 	vkWaitForFences
+	vkResetFences
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -124,4 +125,5 @@ var deviceFpNames = [...]string{
 	vkQueuePresentKHR:         "vkQueuePresentKHR",
 	vkCreateFence:             "vkCreateFence",
 	vkWaitForFences:           "vkWaitForFences",
+	vkResetFences:             "vkResetFences",
 }

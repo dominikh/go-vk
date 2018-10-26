@@ -7,6 +7,7 @@ follow, then vendor extensions.
 
 - [x] vkWaitForFences
 - [x] vkTrimCommandPool
+- [x] vkResetFences
 - [x] vkResetCommandPool
 - [x] vkQueueWaitIdle
 - [x] vkQueueSubmit
@@ -51,7 +52,6 @@ follow, then vendor extensions.
 - [ ] vkUpdateDescriptorSetWithTemplate
 - [ ] vkUnmapMemory
 - [ ] vkSetEvent
-- [ ] vkResetFences
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
 - [ ] vkQueueBindSparse

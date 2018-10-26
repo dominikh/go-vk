@@ -50,6 +50,7 @@ package vk
 // VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties);
 // VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence);
 // VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);
+// VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences);
 import "C"
 import (
 	"bytes"
@@ -2016,6 +2017,18 @@ func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Dura
 		ptr = (*C.VkFence)(unsafe.Pointer(&fences[0]))
 	}
 	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), ptr, vkBool(waitAll), C.uint64_t(timeout)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
+func (dev *Device) ResetFences(fences []Fence) error {
+	var ptr *C.VkFence
+	if len(fences) > 0 {
+		ptr = (*C.VkFence)(unsafe.Pointer(&fences[0]))
+	}
+	res := Result(C.domVkResetFences(dev.fps[vkResetFences], dev.hnd, C.uint32_t(len(fences)), ptr))
 	if res != Success {
 		return res
 	}

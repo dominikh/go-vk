@@ -125,3 +125,6 @@ VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCr
 VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout) {
 	return (*fp)(device, fenceCount, pFences, waitAll, timeout);
 }
+VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences) {
+	return (*fp)(device, fenceCount, pFences);
+}
