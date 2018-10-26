@@ -113,6 +113,7 @@ type PipelineStageFlags uint32
 type AccessFlags uint32
 type DependencyFlags uint32
 type SubpassContents uint32
+type FenceCreateFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1431,6 +1432,10 @@ const (
 	SubpassContentsSecondaryCommandBuffers SubpassContents = 1
 )
 
+const (
+	FenceCreateSignaledBit FenceCreateFlags = 0x00000001
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2012,6 +2017,14 @@ func (flags DependencyFlags) String() string {
 	}
 	if (flags & DependencyDeviceGroupBitKHR) != 0 {
 		out = append(out, "DependencyDeviceGroupBitKHR")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags FenceCreateFlags) String() string {
+	var out []string
+	if (flags & FenceCreateSignaledBit) != 0 {
+		out = append(out, "FenceCreateSignaledBit")
 	}
 	return strings.Join(out, " | ")
 }

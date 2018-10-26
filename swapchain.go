@@ -99,14 +99,17 @@ func (chain SwapchainKHR) Images() ([]Image, error) {
 	return out, nil
 }
 
-func (chain SwapchainKHR) AcquireNextImage(timeout time.Duration, semaphore *Semaphore) (uint32, error) {
-	// TODO(dh): support fences
+func (chain SwapchainKHR) AcquireNextImage(timeout time.Duration, semaphore *Semaphore, fence *Fence) (uint32, error) {
 	var idx C.uint32_t
-	var sem C.VkSemaphore
+	var semaphoreHnd C.VkSemaphore
+	var fenceHnd C.VkFence
 	if semaphore != nil {
-		sem = semaphore.hnd
+		semaphoreHnd = semaphore.hnd
 	}
-	res := Result(C.domVkAcquireNextImageKHR(chain.dev.fps[vkAcquireNextImageKHR], chain.dev.hnd, chain.hnd, C.uint64_t(timeout), sem, nil, &idx))
+	if fence != nil {
+		fenceHnd = fence.hnd
+	}
+	res := Result(C.domVkAcquireNextImageKHR(chain.dev.fps[vkAcquireNextImageKHR], chain.dev.hnd, chain.hnd, C.uint64_t(timeout), semaphoreHnd, fenceHnd, &idx))
 	if res != Success {
 		return uint32(idx), res
 	}

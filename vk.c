@@ -119,3 +119,6 @@ VkResult domVkQueuePresentKHR(PFN_vkQueuePresentKHR fp, VkQueue queue, const VkP
 VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties) {
 	return (*fp)(physicalDevice, pLayerName, pPropertyCount, pProperties);
 }
+VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence) {
+	return (*fp)(device, pCreateInfo, pAllocator, pFence);
+}

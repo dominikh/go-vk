@@ -32,6 +32,7 @@ follow, then vendor extensions.
 - [x] vkCreateImageView
 - [x] vkCreateGraphicsPipelines
 - [x] vkCreateFramebuffer
+- [x] vkCreateFence
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCmdSetLineWidth
@@ -124,7 +125,6 @@ follow, then vendor extensions.
 - [ ] vkCreateQueryPool
 - [ ] vkCreatePipelineCache
 - [ ] vkCreateImage
-- [ ] vkCreateFence
 - [ ] vkCreateEvent
 - [ ] vkCreateDescriptorUpdateTemplate
 - [ ] vkCreateDescriptorSetLayout

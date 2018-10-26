@@ -56,6 +56,7 @@ const (
 	vkCmdEndRenderPass
 	vkCreateSemaphore
 	vkQueueSubmit
+	vkCreateFence
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -120,4 +121,5 @@ var deviceFpNames = [...]string{
 	vkAcquireNextImageKHR:     "vkAcquireNextImageKHR",
 	vkQueueSubmit:             "vkQueueSubmit",
 	vkQueuePresentKHR:         "vkQueuePresentKHR",
+	vkCreateFence:             "vkCreateFence",
 }

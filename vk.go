@@ -48,6 +48,7 @@ package vk
 // VkResult domVkCreateSemaphore(PFN_vkCreateSemaphore fp, VkDevice device, const VkSemaphoreCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSemaphore* pSemaphore);
 // VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence);
 // VkResult domVkEnumerateDeviceExtensionProperties(PFN_vkEnumerateDeviceExtensionProperties fp, VkPhysicalDevice physicalDevice, const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties);
+// VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence);
 import "C"
 import (
 	"bytes"
@@ -1911,8 +1912,7 @@ type SubmitInfo struct {
 	SignalSemaphores []Semaphore
 }
 
-func (queue *Queue) Submit(infos []SubmitInfo) error {
-	// TODO(dh): support fence
+func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 	var (
 		waitSemaphoreCount   uintptr
 		commandBufferCount   uintptr
@@ -1968,11 +1968,42 @@ func (queue *Queue) Submit(infos []SubmitInfo) error {
 		signalSemaphores += C.sizeof_VkSemaphore * uintptr(len(info.SignalSemaphores))
 	}
 
-	res := Result(C.domVkQueueSubmit(queue.fps[vkQueueSubmit], queue.hnd, C.uint32_t(len(infos)), (*C.VkSubmitInfo)(unsafe.Pointer(alloc)), nil))
+	var fenceHnd C.VkFence
+	if fence != nil {
+		fenceHnd = fence.hnd
+	}
+	res := Result(C.domVkQueueSubmit(queue.fps[vkQueueSubmit], queue.hnd, C.uint32_t(len(infos)), (*C.VkSubmitInfo)(unsafe.Pointer(alloc)), fenceHnd))
 	if res != Success {
 		return res
 	}
 	return nil
+}
+
+type Fence struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkFence)
+	hnd C.VkFence
+}
+
+type FenceCreateInfo struct {
+	Next  unsafe.Pointer
+	Flags FenceCreateFlags
+}
+
+func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
+	// TODO(dh): support custom allocators
+	cinfo := (*C.VkFenceCreateInfo)(calloc(1, C.sizeof_VkFenceCreateInfo))
+	defer C.free(unsafe.Pointer(cinfo))
+	*cinfo = C.VkFenceCreateInfo{
+		sType: C.VkStructureType(StructureTypeFenceCreateInfo),
+		pNext: info.Next,
+		flags: C.VkFenceCreateFlags(info.Flags),
+	}
+	var hnd C.VkFence
+	res := Result(C.domVkCreateFence(dev.fps[vkCreateFence], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return Fence{}, res
+	}
+	return Fence{hnd: hnd}, nil
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
