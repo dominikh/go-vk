@@ -8,11 +8,19 @@ import (
 	"unsafe"
 )
 
-func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
+func alloc(size C.size_t) unsafe.Pointer {
+	return C.calloc(1, size)
+}
+
+func allocn(nmemb int, size C.size_t) unsafe.Pointer {
 	if nmemb == 0 {
 		return nil
 	}
-	return C.calloc(nmemb, size)
+	return C.calloc(C.size_t(nmemb), size)
+}
+
+func free(ptr unsafe.Pointer) {
+	C.free(ptr)
 }
 
 // ucopy copies data from src to dst,
@@ -35,4 +43,31 @@ func ucopy1(dst, src unsafe.Pointer, size uintptr) {
 		(*[math.MaxInt32]byte)(dst)[:size],
 		(*[math.MaxInt32]byte)(src)[:size],
 	)
+}
+
+func externStrings(ss []string) (**C.char, func()) {
+	if len(ss) == 0 {
+		return nil, func() {}
+	}
+	var ptrs []unsafe.Pointer
+
+	ptr := allocn(len(ss), C.size_t(unsafe.Sizeof(uintptr(0))))
+	ptrs = append(ptrs, ptr)
+	slice := (*[math.MaxInt32]*C.char)(ptr)[:len(ss)]
+	for i, s := range ss {
+		slice[i] = C.CString(s)
+		ptrs = append(ptrs, unsafe.Pointer(slice[i]))
+	}
+	return (**C.char)(ptr), func() {
+		for _, ptr := range ptrs {
+			free(ptr)
+		}
+	}
+}
+
+func externFloat32(vs []float32) *C.float {
+	if len(vs) == 0 {
+		return nil
+	}
+	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
 }

@@ -41,8 +41,8 @@ type SwapchainKHR struct {
 
 func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (SwapchainKHR, error) {
 	// TODO(dh): support custom allocator
-	ptr := (*C.VkSwapchainCreateInfoKHR)(C.calloc(1, C.sizeof_VkSwapchainCreateInfoKHR))
-	defer C.free(unsafe.Pointer(ptr))
+	ptr := (*C.VkSwapchainCreateInfoKHR)(alloc(C.sizeof_VkSwapchainCreateInfoKHR))
+	defer free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeSwapchainCreateInfoKHR)
 	ptr.pNext = info.Next
 	ptr.surface = info.Surface.hnd
@@ -125,20 +125,20 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 	size3 := C.sizeof_uint32_t * uintptr(len(info.ImageIndices))
 	size4 := C.sizeof_VkResult * uintptr(len(info.Swapchains))
 	size := size0 + size1 + size2 + size3 + size4
-	alloc := C.calloc(1, C.size_t(size))
-	defer C.free(alloc)
-	cinfo := (*C.VkPresentInfoKHR)(alloc)
+	mem := alloc(C.size_t(size))
+	defer free(mem)
+	cinfo := (*C.VkPresentInfoKHR)(mem)
 	*cinfo = C.VkPresentInfoKHR{
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
 		pNext:              info.Next,
 		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
-		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(uintptr(alloc) + size0)),
+		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(uintptr(mem) + size0)),
 		swapchainCount:     C.uint32_t(len(info.Swapchains)),
-		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Pointer(uintptr(alloc) + size0 + size1)),
-		pImageIndices:      (*C.uint32_t)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2)),
+		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Pointer(uintptr(mem) + size0 + size1)),
+		pImageIndices:      (*C.uint32_t)(unsafe.Pointer(uintptr(mem) + size0 + size1 + size2)),
 	}
 	if len(results) != 0 {
-		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(alloc) + size0 + size1 + size2 + size3))
+		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(mem) + size0 + size1 + size2 + size3))
 	}
 	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
 	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)
