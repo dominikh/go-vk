@@ -1995,6 +1995,52 @@ func (dev *Device) ResetFences(fences []Fence) error {
 	return nil
 }
 
+type BufferCreateInfo struct {
+	Next               unsafe.Pointer
+	Flags              BufferCreateFlags
+	Size               DeviceSize
+	Usage              BufferUsageFlags
+	SharingMode        SharingMode
+	QueueFamilyIndices []uint32
+}
+
+type Buffer struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBuffer)
+	hnd C.VkBuffer
+}
+
+func (info BufferCreateInfo) c() *C.VkBufferCreateInfo {
+	size0 := uintptr(C.sizeof_VkBufferCreateInfo)
+	size1 := C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices))
+	size := size0 + size1
+	alloc := C.calloc(1, C.size_t(size))
+	cinfo := (*C.VkBufferCreateInfo)(alloc)
+	*cinfo = C.VkBufferCreateInfo{
+		sType:                 C.VkStructureType(StructureTypeBufferCreateInfo),
+		pNext:                 info.Next,
+		flags:                 C.VkBufferCreateFlags(info.Flags),
+		size:                  C.VkDeviceSize(info.Size),
+		usage:                 C.VkBufferUsageFlags(info.Usage),
+		sharingMode:           C.VkSharingMode(info.SharingMode),
+		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
+		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Pointer(uintptr(alloc) + size0)),
+	}
+	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
+	return cinfo
+}
+
+func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
+	var hnd C.VkBuffer
+	res := Result(C.domVkCreateBuffer(dev.fps[vkCreateBuffer], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return Buffer{}, res
+	}
+	return Buffer{hnd: hnd}, nil
+}
+
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
 	if nmemb == 0 {
 		return nil

@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,BufferCreateFlags,BufferUsageFlags
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -61,6 +61,8 @@ type AccessFlags uint32
 type DependencyFlags uint32
 type SubpassContents uint32
 type FenceCreateFlags uint32
+type BufferCreateFlags uint32
+type BufferUsageFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1381,6 +1383,29 @@ const (
 
 const (
 	FenceCreateSignaledBit FenceCreateFlags = 0x00000001
+)
+
+const (
+	BufferCreateSparseBindingBit   BufferCreateFlags = 0x00000001
+	BufferCreateSparseResidencyBit BufferCreateFlags = 0x00000002
+	BufferCreateSparseAliasedBit   BufferCreateFlags = 0x00000004
+	BufferCreateProtectedBit       BufferCreateFlags = 0x00000008
+)
+
+const (
+	BufferUsageTransferSrcBit                       BufferUsageFlags = 0x00000001
+	BufferUsageTransferDstBit                       BufferUsageFlags = 0x00000002
+	BufferUsageUniformTexelBufferBit                BufferUsageFlags = 0x00000004
+	BufferUsageStorageTexelBufferBit                BufferUsageFlags = 0x00000008
+	BufferUsageUniformBufferBit                     BufferUsageFlags = 0x00000010
+	BufferUsageStorageBufferBit                     BufferUsageFlags = 0x00000020
+	BufferUsageIndexBufferBit                       BufferUsageFlags = 0x00000040
+	BufferUsageVertexBufferBit                      BufferUsageFlags = 0x00000080
+	BufferUsageIndirectBufferBit                    BufferUsageFlags = 0x00000100
+	BufferUsageTransformFeedbackBufferBitEXT        BufferUsageFlags = 0x00000800
+	BufferUsageTransformFeedbackCounterBufferBitEXT BufferUsageFlags = 0x00001000
+	BufferUsageConditionalRenderingBitEXT           BufferUsageFlags = 0x00000200
+	BufferUsageRaytracingBitNVX                     BufferUsageFlags = 0x00000400
 )
 
 func (res Result) Error() string { return res.String() }

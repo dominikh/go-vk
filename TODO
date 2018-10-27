@@ -37,6 +37,7 @@ follow, then vendor extensions.
 - [x] vkCreateFence
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
+- [x] vkCreateBuffer
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetBlendConstants
@@ -131,7 +132,6 @@ follow, then vendor extensions.
 - [ ] vkCreateDescriptorPool
 - [ ] vkCreateComputePipelines
 - [ ] vkCreateBufferView
-- [ ] vkCreateBuffer
 - [ ] vkCmdWriteTimestamp
 - [ ] vkCmdWaitEvents
 - [ ] vkCmdUpdateBuffer

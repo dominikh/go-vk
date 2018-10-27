@@ -59,6 +59,7 @@ const (
 	vkCreateFence
 	vkWaitForFences
 	vkResetFences
+	vkCreateBuffer
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -126,4 +127,5 @@ var deviceFpNames = [...]string{
 	vkCreateFence:             "vkCreateFence",
 	vkWaitForFences:           "vkWaitForFences",
 	vkResetFences:             "vkResetFences",
+	vkCreateBuffer:            "vkCreateBuffer",
 }

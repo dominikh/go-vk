@@ -128,3 +128,6 @@ VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fe
 VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences) {
 	return (*fp)(device, fenceCount, pFences);
 }
+VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBuffer* pBuffer) {
+	return (*fp)(device, pCreateInfo, pAllocator, pBuffer);
+}
