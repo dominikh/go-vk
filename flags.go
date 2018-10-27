@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,BufferCreateFlags,BufferUsageFlags
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -1997,6 +1997,67 @@ func (flags FenceCreateFlags) String() string {
 	var out []string
 	if (flags & FenceCreateSignaledBit) != 0 {
 		out = append(out, "FenceCreateSignaledBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags BufferCreateFlags) String() string {
+	var out []string
+	if (flags & BufferCreateSparseBindingBit) != 0 {
+		out = append(out, "BufferCreateSparseBindingBit")
+	}
+	if (flags & BufferCreateSparseResidencyBit) != 0 {
+		out = append(out, "BufferCreateSparseResidencyBit")
+	}
+	if (flags & BufferCreateSparseAliasedBit) != 0 {
+		out = append(out, "BufferCreateSparseAliasedBit")
+	}
+	if (flags & BufferCreateProtectedBit) != 0 {
+		out = append(out, "BufferCreateProtectedBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags BufferUsageFlags) String() string {
+	var out []string
+	if (flags & BufferUsageTransferSrcBit) != 0 {
+		out = append(out, "BufferUsageTransferSrcBit")
+	}
+	if (flags & BufferUsageTransferDstBit) != 0 {
+		out = append(out, "BufferUsageTransferDstBit")
+	}
+	if (flags & BufferUsageUniformTexelBufferBit) != 0 {
+		out = append(out, "BufferUsageUniformTexelBufferBit")
+	}
+	if (flags & BufferUsageStorageTexelBufferBit) != 0 {
+		out = append(out, "BufferUsageStorageTexelBufferBit")
+	}
+	if (flags & BufferUsageUniformBufferBit) != 0 {
+		out = append(out, "BufferUsageUniformBufferBit")
+	}
+	if (flags & BufferUsageStorageBufferBit) != 0 {
+		out = append(out, "BufferUsageStorageBufferBit")
+	}
+	if (flags & BufferUsageIndexBufferBit) != 0 {
+		out = append(out, "BufferUsageIndexBufferBit")
+	}
+	if (flags & BufferUsageVertexBufferBit) != 0 {
+		out = append(out, "BufferUsageVertexBufferBit")
+	}
+	if (flags & BufferUsageIndirectBufferBit) != 0 {
+		out = append(out, "BufferUsageIndirectBufferBit")
+	}
+	if (flags & BufferUsageTransformFeedbackBufferBitEXT) != 0 {
+		out = append(out, "BufferUsageTransformFeedbackBufferBitEXT")
+	}
+	if (flags & BufferUsageTransformFeedbackCounterBufferBitEXT) != 0 {
+		out = append(out, "BufferUsageTransformFeedbackCounterBufferBitEXT")
+	}
+	if (flags & BufferUsageConditionalRenderingBitEXT) != 0 {
+		out = append(out, "BufferUsageConditionalRenderingBitEXT")
+	}
+	if (flags & BufferUsageRaytracingBitNVX) != 0 {
+		out = append(out, "BufferUsageRaytracingBitNVX")
 	}
 	return strings.Join(out, " | ")
 }
