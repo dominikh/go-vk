@@ -846,7 +846,11 @@ func (dev *Device) mustGetDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 func (dev *Device) getDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	return C.domVkGetDeviceProcAddr(dev.vkGetDeviceProcAddr, dev.hnd, cName)
+	fp := C.domVkGetDeviceProcAddr(dev.vkGetDeviceProcAddr, dev.hnd, cName)
+	if debug {
+		fmt.Fprintf(os.Stderr, "%s = %p\n", name, fp)
+	}
+	return fp
 }
 
 type Queue struct {
@@ -2070,8 +2074,8 @@ func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunct
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 	fp := C.vkGetInstanceProcAddr(instance, cName)
-	if debug && fp == nil {
-		fmt.Fprintln(os.Stderr, "no function pointer for", name)
+	if debug {
+		fmt.Fprintf(os.Stderr, "%s = %p\n", name, fp)
 	}
 	return fp
 }
