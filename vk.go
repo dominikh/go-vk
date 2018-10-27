@@ -36,6 +36,8 @@ var vkCreateInstance C.PFN_vkCreateInstance
 
 func init() {
 	assertSameSize(unsafe.Sizeof(Fence{}), C.sizeof_VkFence)
+	assertSameSize(unsafe.Sizeof(MemoryType{}), C.sizeof_VkMemoryType)
+	assertSameSize(unsafe.Sizeof(MemoryHeap{}), C.sizeof_VkMemoryHeap)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -464,6 +466,31 @@ func (dev *PhysicalDevice) Properties() *PhysicalDeviceProperties {
 			ResidencyAlignedMipSize:                  props.sparseProperties.residencyAlignedMipSize == C.VK_TRUE,
 			ResidencyNonResidentStrict:               props.sparseProperties.residencyNonResidentStrict == C.VK_TRUE,
 		},
+	}
+}
+
+type MemoryType struct {
+	PropertyFlags MemoryPropertyFlags
+	HeapIndex     uint32
+}
+
+type MemoryHeap struct {
+	Size  DeviceSize
+	Flags MemoryHeapFlags
+}
+
+type PhysicalDeviceMemoryProperties struct {
+	Types []MemoryType
+	Heaps []MemoryHeap
+}
+
+func (dev *PhysicalDevice) MemoryProperties() PhysicalDeviceMemoryProperties {
+	var props C.VkPhysicalDeviceMemoryProperties
+	C.domVkGetPhysicalDeviceMemoryProperties(dev.instance.fps[vkGetPhysicalDeviceMemoryProperties], dev.hnd, &props)
+
+	return PhysicalDeviceMemoryProperties{
+		Types: (*[C.VK_MAX_MEMORY_TYPES]MemoryType)(unsafe.Pointer(&props.memoryTypes))[:props.memoryTypeCount],
+		Heaps: (*[C.VK_MAX_MEMORY_TYPES]MemoryHeap)(unsafe.Pointer(&props.memoryHeaps))[:props.memoryHeapCount],
 	}
 }
 

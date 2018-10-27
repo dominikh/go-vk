@@ -134,3 +134,6 @@ VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBuffe
 void domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDevice device, VkBuffer buffer, VkMemoryRequirements* pMemoryRequirements) {
 	(*fp)(device, buffer, pMemoryRequirements);
 }
+void domVkGetPhysicalDeviceMemoryProperties(PFN_vkGetPhysicalDeviceMemoryProperties fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties* pMemoryProperties) {
+	(*fp)(physicalDevice, pMemoryProperties);
+}

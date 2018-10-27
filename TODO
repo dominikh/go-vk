@@ -16,6 +16,7 @@ follow, then vendor extensions.
 - [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
 - [x] vkGetPhysicalDeviceProperties
+- [x] vkGetPhysicalDeviceMemoryProperties
 - [x] vkGetPhysicalDeviceFeatures
 - [x] vkGetInstanceProcAddr
 - [x] vkGetDeviceQueue
@@ -68,7 +69,6 @@ follow, then vendor extensions.
 - [ ] vkGetPhysicalDeviceQueueFamilyProperties2
 - [ ] vkGetPhysicalDeviceProperties2
 - [ ] vkGetPhysicalDeviceMemoryProperties2
-- [ ] vkGetPhysicalDeviceMemoryProperties
 - [ ] vkGetPhysicalDeviceImageFormatProperties2
 - [ ] vkGetPhysicalDeviceImageFormatProperties
 - [ ] vkGetPhysicalDeviceFormatProperties2

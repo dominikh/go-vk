@@ -63,6 +63,8 @@ type SubpassContents uint32
 type FenceCreateFlags uint32
 type BufferCreateFlags uint32
 type BufferUsageFlags uint32
+type MemoryPropertyFlags uint32
+type MemoryHeapFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1408,6 +1410,21 @@ const (
 	BufferUsageRaytracingBitNVX                     BufferUsageFlags = 0x00000400
 )
 
+const (
+	MemoryPropertyDeviceLocalBit     MemoryPropertyFlags = 0x00000001
+	MemoryPropertyHostVisibleBit     MemoryPropertyFlags = 0x00000002
+	MemoryPropertyHostCoherentBit    MemoryPropertyFlags = 0x00000004
+	MemoryPropertyHostCachedBit      MemoryPropertyFlags = 0x00000008
+	MemoryPropertyLazilyAllocatedBit MemoryPropertyFlags = 0x00000010
+	MemoryPropertyProtectedBit       MemoryPropertyFlags = 0x00000020
+)
+
+const (
+	MemoryHeapDeviceLocalBit      MemoryHeapFlags = 0x00000001
+	MemoryHeapMultiInstanceBit    MemoryHeapFlags = 0x00000002
+	MemoryHeapMultiInstanceBitKHR MemoryHeapFlags = MemoryHeapMultiInstanceBit
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2058,6 +2075,43 @@ func (flags BufferUsageFlags) String() string {
 	}
 	if (flags & BufferUsageRaytracingBitNVX) != 0 {
 		out = append(out, "BufferUsageRaytracingBitNVX")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags MemoryPropertyFlags) String() string {
+	var out []string
+	if (flags & MemoryPropertyDeviceLocalBit) != 0 {
+		out = append(out, "MemoryPropertyDeviceLocalBit")
+	}
+	if (flags & MemoryPropertyHostVisibleBit) != 0 {
+		out = append(out, "MemoryPropertyHostVisibleBit")
+	}
+	if (flags & MemoryPropertyHostCoherentBit) != 0 {
+		out = append(out, "MemoryPropertyHostCoherentBit")
+	}
+	if (flags & MemoryPropertyHostCachedBit) != 0 {
+		out = append(out, "MemoryPropertyHostCachedBit")
+	}
+	if (flags & MemoryPropertyLazilyAllocatedBit) != 0 {
+		out = append(out, "MemoryPropertyLazilyAllocatedBit")
+	}
+	if (flags & MemoryPropertyProtectedBit) != 0 {
+		out = append(out, "MemoryPropertyProtectedBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags MemoryHeapFlags) String() string {
+	var out []string
+	if (flags & MemoryHeapDeviceLocalBit) != 0 {
+		out = append(out, "MemoryHeapDeviceLocalBit")
+	}
+	if (flags & MemoryHeapMultiInstanceBit) != 0 {
+		out = append(out, "MemoryHeapMultiInstanceBit")
+	}
+	if (flags & MemoryHeapMultiInstanceBitKHR) != 0 {
+		out = append(out, "MemoryHeapMultiInstanceBitKHR")
 	}
 	return strings.Join(out, " | ")
 }
