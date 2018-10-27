@@ -1,6 +1,15 @@
 /*
 Package vk provides bindings to the Vulkan graphics API.
 
+
+Documentation
+
+Vulkan is a complex beast, with a very extensive specification.
+It wouldn't be feasible to include the entire specification as part of the Go documentation.
+Where possible, we have copied parts of the specification (for example to describe constants),
+but in order to understand the full API, it is advised to read the specification.
+
+
 Dispatchable handles
 
 Vulkan has two kinds of handles: dispatchable and non-dispatchable.
