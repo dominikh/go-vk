@@ -6,13 +6,8 @@
 package vk
 
 // #cgo pkg-config: vulkan x11
-// #cgo CFLAGS: -DVK_NO_PROTOTYPES
-// #include <X11/Xlib.h>
-// #include <vulkan/vulkan_core.h>
-// #include <vulkan/vulkan_xlib.h>
-// #include <stdlib.h>
-// VkResult domVkCreateXlibSurfaceKHR(PFN_vkCreateXlibSurfaceKHR fp, VkInstance instance, const VkXlibSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
-// VkBool32 domVkGetPhysicalDeviceXlibPresentationSupportKHR(PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR fp, VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, Display* dpy, VisualID visualID);
+// #include "vk.h"
+// #include "surface_xlib.h"
 import "C"
 import "unsafe"
 

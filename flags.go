@@ -4,8 +4,7 @@
 package vk
 
 // #cgo pkg-config: vulkan
-// #cgo CFLAGS: -DVK_NO_PROTOTYPES
-// #include <vulkan/vulkan_core.h>
+// #include "vk.h"
 import "C"
 import (
 	"strings"
