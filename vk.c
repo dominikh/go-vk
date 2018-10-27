@@ -131,3 +131,6 @@ VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceC
 VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBuffer* pBuffer) {
 	return (*fp)(device, pCreateInfo, pAllocator, pBuffer);
 }
+void domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDevice device, VkBuffer buffer, VkMemoryRequirements* pMemoryRequirements) {
+	(*fp)(device, buffer, pMemoryRequirements);
+}

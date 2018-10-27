@@ -45,3 +45,4 @@ VkResult domVkCreateFence(PFN_vkCreateFence fp, VkDevice device, const VkFenceCr
 VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);
 VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences);
 VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBuffer* pBuffer);
+void     domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDevice device, VkBuffer buffer, VkMemoryRequirements* pMemoryRequirements);

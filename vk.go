@@ -2007,6 +2007,7 @@ type BufferCreateInfo struct {
 type Buffer struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBuffer)
 	hnd C.VkBuffer
+	dev *Device
 }
 
 func (info BufferCreateInfo) c() *C.VkBufferCreateInfo {
@@ -2039,6 +2040,18 @@ func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
 		return Buffer{}, res
 	}
 	return Buffer{hnd: hnd}, nil
+}
+
+type MemoryRequirements struct {
+	Size           DeviceSize
+	Alignment      DeviceSize
+	MemoryTypeBits uint32
+}
+
+func (buf *Buffer) MemoryRequirements() MemoryRequirements {
+	var reqs MemoryRequirements
+	C.domVkGetBufferMemoryRequirements(buf.dev.fps[vkGetBufferMemoryRequirements], buf.dev.hnd, buf.hnd, (*C.VkMemoryRequirements)(unsafe.Pointer(&reqs)))
+	return reqs
 }
 
 func calloc(nmemb C.size_t, size C.size_t) unsafe.Pointer {
