@@ -65,9 +65,9 @@ type SubpassContents uint32
 type FenceCreateFlags uint32
 type BufferCreateFlags uint32
 type BufferUsageFlags uint32
-
 type MemoryPropertyFlags uint32
 type MemoryHeapFlags uint32
+type MemoryMapFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL

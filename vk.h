@@ -51,3 +51,4 @@ void     domVkGetPhysicalDeviceProperties2(PFN_vkGetPhysicalDeviceProperties2 fp
 VkResult domVkAllocateMemory(PFN_vkAllocateMemory fp, VkDevice device, const VkMemoryAllocateInfo* pAllocateInfo, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory);
 VkResult domVkBindBufferMemory(PFN_vkBindBufferMemory fp, VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset);
 VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos);
+VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memory, VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, void** ppData);

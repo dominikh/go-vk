@@ -2227,6 +2227,15 @@ func (dev *Device) BindBufferMemory2(infos []BindBufferMemoryInfo) error {
 	return nil
 }
 
+func (dev *Device) MapMemory(mem DeviceMemory, offset, size DeviceSize, flags MemoryMapFlags) (uintptr, error) {
+	var ptr unsafe.Pointer
+	res := Result(C.domVkMapMemory(dev.fps[vkMapMemory], dev.hnd, mem.hnd, C.VkDeviceSize(offset), C.VkDeviceSize(size), C.VkMemoryMapFlags(flags), &ptr))
+	if res != Success {
+		return uintptr(ptr), res
+	}
+	return uintptr(ptr), nil
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 

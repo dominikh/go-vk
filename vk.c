@@ -149,3 +149,6 @@ VkResult domVkBindBufferMemory(PFN_vkBindBufferMemory fp, VkDevice device, VkBuf
 VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos) {
 	return (*fp)(device, bindInfoCount, pBindInfos);
 }
+VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memory, VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, void** ppData) {
+	return (*fp)(device, memory, offset, size, flags, ppData);
+}

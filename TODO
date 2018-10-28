@@ -12,6 +12,7 @@ follow, then vendor extensions.
 - [x] vkQueueWaitIdle
 - [x] vkQueueSubmit
 - [x] vkQueuePresentKHR
+- [x] vkMapMemory
 - [x] vkGetSwapchainImagesKHR
 - [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
@@ -62,7 +63,6 @@ follow, then vendor extensions.
 - [ ] vkResetDescriptorPool
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
-- [ ] vkMapMemory
 - [ ] vkInvalidateMappedMemoryRanges
 - [ ] vkGetRenderAreaGranularity
 - [ ] vkGetQueryPoolResults
