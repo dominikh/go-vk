@@ -580,21 +580,21 @@ const (
 const (
 	// The alpha channel, if it exists, of the images is ignored in the compositing process.
 	// Instead, the image is treated as if it has a constant alpha of 1.0.
-	CompositeAlphaOpaqueBitKHR CompositeAlphaFlagsKHR = C.VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR
+	CompositeAlphaOpaqueBitKHR CompositeAlphaFlagsKHR = 0x00000001
 
 	// The alpha channel, if it exists, of the images is respected in the compositing process.
 	// The non-alpha channels of the image are expected to already be multiplied by the alpha channel by the application.
-	CompositeAlphaPreMultipliedBitKHR CompositeAlphaFlagsKHR = C.VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR
+	CompositeAlphaPreMultipliedBitKHR CompositeAlphaFlagsKHR = 0x00000002
 
 	// The alpha channel, if it exists, of the images is respected in the compositing process.
 	// The non-alpha channels of the image are not expected to already be multiplied by the alpha channel by the application;
 	// instead, the compositor will multiply the non-alpha channels of the image by the alpha channel during compositing.
-	CompositeAlphaPostMultipliedBitKHR CompositeAlphaFlagsKHR = C.VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR
+	CompositeAlphaPostMultipliedBitKHR CompositeAlphaFlagsKHR = 0x00000004
 
 	// The way in which the presentation engine treats the alpha channel in the images is unknown to the Vulkan API.
 	// Instead, the application is responsible for setting the composite alpha blending mode using native window system commands.
 	// If the application does not set the blending mode using native window system commands, then a platform-specific default will be used.
-	CompositeAlphaInheritBitKHR CompositeAlphaFlagsKHR = C.VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR
+	CompositeAlphaInheritBitKHR CompositeAlphaFlagsKHR = 0x00000008
 )
 
 const (
