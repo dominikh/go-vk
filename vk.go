@@ -23,8 +23,12 @@ type (
 	DeviceSize = uint64
 )
 
-const APIVersion10 = uint32(C.VK_API_VERSION_1_0)
-const APIVersion11 = uint32(C.VK_API_VERSION_1_1)
+const (
+	// Vulkan 1.0 version number
+	APIVersion10 = uint32(C.VK_API_VERSION_1_0)
+	// Vulkan 1.1 version number
+	APIVersion11 = uint32(C.VK_API_VERSION_1_1)
+)
 
 var vkEnumerateInstanceVersion C.PFN_vkEnumerateInstanceVersion
 var vkEnumerateInstanceExtensionProperties C.PFN_vkEnumerateInstanceExtensionProperties
@@ -58,24 +62,33 @@ func init() {
 		C.PFN_vkCreateInstance(mustVkGetInstanceProcAddr(nil, "vkCreateInstance"))
 }
 
+// MakeVersion constructs an API version number.
 func MakeVersion(major, minor, patch uint32) uint32 {
 	return major<<22 | minor<<12 | patch
 }
 
 type InstanceCreateInfo struct {
-	Next                  unsafe.Pointer
-	ApplicationInfo       *ApplicationInfo
-	EnabledLayerNames     []string
+	Next unsafe.Pointer
+	// If not nil, this information helps implementations recognize behavior inherent to classes of applications
+	ApplicationInfo *ApplicationInfo
+	// Names of layers to enable for the created instance
+	EnabledLayerNames []string
+	// Names of extensions to enable
 	EnabledExtensionNames []string
 }
 
 type ApplicationInfo struct {
-	Next               unsafe.Pointer
-	ApplicationName    string
+	Next unsafe.Pointer
+	// The name of the application
+	ApplicationName string
+	// The developer-supplied version number of the application
 	ApplicationVersion uint32
-	EngineName         string
-	EngineVersion      uint32
-	APIVersion         uint32
+	// The name of the engine (if any) used to create the application
+	EngineName string
+	// The developer-supplied version number of the engine used to create the application
+	EngineVersion uint32
+	// The highest version of Vulkan that the application is designed to use
+	APIVersion uint32
 }
 
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
