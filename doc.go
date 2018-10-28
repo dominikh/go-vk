@@ -13,10 +13,11 @@ but in order to understand the full API, it is advised to read the specification
 Performance
 
 Using the Go bindings will be slower than using C or C++, for many reasons.
-- With CGo, every call into C involves a context switch.
-- We have to copy a lot of data to be able to pass it to C
-- Some unsafe patterns in the C API (such as pNext extension pointers)
-  are wrapped in a safer way in Go, incurring additional overhead.
+
+  - With CGo, every call into C involves a context switch.
+  - We have to copy a lot of data to be able to pass it to C
+  - Some unsafe patterns in the C API (such as pNext extension pointers)
+    are wrapped in a safer way in Go, incurring additional overhead.
 
 Some of this cost can be mitigated, however.
 Unlike OpenGL, Vulkan allows construction and reuse of command buffers (command lists).
