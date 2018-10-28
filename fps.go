@@ -65,6 +65,7 @@ const (
 	vkGetBufferMemoryRequirements
 	vkAllocateMemory
 	vkBindBufferMemory
+	vkBindBufferMemory2
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -138,4 +139,5 @@ var deviceFpNames = [...]string{
 	vkGetBufferMemoryRequirements: "vkGetBufferMemoryRequirements",
 	vkAllocateMemory:              "vkAllocateMemory",
 	vkBindBufferMemory:            "vkBindBufferMemory",
+	vkBindBufferMemory2:           "vkBindBufferMemory2",
 }

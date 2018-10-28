@@ -2199,6 +2199,34 @@ func (dev *Device) BindBufferMemory(buf Buffer, mem DeviceMemory, offset DeviceS
 	return nil
 }
 
+type BindBufferMemoryInfo struct {
+	Extensions   []Extension
+	Buffer       Buffer
+	Memory       DeviceMemory
+	MemoryOffset DeviceSize
+}
+
+func (dev *Device) BindBufferMemory2(infos []BindBufferMemoryInfo) error {
+	mem := allocn(len(infos), C.sizeof_VkBindBufferMemoryInfo)
+	defer free(mem)
+	cinfos := (*[1 << 31]C.VkBindBufferMemoryInfo)(mem)[:len(infos)]
+	for i, info := range infos {
+		cinfos[i] = C.VkBindBufferMemoryInfo{
+			sType:        C.VkStructureType(StructureTypeBindBufferMemoryInfo),
+			pNext:        buildChain(info.Extensions),
+			buffer:       info.Buffer.hnd,
+			memory:       info.Memory.hnd,
+			memoryOffset: C.VkDeviceSize(info.MemoryOffset),
+		}
+		defer internalizeChain(info.Extensions, cinfos[i].pNext)
+	}
+	res := Result(C.domVkBindBufferMemory2(dev.fps[vkBindBufferMemory2], dev.hnd, C.uint32_t(len(infos)), (*C.VkBindBufferMemoryInfo)(mem)))
+	if res != Success {
+		return res
+	}
+	return nil
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 

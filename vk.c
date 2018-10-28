@@ -146,3 +146,6 @@ VkResult domVkAllocateMemory(PFN_vkAllocateMemory fp, VkDevice device, const VkM
 VkResult domVkBindBufferMemory(PFN_vkBindBufferMemory fp, VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset) {
 	return (*fp)(device, buffer, memory, memoryOffset);
 }
+VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos) {
+	return (*fp)(device, bindInfoCount, pBindInfos);
+}

@@ -47,6 +47,8 @@ follow, then vendor extensions.
 - [x] vkCmdDraw
 - [x] vkCmdBindPipeline
 - [x] vkCmdBeginRenderPass
+- [x] vkBindBufferMemory2
+- [x] vkBindBufferMemory
 - [x] vkBeginCommandBuffer
 - [x] vkAllocateMemory
 - [x] vkAllocateCommandBuffers
@@ -174,6 +176,4 @@ follow, then vendor extensions.
 - [ ] vkCmdBeginQuery
 - [ ] vkBindImageMemory2
 - [ ] vkBindImageMemory
-- [ ] vkBindBufferMemory2
-- [ ] vkBindBufferMemory
 - [ ] vkAllocateDescriptorSets
