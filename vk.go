@@ -2106,7 +2106,6 @@ type BufferCreateInfo struct {
 type Buffer struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBuffer)
 	hnd C.VkBuffer
-	dev *Device
 }
 
 func (info BufferCreateInfo) c() *C.VkBufferCreateInfo {
@@ -2150,9 +2149,9 @@ type MemoryRequirements struct {
 	// must be kept identical to C struct
 }
 
-func (buf *Buffer) MemoryRequirements() MemoryRequirements {
+func (dev *Device) BufferMemoryRequirements(buf Buffer) MemoryRequirements {
 	var reqs MemoryRequirements
-	C.domVkGetBufferMemoryRequirements(buf.dev.fps[vkGetBufferMemoryRequirements], buf.dev.hnd, buf.hnd, (*C.VkMemoryRequirements)(unsafe.Pointer(&reqs)))
+	C.domVkGetBufferMemoryRequirements(dev.fps[vkGetBufferMemoryRequirements], dev.hnd, buf.hnd, (*C.VkMemoryRequirements)(unsafe.Pointer(&reqs)))
 	return reqs
 }
 
@@ -2190,6 +2189,14 @@ func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error
 		return DeviceMemory{}, res
 	}
 	return DeviceMemory{hnd: hnd}, nil
+}
+
+func (dev *Device) BindBufferMemory(buf Buffer, mem DeviceMemory, offset DeviceSize) error {
+	res := Result(C.domVkBindBufferMemory(dev.fps[vkBindBufferMemory], dev.hnd, buf.hnd, mem.hnd, C.VkDeviceSize(offset)))
+	if res != Success {
+		return res
+	}
+	return nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

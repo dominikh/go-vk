@@ -143,3 +143,6 @@ void domVkGetPhysicalDeviceProperties2(PFN_vkGetPhysicalDeviceProperties2 fp, Vk
 VkResult domVkAllocateMemory(PFN_vkAllocateMemory fp, VkDevice device, const VkMemoryAllocateInfo* pAllocateInfo, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
 	return (*fp)(device, pAllocateInfo, pAllocator, pMemory);
 }
+VkResult domVkBindBufferMemory(PFN_vkBindBufferMemory fp, VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset) {
+	return (*fp)(device, buffer, memory, memoryOffset);
+}
