@@ -63,6 +63,7 @@ const (
 	vkResetFences
 	vkCreateBuffer
 	vkGetBufferMemoryRequirements
+	vkAllocateMemory
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -134,4 +135,5 @@ var deviceFpNames = [...]string{
 	vkResetFences:                 "vkResetFences",
 	vkCreateBuffer:                "vkCreateBuffer",
 	vkGetBufferMemoryRequirements: "vkGetBufferMemoryRequirements",
+	vkAllocateMemory:              "vkAllocateMemory",
 }

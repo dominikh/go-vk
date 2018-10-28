@@ -2156,6 +2156,42 @@ func (buf *Buffer) MemoryRequirements() MemoryRequirements {
 	return reqs
 }
 
+type MemoryAllocateInfo struct {
+	Extensions      []Extension
+	AllocationSize  DeviceSize
+	MemoryTypeIndex uint32
+}
+
+func (info MemoryAllocateInfo) c() *C.VkMemoryAllocateInfo {
+	cinfo := (*C.VkMemoryAllocateInfo)(alloc(C.sizeof_VkMemoryAllocateInfo))
+	*cinfo = C.VkMemoryAllocateInfo{
+		sType:           C.VkStructureType(StructureTypeMemoryAllocateInfo),
+		pNext:           buildChain(info.Extensions),
+		allocationSize:  C.VkDeviceSize(info.AllocationSize),
+		memoryTypeIndex: C.uint32_t(info.MemoryTypeIndex),
+	}
+	return cinfo
+}
+
+// DeviceMemory is an opaque handle to a device memory object.
+type DeviceMemory struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDeviceMemory)
+	hnd C.VkDeviceMemory
+}
+
+func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer free(unsafe.Pointer(cinfo))
+	defer internalizeChain(info.Extensions, cinfo.pNext)
+	var hnd C.VkDeviceMemory
+	res := Result(C.domVkAllocateMemory(dev.fps[vkAllocateMemory], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return DeviceMemory{}, res
+	}
+	return DeviceMemory{hnd: hnd}, nil
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
