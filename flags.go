@@ -57,12 +57,15 @@ type ImageLayout uint32
 type PipelineBindPoint uint32
 type SubpassDescriptionFlags uint32
 type PipelineStageFlags uint32
+
+// Bitmask specifying memory access types that will participate in a memory dependency
 type AccessFlags uint32
 type DependencyFlags uint32
 type SubpassContents uint32
 type FenceCreateFlags uint32
 type BufferCreateFlags uint32
 type BufferUsageFlags uint32
+
 type MemoryPropertyFlags uint32
 type MemoryHeapFlags uint32
 
@@ -601,31 +604,31 @@ const (
 	// ImageUsageTransferDstBit specifies that the image can be used as the destination of a transfer command.
 	ImageUsageTransferDstBit ImageUsageFlags = 0x00000002
 
-	// ImageUsageSampledBit specifies that the image can be used to create a VkImageView
-	// suitable for occupying a VkDescriptorSet slot either of type VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
-	// or VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, and be sampled by a shader.
+	// ImageUsageSampledBit specifies that the image can be used to create an ImageView
+	// suitable for occupying a DescriptorSet slot either of type DescriptorTypeSampledImage
+	// or DescriptorTypeCombinedImageSampler, and be sampled by a shader.
 	ImageUsageSampledBit ImageUsageFlags = 0x00000004
 
-	// ImageUsageStorageBit specifies that the image can be used to create a VkImageView
-	// suitable for occupying a VkDescriptorSet slot of type VK_DESCRIPTOR_TYPE_STORAGE_IMAGE.
+	// ImageUsageStorageBit specifies that the image can be used to create an ImageView
+	// suitable for occupying a DescriptorSet slot of type DescriptorTypeStorageImage.
 	ImageUsageStorageBit ImageUsageFlags = 0x00000008
 
-	// ImageUsageColorAttachmentBit specifies that the image can be used to create a VkImageView
-	// suitable for use as a color or resolve attachment in a VkFramebuffer.
+	// ImageUsageColorAttachmentBit specifies that the image can be used to create an ImageView
+	// suitable for use as a color or resolve attachment in a Framebuffer.
 	ImageUsageColorAttachmentBit ImageUsageFlags = 0x00000010
 
-	// ImageUsageDepthStencilAttachmentBit specifies that the image can be used to create a VkImageView
-	// suitable for use as a depth/stencil attachment in a VkFramebuffer.
+	// ImageUsageDepthStencilAttachmentBit specifies that the image can be used to create an ImageView
+	// suitable for use as a depth/stencil attachment in a Framebuffer.
 	ImageUsageDepthStencilAttachmentBit ImageUsageFlags = 0x00000020
 
 	// ImageUsageTransientAttachmentBit specifies that the memory bound to this image will have been allocated
-	// with the VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT (see Memory Allocation for more detail).
-	// This bit can be set for any image that can be used to create a VkImageView
+	// with the MemoryPropertyLazilyAllocatedBit (see Memory Allocation for more detail).
+	// This bit can be set for any image that can be used to create an ImageView
 	// suitable for use as a color, resolve, depth/stencil, or input attachment.
 	ImageUsageTransientAttachmentBit ImageUsageFlags = 0x00000040
 
-	// ImageUsageInputAttachmentBit specifies that the image can be used to create a VkImageView suitable
-	// for occupying VkDescriptorSet slot of type VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+	// ImageUsageInputAttachmentBit specifies that the image can be used to create an ImageView suitable
+	// for occupying DescriptorSet slot of type DescriptorTypeInputAttachment;
 	// be read from a shader as an input attachment; and be used as an input attachment in a framebuffer.
 	ImageUsageInputAttachmentBit ImageUsageFlags = 0x00000080
 )
@@ -883,12 +886,12 @@ const (
 
 	// CommandPoolCreateResetCommandBufferBit allows any command buffer allocated from a pool
 	// to be individually reset to the initial state;
-	// either by calling vkResetCommandBuffer, or via the implicit reset when calling vkBeginCommandBuffer.
-	// If this flag is not set on a pool, then vkResetCommandBuffer must not be called for any command buffer allocated from that pool.
+	// either by calling ResetCommandBuffer, or via the implicit reset when calling BeginCommandBuffer.
+	// If this flag is not set on a pool, then ResetCommandBuffer must not be called for any command buffer allocated from that pool.
 	CommandPoolCreateResetCommandBufferBit CommandPoolCreateFlags = 0x00000002
 
 	// CommandPoolCreateProtectedBit specifies that command buffers allocated from the pool are protected command buffers.
-	// If the protected memory feature is not enabled, the VK_COMMAND_POOL_CREATE_PROTECTED_BIT bit of flags must not be set.
+	// If the protected memory feature is not enabled, the CommandPoolCreateProtectedBit bit of flags must not be set.
 	CommandPoolCreateProtectedBit CommandPoolCreateFlags = 0x00000004
 )
 
@@ -1341,33 +1344,91 @@ const (
 )
 
 const (
-	AccessIndirectCommandReadBit               AccessFlags = 0x00000001
-	AccessIndexReadBit                         AccessFlags = 0x00000002
-	AccessVertexAttributeReadBit               AccessFlags = 0x00000004
-	AccessUniformReadBit                       AccessFlags = 0x00000008
-	AccessInputAttachmentReadBit               AccessFlags = 0x00000010
-	AccessShaderReadBit                        AccessFlags = 0x00000020
-	AccessShaderWriteBit                       AccessFlags = 0x00000040
-	AccessColorAttachmentReadBit               AccessFlags = 0x00000080
-	AccessColorAttachmentWriteBit              AccessFlags = 0x00000100
-	AccessDepthStencilAttachmentReadBit        AccessFlags = 0x00000200
-	AccessDepthStencilAttachmentWriteBit       AccessFlags = 0x00000400
-	AccessTransferReadBit                      AccessFlags = 0x00000800
-	AccessTransferWriteBit                     AccessFlags = 0x00001000
-	AccessHostReadBit                          AccessFlags = 0x00002000
-	AccessHostWriteBit                         AccessFlags = 0x00004000
-	AccessMemoryReadBit                        AccessFlags = 0x00008000
-	AccessMemoryWriteBit                       AccessFlags = 0x00010000
-	AccessTransformFeedbackWriteBitEXT         AccessFlags = 0x02000000
-	AccessTransformFeedbackCounterReadBitEXT   AccessFlags = 0x04000000
-	AccessTransformFeedbackCounterWriteBitEXT  AccessFlags = 0x08000000
-	AccessConditionalRenderingReadBitEXT       AccessFlags = 0x00100000
-	AccessCommandProcessReadBitNVX             AccessFlags = 0x00020000
-	AccessCommandProcessWriteBitNVX            AccessFlags = 0x00040000
+	// AccessIndirectCommandReadBit specifies read access to indirect command data read as part of an indirect drawing or dispatch command.
+	AccessIndirectCommandReadBit AccessFlags = 0x00000001
+
+	// AccessIndexReadBit specifies read access to an index buffer as part of an indexed drawing command, bound by BindIndexBuffer.
+	AccessIndexReadBit AccessFlags = 0x00000002
+
+	// AccessVertexAttributeReadBit specifies read access to a vertex buffer as part of a drawing command, bound by BindVertexBuffers.
+	AccessVertexAttributeReadBit AccessFlags = 0x00000004
+
+	// AccessUniformReadBit specifies read access to a uniform buffer.
+	AccessUniformReadBit AccessFlags = 0x00000008
+
+	// AccessInputAttachmentReadBit specifies read access to an input attachment within a render pass during fragment shading.
+	AccessInputAttachmentReadBit AccessFlags = 0x00000010
+
+	// AccessShaderReadBit specifies read access to a storage buffer, uniform texel buffer, storage texel buffer, sampled image, or storage image.
+	AccessShaderReadBit AccessFlags = 0x00000020
+
+	// AccessShaderWriteBit specifies write access to a storage buffer, storage texel buffer, or storage image.
+	AccessShaderWriteBit AccessFlags = 0x00000040
+
+	// AccessColorAttachmentReadBit specifies read access to a color attachment, such as via blending, logic operations, or via certain subpass load operations.
+	// It does not include advanced blend operations.
+	AccessColorAttachmentReadBit AccessFlags = 0x00000080
+
+	// AccessColorAttachmentWriteBit specifies write access to a color or resolve attachment during a render pass or via certain subpass load and store operations.
+	AccessColorAttachmentWriteBit AccessFlags = 0x00000100
+
+	// AccessDepthStencilAttachmentReadBit specifies read access to a depth/stencil attachment, via depth or stencil operations or via certain subpass load operations.
+	AccessDepthStencilAttachmentReadBit AccessFlags = 0x00000200
+
+	// AccessDepthStencilAttachmentWriteBit specifies write access to a depth/stencil attachment, via depth or stencil operations or via certain subpass load and store operations.
+	AccessDepthStencilAttachmentWriteBit AccessFlags = 0x00000400
+
+	// AccessTransferReadBit specifies read access to an image or buffer in a copy operation.
+	AccessTransferReadBit AccessFlags = 0x00000800
+
+	// AccessTransferWriteBit specifies write access to an image or buffer in a clear or copy operation.
+	AccessTransferWriteBit AccessFlags = 0x00001000
+
+	// AccessHostReadBit specifies read access by a host operation.
+	// Accesses of this type are not performed through a resource, but directly on memory.
+	AccessHostReadBit AccessFlags = 0x00002000
+
+	// AccessHostWriteBit specifies write access by a host operation.
+	// Accesses of this type are not performed through a resource, but directly on memory.
+	AccessHostWriteBit AccessFlags = 0x00004000
+
+	// AccessMemoryReadBit specifies read access via non-specific entities.
+	// These entities include the Vulkan device and host, but may also include entities external to the Vulkan device or otherwise not part of the core Vulkan pipeline.
+	// When included in a destination access mask, makes all available writes visible to all future read accesses on entities known to the Vulkan device.
+	AccessMemoryReadBit AccessFlags = 0x00008000
+
+	// AccessMemoryWriteBit specifies write access via non-specific entities.
+	// These entities include the Vulkan device and host, but may also include entities external to the Vulkan device or otherwise not part of the core Vulkan pipeline.
+	// When included in a source access mask, all writes that are performed by entities known to the Vulkan device are made available.
+	// When included in a destination access mask, makes all available writes visible to all future write accesses on entities known to the Vulkan device.
+	AccessMemoryWriteBit AccessFlags = 0x00010000
+
+	// AccessTransformFeedbackWriteBitEXT specifies write access to a transform feedback buffer made when transform feedback is active.
+	AccessTransformFeedbackWriteBitEXT AccessFlags = 0x02000000
+
+	// AccessTransformFeedbackCounterReadBitEXT specifies read access to a transform feedback counter buffer which is read when BeginTransformFeedbackEXT executes.
+	AccessTransformFeedbackCounterReadBitEXT AccessFlags = 0x04000000
+
+	// AccessTransformFeedbackCounterWriteBitEXT specifies write access to a transform feedback counter buffer which is written when EndTransformFeedbackEXT executes.
+	AccessTransformFeedbackCounterWriteBitEXT AccessFlags = 0x08000000
+
+	// AccessConditionalRenderingReadBitEXT specifies read access to a predicate as part of conditional rendering.
+	AccessConditionalRenderingReadBitEXT AccessFlags = 0x00100000
+
+	// AccessCommandProcessReadBitNVX specifies reads from Buffer inputs to ProcessCommandsNVX.
+	AccessCommandProcessReadBitNVX AccessFlags = 0x00020000
+
+	// AccessCommandProcessWriteBitNVX specifies writes to the target command buffer in ProcessCommandsNVX.
+	AccessCommandProcessWriteBitNVX AccessFlags = 0x00040000
+
+	// AccessColorAttachmentReadNoncoherentBitEXT is similar to AccessColorAttachmentReadBit, but also includes advanced blend operations.
 	AccessColorAttachmentReadNoncoherentBitEXT AccessFlags = 0x00080000
-	AccessShadingRateImageReadBitNV            AccessFlags = 0x00800000
-	AccessAccelerationStructureReadBitNVX      AccessFlags = 0x00200000
-	AccessAccelerationStructureWriteBitNVX     AccessFlags = 0x00400000
+
+	// AccessShadingRateImageReadBitNV specifies read access to a shading rate image as part of a drawing command, as bound by BindShadingRateImageNV.
+	AccessShadingRateImageReadBitNV AccessFlags = 0x00800000
+
+	AccessAccelerationStructureReadBitNVX  AccessFlags = 0x00200000
+	AccessAccelerationStructureWriteBitNVX AccessFlags = 0x00400000
 )
 
 const (
@@ -1395,19 +1456,46 @@ const (
 )
 
 const (
-	BufferUsageTransferSrcBit                       BufferUsageFlags = 0x00000001
-	BufferUsageTransferDstBit                       BufferUsageFlags = 0x00000002
-	BufferUsageUniformTexelBufferBit                BufferUsageFlags = 0x00000004
-	BufferUsageStorageTexelBufferBit                BufferUsageFlags = 0x00000008
-	BufferUsageUniformBufferBit                     BufferUsageFlags = 0x00000010
-	BufferUsageStorageBufferBit                     BufferUsageFlags = 0x00000020
-	BufferUsageIndexBufferBit                       BufferUsageFlags = 0x00000040
-	BufferUsageVertexBufferBit                      BufferUsageFlags = 0x00000080
-	BufferUsageIndirectBufferBit                    BufferUsageFlags = 0x00000100
-	BufferUsageTransformFeedbackBufferBitEXT        BufferUsageFlags = 0x00000800
+	// BufferUsageTransferSrcBit specifies that the buffer can be used as the source of a transfer command (see the definition of PipelineStageTransferBit).
+	BufferUsageTransferSrcBit BufferUsageFlags = 0x00000001
+
+	// BufferUsageTransferDstBit specifies that the buffer can be used as the destination of a transfer command.
+	BufferUsageTransferDstBit BufferUsageFlags = 0x00000002
+
+	// BufferUsageUniformTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for occupying a DescriptorSet slot of type DescriptorTypeUniformTexelBuffer.
+	BufferUsageUniformTexelBufferBit BufferUsageFlags = 0x00000004
+
+	// BufferUsageStorageTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for occupying a DescriptorSet slot of type DescriptorTypeStorageTexelBUFFER.
+	BufferUsageStorageTexelBufferBit BufferUsageFlags = 0x00000008
+
+	// BufferUsageUniformBufferBit specifies that the buffer can be used in a DescriptorBufferInfo suitable for occupying a DescriptorSet slot either of type DescriptorTypeUniformBuffer or DescriptorTypeUniformBufferDynamic.
+	BufferUsageUniformBufferBit BufferUsageFlags = 0x00000010
+
+	// BufferUsageStorageBufferBit specifies that the buffer can be used in a DescriptorBufferInfo suitable for occupying
+	// a DescriptorSet slot either of type DescriptorTypeStorageBuffer or DescriptorTypeStorageBufferDynamic.
+	BufferUsageStorageBufferBit BufferUsageFlags = 0x00000020
+
+	// BufferUsageIndexBufferBit specifies that the buffer is suitable for passing as the buffer parameter to BindIndexBuffer.
+	BufferUsageIndexBufferBit BufferUsageFlags = 0x00000040
+
+	// BufferUsageVertexBufferBit specifies that the buffer is suitable for passing as an element of the pBuffers array to BindVertexBuffers.
+	BufferUsageVertexBufferBit BufferUsageFlags = 0x00000080
+
+	// BufferUsageIndirectBufferBit specifies that the buffer is suitable for passing as the buffer parameter to
+	// DrawIndirect, DrawIndexedIndirect, DrawMeshTasksIndirectNV, DrawMeshTasksIndirectCount, or DispatchIndirect.
+	// It is also suitable for passing as the buffer member of IndirectCommandsTokenNVX, or sequencesCountBuffer or sequencesIndexBuffer member of CmdProcessCommandsInfoNVX
+	BufferUsageIndirectBufferBit BufferUsageFlags = 0x00000100
+
+	// BufferUsageTransformFeedbackBufferBitEXT specifies that the buffer is suitable for using for binding as a transform feedback buffer with BindTransformFeedbackBuffersEXT.
+	BufferUsageTransformFeedbackBufferBitEXT BufferUsageFlags = 0x00000800
+
+	// BufferUsageTransformFeedbackCounterBufferBitEXT specifies that the buffer is suitable for using as a counter buffer with BeginTransformFeedbackEXT and EndTransformFeedbackEXT.
 	BufferUsageTransformFeedbackCounterBufferBitEXT BufferUsageFlags = 0x00001000
-	BufferUsageConditionalRenderingBitEXT           BufferUsageFlags = 0x00000200
-	BufferUsageRaytracingBitNVX                     BufferUsageFlags = 0x00000400
+
+	// BufferUsageConditionalRenderingBitEXT specifies that the buffer is suitable for passing as the buffer parameter to BeginConditionalRenderingEXT.
+	BufferUsageConditionalRenderingBitEXT BufferUsageFlags = 0x00000200
+
+	BufferUsageRaytracingBitNVX BufferUsageFlags = 0x00000400
 )
 
 const (
