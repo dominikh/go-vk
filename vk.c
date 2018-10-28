@@ -137,3 +137,6 @@ void domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDe
 void domVkGetPhysicalDeviceMemoryProperties(PFN_vkGetPhysicalDeviceMemoryProperties fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties* pMemoryProperties) {
 	(*fp)(physicalDevice, pMemoryProperties);
 }
+void domVkGetPhysicalDeviceProperties2(PFN_vkGetPhysicalDeviceProperties2 fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2* pProperties) {
+	(*fp)(physicalDevice, pProperties);
+}

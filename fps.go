@@ -9,6 +9,7 @@ const (
 	vkGetPhysicalDeviceQueueFamilyProperties
 	vkEnumerateDeviceExtensionProperties
 	vkGetPhysicalDeviceMemoryProperties
+	vkGetPhysicalDeviceProperties2
 
 	// VK_KHR_surface
 	vkGetPhysicalDeviceSurfaceSupportKHR
@@ -79,6 +80,7 @@ var instanceFpNames = [...]string{
 	vkGetPhysicalDeviceQueueFamilyProperties: "vkGetPhysicalDeviceQueueFamilyProperties",
 	vkEnumerateDeviceExtensionProperties:     "vkEnumerateDeviceExtensionProperties",
 	vkGetPhysicalDeviceMemoryProperties:      "vkGetPhysicalDeviceMemoryProperties",
+	vkGetPhysicalDeviceProperties2:           "vkGetPhysicalDeviceProperties2",
 
 	vkGetPhysicalDeviceSurfaceSupportKHR:          "vkGetPhysicalDeviceSurfaceSupportKHR",
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR:     "vkGetPhysicalDeviceSurfaceCapabilitiesKHR",

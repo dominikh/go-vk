@@ -47,3 +47,4 @@ VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceC
 VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBuffer* pBuffer);
 void     domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDevice device, VkBuffer buffer, VkMemoryRequirements* pMemoryRequirements);
 void     domVkGetPhysicalDeviceMemoryProperties(PFN_vkGetPhysicalDeviceMemoryProperties fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties* pMemoryProperties);
+void     domVkGetPhysicalDeviceProperties2(PFN_vkGetPhysicalDeviceProperties2 fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2* pProperties);
