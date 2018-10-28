@@ -1132,7 +1132,6 @@ func (dev *Device) WaitIdle() error {
 type Image struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImage)
 	hnd C.VkImage
-	dev *Device
 }
 
 func (img Image) String() string {
@@ -1148,6 +1147,7 @@ type ImageView struct {
 
 type ImageViewCreateInfo struct {
 	Extensions       []Extension
+	Image            Image
 	ViewType         ImageViewType
 	Format           Format
 	Components       ComponentMapping
@@ -1169,14 +1169,14 @@ type ImageSubresourceRange struct {
 	LayerCount     uint32
 }
 
-func (img Image) CreateView(info *ImageViewCreateInfo) (ImageView, error) {
+func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error) {
 	// TODO(dh): support custom allocator
 	ptr := (*C.VkImageViewCreateInfo)(alloc(C.sizeof_VkImageViewCreateInfo))
 	defer free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeImageViewCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
-	ptr.image = img.hnd
+	ptr.image = info.Image.hnd
 	ptr.viewType = C.VkImageViewType(info.ViewType)
 	ptr.format = C.VkFormat(info.Format)
 	ptr.components = C.VkComponentMapping{
@@ -1194,7 +1194,7 @@ func (img Image) CreateView(info *ImageViewCreateInfo) (ImageView, error) {
 	}
 
 	var hnd C.VkImageView
-	res := Result(C.domVkCreateImageView(img.dev.fps[vkCreateImageView], img.dev.hnd, ptr, nil, &hnd))
+	res := Result(C.domVkCreateImageView(dev.fps[vkCreateImageView], dev.hnd, ptr, nil, &hnd))
 	if res != Success {
 		return ImageView{}, res
 	}

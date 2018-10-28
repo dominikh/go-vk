@@ -89,7 +89,7 @@ func (chain SwapchainKHR) Images() ([]Image, error) {
 	}
 	out := make([]Image, count)
 	for i, img := range images {
-		out[i] = Image{hnd: img, dev: chain.dev}
+		out[i] = Image{hnd: img}
 	}
 	return out, nil
 }

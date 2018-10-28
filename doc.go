@@ -41,6 +41,12 @@ We prefer pool.AllocateCommandBuffers(...) over dev.AllocateCommandBuffers(pool,
 This does mean that our structs have to carry around additional information,
 such as the handle of their parent object and function pointers.
 
+In the majority of cases, however, we stick to Vulkan's categorization.
+For example, we don't define any methods on VkBuffer.
+At first glance, it may make sense to treat VkBindBufferMemory as a method on VkBuffer.
+However, Vulkan later added VkBindBufferMemory2, which allows binding multiple buffers to memory at once.
+To avoid splitting related methods across multiple receivers, we define both on VkDevice.
+
 
 Error handling
 
