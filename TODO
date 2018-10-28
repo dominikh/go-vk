@@ -24,6 +24,7 @@ follow, then vendor extensions.
 - [x] vkGetDeviceQueue
 - [x] vkGetDeviceProcAddr
 - [x] vkGetBufferMemoryRequirements
+- [x] vkFreeMemory
 - [x] vkFreeCommandBuffers
 - [x] vkEnumeratePhysicalDevices
 - [x] vkEnumerateDeviceExtensionProperties
@@ -92,7 +93,6 @@ follow, then vendor extensions.
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDescriptorSetLayoutSupport
 - [ ] vkGetBufferMemoryRequirements2
-- [ ] vkFreeMemory
 - [ ] vkFreeDescriptorSets
 - [ ] vkFlushMappedMemoryRanges
 - [ ] vkEnumeratePhysicalDeviceGroups

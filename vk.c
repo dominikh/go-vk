@@ -155,3 +155,6 @@ VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memo
 void domVkUnmapMemory(PFN_vkUnmapMemory fp, VkDevice device, VkDeviceMemory memory) {
 	(*fp)(device, memory);
 }
+void domVkFreeMemory(PFN_vkFreeMemory fp, VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, memory, pAllocator);
+}

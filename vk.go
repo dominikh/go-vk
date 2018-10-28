@@ -2191,6 +2191,11 @@ func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error
 	return DeviceMemory{hnd: hnd}, nil
 }
 
+func (dev *Device) FreeMemory(mem DeviceMemory) {
+	// TODO(dh): support custom allocators
+	C.domVkFreeMemory(dev.fps[vkFreeMemory], dev.hnd, mem.hnd, nil)
+}
+
 func (dev *Device) BindBufferMemory(buf Buffer, mem DeviceMemory, offset DeviceSize) error {
 	res := Result(C.domVkBindBufferMemory(dev.fps[vkBindBufferMemory], dev.hnd, buf.hnd, mem.hnd, C.VkDeviceSize(offset)))
 	if res != Success {
