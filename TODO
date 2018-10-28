@@ -6,6 +6,7 @@ For now, only core functions will be considered. KHR extensions will
 follow, then vendor extensions.
 
 - [x] vkWaitForFences
+- [x] vkUnmapMemory
 - [x] vkTrimCommandPool
 - [x] vkResetFences
 - [x] vkResetCommandPool
@@ -57,7 +58,6 @@ follow, then vendor extensions.
 - [x] VkResetCommandBuffer
 - [ ] vkUpdateDescriptorSets
 - [ ] vkUpdateDescriptorSetWithTemplate
-- [ ] vkUnmapMemory
 - [ ] vkSetEvent
 - [ ] vkResetEvent
 - [ ] vkResetDescriptorPool

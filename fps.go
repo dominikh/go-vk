@@ -67,6 +67,7 @@ const (
 	vkBindBufferMemory
 	vkBindBufferMemory2
 	vkMapMemory
+	vkUnmapMemory
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -142,4 +143,5 @@ var deviceFpNames = [...]string{
 	vkBindBufferMemory:            "vkBindBufferMemory",
 	vkBindBufferMemory2:           "vkBindBufferMemory2",
 	vkMapMemory:                   "vkMapMemory",
+	vkUnmapMemory:                 "vkUnmapMemory",
 }

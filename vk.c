@@ -152,3 +152,6 @@ VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uin
 VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memory, VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, void** ppData) {
 	return (*fp)(device, memory, offset, size, flags, ppData);
 }
+void domVkUnmapMemory(PFN_vkUnmapMemory fp, VkDevice device, VkDeviceMemory memory) {
+	(*fp)(device, memory);
+}

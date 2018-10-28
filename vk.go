@@ -2236,6 +2236,10 @@ func (dev *Device) MapMemory(mem DeviceMemory, offset, size DeviceSize, flags Me
 	return uintptr(ptr), nil
 }
 
+func (dev *Device) UnmapMemory(mem DeviceMemory) {
+	C.domVkUnmapMemory(dev.fps[vkUnmapMemory], dev.hnd, mem.hnd)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
