@@ -17,9 +17,6 @@ import (
 	"unsafe"
 )
 
-// XXX add assertions that some of our structs are the same size as the C structs.
-// any struct used in ucopy must have an assertion.
-
 const debug = true
 
 type (
@@ -35,9 +32,21 @@ var vkEnumerateInstanceLayerProperties C.PFN_vkEnumerateInstanceLayerProperties
 var vkCreateInstance C.PFN_vkCreateInstance
 
 func init() {
+	assertSameSize(unsafe.Sizeof(AttachmentDescription{}), C.sizeof_VkAttachmentDescription)
+	assertSameSize(unsafe.Sizeof(AttachmentReference{}), C.sizeof_VkAttachmentReference)
+	assertSameSize(unsafe.Sizeof(DescriptorSetLayout{}), C.sizeof_VkDescriptorSetLayout)
 	assertSameSize(unsafe.Sizeof(Fence{}), C.sizeof_VkFence)
-	assertSameSize(unsafe.Sizeof(MemoryType{}), C.sizeof_VkMemoryType)
+	assertSameSize(unsafe.Sizeof(ImageView{}), C.sizeof_VkImageView)
 	assertSameSize(unsafe.Sizeof(MemoryHeap{}), C.sizeof_VkMemoryHeap)
+	assertSameSize(unsafe.Sizeof(MemoryRequirements{}), C.sizeof_VkMemoryRequirements)
+	assertSameSize(unsafe.Sizeof(MemoryType{}), C.sizeof_VkMemoryType)
+	assertSameSize(unsafe.Sizeof(PushConstantRange{}), C.sizeof_VkPushConstantRange)
+	assertSameSize(unsafe.Sizeof(Rect2D{}), C.sizeof_VkRect2D)
+	assertSameSize(unsafe.Sizeof(Semaphore{}), C.sizeof_VkSemaphore)
+	assertSameSize(unsafe.Sizeof(SubpassDependency{}), C.sizeof_VkSubpassDependency)
+	assertSameSize(unsafe.Sizeof(VertexInputAttributeDescription{}), C.sizeof_VkVertexInputAttributeDescription)
+	assertSameSize(unsafe.Sizeof(VertexInputBindingDescription{}), C.sizeof_VkVertexInputBindingDescription)
+	assertSameSize(unsafe.Sizeof(Viewport{}), C.sizeof_VkViewport)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -448,11 +457,15 @@ func (dev *PhysicalDevice) Properties() *PhysicalDeviceProperties {
 type MemoryType struct {
 	PropertyFlags MemoryPropertyFlags
 	HeapIndex     uint32
+
+	// must be kept identical to C struct
 }
 
 type MemoryHeap struct {
 	Size  DeviceSize
 	Flags MemoryHeapFlags
+
+	// must be kept identical to C struct
 }
 
 type PhysicalDeviceMemoryProperties struct {
@@ -1090,6 +1103,8 @@ func (img Image) String() string {
 type ImageView struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImageView)
 	hnd C.VkImageView
+
+	// must be kept identical to C struct
 }
 
 type ImageViewCreateInfo struct {
@@ -1215,6 +1230,8 @@ type VertexInputBindingDescription struct {
 	Binding   uint32
 	Stride    uint32
 	InputRate VertexInputRate
+
+	// must be kept identical to C struct
 }
 
 type VertexInputAttributeDescription struct {
@@ -1222,6 +1239,8 @@ type VertexInputAttributeDescription struct {
 	Binding  uint32
 	Format   Format
 	Offset   uint32
+
+	// must be kept identical to C struct
 }
 
 type PipelineInputAssemblyStateCreateInfo struct {
@@ -1249,16 +1268,22 @@ type Viewport struct {
 	Height   float32
 	MinDepth float32
 	MaxDepth float32
+
+	// must be kept identical to C struct
 }
 
 type Rect2D struct {
 	Offset Offset2D
 	Extent Extent2D
+
+	// must be kept identical to C struct
 }
 
 type Offset2D struct {
 	X int32
 	Y int32
+
+	// must be kept identical to C struct
 }
 
 type PipelineViewportStateCreateInfo struct {
@@ -1491,12 +1516,16 @@ func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (Pipelin
 type DescriptorSetLayout struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSetLayout)
 	hnd C.VkDescriptorSetLayout
+
+	// must be kept identical to C struct
 }
 
 type PushConstantRange struct {
 	StageFlags ShaderStageFlags
 	Offset     uint32
 	Size       uint32
+
+	// must be kept identical to C struct
 }
 
 type PipelineTessellationStateCreateInfo struct {
@@ -1679,11 +1708,15 @@ type AttachmentDescription struct {
 	StencilStoreOp AttachmentStoreOp
 	InitialLayout  ImageLayout
 	FinalLayout    ImageLayout
+
+	// must be kept identical to C struct
 }
 
 type AttachmentReference struct {
 	Attachment uint32
 	Layout     ImageLayout
+
+	// must be kept identical to C struct
 }
 
 type SubpassDescription struct {
@@ -1711,6 +1744,8 @@ type SubpassDependency struct {
 	SrcAccessMask   AccessFlags
 	DstAccessMask   AccessFlags
 	DependencyFlags DependencyFlags
+
+	// must be kept identical to C struct
 }
 
 func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, error) {
@@ -1845,6 +1880,8 @@ func (ClearDepthStencilValue) isClearValue()  {}
 type Semaphore struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSemaphore)
 	hnd C.VkSemaphore
+
+	// must be kept identical to C struct
 }
 
 type SemaphoreCreateInfo struct {
@@ -1950,6 +1987,8 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 type Fence struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkFence)
 	hnd C.VkFence
+
+	// must be kept identical to C struct
 }
 
 type FenceCreateInfo struct {
@@ -2049,6 +2088,8 @@ type MemoryRequirements struct {
 	Size           DeviceSize
 	Alignment      DeviceSize
 	MemoryTypeBits uint32
+
+	// must be kept identical to C struct
 }
 
 func (buf *Buffer) MemoryRequirements() MemoryRequirements {
