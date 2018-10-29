@@ -71,3 +71,10 @@ func externFloat32(vs []float32) *C.float {
 	}
 	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
 }
+
+func result2error(res Result) error {
+	if res == Success {
+		return nil
+	}
+	return res
+}
