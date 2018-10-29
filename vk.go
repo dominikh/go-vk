@@ -1849,7 +1849,7 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 		}
 		if subpass.DepthStencilAttachment != nil {
 			csubpass.pDepthStencilAttachment = (*C.VkAttachmentReference)(alloc(C.sizeof_VkAttachmentReference))
-			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(&subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
+			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
 		}
 		ucopy(unsafe.Pointer(csubpass.pPreserveAttachments), unsafe.Pointer(&subpass.PreserveAttachments), C.sizeof_uint32_t)
 	}
