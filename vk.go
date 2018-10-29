@@ -17,6 +17,16 @@ import (
 	"unsafe"
 )
 
+// OPT(dh): we could replace large chunks of C info struct
+// initializers with memcpys of our Go info structs. A lot of the
+// time, they're mostly identical, aside from pNext and slices. This
+// would replace a whole lot of MOV instructions with single
+// runtime.memmove calls.
+//
+// We can create special structs with copy-range markers as [0]byte
+// fields, cast our Go structs to these, and use them for
+// straightforward copying. We should be able to code-generate these.
+
 const debug = true
 
 type (
@@ -680,12 +690,16 @@ type QueueFamilyProperties struct {
 type Extent2D struct {
 	Width  uint32
 	Height uint32
+
+	// must be kept identical to C struct
 }
 
 type Extent3D struct {
 	Width  uint32
 	Height uint32
 	Depth  uint32
+
+	// must be kept identical to C struct
 }
 
 func (dev *PhysicalDevice) QueueFamilyProperties() []*QueueFamilyProperties {
@@ -2243,6 +2257,62 @@ func (dev *Device) MapMemory(mem DeviceMemory, offset, size DeviceSize, flags Me
 
 func (dev *Device) UnmapMemory(mem DeviceMemory) {
 	C.domVkUnmapMemory(dev.fps[vkUnmapMemory], dev.hnd, mem.hnd)
+}
+
+type ImageCreateInfo struct {
+	Extensions         []Extension
+	Flags              ImageCreateFlags
+	ImageType          ImageType
+	Format             Format
+	Extent             Extent3D
+	MipLevels          uint32
+	ArrayLayers        uint32
+	Samples            SampleCountFlags
+	Tiling             ImageTiling
+	Usage              ImageUsageFlags
+	SharingMode        SharingMode
+	QueueFamilyIndices []uint32
+	InitialLayout      ImageLayout
+}
+
+func (info ImageCreateInfo) c() *C.VkImageCreateInfo {
+	size0 := uintptr(C.sizeof_VkImageCreateInfo)
+	size1 := C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices))
+	size := size0 + size1
+	mem := alloc(C.size_t(size))
+	cinfo := (*C.VkImageCreateInfo)(mem)
+	*cinfo = C.VkImageCreateInfo{
+		sType:                 C.VkStructureType(StructureTypeImageCreateInfo),
+		pNext:                 buildChain(info.Extensions),
+		flags:                 C.VkImageCreateFlags(info.Flags),
+		imageType:             C.VkImageType(info.ImageType),
+		format:                C.VkFormat(info.Format),
+		mipLevels:             C.uint32_t(info.MipLevels),
+		arrayLayers:           C.uint32_t(info.ArrayLayers),
+		samples:               C.VkSampleCountFlagBits(info.Samples),
+		tiling:                C.VkImageTiling(info.Tiling),
+		usage:                 C.VkImageUsageFlags(info.Usage),
+		sharingMode:           C.VkSharingMode(info.SharingMode),
+		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
+		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Pointer(uintptr(mem) + size0)),
+		initialLayout:         C.VkImageLayout(info.InitialLayout),
+	}
+	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
+	ucopy1(unsafe.Pointer(&cinfo.extent), unsafe.Pointer(&info.Extent), C.sizeof_VkExtent3D)
+	return cinfo
+}
+
+func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	defer free(unsafe.Pointer(cinfo))
+	defer internalizeChain(info.Extensions, cinfo.pNext)
+	var hnd C.VkImage
+	res := Result(C.domVkCreateImage(dev.fps[vkCreateImage], dev.hnd, cinfo, nil, &hnd))
+	if res != Success {
+		return Image{hnd: hnd}, res
+	}
+	return Image{hnd: hnd}, nil
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

@@ -37,6 +37,7 @@ follow, then vendor extensions.
 - [x] vkCreatePipelineLayout
 - [x] vkCreateInstance
 - [x] vkCreateImageView
+- [x] vkCreateImage
 - [x] vkCreateGraphicsPipelines
 - [x] vkCreateFramebuffer
 - [x] vkCreateFence
@@ -128,7 +129,6 @@ follow, then vendor extensions.
 - [ ] vkCreateSampler
 - [ ] vkCreateQueryPool
 - [ ] vkCreatePipelineCache
-- [ ] vkCreateImage
 - [ ] vkCreateEvent
 - [ ] vkCreateDescriptorUpdateTemplate
 - [ ] vkCreateDescriptorSetLayout

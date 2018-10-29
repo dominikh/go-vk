@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -68,6 +68,9 @@ type BufferUsageFlags uint32
 type MemoryPropertyFlags uint32
 type MemoryHeapFlags uint32
 type MemoryMapFlags uint32
+type ImageTiling uint32
+type ImageType uint32
+type ImageCreateFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1511,6 +1514,47 @@ const (
 	MemoryHeapDeviceLocalBit      MemoryHeapFlags = 0x00000001
 	MemoryHeapMultiInstanceBit    MemoryHeapFlags = 0x00000002
 	MemoryHeapMultiInstanceBitKHR MemoryHeapFlags = MemoryHeapMultiInstanceBit
+)
+
+const (
+	// ImageTilingOptimal specifies optimal tiling (texels are laid out in an implementation-dependent arrangement, for more optimal memory access).
+	ImageTilingOptimal ImageTiling = 0
+	// ImageTilingLinear specifies linear tiling (texels are laid out in memory in row-major order, possibly with some padding on each row).
+	ImageTilingLinear ImageTiling = 1
+	// ImageTilingDrmFormatModifierEXT indicates that the image’s tiling is defined by a Linux DRM format modifier.
+	ImageTilingDrmFormatModifierEXT ImageTiling = 1000158000
+)
+
+const (
+	// ImageType1D specifies a one-dimensional image.
+	ImageType1D ImageType = 0
+	// ImageType2D specifies a two-dimensional image.
+	ImageType2D ImageType = 1
+	// ImageType3D specifies a three-dimensional image.
+	ImageType3D ImageType = 2
+)
+
+const (
+	ImageCreateSparseBindingBit                     ImageCreateFlags = 0x00000001
+	ImageCreateSparseResidencyBit                   ImageCreateFlags = 0x00000002
+	ImageCreateSparseAliasedBit                     ImageCreateFlags = 0x00000004
+	ImageCreateMutableFormatBit                     ImageCreateFlags = 0x00000008
+	ImageCreateCubeCompatibleBit                    ImageCreateFlags = 0x00000010
+	ImageCreateAliasBit                             ImageCreateFlags = 0x00000400
+	ImageCreateSplitInstanceBindRegionsBit          ImageCreateFlags = 0x00000040
+	ImageCreate2DArrayCompatibleBit                 ImageCreateFlags = 0x00000020
+	ImageCreateBlockTexelViewCompatibleBit          ImageCreateFlags = 0x00000080
+	ImageCreateExtendedUsageBit                     ImageCreateFlags = 0x00000100
+	ImageCreateProtectedBit                         ImageCreateFlags = 0x00000800
+	ImageCreateDisjointBit                          ImageCreateFlags = 0x00000200
+	ImageCreateCornerSampledBitNV                   ImageCreateFlags = 0x00002000
+	ImageCreateSampleLocationsCompatibleDepthBitEXT ImageCreateFlags = 0x00001000
+	ImageCreateSplitInstanceBindRegionsBitKHR       ImageCreateFlags = ImageCreateSplitInstanceBindRegionsBit
+	ImageCreate2DArrayCompatibleBitKHR              ImageCreateFlags = ImageCreate2DArrayCompatibleBit
+	ImageCreateBlockTexelViewCompatibleBitKHR       ImageCreateFlags = ImageCreateBlockTexelViewCompatibleBit
+	ImageCreateExtendedUsageBitKHR                  ImageCreateFlags = ImageCreateExtendedUsageBit
+	ImageCreateDisjointBitKHR                       ImageCreateFlags = ImageCreateDisjointBit
+	ImageCreateAliasBitKHR                          ImageCreateFlags = ImageCreateAliasBit
 )
 
 func (res Result) Error() string { return res.String() }

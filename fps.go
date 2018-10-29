@@ -69,6 +69,7 @@ const (
 	vkMapMemory
 	vkUnmapMemory
 	vkFreeMemory
+	vkCreateImage
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -146,4 +147,5 @@ var deviceFpNames = [...]string{
 	vkMapMemory:                   "vkMapMemory",
 	vkUnmapMemory:                 "vkUnmapMemory",
 	vkFreeMemory:                  "vkFreeMemory",
+	vkCreateImage:                 "vkCreateImage",
 }

@@ -54,3 +54,4 @@ VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uin
 VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memory, VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, void** ppData);
 void     domVkUnmapMemory(PFN_vkUnmapMemory fp, VkDevice device, VkDeviceMemory memory);
 void     domVkFreeMemory(PFN_vkFreeMemory fp, VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks* pAllocator);
+VkResult domVkCreateImage(PFN_vkCreateImage fp, VkDevice device, const VkImageCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImage* pImage);
