@@ -993,8 +993,8 @@ func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstIns
 }
 
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
-	size0 := uintptr(C.sizeof_VkRenderPassBeginInfo)
-	size1 := C.sizeof_VkClearValue * uintptr(len(info.ClearValues))
+	size0 := align(C.sizeof_VkRenderPassBeginInfo)
+	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkRenderPassBeginInfo)(mem)
@@ -1231,9 +1231,9 @@ type PipelineVertexInputStateCreateInfo struct {
 }
 
 func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStateCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineVertexInputStateCreateInfo)
-	size1 := uintptr(len(info.VertexBindingDescriptions)) * C.sizeof_VkVertexInputBindingDescription
-	size2 := uintptr(len(info.VertexAttributeDescriptions)) * C.sizeof_VkVertexInputAttributeDescription
+	size0 := align(C.sizeof_VkPipelineVertexInputStateCreateInfo)
+	size1 := align(uintptr(len(info.VertexBindingDescriptions)) * C.sizeof_VkVertexInputBindingDescription)
+	size2 := align(uintptr(len(info.VertexAttributeDescriptions)) * C.sizeof_VkVertexInputAttributeDescription)
 	size := size0 + size1 + size2
 
 	mem := alloc(C.size_t(size))
@@ -1321,9 +1321,9 @@ type PipelineViewportStateCreateInfo struct {
 }
 
 func (info *PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineViewportStateCreateInfo)
-	size1 := uintptr(len(info.Viewports)) * C.sizeof_VkViewport
-	size2 := uintptr(len(info.Scissors)) * C.sizeof_VkRect2D
+	size0 := align(C.sizeof_VkPipelineViewportStateCreateInfo)
+	size1 := align(uintptr(len(info.Viewports)) * C.sizeof_VkViewport)
+	size2 := align(uintptr(len(info.Scissors)) * C.sizeof_VkRect2D)
 	size := size0 + size1 + size2
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineViewportStateCreateInfo)(mem)
@@ -1388,8 +1388,8 @@ type PipelineMultisampleStateCreateInfo struct {
 }
 
 func (info *PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStateCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineMultisampleStateCreateInfo)
-	size1 := uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask
+	size0 := align(C.sizeof_VkPipelineMultisampleStateCreateInfo)
+	size1 := align(uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask)
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineMultisampleStateCreateInfo)(mem)
@@ -1435,8 +1435,8 @@ type PipelineColorBlendStateCreateInfo struct {
 }
 
 func (info *PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineColorBlendStateCreateInfo)
-	size1 := C.sizeof_VkPipelineColorBlendAttachmentState * uintptr(len(info.Attachments))
+	size0 := align(C.sizeof_VkPipelineColorBlendStateCreateInfo)
+	size1 := align(C.sizeof_VkPipelineColorBlendAttachmentState * uintptr(len(info.Attachments)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineColorBlendStateCreateInfo)(mem)
@@ -1478,8 +1478,8 @@ type PipelineDynamicStateCreateInfo struct {
 }
 
 func (info *PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineDynamicStateCreateInfo)
-	size1 := C.sizeof_VkDynamicState * uintptr(len(info.DynamicStates))
+	size0 := align(C.sizeof_VkPipelineDynamicStateCreateInfo)
+	size1 := align(C.sizeof_VkDynamicState * uintptr(len(info.DynamicStates)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineDynamicStateCreateInfo)(mem)
@@ -1507,9 +1507,9 @@ type PipelineLayoutCreateInfo struct {
 }
 
 func (info *PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
-	size0 := uintptr(C.sizeof_VkPipelineLayoutCreateInfo)
-	size1 := C.sizeof_VkDescriptorSetLayout * uintptr(len(info.SetLayouts))
-	size2 := C.sizeof_VkPushConstantRange * uintptr(len(info.PushConstantRanges))
+	size0 := align(C.sizeof_VkPipelineLayoutCreateInfo)
+	size1 := align(C.sizeof_VkDescriptorSetLayout * uintptr(len(info.SetLayouts)))
+	size2 := align(C.sizeof_VkPushConstantRange * uintptr(len(info.PushConstantRanges)))
 	size := size0 + size1 + size2
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineLayoutCreateInfo)(mem)
@@ -1787,10 +1787,10 @@ type SubpassDependency struct {
 
 func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, error) {
 	// TODO(dh): support custom allocators
-	size0 := uintptr(C.sizeof_VkRenderPassCreateInfo)
-	size1 := C.sizeof_VkAttachmentDescription * uintptr(len(info.Attachments))
-	size2 := C.sizeof_VkSubpassDescription * uintptr(len(info.Subpasses))
-	size3 := C.sizeof_VkSubpassDependency * uintptr(len(info.Dependencies))
+	size0 := align(C.sizeof_VkRenderPassCreateInfo)
+	size1 := align(C.sizeof_VkAttachmentDescription * uintptr(len(info.Attachments)))
+	size2 := align(C.sizeof_VkSubpassDescription * uintptr(len(info.Subpasses)))
+	size3 := align(C.sizeof_VkSubpassDependency * uintptr(len(info.Dependencies)))
 	size := size0 + size1 + size2 + size3
 	mem := alloc(C.size_t(size))
 	defer free(mem)
@@ -1854,8 +1854,8 @@ type FramebufferCreateInfo struct {
 }
 
 func (info *FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
-	size0 := uintptr(C.sizeof_VkFramebufferCreateInfo)
-	size1 := uintptr(C.sizeof_VkImageView) * uintptr(len(info.Attachments))
+	size0 := align(C.sizeof_VkFramebufferCreateInfo)
+	size1 := align(uintptr(C.sizeof_VkImageView) * uintptr(len(info.Attachments)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkFramebufferCreateInfo)(mem)
@@ -1959,11 +1959,11 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 		commandBufferCount += uintptr(len(info.CommandBuffers))
 		signalSemaphoreCount += uintptr(len(info.SignalSemaphores))
 	}
-	size0 := C.sizeof_VkSubmitInfo * uintptr(len(infos))
-	size1 := C.sizeof_VkSemaphore * waitSemaphoreCount
-	size2 := C.sizeof_VkPipelineStageFlags * waitSemaphoreCount
-	size3 := C.sizeof_VkCommandBuffer * commandBufferCount
-	size4 := C.sizeof_VkSemaphore * signalSemaphoreCount
+	size0 := align(C.sizeof_VkSubmitInfo * uintptr(len(infos)))
+	size1 := align(C.sizeof_VkSemaphore * waitSemaphoreCount)
+	size2 := align(C.sizeof_VkPipelineStageFlags * waitSemaphoreCount)
+	size3 := align(C.sizeof_VkCommandBuffer * commandBufferCount)
+	size4 := align(C.sizeof_VkSemaphore * signalSemaphoreCount)
 	size := size0 + size1 + size2 + size3 + size4
 	mem := uintptr(alloc(C.size_t(size)))
 	defer free(unsafe.Pointer(mem))
@@ -2073,8 +2073,8 @@ type Buffer struct {
 }
 
 func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
-	size0 := uintptr(C.sizeof_VkBufferCreateInfo)
-	size1 := C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices))
+	size0 := align(C.sizeof_VkBufferCreateInfo)
+	size1 := align(C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkBufferCreateInfo)(mem)
@@ -2211,8 +2211,8 @@ type ImageCreateInfo struct {
 }
 
 func (info *ImageCreateInfo) c() *C.VkImageCreateInfo {
-	size0 := uintptr(C.sizeof_VkImageCreateInfo)
-	size1 := C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices))
+	size0 := align(C.sizeof_VkImageCreateInfo)
+	size1 := align(C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices)))
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkImageCreateInfo)(mem)

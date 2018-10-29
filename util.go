@@ -23,6 +23,12 @@ func free(ptr unsafe.Pointer) {
 	C.free(ptr)
 }
 
+const alignment = 8
+
+func align(p uintptr) uintptr {
+	return (p + alignment - 1) &^ (alignment - 1)
+}
+
 // ucopy copies data from src to dst,
 // where dst must be a C pointer and src must be a pointer to a Go slice.
 func ucopy(dst, src unsafe.Pointer, size uintptr) {
