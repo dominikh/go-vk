@@ -992,7 +992,7 @@ func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstIns
 	C.domVkCmdDraw(buf.fps[vkCmdDraw], buf.hnd, C.uint32_t(vertexCount), C.uint32_t(instanceCount), C.uint32_t(firstVertex), C.uint32_t(firstInstance))
 }
 
-func (info RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
+func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := uintptr(C.sizeof_VkRenderPassBeginInfo)
 	size1 := C.sizeof_VkClearValue * uintptr(len(info.ClearValues))
 	size := size0 + size1
@@ -1230,7 +1230,7 @@ type PipelineVertexInputStateCreateInfo struct {
 	VertexAttributeDescriptions []VertexInputAttributeDescription
 }
 
-func (info PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStateCreateInfo {
+func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStateCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineVertexInputStateCreateInfo)
 	size1 := uintptr(len(info.VertexBindingDescriptions)) * C.sizeof_VkVertexInputBindingDescription
 	size2 := uintptr(len(info.VertexAttributeDescriptions)) * C.sizeof_VkVertexInputAttributeDescription
@@ -1277,7 +1277,7 @@ type PipelineInputAssemblyStateCreateInfo struct {
 	PrimitiveRestartEnable bool
 }
 
-func (info PipelineInputAssemblyStateCreateInfo) c() *C.VkPipelineInputAssemblyStateCreateInfo {
+func (info *PipelineInputAssemblyStateCreateInfo) c() *C.VkPipelineInputAssemblyStateCreateInfo {
 	cinfo := (*C.VkPipelineInputAssemblyStateCreateInfo)(alloc(C.sizeof_VkPipelineInputAssemblyStateCreateInfo))
 	*cinfo = C.VkPipelineInputAssemblyStateCreateInfo{
 		sType:                  C.VkStructureType(StructureTypePipelineInputAssemblyStateCreateInfo),
@@ -1320,7 +1320,7 @@ type PipelineViewportStateCreateInfo struct {
 	Scissors   []Rect2D
 }
 
-func (info PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreateInfo {
+func (info *PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineViewportStateCreateInfo)
 	size1 := uintptr(len(info.Viewports)) * C.sizeof_VkViewport
 	size2 := uintptr(len(info.Scissors)) * C.sizeof_VkRect2D
@@ -1357,7 +1357,7 @@ type PipelineRasterizationStateCreateInfo struct {
 	LineWidth               float32
 }
 
-func (info PipelineRasterizationStateCreateInfo) c() *C.VkPipelineRasterizationStateCreateInfo {
+func (info *PipelineRasterizationStateCreateInfo) c() *C.VkPipelineRasterizationStateCreateInfo {
 	cinfo := (*C.VkPipelineRasterizationStateCreateInfo)(alloc(C.sizeof_VkPipelineRasterizationStateCreateInfo))
 	*cinfo = C.VkPipelineRasterizationStateCreateInfo{
 		sType:                   C.VkStructureType(StructureTypePipelineRasterizationStateCreateInfo),
@@ -1387,7 +1387,7 @@ type PipelineMultisampleStateCreateInfo struct {
 	AlphaToOneEnable      bool
 }
 
-func (info PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStateCreateInfo {
+func (info *PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStateCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineMultisampleStateCreateInfo)
 	size1 := uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask
 	size := size0 + size1
@@ -1434,7 +1434,7 @@ type PipelineColorBlendStateCreateInfo struct {
 	BlendConstants [4]float32
 }
 
-func (info PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateCreateInfo {
+func (info *PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineColorBlendStateCreateInfo)
 	size1 := C.sizeof_VkPipelineColorBlendAttachmentState * uintptr(len(info.Attachments))
 	size := size0 + size1
@@ -1477,7 +1477,7 @@ type PipelineDynamicStateCreateInfo struct {
 	DynamicStates []DynamicState
 }
 
-func (info PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateInfo {
+func (info *PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineDynamicStateCreateInfo)
 	size1 := C.sizeof_VkDynamicState * uintptr(len(info.DynamicStates))
 	size := size0 + size1
@@ -1506,7 +1506,7 @@ type PipelineLayoutCreateInfo struct {
 	PushConstantRanges []PushConstantRange
 }
 
-func (info PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
+func (info *PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 	size0 := uintptr(C.sizeof_VkPipelineLayoutCreateInfo)
 	size1 := C.sizeof_VkDescriptorSetLayout * uintptr(len(info.SetLayouts))
 	size2 := C.sizeof_VkPushConstantRange * uintptr(len(info.PushConstantRanges))
@@ -1559,7 +1559,7 @@ type PipelineTessellationStateCreateInfo struct {
 	PatchControlPoints uint32
 }
 
-func (info PipelineTessellationStateCreateInfo) c() *C.VkPipelineTessellationStateCreateInfo {
+func (info *PipelineTessellationStateCreateInfo) c() *C.VkPipelineTessellationStateCreateInfo {
 	cinfo := (*C.VkPipelineTessellationStateCreateInfo)(alloc(C.sizeof_VkPipelineTessellationStateCreateInfo))
 	*cinfo = C.VkPipelineTessellationStateCreateInfo{
 		sType:              C.VkStructureType(StructureTypePipelineTessellationStateCreateInfo),
@@ -1583,7 +1583,7 @@ type PipelineDepthStencilStateCreateInfo struct {
 	MaxDepthBounds        float32
 }
 
-func (info PipelineDepthStencilStateCreateInfo) c() *C.VkPipelineDepthStencilStateCreateInfo {
+func (info *PipelineDepthStencilStateCreateInfo) c() *C.VkPipelineDepthStencilStateCreateInfo {
 	cinfo := (*C.VkPipelineDepthStencilStateCreateInfo)(alloc(C.sizeof_VkPipelineDepthStencilStateCreateInfo))
 	*cinfo = C.VkPipelineDepthStencilStateCreateInfo{
 		sType:                 C.VkStructureType(StructureTypePipelineDepthStencilStateCreateInfo),
@@ -1853,7 +1853,7 @@ type FramebufferCreateInfo struct {
 	Layers      uint32
 }
 
-func (info FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
+func (info *FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
 	size0 := uintptr(C.sizeof_VkFramebufferCreateInfo)
 	size1 := uintptr(C.sizeof_VkImageView) * uintptr(len(info.Attachments))
 	size := size0 + size1
@@ -1921,7 +1921,7 @@ type SemaphoreCreateInfo struct {
 	Extensions []Extension
 }
 
-func (info SemaphoreCreateInfo) c() *C.VkSemaphoreCreateInfo {
+func (info *SemaphoreCreateInfo) c() *C.VkSemaphoreCreateInfo {
 	cinfo := (*C.VkSemaphoreCreateInfo)(alloc(C.sizeof_VkSemaphoreCreateInfo))
 	*cinfo = C.VkSemaphoreCreateInfo{
 		sType: C.VkStructureType(StructureTypeSemaphoreCreateInfo),
@@ -2072,7 +2072,7 @@ type Buffer struct {
 	hnd C.VkBuffer
 }
 
-func (info BufferCreateInfo) c() *C.VkBufferCreateInfo {
+func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
 	size0 := uintptr(C.sizeof_VkBufferCreateInfo)
 	size1 := C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices))
 	size := size0 + size1
@@ -2122,7 +2122,7 @@ type MemoryAllocateInfo struct {
 	MemoryTypeIndex uint32
 }
 
-func (info MemoryAllocateInfo) c() *C.VkMemoryAllocateInfo {
+func (info *MemoryAllocateInfo) c() *C.VkMemoryAllocateInfo {
 	cinfo := (*C.VkMemoryAllocateInfo)(alloc(C.sizeof_VkMemoryAllocateInfo))
 	*cinfo = C.VkMemoryAllocateInfo{
 		sType:           C.VkStructureType(StructureTypeMemoryAllocateInfo),
