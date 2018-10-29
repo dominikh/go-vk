@@ -685,6 +685,8 @@ type QueueFamilyProperties struct {
 	QueueCount                  uint32
 	TimestampValidBits          uint32
 	MinImageTransferGranularity Extent3D
+
+	// must be kept identical to C struct
 }
 
 type Extent2D struct {
@@ -702,26 +704,12 @@ type Extent3D struct {
 	// must be kept identical to C struct
 }
 
-func (dev *PhysicalDevice) QueueFamilyProperties() []*QueueFamilyProperties {
+func (dev *PhysicalDevice) QueueFamilyProperties() []QueueFamilyProperties {
 	var count C.uint32_t
 	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, nil)
-	props := (*C.VkQueueFamilyProperties)(allocn(int(count), C.sizeof_VkQueueFamilyProperties))
-	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, props)
-	var out []*QueueFamilyProperties
-	for _, prop := range (*[math.MaxInt32]C.VkQueueFamilyProperties)(unsafe.Pointer(props))[:count] {
-		// XXX can we use ucopy here?
-		out = append(out, &QueueFamilyProperties{
-			QueueFlags:         QueueFlags(prop.queueFlags),
-			QueueCount:         uint32(prop.queueCount),
-			TimestampValidBits: uint32(prop.timestampValidBits),
-			MinImageTransferGranularity: Extent3D{
-				Width:  uint32(prop.minImageTransferGranularity.width),
-				Height: uint32(prop.minImageTransferGranularity.height),
-				Depth:  uint32(prop.minImageTransferGranularity.depth),
-			},
-		})
-	}
-	return out
+	props := make([]QueueFamilyProperties, count)
+	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, (*C.VkQueueFamilyProperties)(unsafe.Pointer(&props[0])))
+	return props
 }
 
 type DeviceQueueCreateInfo struct {
