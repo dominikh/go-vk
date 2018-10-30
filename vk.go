@@ -2007,6 +2007,11 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 	return out, result2error(res)
 }
 
+func (dev *Device) DestroyRenderPass(renderPass RenderPass) {
+	// TODO(dh): support a custom allocator
+	C.domVkDestroyRenderPass(dev.fps[vkDestroyRenderPass], dev.hnd, renderPass.hnd, nil)
+}
+
 type FramebufferCreateInfo struct {
 	Extensions  []Extension
 	RenderPass  RenderPass
