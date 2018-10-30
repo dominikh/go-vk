@@ -1356,6 +1356,11 @@ func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (ShaderModul
 	return out, result2error(res)
 }
 
+func (dev *Device) DestroyShaderModule(module ShaderModule) {
+	// TODO(dh): support custom allocator
+	C.domVkDestroyShaderModule(dev.fps[vkDestroyShaderModule], dev.hnd, module.hnd, nil)
+}
+
 type PipelineShaderStageCreateInfo struct {
 	Extensions []Extension
 	Stage      ShaderStageFlags
