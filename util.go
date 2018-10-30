@@ -33,12 +33,12 @@ func align(p uintptr) uintptr {
 // ucopy copies data from src to dst,
 // where dst must be a C pointer and src must be a pointer to a Go slice.
 func ucopy(dst, src unsafe.Pointer, size uintptr) {
-	elems := *(*int)(unsafe.Pointer(uintptr(src) + unsafe.Sizeof(uintptr(0))))
+	elems := (*reflect.SliceHeader)(src).Len
 	if elems == 0 {
 		return
 	}
 	// Access the slice's underlying data
-	src = (*(*unsafe.Pointer)(src))
+	src = unsafe.Pointer((*reflect.SliceHeader)(src).Data)
 	copy(
 		(*[math.MaxInt32]byte)(dst)[:uintptr(elems)*size],
 		(*[math.MaxInt32]byte)(src)[:uintptr(elems)*size],
