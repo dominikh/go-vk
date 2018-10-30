@@ -64,6 +64,10 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ComponentMapping{}), C.sizeof_VkComponentMapping)
 	assertSameSize(unsafe.Sizeof(ImageSubresourceRange{}), C.sizeof_VkImageSubresourceRange)
 	assertSameSize(unsafe.Sizeof(ClearDepthStencilValue{}), C.sizeof_VkClearDepthStencilValue)
+	assertSameSize(unsafe.Sizeof(BufferCopy{}), C.sizeof_VkBufferCopy)
+	assertSameSize(unsafe.Sizeof(BufferImageCopy{}), C.sizeof_VkBufferImageCopy)
+	assertSameSize(unsafe.Sizeof(ImageSubresourceLayers{}), C.sizeof_VkImageSubresourceLayers)
+	assertSameSize(unsafe.Sizeof(ImageCopy{}), C.sizeof_VkImageCopy)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1084,6 +1088,86 @@ func (buf *CommandBuffer) BindPipeline(pipelineBindPoint PipelineBindPoint, pipe
 	C.domVkCmdBindPipeline(buf.fps[vkCmdBindPipeline], buf.hnd, C.VkPipelineBindPoint(pipelineBindPoint), pipeline.hnd)
 }
 
+func (buf *CommandBuffer) BindIndexBuffer(buffer Buffer, offset DeviceSize, indexType IndexType) {
+	C.domVkCmdBindIndexBuffer(buf.fps[vkCmdBindIndexBuffer], buf.hnd, buffer.hnd, C.VkDeviceSize(offset), C.VkIndexType(indexType))
+}
+
+type BufferCopy struct {
+	SrcOffset DeviceSize
+	DstOffset DeviceSize
+	Size      DeviceSize
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) CopyBuffer(srcBuffer, dstBuffer Buffer, regions []BufferCopy) {
+	C.domVkCmdCopyBuffer(buf.fps[vkCmdCopyBuffer], buf.hnd, srcBuffer.hnd, dstBuffer.hnd, C.uint32_t(len(regions)), (*C.VkBufferCopy)(slice2ptr(uptr(&regions))))
+}
+
+type BufferImageCopy struct {
+	BufferOfset       DeviceSize
+	BufferRowLength   uint32
+	BufferImageHeight uint32
+	ImageSubresource  ImageSubresourceLayers
+	ImageOffset       Offset3D
+	ImageExtent       Extent3D
+
+	// must be kept identical to C struct
+}
+
+type ImageSubresourceLayers struct {
+	AspectMask     ImageAspectFlags
+	MipLevel       uint32
+	BaseArrayLayer uint32
+	LayerCount     uint32
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) CopyBufferToImage(srcBuffer Buffer, dstImage Image, dstImageLayout ImageLayout, regions []BufferImageCopy) {
+	C.domVkCmdCopyBufferToImage(
+		buf.fps[vkCmdCopyBufferToImage],
+		buf.hnd,
+		srcBuffer.hnd,
+		dstImage.hnd,
+		C.VkImageLayout(dstImageLayout),
+		C.uint32_t(len(regions)),
+		(*C.VkBufferImageCopy)(slice2ptr(uptr(&regions))))
+}
+
+type ImageCopy struct {
+	SrcSubresource ImageSubresourceLayers
+	SrcOffset      Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffset      Offset3D
+	Extent         Extent3D
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) CopyImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageCopy) {
+	C.domVkCmdCopyImage(
+		buf.fps[vkCmdCopyImage],
+		buf.hnd,
+		srcImage.hnd,
+		C.VkImageLayout(srcImageLayout),
+		dstImage.hnd,
+		C.VkImageLayout(dstImageLayout),
+		C.uint32_t(len(regions)),
+		(*C.VkImageCopy)(slice2ptr(uptr(&regions))))
+}
+
+func (buf *CommandBuffer) CopyImageToBuffer(srcImage Image, srcImageLayout ImageLayout, dstBuffer Buffer, regions []BufferImageCopy) {
+	C.domVkCmdCopyImageToBuffer(
+		buf.fps[vkCmdCopyImageToBuffer],
+		buf.hnd,
+		srcImage.hnd,
+		C.VkImageLayout(srcImageLayout),
+		dstBuffer.hnd,
+		C.uint32_t(len(regions)),
+		(*C.VkBufferImageCopy)(slice2ptr(uptr(&regions))))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
@@ -1354,6 +1438,14 @@ type Rect2D struct {
 type Offset2D struct {
 	X int32
 	Y int32
+
+	// must be kept identical to C struct
+}
+
+type Offset3D struct {
+	X int32
+	Y int32
+	Z int32
 
 	// must be kept identical to C struct
 }

@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -71,6 +71,7 @@ type MemoryMapFlags uint32
 type ImageTiling uint32
 type ImageType uint32
 type ImageCreateFlags uint32
+type IndexType uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1555,6 +1556,11 @@ const (
 	ImageCreateExtendedUsageBitKHR                  ImageCreateFlags = ImageCreateExtendedUsageBit
 	ImageCreateDisjointBitKHR                       ImageCreateFlags = ImageCreateDisjointBit
 	ImageCreateAliasBitKHR                          ImageCreateFlags = ImageCreateAliasBit
+)
+
+const (
+	IndexTypeUint16 IndexType = 0
+	IndexTypeUint32 IndexType = 1
 )
 
 func (res Result) Error() string { return res.String() }

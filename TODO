@@ -94,17 +94,17 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdBeginRenderPass2KHR
 - [ ] vkCmdBeginTransformFeedbackEXT
 - [ ] vkCmdBindDescriptorSets
-- [ ] vkCmdBindIndexBuffer
+- [x] vkCmdBindIndexBuffer
 - [ ] vkCmdBindShadingRateImageNV
 - [ ] vkCmdBindTransformFeedbackBuffersEXT
 - [ ] vkCmdBindVertexBuffers
 - [ ] vkCmdBlitImage
 - [ ] vkCmdBuildAccelerationStructureNVX
 - [ ] vkCmdCopyAccelerationStructureNVX
-- [ ] vkCmdCopyBuffer
-- [ ] vkCmdCopyBufferToImage
-- [ ] vkCmdCopyImage
-- [ ] vkCmdCopyImageToBuffer
+- [x] vkCmdCopyBuffer
+- [x] vkCmdCopyBufferToImage
+- [x] vkCmdCopyImage
+- [x] vkCmdCopyImageToBuffer
 - [ ] vkCmdCopyQueryPoolResults
 - [ ] vkCmdDebugMarkerBeginEXT
 - [ ] vkCmdDebugMarkerEndEXT
