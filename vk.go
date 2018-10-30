@@ -108,6 +108,12 @@ type ApplicationInfo struct {
 	APIVersion uint32
 }
 
+type Instance struct {
+	// VK_DEFINE_HANDLE(VkInstance)
+	hnd C.VkInstance
+	fps [instanceMaxPFN]C.PFN_vkVoidFunction
+}
+
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	// TODO(dh): support a custom allocator
 	ptr := (*C.VkInstanceCreateInfo)(alloc(C.sizeof_VkInstanceCreateInfo))
@@ -148,10 +154,9 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	return out, nil
 }
 
-type Instance struct {
-	// VK_DEFINE_HANDLE(VkInstance)
-	hnd C.VkInstance
-	fps [instanceMaxPFN]C.PFN_vkVoidFunction
+func (ins *Instance) Destroy() {
+	// TODO(dh): support a custom allocator
+	C.domVkDestroyInstance(ins.fps[vkDestroyInstance], ins.hnd, nil)
 }
 
 func (ins *Instance) init() {
