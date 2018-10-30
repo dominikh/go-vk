@@ -871,14 +871,6 @@ func (dev *Device) Queue(family, index uint32) *Queue {
 	return &Queue{hnd: out, fps: &dev.fps}
 }
 
-type CommandPool struct {
-	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkCommandPool)
-	hnd C.VkCommandPool
-	dev *Device
-
-	freePtrs []C.VkCommandBuffer
-}
-
 type CommandBuffer struct {
 	// VK_DEFINE_HANDLE(VkCommandBuffer)
 	hnd C.VkCommandBuffer
@@ -1047,38 +1039,36 @@ type CommandPoolCreateInfo struct {
 	QueueFamilyIndex uint32
 }
 
-func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (*CommandPool, error) {
+type CommandPool struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkCommandPool)
+	hnd C.VkCommandPool
+}
+
+func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (CommandPool, error) {
 	// TODO(dh): support callbacks
 	ptr := (*C.VkCommandPoolCreateInfo)(alloc(C.sizeof_VkCommandPoolCreateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeCommandPoolCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.flags = C.VkCommandPoolCreateFlags(info.Flags)
 	ptr.queueFamilyIndex = C.uint32_t(info.QueueFamilyIndex)
-	pool := &CommandPool{dev: dev}
+	var pool CommandPool
 	res := Result(C.domVkCreateCommandPool(dev.fps[vkCreateCommandPool], dev.hnd, ptr, nil, &pool.hnd))
 	internalizeChain(info.Extensions, ptr.pNext)
 	free(unsafe.Pointer(ptr))
 	return pool, result2error(res)
 }
 
-func (dev *Device) DestroyCommandPool(pool *CommandPool) {
+func (dev *Device) DestroyCommandPool(pool CommandPool) {
 	// TODO(dh): support callbacks
 	C.domVkDestroyCommandPool(dev.fps[vkDestroyCommandPool], dev.hnd, pool.hnd, nil)
 }
 
-func (pool *CommandPool) Trim(flags CommandPoolTrimFlags) {
-	C.domVkTrimCommandPool(pool.dev.fps[vkTrimCommandPool], pool.dev.hnd, pool.hnd, C.VkCommandPoolTrimFlags(flags))
+func (dev *Device) TrimCommandPool(pool CommandPool, flags CommandPoolTrimFlags) {
+	C.domVkTrimCommandPool(dev.fps[vkTrimCommandPool], dev.hnd, pool.hnd, C.VkCommandPoolTrimFlags(flags))
 }
 
-func vkBool(b bool) C.VkBool32 {
-	if b {
-		return C.VK_TRUE
-	}
-	return C.VK_FALSE
-}
-
-func (pool *CommandPool) Reset(flags CommandPoolResetFlags) error {
-	res := Result(C.domVkResetCommandPool(pool.dev.fps[vkResetCommandPool], pool.dev.hnd, pool.hnd, C.VkCommandPoolResetFlags(flags)))
+func (dev *Device) ResetCommandPool(pool CommandPool, flags CommandPoolResetFlags) error {
+	res := Result(C.domVkResetCommandPool(dev.fps[vkResetCommandPool], dev.hnd, pool.hnd, C.VkCommandPoolResetFlags(flags)))
 	return result2error(res)
 }
 
@@ -1088,7 +1078,7 @@ type CommandBufferAllocateInfo struct {
 	CommandBufferCount uint32
 }
 
-func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
+func (dev *Device) AllocateCommandBuffers(pool CommandPool, info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
 	ptr := (*C.VkCommandBufferAllocateInfo)(alloc(C.sizeof_VkCommandBufferAllocateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferAllocateInfo)
 	ptr.pNext = buildChain(info.Extensions)
@@ -1096,7 +1086,7 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	ptr.level = C.VkCommandBufferLevel(info.Level)
 	ptr.commandBufferCount = C.uint32_t(info.CommandBufferCount)
 	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
-	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&bufs)))))
+	res := Result(C.domVkAllocateCommandBuffers(dev.fps[vkAllocateCommandBuffers], dev.hnd, ptr, (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&bufs)))))
 	internalizeChain(info.Extensions, ptr.pNext)
 	free(unsafe.Pointer(ptr))
 	if res != Success {
@@ -1104,23 +1094,26 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	}
 	out := make([]*CommandBuffer, info.CommandBufferCount)
 	for i, buf := range bufs {
-		out[i] = &CommandBuffer{hnd: buf, fps: &pool.dev.fps}
+		out[i] = &CommandBuffer{hnd: buf, fps: &dev.fps}
 	}
 	return out, nil
 }
 
-func (pool *CommandPool) FreeBuffers(bufs []*CommandBuffer) {
-	ptrs := pool.freePtrs[:0]
-	if cap(ptrs) >= len(bufs) {
-		ptrs = ptrs[:len(bufs)]
-	} else {
-		ptrs = make([]C.VkCommandBuffer, len(bufs))
+func (dev *Device) FreeCommandBuffers(pool CommandPool, bufs []*CommandBuffer) {
+	if len(bufs) == 1 {
+		C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, 1, (*C.VkCommandBuffer)(unsafe.Pointer(bufs[0])))
+		return
 	}
+
+	// OPT(dh): cache this slice and reuse it for multiple
+	// FreeCommandBuffers calls. Since the function has to be
+	// reentrant, and we don't want to store the slice in the
+	// CommandPool itself, we'd probably best use a sync.Pool.
+	ptrs := make([]C.VkCommandBuffer, len(bufs))
 	for i, buf := range bufs {
 		ptrs[i] = buf.hnd
 	}
-	C.domVkFreeCommandBuffers(pool.dev.fps[vkFreeCommandBuffers], pool.dev.hnd, pool.hnd, C.uint32_t(len(bufs)), (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&ptrs))))
-	pool.freePtrs = ptrs[:0]
+	C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, C.uint32_t(len(bufs)), (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&ptrs))))
 }
 
 func (dev *Device) WaitIdle() error {
@@ -2351,11 +2344,12 @@ func mustVkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidF
 }
 
 func (hnd *CommandBuffer) String() string  { return fmt.Sprintf("VkCommandBuffer(%#x)", hnd.hnd) }
-func (hnd *CommandPool) String() string    { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
 func (hnd *Device) String() string         { return fmt.Sprintf("VkDevice(%#x)", hnd.hnd) }
 func (hnd *Instance) String() string       { return fmt.Sprintf("VkInstance(%#x)", hnd.hnd) }
+func (hnd *PhysicalDevice) String() string { return fmt.Sprintf("VkPhysicalDevice(%#x)", hnd.hnd) }
 func (hnd *Queue) String() string          { return fmt.Sprintf("VkQueue(%#x)", hnd.hnd) }
 func (hnd Buffer) String() string          { return fmt.Sprintf("VkBuffer(%#x)", hnd.hnd) }
+func (hnd CommandPool) String() string     { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
 func (hnd DeviceMemory) String() string    { return fmt.Sprintf("VkDeviceMemory(%#x)", hnd.hnd) }
 func (hnd Fence) String() string           { return fmt.Sprintf("VkFence(%#x)", hnd.hnd) }
 func (hnd Framebuffer) String() string     { return fmt.Sprintf("VkFramebuffer(%#x)", hnd.hnd) }
@@ -2366,7 +2360,6 @@ func (hnd PipelineLayout) String() string  { return fmt.Sprintf("VkPipelineLayou
 func (hnd RenderPass) String() string      { return fmt.Sprintf("VkRenderPass(%#x)", hnd.hnd) }
 func (hnd Semaphore) String() string       { return fmt.Sprintf("VkSemaphore(%#x)", hnd.hnd) }
 func (hnd ShaderModule) String() string    { return fmt.Sprintf("VkShaderModule(%#x)", hnd.hnd) }
-func (hnd *PhysicalDevice) String() string { return fmt.Sprintf("VkPhysicalDevice(%#x)", hnd.hnd) }
 func (hnd DescriptorSetLayout) String() string {
 	return fmt.Sprintf("VkDescriptorSetLayout(%#x)", hnd.hnd)
 }

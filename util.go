@@ -1,6 +1,7 @@
 package vk
 
 // #include <stdlib.h>
+// #include "vk.h"
 import "C"
 
 import (
@@ -88,4 +89,11 @@ func result2error(res Result) error {
 
 func slice2ptr(slice unsafe.Pointer) unsafe.Pointer {
 	return unsafe.Pointer((*reflect.SliceHeader)(slice).Data)
+}
+
+func vkBool(b bool) C.VkBool32 {
+	if b {
+		return C.VK_TRUE
+	}
+	return C.VK_FALSE
 }

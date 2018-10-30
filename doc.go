@@ -30,18 +30,7 @@ Vulkan has two kinds of handles: dispatchable and non-dispatchable.
 In Vulkan, virtually all functions take a dispatchable handle as their first argument.
 This loosely maps to method receivers.
 
-In the Go bindings, we don't strictly stick to Vulkan's categorization.
-Where it makes sense, we define methods on non-dispatchable handles,
-for example to provide methods on CommandPool.
-In the Vulkan API, VkCommandPool is a non-dispatchable handle,
-and functions that act on it take a VkDevice as their first argument.
-
-We prefer pool.AllocateCommandBuffers(...) over dev.AllocateCommandBuffers(pool, ...).
-
-This does mean that our structs have to carry around additional information,
-such as the handle of their parent object and function pointers.
-
-In the majority of cases, however, we stick to Vulkan's categorization.
+In the Go bindings, we stick to Vulkan's categorization.
 For example, we don't define any methods on VkBuffer.
 At first glance, it may make sense to treat VkBindBufferMemory as a method on VkBuffer.
 However, Vulkan later added VkBindBufferMemory2, which allows binding multiple buffers to memory at once.
