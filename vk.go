@@ -832,16 +832,8 @@ func (dev *Device) Destroy() {
 
 func (dev *Device) init() {
 	for i, name := range deviceFpNames {
-		dev.fps[i] = dev.mustGetDeviceProcAddr(name)
+		dev.fps[i] = dev.getDeviceProcAddr(name)
 	}
-}
-
-func (dev *Device) mustGetDeviceProcAddr(name string) C.PFN_vkVoidFunction {
-	fp := dev.getDeviceProcAddr(name)
-	if fp == nil {
-		panic(fmt.Sprintf("couldn't load function %s", name))
-	}
-	return fp
 }
 
 func (dev *Device) getDeviceProcAddr(name string) C.PFN_vkVoidFunction {
