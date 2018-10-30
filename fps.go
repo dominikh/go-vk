@@ -75,6 +75,8 @@ const (
 	vkCmdSetDeviceMask
 	vkCmdSetDepthBounds
 	vkCmdPushConstants
+	vkCmdFillBuffer
+	vkCmdDispatch
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -158,4 +160,6 @@ var deviceFpNames = [...]string{
 	vkCmdSetDeviceMask:            "vkCmdSetDeviceMask",
 	vkCmdSetDepthBounds:           "vkCmdSetDepthBounds",
 	vkCmdPushConstants:            "vkCmdPushConstants",
+	vkCmdFillBuffer:               "vkCmdFillBuffer",
+	vkCmdDispatch:                 "vkCmdDispatch",
 }

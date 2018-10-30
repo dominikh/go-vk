@@ -177,3 +177,9 @@ void domVkCmdSetDepthBounds(PFN_vkCmdSetDepthBounds fp, VkCommandBuffer commandB
 void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues) {
 	(*fp)(commandBuffer, layout, stageFlags, offset, size, pValues);
 }
+void domVkCmdFillBuffer(PFN_vkCmdFillBuffer fp, VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize size, uint32_t data) {
+	(*fp)(commandBuffer, dstBuffer, dstOffset, size, data);
+}
+void domVkCmdDispatch(PFN_vkCmdDispatch fp, VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) {
+	(*fp)(commandBuffer, groupCountX, groupCountY, groupCountZ);
+}

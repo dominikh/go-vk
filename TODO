@@ -52,8 +52,10 @@ follow, then vendor extensions.
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetBlendConstants
 - [x] vkCmdPushConstants
+- [x] vkCmdFillBuffer
 - [x] vkCmdEndRenderPass
 - [x] vkCmdDraw
+- [x] vkCmdDispatch
 - [x] vkCmdBindPipeline
 - [x] vkCmdBeginRenderPass
 - [x] vkBindBufferMemory2
@@ -152,7 +154,6 @@ follow, then vendor extensions.
 - [ ] vkCmdResetEvent
 - [ ] vkCmdPipelineBarrier
 - [ ] vkCmdNextSubpass
-- [ ] vkCmdFillBuffer
 - [ ] vkCmdExecuteCommands
 - [ ] vkCmdEndQuery
 - [ ] vkCmdDrawIndirect
@@ -160,7 +161,6 @@ follow, then vendor extensions.
 - [ ] vkCmdDrawIndexed
 - [ ] vkCmdDispatchIndirect
 - [ ] vkCmdDispatchBase
-- [ ] vkCmdDispatch
 - [ ] vkCmdCopyQueryPoolResults
 - [ ] vkCmdCopyImageToBuffer
 - [ ] vkCmdCopyImage

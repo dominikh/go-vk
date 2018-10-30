@@ -976,6 +976,14 @@ func (buf *CommandBuffer) PushConstants(layout PipelineLayout, stageFlags Shader
 	C.domVkCmdPushConstants(buf.fps[vkCmdPushConstants], buf.hnd, layout.hnd, C.VkShaderStageFlags(stageFlags), C.uint32_t(offset), C.uint32_t(len(data)), slice2ptr(unsafe.Pointer(&data)))
 }
 
+func (buf *CommandBuffer) FillBuffer(dstBuffer Buffer, dstOffset DeviceSize, size DeviceSize, data uint32) {
+	C.domVkCmdFillBuffer(buf.fps[vkCmdFillBuffer], buf.hnd, dstBuffer.hnd, C.VkDeviceSize(dstOffset), C.VkDeviceSize(size), C.uint32_t(data))
+}
+
+func (buf *CommandBuffer) Dispatch(x, y, z uint32) {
+	C.domVkCmdDispatch(buf.fps[vkCmdDispatch], buf.hnd, C.uint32_t(x), C.uint32_t(y), C.uint32_t(z))
+}
+
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := align(C.sizeof_VkRenderPassBeginInfo)
 	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))

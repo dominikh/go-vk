@@ -60,3 +60,5 @@ void     domVkCmdSetScissor(PFN_vkCmdSetScissor fp, VkCommandBuffer commandBuffe
 void     domVkCmdSetDeviceMask(PFN_vkCmdSetDeviceMask fp, VkCommandBuffer commandBuffer, uint32_t deviceMask);
 void     domVkCmdSetDepthBounds(PFN_vkCmdSetDepthBounds fp, VkCommandBuffer commandBuffer, float minDepthBounds, float maxDepthBounds);
 void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues);
+void     domVkCmdFillBuffer(PFN_vkCmdFillBuffer fp, VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize size, uint32_t data);
+void     domVkCmdDispatch(PFN_vkCmdDispatch fp, VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
