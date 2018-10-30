@@ -61,6 +61,8 @@ func init() {
 	assertSameSize(unsafe.Sizeof(VertexInputAttributeDescription{}), C.sizeof_VkVertexInputAttributeDescription)
 	assertSameSize(unsafe.Sizeof(VertexInputBindingDescription{}), C.sizeof_VkVertexInputBindingDescription)
 	assertSameSize(unsafe.Sizeof(Viewport{}), C.sizeof_VkViewport)
+	assertSameSize(unsafe.Sizeof(ComponentMapping{}), C.sizeof_VkComponentMapping)
+	assertSameSize(unsafe.Sizeof(ImageSubresourceRange{}), C.sizeof_VkImageSubresourceRange)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1147,6 +1149,8 @@ type ComponentMapping struct {
 	G ComponentSwizzle
 	B ComponentSwizzle
 	A ComponentSwizzle
+
+	// must be kept identical to C struct
 }
 
 type ImageSubresourceRange struct {
@@ -1155,6 +1159,8 @@ type ImageSubresourceRange struct {
 	LevelCount     uint32
 	BaseArrayLayer uint32
 	LayerCount     uint32
+
+	// must be kept identical to C struct
 }
 
 func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error) {
@@ -1165,19 +1171,8 @@ func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error)
 	ptr.image = info.Image.hnd
 	ptr.viewType = C.VkImageViewType(info.ViewType)
 	ptr.format = C.VkFormat(info.Format)
-	ptr.components = C.VkComponentMapping{
-		r: C.VkComponentSwizzle(info.Components.R),
-		g: C.VkComponentSwizzle(info.Components.G),
-		b: C.VkComponentSwizzle(info.Components.B),
-		a: C.VkComponentSwizzle(info.Components.A),
-	}
-	ptr.subresourceRange = C.VkImageSubresourceRange{
-		aspectMask:     C.VkImageAspectFlags(info.SubresourceRange.AspectMask),
-		baseMipLevel:   C.uint32_t(info.SubresourceRange.BaseMipLevel),
-		levelCount:     C.uint32_t(info.SubresourceRange.LevelCount),
-		baseArrayLayer: C.uint32_t(info.SubresourceRange.BaseArrayLayer),
-		layerCount:     C.uint32_t(info.SubresourceRange.LayerCount),
-	}
+	ucopy1(unsafe.Pointer(&ptr.components), unsafe.Pointer(&info.Components), C.sizeof_VkComponentMapping)
+	ucopy1(unsafe.Pointer(&ptr.subresourceRange), unsafe.Pointer(&info.SubresourceRange), C.sizeof_VkImageSubresourceRange)
 
 	var out ImageView
 	res := Result(C.domVkCreateImageView(dev.fps[vkCreateImageView], dev.hnd, ptr, nil, &out.hnd))
