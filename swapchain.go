@@ -6,7 +6,6 @@ package vk
 // #cgo pkg-config: vulkan
 // #include <stdlib.h>
 // #include "vk.h"
-// #include "swapchain.h"
 import "C"
 
 import (

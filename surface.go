@@ -5,7 +5,6 @@ package vk
 
 // #cgo pkg-config: vulkan
 // #include "vk.h"
-// #include "surface.h"
 import "C"
 import (
 	"fmt"

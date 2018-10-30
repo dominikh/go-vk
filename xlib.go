@@ -7,7 +7,7 @@ package vk
 
 // #cgo pkg-config: vulkan x11
 // #include "vk.h"
-// #include "surface_xlib.h"
+// #include "xlib.h"
 import "C"
 
 type XlibDisplay = C.Display

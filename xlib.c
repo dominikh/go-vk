@@ -1,9 +1,7 @@
-// Copyright (c) 2018 Dominik Honnef
-
 // +build xlib
 
 #include <X11/Xlib.h>
-#include <vulkan/vulkan_core.h>
+#include "vk.h"
 #include <vulkan/vulkan_xlib.h>
 
 VkResult domVkCreateXlibSurfaceKHR(PFN_vkCreateXlibSurfaceKHR fp, VkInstance instance, const VkXlibSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface) {
