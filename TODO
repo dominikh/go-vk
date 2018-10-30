@@ -200,7 +200,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkDestroyIndirectCommandsLayoutNVX
 - [x] vkDestroyInstance
 - [ ] vkDestroyObjectTableNVX
-- [ ] vkDestroyPipeline
+- [x] vkDestroyPipeline
 - [ ] vkDestroyPipelineCache
 - [x] vkDestroyQueryPool
 - [x] vkDestroyRenderPass

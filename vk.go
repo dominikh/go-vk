@@ -1898,6 +1898,11 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	return out, nil
 }
 
+func (dev *Device) DestroyPipeline(pipeline Pipeline) {
+	// TODO(dh): support a custom allocator
+	C.domVkDestroyPipeline(dev.fps[vkDestroyPipeline], dev.hnd, pipeline.hnd, nil)
+}
+
 type AttachmentDescription struct {
 	Flags          AttachmentDescriptionFlags
 	Format         Format
