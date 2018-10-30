@@ -1176,6 +1176,10 @@ func (buf *CommandBuffer) ResetQueryPool(queryPool QueryPool, firstQuery, queryC
 	C.domVkCmdResetQueryPool(buf.fps[vkCmdResetQueryPool], buf.hnd, queryPool.hnd, C.uint32_t(firstQuery), C.uint32_t(queryCount))
 }
 
+func (buf *CommandBuffer) UpdateBuffer(dstBuffer Buffer, dstOffset DeviceSize, data []byte) {
+	C.domVkCmdUpdateBuffer(buf.fps[vkCmdUpdateBuffer], buf.hnd, dstBuffer.hnd, C.VkDeviceSize(dstOffset), C.VkDeviceSize(len(data)), slice2ptr(uptr(&data)))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags

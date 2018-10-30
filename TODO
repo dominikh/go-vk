@@ -151,7 +151,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdSetViewportShadingRatePaletteNV
 - [ ] vkCmdSetViewportWScalingNV
 - [ ] vkCmdTraceRaysNVX
-- [ ] vkCmdUpdateBuffer
+- [x] vkCmdUpdateBuffer
 - [ ] vkCmdWaitEvents
 - [ ] vkCmdWriteAccelerationStructurePropertiesNVX
 - [ ] vkCmdWriteBufferMarkerAMD
