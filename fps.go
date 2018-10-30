@@ -77,6 +77,11 @@ const (
 	vkCmdPushConstants
 	vkCmdFillBuffer
 	vkCmdDispatch
+	vkCreateEvent
+	vkSetEvent
+	vkResetEvent
+	vkGetEventStatus
+	vkCmdSetEvent
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -162,4 +167,9 @@ var deviceFpNames = [...]string{
 	vkCmdPushConstants:            "vkCmdPushConstants",
 	vkCmdFillBuffer:               "vkCmdFillBuffer",
 	vkCmdDispatch:                 "vkCmdDispatch",
+	vkCreateEvent:                 "vkCreateEvent",
+	vkSetEvent:                    "vkSetEvent",
+	vkResetEvent:                  "vkResetEvent",
+	vkGetEventStatus:              "vkGetEventStatus",
+	vkCmdSetEvent:                 "vkCmdSetEvent",
 }

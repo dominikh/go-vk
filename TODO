@@ -8,7 +8,9 @@ follow, then vendor extensions.
 - [x] vkWaitForFences
 - [x] vkUnmapMemory
 - [x] vkTrimCommandPool
+- [x] vkSetEvent
 - [x] vkResetFences
+- [x] vkResetEvent
 - [x] vkResetCommandPool
 - [x] vkQueueWaitIdle
 - [x] vkQueueSubmit
@@ -21,6 +23,7 @@ follow, then vendor extensions.
 - [x] vkGetPhysicalDeviceMemoryProperties
 - [x] vkGetPhysicalDeviceFeatures
 - [x] vkGetInstanceProcAddr
+- [x] vkGetEventStatus
 - [x] vkGetDeviceQueue
 - [x] vkGetDeviceProcAddr
 - [x] vkGetBufferMemoryRequirements
@@ -41,12 +44,14 @@ follow, then vendor extensions.
 - [x] vkCreateGraphicsPipelines
 - [x] vkCreateFramebuffer
 - [x] vkCreateFence
+- [x] vkCreateEvent
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCreateBuffer
 - [x] vkCmdSetViewport
 - [x] vkCmdSetScissor
 - [x] vkCmdSetLineWidth
+- [x] vkCmdSetEvent
 - [x] vkCmdSetDeviceMask
 - [x] vkCmdSetDepthBounds
 - [x] vkCmdSetDepthBias
@@ -67,8 +72,6 @@ follow, then vendor extensions.
 - [x] VkResetCommandBuffer
 - [ ] vkUpdateDescriptorSets
 - [ ] vkUpdateDescriptorSetWithTemplate
-- [ ] vkSetEvent
-- [ ] vkResetEvent
 - [ ] vkResetDescriptorPool
 - [ ] vkQueueBindSparse
 - [ ] vkMergePipelineCaches
@@ -95,7 +98,6 @@ follow, then vendor extensions.
 - [ ] vkGetImageMemoryRequirements2
 - [ ] vkGetImageMemoryRequirements
 - [ ] vkGetFenceStatus
-- [ ] vkGetEventStatus
 - [ ] vkGetDeviceQueue2
 - [ ] vkGetDeviceMemoryCommitment
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
@@ -136,7 +138,6 @@ follow, then vendor extensions.
 - [ ] vkCreateSampler
 - [ ] vkCreateQueryPool
 - [ ] vkCreatePipelineCache
-- [ ] vkCreateEvent
 - [ ] vkCreateDescriptorUpdateTemplate
 - [ ] vkCreateDescriptorSetLayout
 - [ ] vkCreateDescriptorPool
@@ -148,7 +149,6 @@ follow, then vendor extensions.
 - [ ] vkCmdSetStencilWriteMask
 - [ ] vkCmdSetStencilReference
 - [ ] vkCmdSetStencilCompareMask
-- [ ] vkCmdSetEvent
 - [ ] vkCmdResolveImage
 - [ ] vkCmdResetQueryPool
 - [ ] vkCmdResetEvent

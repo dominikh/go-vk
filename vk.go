@@ -984,6 +984,10 @@ func (buf *CommandBuffer) Dispatch(x, y, z uint32) {
 	C.domVkCmdDispatch(buf.fps[vkCmdDispatch], buf.hnd, C.uint32_t(x), C.uint32_t(y), C.uint32_t(z))
 }
 
+func (buf *CommandBuffer) SetEvent(event Event, stageMask PipelineStageFlags) {
+	C.domVkCmdSetEvent(buf.fps[vkCmdSetEvent], buf.hnd, event.hnd, C.VkPipelineStageFlags(stageMask))
+}
+
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := align(C.sizeof_VkRenderPassBeginInfo)
 	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))
@@ -2225,6 +2229,55 @@ func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
 	internalizeChain(info.Extensions, cinfo.pNext)
 	free(unsafe.Pointer(cinfo))
 	return img, result2error(res)
+}
+
+type Event struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkEvent)
+	hnd C.VkEvent
+}
+
+type EventCreateInfo struct {
+	Extensions []Extension
+}
+
+func (info *EventCreateInfo) c() *C.VkEventCreateInfo {
+	cinfo := (*C.VkEventCreateInfo)(alloc(C.sizeof_VkEventCreateInfo))
+	*cinfo = C.VkEventCreateInfo{
+		sType: C.VkStructureType(StructureTypeEventCreateInfo),
+		pNext: buildChain(info.Extensions),
+		flags: 0,
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateEvent(info *EventCreateInfo) (Event, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var ev Event
+	res := Result(C.domVkCreateEvent(dev.fps[vkCreateEvent], dev.hnd, cinfo, nil, &ev.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(unsafe.Pointer(cinfo))
+	return ev, result2error(res)
+}
+
+func (dev *Device) SetEvent(ev Event) error {
+	res := Result(C.domVkSetEvent(dev.fps[vkSetEvent], dev.hnd, ev.hnd))
+	return result2error(res)
+}
+
+func (dev *Device) ResetEvent(ev Event) error {
+	res := Result(C.domVkResetEvent(dev.fps[vkResetEvent], dev.hnd, ev.hnd))
+	return result2error(res)
+}
+
+func (dev *Device) EventStatus(ev Event) (Result, error) {
+	res := Result(C.domVkGetEventStatus(dev.fps[vkGetEventStatus], dev.hnd, ev.hnd))
+	switch res {
+	case EventSet, EventReset:
+		return res, nil
+	default:
+		return res, res
+	}
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

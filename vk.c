@@ -183,3 +183,18 @@ void domVkCmdFillBuffer(PFN_vkCmdFillBuffer fp, VkCommandBuffer commandBuffer, V
 void domVkCmdDispatch(PFN_vkCmdDispatch fp, VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) {
 	(*fp)(commandBuffer, groupCountX, groupCountY, groupCountZ);
 }
+VkResult domVkCreateEvent(PFN_vkCreateEvent fp, VkDevice device, const VkEventCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkEvent* pEvent) {
+	return (*fp)(device, pCreateInfo, pAllocator, pEvent);
+}
+VkResult domVkSetEvent(PFN_vkSetEvent fp, VkDevice device, VkEvent event) {
+	return (*fp)(device, event);
+}
+VkResult domVkResetEvent(PFN_vkSetEvent fp, VkDevice device, VkEvent event) {
+	return (*fp)(device, event);
+}
+VkResult domVkGetEventStatus(PFN_vkGetEventStatus fp, VkDevice device, VkEvent event) {
+	return (*fp)(device, event);
+}
+void domVkCmdSetEvent(PFN_vkCmdSetEvent fp, VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask) {
+	(*fp)(commandBuffer, event, stageMask);
+}

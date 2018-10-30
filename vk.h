@@ -62,3 +62,8 @@ void     domVkCmdSetDepthBounds(PFN_vkCmdSetDepthBounds fp, VkCommandBuffer comm
 void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues);
 void     domVkCmdFillBuffer(PFN_vkCmdFillBuffer fp, VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize size, uint32_t data);
 void     domVkCmdDispatch(PFN_vkCmdDispatch fp, VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
+VkResult domVkCreateEvent(PFN_vkCreateEvent fp, VkDevice device, const VkEventCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkEvent* pEvent);
+VkResult domVkSetEvent(PFN_vkSetEvent fp, VkDevice device, VkEvent event);
+VkResult domVkResetEvent(PFN_vkResetEvent fp, VkDevice device, VkEvent event);
+VkResult domVkGetEventStatus(PFN_vkGetEventStatus fp, VkDevice device, VkEvent event);
+void     domVkCmdSetEvent(PFN_vkCmdSetEvent fp, VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask);
