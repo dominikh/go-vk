@@ -542,7 +542,7 @@ func (dev *PhysicalDevice) ExtensionProperties(layer string) ([]ExtensionPropert
 		return nil, res
 	}
 	properties := make([]C.VkExtensionProperties, count)
-	res = Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, &properties[0]))
+	res = Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, (*C.VkExtensionProperties)(slice2ptr(unsafe.Pointer(&properties)))))
 	if res != Success {
 		return nil, res
 	}
@@ -708,7 +708,7 @@ func (dev *PhysicalDevice) QueueFamilyProperties() []QueueFamilyProperties {
 	var count C.uint32_t
 	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, nil)
 	props := make([]QueueFamilyProperties, count)
-	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, (*C.VkQueueFamilyProperties)(unsafe.Pointer(&props[0])))
+	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, (*C.VkQueueFamilyProperties)(slice2ptr(unsafe.Pointer(&props))))
 	return props
 }
 
@@ -973,7 +973,7 @@ func (buf *CommandBuffer) SetDepthBias(constantFactor, clamp, slopeFactor float3
 }
 
 func (buf *CommandBuffer) SetBlendConstants(blendConstants [4]float32) {
-	C.domVkCmdSetBlendConstants(buf.fps[vkCmdSetBlendConstants], buf.hnd, (*C.float)(unsafe.Pointer(&blendConstants[0])))
+	C.domVkCmdSetBlendConstants(buf.fps[vkCmdSetBlendConstants], buf.hnd, (*C.float)(slice2ptr(unsafe.Pointer(&blendConstants))))
 }
 
 func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstInstance uint32) {
@@ -981,11 +981,11 @@ func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstIns
 }
 
 func (buf *CommandBuffer) SetViewport(firstViewport uint32, viewports []Viewport) {
-	C.domVkCmdSetViewport(buf.fps[vkCmdSetViewport], buf.hnd, C.uint32_t(firstViewport), C.uint32_t(len(viewports)), (*C.VkViewport)(unsafe.Pointer(&viewports[0])))
+	C.domVkCmdSetViewport(buf.fps[vkCmdSetViewport], buf.hnd, C.uint32_t(firstViewport), C.uint32_t(len(viewports)), (*C.VkViewport)(slice2ptr(unsafe.Pointer(&viewports))))
 }
 
 func (buf *CommandBuffer) SetScissor(firstScissor uint32, scissors []Rect2D) {
-	C.domVkCmdSetScissor(buf.fps[vkCmdSetScissor], buf.hnd, C.uint32_t(firstScissor), C.uint32_t(len(scissors)), (*C.VkRect2D)(unsafe.Pointer(&scissors[0])))
+	C.domVkCmdSetScissor(buf.fps[vkCmdSetScissor], buf.hnd, C.uint32_t(firstScissor), C.uint32_t(len(scissors)), (*C.VkRect2D)(slice2ptr(unsafe.Pointer(&scissors))))
 }
 
 func (buf *CommandBuffer) SetDeviceMask(deviceMask uint32) {
@@ -997,7 +997,7 @@ func (buf *CommandBuffer) SetDepthBounds(min, max float32) {
 }
 
 func (buf *CommandBuffer) PushConstants(layout PipelineLayout, stageFlags ShaderStageFlags, offset uint32, size uint32, data []byte) {
-	C.domVkCmdPushConstants(buf.fps[vkCmdPushConstants], buf.hnd, layout.hnd, C.VkShaderStageFlags(stageFlags), C.uint32_t(offset), C.uint32_t(len(data)), unsafe.Pointer(&data[0]))
+	C.domVkCmdPushConstants(buf.fps[vkCmdPushConstants], buf.hnd, layout.hnd, C.VkShaderStageFlags(stageFlags), C.uint32_t(offset), C.uint32_t(len(data)), slice2ptr(unsafe.Pointer(&data)))
 }
 
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
@@ -1098,7 +1098,7 @@ func (pool *CommandPool) AllocateCommandBuffers(info *CommandBufferAllocateInfo)
 	ptr.level = C.VkCommandBufferLevel(info.Level)
 	ptr.commandBufferCount = C.uint32_t(info.CommandBufferCount)
 	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
-	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, &bufs[0]))
+	res := Result(C.domVkAllocateCommandBuffers(pool.dev.fps[vkAllocateCommandBuffers], pool.dev.hnd, ptr, (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&bufs)))))
 	internalizeChain(info.Extensions, ptr.pNext)
 	free(unsafe.Pointer(ptr))
 	if res != Success {
@@ -1121,7 +1121,7 @@ func (pool *CommandPool) FreeBuffers(bufs []*CommandBuffer) {
 	for i, buf := range bufs {
 		ptrs[i] = buf.hnd
 	}
-	C.domVkFreeCommandBuffers(pool.dev.fps[vkFreeCommandBuffers], pool.dev.hnd, pool.hnd, C.uint32_t(len(bufs)), &ptrs[0])
+	C.domVkFreeCommandBuffers(pool.dev.fps[vkFreeCommandBuffers], pool.dev.hnd, pool.hnd, C.uint32_t(len(bufs)), (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&ptrs))))
 	pool.freePtrs = ptrs[:0]
 }
 
@@ -1732,7 +1732,7 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	}
 
 	hnds := make([]C.VkPipeline, len(infos))
-	res := Result(C.domVkCreateGraphicsPipelines(dev.fps[vkCreateGraphicsPipelines], dev.hnd, 0, C.uint32_t(len(infos)), ptrs, nil, &hnds[0]))
+	res := Result(C.domVkCreateGraphicsPipelines(dev.fps[vkCreateGraphicsPipelines], dev.hnd, 0, C.uint32_t(len(infos)), ptrs, nil, (*C.VkPipeline)(slice2ptr(unsafe.Pointer(&hnds)))))
 	if res != Success {
 		return nil, res
 	}
@@ -2049,20 +2049,12 @@ func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
 }
 
 func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Duration) error {
-	var ptr *C.VkFence
-	if len(fences) > 0 {
-		ptr = (*C.VkFence)(unsafe.Pointer(&fences[0]))
-	}
-	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), ptr, vkBool(waitAll), C.uint64_t(timeout)))
+	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(unsafe.Pointer(&fences))), vkBool(waitAll), C.uint64_t(timeout)))
 	return result2error(res)
 }
 
 func (dev *Device) ResetFences(fences []Fence) error {
-	var ptr *C.VkFence
-	if len(fences) > 0 {
-		ptr = (*C.VkFence)(unsafe.Pointer(&fences[0]))
-	}
-	res := Result(C.domVkResetFences(dev.fps[vkResetFences], dev.hnd, C.uint32_t(len(fences)), ptr))
+	res := Result(C.domVkResetFences(dev.fps[vkResetFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(unsafe.Pointer(&fences)))))
 	return result2error(res)
 }
 

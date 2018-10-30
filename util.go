@@ -5,6 +5,7 @@ import "C"
 
 import (
 	"math"
+	"reflect"
 	"unsafe"
 )
 
@@ -83,4 +84,8 @@ func result2error(res Result) error {
 		return nil
 	}
 	return res
+}
+
+func slice2ptr(slice unsafe.Pointer) unsafe.Pointer {
+	return unsafe.Pointer((*reflect.SliceHeader)(slice).Data)
 }
