@@ -204,7 +204,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkDestroyPipelineCache
 - [x] vkDestroyQueryPool
 - [ ] vkDestroyRenderPass
-- [ ] vkDestroySampler
+- [x] vkDestroySampler
 - [ ] vkDestroySamplerYcbcrConversion
 - [ ] vkDestroyShaderModule
 - [ ] vkDestroySurfaceKHR

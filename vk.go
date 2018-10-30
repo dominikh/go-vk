@@ -2588,6 +2588,11 @@ func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
 	return out, result2error(res)
 }
 
+func (dev *Device) DestroySampler(sampler Sampler) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroySampler(dev.fps[vkDestroySampler], dev.hnd, sampler.hnd, nil)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
