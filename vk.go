@@ -1172,6 +1172,10 @@ func (buf *CommandBuffer) ResetEvent(event Event, stageMask PipelineStageFlags) 
 	C.domVkCmdResetEvent(buf.fps[vkCmdResetEvent], buf.hnd, event.hnd, C.VkPipelineStageFlags(stageMask))
 }
 
+func (buf *CommandBuffer) ResetQueryPool(queryPool QueryPool, firstQuery, queryCount uint32) {
+	C.domVkCmdResetQueryPool(buf.fps[vkCmdResetQueryPool], buf.hnd, queryPool.hnd, C.uint32_t(firstQuery), C.uint32_t(queryCount))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
@@ -2481,6 +2485,45 @@ func (dev *Device) EventStatus(ev Event) (Result, error) {
 	default:
 		return res, res
 	}
+}
+
+type QueryPool struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkQueryPool)
+	hnd C.VkQueryPool
+}
+
+type QueryPoolCreateInfo struct {
+	Extensions         []Extension
+	QueryType          QueryType
+	QueryCount         uint32
+	PipelineStatistics QueryPipelineStatisticFlags
+}
+
+func (info *QueryPoolCreateInfo) c() *C.VkQueryPoolCreateInfo {
+	cinfo := (*C.VkQueryPoolCreateInfo)(alloc(C.sizeof_VkQueryPoolCreateInfo))
+	*cinfo = C.VkQueryPoolCreateInfo{
+		sType:              C.VkStructureType(StructureTypeQueryPoolCreateInfo),
+		pNext:              buildChain(info.Extensions),
+		queryType:          C.VkQueryType(info.QueryType),
+		queryCount:         C.uint32_t(info.QueryCount),
+		pipelineStatistics: C.VkQueryPipelineStatisticFlags(info.PipelineStatistics),
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateQueryPool(info *QueryPoolCreateInfo) (QueryPool, error) {
+	// TODO(dh(): support custom allocator
+	cinfo := info.c()
+	var out QueryPool
+	res := Result(C.domVkCreateQueryPool(dev.fps[vkCreateQueryPool], dev.hnd, cinfo, nil, &out.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
+func (dev *Device) DestroyQueryPool(queryPool QueryPool) {
+	// TODO(dh(): support custom allocator
+	C.domVkDestroyQueryPool(dev.fps[vkDestroyQueryPool], dev.hnd, queryPool.hnd, nil)
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

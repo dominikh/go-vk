@@ -138,7 +138,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdPushDescriptorSetWithTemplateKHR
 - [ ] vkCmdReserveSpaceForCommandsNVX
 - [x] vkCmdResetEvent
-- [ ] vkCmdResetQueryPool
+- [x] vkCmdResetQueryPool
 - [ ] vkCmdResolveImage
 - [ ] vkCmdSetCheckpointNV
 - [ ] vkCmdSetCoarseSampleOrderNV
@@ -175,7 +175,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCreateMirSurfaceKHR
 - [ ] vkCreateObjectTableNVX
 - [ ] vkCreatePipelineCache
-- [ ] vkCreateQueryPool
+- [x] vkCreateQueryPool
 - [ ] vkCreateRaytracingPipelinesNVX
 - [ ] vkCreateRenderPass2KHR
 - [ ] vkCreateSampler
@@ -202,7 +202,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkDestroyObjectTableNVX
 - [ ] vkDestroyPipeline
 - [ ] vkDestroyPipelineCache
-- [ ] vkDestroyQueryPool
+- [x] vkDestroyQueryPool
 - [ ] vkDestroyRenderPass
 - [ ] vkDestroySampler
 - [ ] vkDestroySamplerYcbcrConversion

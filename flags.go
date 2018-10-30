@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType,QueryType
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -72,6 +72,7 @@ type ImageTiling uint32
 type ImageType uint32
 type ImageCreateFlags uint32
 type IndexType uint32
+type QueryType uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1561,6 +1562,14 @@ const (
 const (
 	IndexTypeUint16 IndexType = 0
 	IndexTypeUint32 IndexType = 1
+)
+
+const (
+	QueryTypeOcclusion                  QueryType = 0
+	QueryTypePipelineStatistics         QueryType = 1
+	QueryTypeTimestamp                  QueryType = 2
+	QueryTypeTransformFeedbackStreamEXT QueryType = 1000028004
+	QueryTypeCompactedSizeNVX           QueryType = 1000165000
 )
 
 func (res Result) Error() string { return res.String() }
