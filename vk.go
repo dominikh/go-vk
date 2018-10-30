@@ -63,6 +63,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(Viewport{}), C.sizeof_VkViewport)
 	assertSameSize(unsafe.Sizeof(ComponentMapping{}), C.sizeof_VkComponentMapping)
 	assertSameSize(unsafe.Sizeof(ImageSubresourceRange{}), C.sizeof_VkImageSubresourceRange)
+	assertSameSize(unsafe.Sizeof(ClearDepthStencilValue{}), C.sizeof_VkClearDepthStencilValue)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -987,6 +988,65 @@ func (buf *CommandBuffer) SetEvent(event Event, stageMask PipelineStageFlags) {
 	C.domVkCmdSetEvent(buf.fps[vkCmdSetEvent], buf.hnd, event.hnd, C.VkPipelineStageFlags(stageMask))
 }
 
+type ClearAttachment struct {
+	AspectMask      ImageAspectFlags
+	ColorAttachment uint32
+	ClearValue      ClearValue
+}
+
+type ClearRect struct {
+	Rect           Rect2D
+	BaseArrayLayer uint32
+	LayerCount     uint32
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects []ClearRect) {
+	mem := allocn(len(attachments), C.sizeof_VkClearAttachment)
+	arr := (*[math.MaxInt32]C.VkClearAttachment)(mem)[:len(attachments)]
+	for i := range arr {
+		arr[i] = C.VkClearAttachment{
+			aspectMask:      C.VkImageAspectFlags(attachments[i].AspectMask),
+			colorAttachment: C.uint32_t(attachments[i].ColorAttachment),
+		}
+		switch v := attachments[i].ClearValue.(type) {
+		case ClearColorValueFloat32s:
+			copy(arr[i].clearValue[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearColorValueInt32s:
+			copy(arr[i].clearValue[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearColorValueUint32s:
+			copy(arr[i].clearValue[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+		case ClearDepthStencilValue:
+			ucopy1(unsafe.Pointer(&arr[i].clearValue), unsafe.Pointer(&v), C.sizeof_VkClearDepthStencilValue)
+		default:
+			panic(fmt.Sprintf("unreachable: %T", v))
+		}
+	}
+	C.domVkCmdClearAttachments(buf.fps[vkCmdClearAttachments], buf.hnd, C.uint32_t(len(attachments)), (*C.VkClearAttachment)(mem), C.uint32_t(len(rects)), (*C.VkClearRect)(slice2ptr(unsafe.Pointer(&rects))))
+	free(unsafe.Pointer(mem))
+}
+
+func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, color ClearColorValue, ranges []ImageSubresourceRange) {
+	cColor := (*C.VkClearColorValue)(alloc(C.sizeof_VkClearColorValue))
+	switch v := color.(type) {
+	case ClearColorValueFloat32s:
+		copy(cColor[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+	case ClearColorValueInt32s:
+		copy(cColor[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+	case ClearColorValueUint32s:
+		copy(cColor[:], (*[16]byte)(unsafe.Pointer(&v))[:])
+	default:
+		panic(fmt.Sprintf("unreachable: %T", v))
+	}
+	C.domVkCmdClearColorImage(buf.fps[vkCmdClearColorImage], buf.hnd, image.hnd, C.VkImageLayout(imageLayout), cColor, C.uint32_t(len(ranges)), (*C.VkImageSubresourceRange)(slice2ptr(unsafe.Pointer(&ranges))))
+	free(unsafe.Pointer(cColor))
+}
+
+func (buf *CommandBuffer) ClearDepthStencilImage(image Image, imageLayout ImageLayout, depthStencil ClearDepthStencilValue, ranges []ImageSubresourceRange) {
+	C.domVkCmdClearDepthStencilImage(buf.fps[vkCmdClearDepthStencilImage], buf.hnd, image.hnd, C.VkImageLayout(imageLayout), (*C.VkClearDepthStencilValue)(unsafe.Pointer(&depthStencil)), C.uint32_t(len(ranges)), (*C.VkImageSubresourceRange)(slice2ptr(unsafe.Pointer(&ranges))))
+}
+
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := align(C.sizeof_VkRenderPassBeginInfo)
 	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))
@@ -1901,6 +1961,10 @@ type ClearValue interface {
 	isClearValue()
 }
 
+type ClearColorValue interface {
+	isClearColorValue()
+}
+
 type ClearColorValueFloat32s [4]float32
 type ClearColorValueInt32s [4]int32
 type ClearColorValueUint32s [4]uint32
@@ -1908,7 +1972,13 @@ type ClearColorValueUint32s [4]uint32
 type ClearDepthStencilValue struct {
 	Depth   float32
 	Stencil uint32
+
+	// must be kept identical to C struct
 }
+
+func (ClearColorValueFloat32s) isClearColorValue() {}
+func (ClearColorValueInt32s) isClearColorValue()   {}
+func (ClearColorValueUint32s) isClearColorValue()  {}
 
 func (ClearColorValueFloat32s) isClearValue() {}
 func (ClearColorValueInt32s) isClearValue()   {}

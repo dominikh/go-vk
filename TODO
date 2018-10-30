@@ -71,6 +71,9 @@ follow, then vendor extensions.
 - [x] vkCmdEndRenderPass
 - [x] vkCmdDraw
 - [x] vkCmdDispatch
+- [x] vkCmdClearDepthStencilImage
+- [x] vkCmdClearColorImage
+- [x] vkCmdClearAttachments
 - [x] vkCmdBindPipeline
 - [x] vkCmdBeginRenderPass
 - [x] vkBindBufferMemory2
@@ -166,9 +169,6 @@ follow, then vendor extensions.
 - [ ] vkCmdCopyImage
 - [ ] vkCmdCopyBufferToImage
 - [ ] vkCmdCopyBuffer
-- [ ] vkCmdClearDepthStencilImage
-- [ ] vkCmdClearColorImage
-- [ ] vkCmdClearAttachments
 - [ ] vkCmdBlitImage
 - [ ] vkCmdBindVertexBuffers
 - [ ] vkCmdBindIndexBuffer

@@ -77,3 +77,6 @@ void     domVkDestroyDevice(PFN_vkDestroyDevice fp, VkDevice device, const VkAll
 void     domVkDestroyImageView(PFN_vkDestroyImageView fp, VkDevice device, VkImageView imageView, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyCommandPool(PFN_vkDestroyCommandPool fp, VkDevice device, VkCommandPool commandPool, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyPipelineLayout(PFN_vkDestroyPipelineLayout fp, VkDevice device, VkPipelineLayout pipelineLayout, const VkAllocationCallbacks* pAllocator);
+void     domVkCmdClearAttachments(PFN_vkCmdClearAttachments fp, VkCommandBuffer commandBuffer, uint32_t attachmentCount, const VkClearAttachment* pAttachments, uint32_t rectCount, const VkClearRect* pRects);
+void     domVkCmdClearColorImage(PFN_vkCmdClearColorImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearColorValue* pColor, uint32_t rangeCount, const VkImageSubresourceRange* pRanges);
+void     domVkCmdClearDepthStencilImage(PFN_vkCmdClearDepthStencilImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearDepthStencilValue* pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange* pRanges);

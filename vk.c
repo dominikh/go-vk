@@ -228,3 +228,12 @@ void domVkDestroyCommandPool(PFN_vkDestroyCommandPool fp, VkDevice device, VkCom
 void domVkDestroyPipelineLayout(PFN_vkDestroyPipelineLayout fp, VkDevice device, VkPipelineLayout pipelineLayout, const VkAllocationCallbacks* pAllocator) {
 	(*fp)(device, pipelineLayout, pAllocator);
 }
+void domVkCmdClearAttachments(PFN_vkCmdClearAttachments fp, VkCommandBuffer commandBuffer, uint32_t attachmentCount, const VkClearAttachment* pAttachments, uint32_t rectCount, const VkClearRect* pRects) {
+	(*fp)(commandBuffer, attachmentCount, pAttachments, rectCount, pRects);
+}
+void domVkCmdClearColorImage(PFN_vkCmdClearColorImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearColorValue* pColor, uint32_t rangeCount, const VkImageSubresourceRange* pRanges) {
+	(*fp)(commandBuffer, image, imageLayout, pColor, rangeCount, pRanges);
+}
+void domVkCmdClearDepthStencilImage(PFN_vkCmdClearDepthStencilImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearDepthStencilValue* pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange* pRanges) {
+	(*fp)(commandBuffer, image, imageLayout, pDepthStencil, rangeCount, pRanges);
+}

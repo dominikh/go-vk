@@ -92,6 +92,9 @@ const (
 	vkDestroyImageView
 	vkDestroyCommandPool
 	vkDestroyPipelineLayout
+	vkCmdClearAttachments
+	vkCmdClearColorImage
+	vkCmdClearDepthStencilImage
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -192,4 +195,7 @@ var deviceFpNames = [...]string{
 	vkDestroyImageView:            "vkDestroyImageView",
 	vkDestroyCommandPool:          "vkDestroyCommandPool",
 	vkDestroyPipelineLayout:       "vkDestroyPipelineLayout",
+	vkCmdClearAttachments:         "vkCmdClearAttachments",
+	vkCmdClearColorImage:          "vkCmdClearColorImage",
+	vkCmdClearDepthStencilImage:   "vkCmdClearDepthStencilImage",
 }
