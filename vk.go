@@ -2526,6 +2526,64 @@ func (dev *Device) DestroyQueryPool(queryPool QueryPool) {
 	C.domVkDestroyQueryPool(dev.fps[vkDestroyQueryPool], dev.hnd, queryPool.hnd, nil)
 }
 
+type Sampler struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSampler)
+	hnd C.VkSampler
+}
+
+type SamplerCreateInfo struct {
+	Extensions              []Extension
+	MagFilter               Filter
+	MinFilter               Filter
+	MipmapMode              SamplerMipmapMode
+	AddressModeU            SamplerAddressMode
+	AddressModeV            SamplerAddressMode
+	AddressModeW            SamplerAddressMode
+	MipLodBias              float32
+	AnisotropyEnable        bool
+	MaxAnisotropy           float32
+	CompareEnable           bool
+	CompareOp               CompareOp
+	MinLod                  float32
+	MaxLod                  float32
+	BorderColor             BorderColor
+	UnnormalizedCoordinates bool
+}
+
+func (info *SamplerCreateInfo) c() *C.VkSamplerCreateInfo {
+	cinfo := (*C.VkSamplerCreateInfo)(alloc(C.sizeof_VkSamplerCreateInfo))
+	*cinfo = C.VkSamplerCreateInfo{
+		sType:                   C.VkStructureType(StructureTypeSamplerCreateInfo),
+		pNext:                   buildChain(info.Extensions),
+		magFilter:               C.VkFilter(info.MagFilter),
+		minFilter:               C.VkFilter(info.MinFilter),
+		mipmapMode:              C.VkSamplerMipmapMode(info.MipmapMode),
+		addressModeU:            C.VkSamplerAddressMode(info.AddressModeU),
+		addressModeV:            C.VkSamplerAddressMode(info.AddressModeV),
+		addressModeW:            C.VkSamplerAddressMode(info.AddressModeW),
+		mipLodBias:              C.float(info.MipLodBias),
+		anisotropyEnable:        vkBool(info.AnisotropyEnable),
+		maxAnisotropy:           C.float(info.MaxAnisotropy),
+		compareEnable:           vkBool(info.CompareEnable),
+		compareOp:               C.VkCompareOp(info.CompareOp),
+		minLod:                  C.float(info.MinLod),
+		maxLod:                  C.float(info.MaxLod),
+		borderColor:             C.VkBorderColor(info.BorderColor),
+		unnormalizedCoordinates: vkBool(info.UnnormalizedCoordinates),
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var out Sampler
+	res := Result(C.domVkCreateSampler(dev.fps[vkCreateSampler], dev.hnd, cinfo, nil, &out.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 

@@ -178,7 +178,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCreateQueryPool
 - [ ] vkCreateRaytracingPipelinesNVX
 - [ ] vkCreateRenderPass2KHR
-- [ ] vkCreateSampler
+- [x] vkCreateSampler
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkCreateSharedSwapchainsKHR
 - [ ] vkCreateValidationCacheEXT

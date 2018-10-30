@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType,QueryType
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType,QueryType,Filter,SamplerAddressMode,SamplerMipmapMode,BorderColor
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -73,6 +73,10 @@ type ImageType uint32
 type ImageCreateFlags uint32
 type IndexType uint32
 type QueryType uint32
+type Filter uint32
+type SamplerAddressMode uint32
+type SamplerMipmapMode uint32
+type BorderColor uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1570,6 +1574,34 @@ const (
 	QueryTypeTimestamp                  QueryType = 2
 	QueryTypeTransformFeedbackStreamEXT QueryType = 1000028004
 	QueryTypeCompactedSizeNVX           QueryType = 1000165000
+)
+
+const (
+	FilterNearest  Filter = 0
+	FilterLinear   Filter = 1
+	FilterCubicIMG Filter = 1000015000
+)
+
+const (
+	SamplerAddressModeRepeat            SamplerAddressMode = 0
+	SamplerAddressModeMirroredRepeat    SamplerAddressMode = 1
+	SamplerAddressModeClampToEdge       SamplerAddressMode = 2
+	SamplerAddressModeClampToBorder     SamplerAddressMode = 3
+	SamplerAddressModeMirrorClampToEdge SamplerAddressMode = 4
+)
+
+const (
+	SamplerMipmapModeNearest SamplerMipmapMode = 0
+	SamplerMipmapModeLinear  SamplerMipmapMode = 1
+)
+
+const (
+	BorderColorFloatTransparentBlack BorderColor = 0
+	BorderColorIntTransparentBlack   BorderColor = 1
+	BorderColorFloatOpaqueBlack      BorderColor = 2
+	BorderColorIntOpaqueBlack        BorderColor = 3
+	BorderColorFloatOpaqueWhite      BorderColor = 4
+	BorderColorIntOpaqueWhite        BorderColor = 5
 )
 
 func (res Result) Error() string { return res.String() }
