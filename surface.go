@@ -56,7 +56,7 @@ func (dev *PhysicalDevice) SurfaceSupportKHR(queueFamilyIndex uint32, surface Su
 
 func (dev *PhysicalDevice) SurfaceCapabilitiesKHR(surface SurfaceKHR) (*SurfaceCapabilities, error) {
 	var out SurfaceCapabilities
-	res := Result(C.domVkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceCapabilitiesKHR], dev.hnd, surface.hnd, (*C.VkSurfaceCapabilitiesKHR)(unsafe.Pointer(&out))))
+	res := Result(C.domVkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceCapabilitiesKHR], dev.hnd, surface.hnd, (*C.VkSurfaceCapabilitiesKHR)(uptr(&out))))
 	return &out, result2error(res)
 }
 
@@ -67,7 +67,7 @@ func (dev *PhysicalDevice) SurfaceFormatsKHR(surface SurfaceKHR) ([]SurfaceForma
 		return nil, res
 	}
 	out := make([]SurfaceFormatKHR, count)
-	res = Result(C.domVkGetPhysicalDeviceSurfaceFormatsKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceFormatsKHR], dev.hnd, surface.hnd, &count, (*C.VkSurfaceFormatKHR)(unsafe.Pointer(&out[0]))))
+	res = Result(C.domVkGetPhysicalDeviceSurfaceFormatsKHR(dev.instance.fps[vkGetPhysicalDeviceSurfaceFormatsKHR], dev.hnd, surface.hnd, &count, (*C.VkSurfaceFormatKHR)(uptr(&out[0]))))
 	return out, result2error(res)
 }
 
@@ -78,6 +78,6 @@ func (dev *PhysicalDevice) SurfacePresentModesKHR(surface SurfaceKHR) ([]Present
 		return nil, res
 	}
 	out := make([]PresentModeKHR, count)
-	res = Result(C.domVkGetPhysicalDeviceSurfacePresentModesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfacePresentModesKHR], dev.hnd, surface.hnd, &count, (*C.VkPresentModeKHR)(unsafe.Pointer(&out[0]))))
+	res = Result(C.domVkGetPhysicalDeviceSurfacePresentModesKHR(dev.instance.fps[vkGetPhysicalDeviceSurfacePresentModesKHR], dev.hnd, surface.hnd, &count, (*C.VkPresentModeKHR)(uptr(&out[0]))))
 	return out, result2error(res)
 }
