@@ -7,7 +7,10 @@ package vk
 // #include "vk.h"
 // #include "surface.h"
 import "C"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 func init() {
 	assertSameSize(unsafe.Sizeof(SurfaceCapabilities{}), unsafe.Sizeof(C.VkSurfaceCapabilitiesKHR{}))
@@ -17,6 +20,10 @@ func init() {
 type SurfaceKHR struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSurfaceKHR)
 	hnd C.VkSurfaceKHR
+}
+
+func (hnd SurfaceKHR) String() string {
+	return fmt.Sprintf("VkSurfaceKHR(%#x)", hnd.hnd)
 }
 
 type SurfaceCapabilities struct {

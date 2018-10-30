@@ -155,10 +155,6 @@ func (ins *Instance) init() {
 	}
 }
 
-func (ins *Instance) String() string {
-	return fmt.Sprintf("VkInstance(%p)", ins.hnd)
-}
-
 func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
 	count := C.uint32_t(1)
 	var devs *C.VkPhysicalDevice
@@ -188,10 +184,6 @@ type PhysicalDevice struct {
 	// VK_DEFINE_HANDLE(VkPhysicalDevice)
 	hnd      C.VkPhysicalDevice
 	instance *Instance
-}
-
-func (dev *PhysicalDevice) String() string {
-	return fmt.Sprintf("VkPhysicalDevice(%p)", dev.hnd)
 }
 
 type PhysicalDeviceLimits struct {
@@ -839,10 +831,6 @@ func (dev *Device) init() {
 	}
 }
 
-func (dev *Device) String() string {
-	return fmt.Sprintf("VkDevice(%p)", dev.hnd)
-}
-
 func (dev *Device) mustGetDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 	fp := dev.getDeviceProcAddr(name)
 	if fp == nil {
@@ -867,10 +855,6 @@ type Queue struct {
 	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
 }
 
-func (q *Queue) String() string {
-	return fmt.Sprintf("VkQueue(%p)", q.hnd)
-}
-
 func (q *Queue) WaitIdle() error {
 	res := Result(C.domVkQueueWaitIdle(q.fps[vkQueueWaitIdle], q.hnd))
 	return result2error(res)
@@ -890,18 +874,10 @@ type CommandPool struct {
 	freePtrs []C.VkCommandBuffer
 }
 
-func (pool *CommandPool) String() string {
-	return fmt.Sprintf("VkCommandPool(%p)", pool.hnd)
-}
-
 type CommandBuffer struct {
 	// VK_DEFINE_HANDLE(VkCommandBuffer)
 	hnd C.VkCommandBuffer
 	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
-}
-
-func (buf *CommandBuffer) String() string {
-	return fmt.Sprintf("VkCommandBuffer(%p)", buf)
 }
 
 func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
@@ -1133,10 +1109,6 @@ func (dev *Device) WaitIdle() error {
 type Image struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImage)
 	hnd C.VkImage
-}
-
-func (img Image) String() string {
-	return fmt.Sprintf("VkImage(%p)", img.hnd)
 }
 
 type ImageView struct {
@@ -2265,4 +2237,25 @@ func mustVkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidF
 		panic(fmt.Sprintf("couldn't load function %s", name))
 	}
 	return fp
+}
+
+func (hnd *CommandBuffer) String() string  { return fmt.Sprintf("VkCommandBuffer(%#x)", hnd.hnd) }
+func (hnd *CommandPool) String() string    { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
+func (hnd *Device) String() string         { return fmt.Sprintf("VkDevice(%#x)", hnd.hnd) }
+func (hnd *Instance) String() string       { return fmt.Sprintf("VkInstance(%#x)", hnd.hnd) }
+func (hnd *Queue) String() string          { return fmt.Sprintf("VkQueue(%#x)", hnd.hnd) }
+func (hnd Buffer) String() string          { return fmt.Sprintf("VkBuffer(%#x)", hnd.hnd) }
+func (hnd DeviceMemory) String() string    { return fmt.Sprintf("VkDeviceMemory(%#x)", hnd.hnd) }
+func (hnd Fence) String() string           { return fmt.Sprintf("VkFence(%#x)", hnd.hnd) }
+func (hnd Framebuffer) String() string     { return fmt.Sprintf("VkFramebuffer(%#x)", hnd.hnd) }
+func (hnd Image) String() string           { return fmt.Sprintf("VkImage(%#x)", hnd.hnd) }
+func (hnd ImageView) String() string       { return fmt.Sprintf("VkImageView(%#x)", hnd.hnd) }
+func (hnd Pipeline) String() string        { return fmt.Sprintf("VkPipeline(%#x)", hnd.hnd) }
+func (hnd PipelineLayout) String() string  { return fmt.Sprintf("VkPipelineLayout(%#x)", hnd.hnd) }
+func (hnd RenderPass) String() string      { return fmt.Sprintf("VkRenderPass(%#x)", hnd.hnd) }
+func (hnd Semaphore) String() string       { return fmt.Sprintf("VkSemaphore(%#x)", hnd.hnd) }
+func (hnd ShaderModule) String() string    { return fmt.Sprintf("VkShaderModule(%#x)", hnd.hnd) }
+func (hnd *PhysicalDevice) String() string { return fmt.Sprintf("VkPhysicalDevice(%#x)", hnd.hnd) }
+func (hnd DescriptorSetLayout) String() string {
+	return fmt.Sprintf("VkDescriptorSetLayout(%#x)", hnd.hnd)
 }
