@@ -1168,6 +1168,10 @@ func (buf *CommandBuffer) CopyImageToBuffer(srcImage Image, srcImageLayout Image
 		(*C.VkBufferImageCopy)(slice2ptr(uptr(&regions))))
 }
 
+func (buf *CommandBuffer) ResetEvent(event Event, stageMask PipelineStageFlags) {
+	C.domVkCmdResetEvent(buf.fps[vkCmdResetEvent], buf.hnd, event.hnd, C.VkPipelineStageFlags(stageMask))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
