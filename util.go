@@ -55,24 +55,23 @@ func ucopy1(dst, src uptr, size uintptr) {
 	)
 }
 
-func externStrings(ss []string) (**C.char, func()) {
-	if len(ss) == 0 {
-		return nil, func() {}
+func externStrings(ss []string) **C.char {
+	size0 := C.sizeof_uintptr_t * uintptr(len(ss))
+	var size1 uintptr
+	for _, s := range ss {
+		size1 += uintptr(len(s)) + 1
 	}
-	var ptrs []uptr
-
-	ptr := allocn(len(ss), C.size_t(unsafe.Sizeof(uintptr(0))))
-	ptrs = append(ptrs, ptr)
-	slice := (*[math.MaxInt32]*C.char)(ptr)[:len(ss)]
+	size1 = align(size1)
+	size := size0 + size1
+	mem := alloc(C.size_t(size))
+	arr := (*[math.MaxInt32]uptr)(mem)[:len(ss)]
+	data := uptr(uintptr(mem) + size0)
 	for i, s := range ss {
-		slice[i] = C.CString(s)
-		ptrs = append(ptrs, uptr(slice[i]))
+		arr[i] = data
+		ucopy(data, unsafe.Pointer(&s), 1)
+		data = uptr(uintptr(data) + uintptr(len(s)) + 1)
 	}
-	return (**C.char)(ptr), func() {
-		for _, ptr := range ptrs {
-			free(ptr)
-		}
-	}
+	return (**C.char)(mem)
 }
 
 func externFloat32(vs []float32) *C.float {

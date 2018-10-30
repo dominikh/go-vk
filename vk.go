@@ -106,19 +106,17 @@ type ApplicationInfo struct {
 
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	// TODO(dh): support a custom allocator
-	var free1, free2 func()
-
 	ptr := (*C.VkInstanceCreateInfo)(alloc(C.sizeof_VkInstanceCreateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeInstanceCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
 	ptr.enabledLayerCount = C.uint32_t(len(info.EnabledLayerNames))
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
-	ptr.ppEnabledLayerNames, free1 = externStrings(info.EnabledLayerNames)
-	ptr.ppEnabledExtensionNames, free2 = externStrings(info.EnabledExtensionNames)
+	ptr.ppEnabledLayerNames = externStrings(info.EnabledLayerNames)
+	ptr.ppEnabledExtensionNames = externStrings(info.EnabledExtensionNames)
 	defer free(uptr(ptr))
-	defer free1()
-	defer free2()
+	defer free(uptr(ptr.ppEnabledLayerNames))
+	defer free(uptr(ptr.ppEnabledExtensionNames))
 	if info.ApplicationInfo != nil {
 		ptr.pApplicationInfo = (*C.VkApplicationInfo)(alloc(C.sizeof_VkApplicationInfo))
 		ptr.pApplicationInfo.sType = C.VkStructureType(StructureTypeApplicationInfo)
@@ -731,7 +729,6 @@ type Device struct {
 
 func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error) {
 	// TODO(dh): support custom allocators
-	var free1 func()
 	ptr := (*C.VkDeviceCreateInfo)(alloc(C.sizeof_VkDeviceCreateInfo))
 	ptr.sType = C.VkStructureType(StructureTypeDeviceCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
@@ -753,8 +750,8 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 		defer internalizeChain(obj.Extensions, arr[i].pNext)
 	}
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
-	ptr.ppEnabledExtensionNames, free1 = externStrings(info.EnabledExtensionNames)
-	defer free1()
+	ptr.ppEnabledExtensionNames = externStrings(info.EnabledExtensionNames)
+	defer free(uptr(ptr.ppEnabledExtensionNames))
 	if info.EnabledFeatures != nil {
 		ptr.pEnabledFeatures = (*C.VkPhysicalDeviceFeatures)(alloc(C.sizeof_VkPhysicalDeviceFeatures))
 		ptr.pEnabledFeatures.robustBufferAccess = vkBool(info.EnabledFeatures.RobustBufferAccess)
