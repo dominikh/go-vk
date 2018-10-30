@@ -161,3 +161,19 @@ void domVkFreeMemory(PFN_vkFreeMemory fp, VkDevice device, VkDeviceMemory memory
 VkResult domVkCreateImage(PFN_vkCreateImage fp, VkDevice device, const VkImageCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImage* pImage) {
 	return (*fp)(device, pCreateInfo, pAllocator, pImage);
 }
+void domVkCmdSetViewport(PFN_vkCmdSetViewport fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewport* pViewports) {
+	(*fp)(commandBuffer, firstViewport, viewportCount, pViewports);
+}
+void domVkCmdSetScissor(PFN_vkCmdSetScissor fp, VkCommandBuffer commandBuffer, uint32_t firstScissor, uint32_t scissorCount, const VkRect2D* pScissors) {
+	(*fp)(commandBuffer, firstScissor, scissorCount, pScissors);
+}
+void domVkCmdSetDeviceMask(PFN_vkCmdSetDeviceMask fp, VkCommandBuffer commandBuffer, uint32_t deviceMask) {
+	(*fp)(commandBuffer, deviceMask);
+}
+void domVkCmdSetDepthBounds(PFN_vkCmdSetDepthBounds fp, VkCommandBuffer commandBuffer, float minDepthBounds, float maxDepthBounds) {
+	(*fp)(commandBuffer, minDepthBounds, maxDepthBounds);
+}
+
+void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues) {
+	(*fp)(commandBuffer, layout, stageFlags, offset, size, pValues);
+}

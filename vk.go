@@ -980,6 +980,26 @@ func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstIns
 	C.domVkCmdDraw(buf.fps[vkCmdDraw], buf.hnd, C.uint32_t(vertexCount), C.uint32_t(instanceCount), C.uint32_t(firstVertex), C.uint32_t(firstInstance))
 }
 
+func (buf *CommandBuffer) SetViewport(firstViewport uint32, viewports []Viewport) {
+	C.domVkCmdSetViewport(buf.fps[vkCmdSetViewport], buf.hnd, C.uint32_t(firstViewport), C.uint32_t(len(viewports)), (*C.VkViewport)(unsafe.Pointer(&viewports[0])))
+}
+
+func (buf *CommandBuffer) SetScissor(firstScissor uint32, scissors []Rect2D) {
+	C.domVkCmdSetScissor(buf.fps[vkCmdSetScissor], buf.hnd, C.uint32_t(firstScissor), C.uint32_t(len(scissors)), (*C.VkRect2D)(unsafe.Pointer(&scissors[0])))
+}
+
+func (buf *CommandBuffer) SetDeviceMask(deviceMask uint32) {
+	C.domVkCmdSetDeviceMask(buf.fps[vkCmdSetDeviceMask], buf.hnd, C.uint32_t(deviceMask))
+}
+
+func (buf *CommandBuffer) SetDepthBounds(min, max float32) {
+	C.domVkCmdSetDepthBounds(buf.fps[vkCmdSetDepthBounds], buf.hnd, C.float(min), C.float(max))
+}
+
+func (buf *CommandBuffer) PushConstants(layout PipelineLayout, stageFlags ShaderStageFlags, offset uint32, size uint32, data []byte) {
+	C.domVkCmdPushConstants(buf.fps[vkCmdPushConstants], buf.hnd, layout.hnd, C.VkShaderStageFlags(stageFlags), C.uint32_t(offset), C.uint32_t(len(data)), unsafe.Pointer(&data[0]))
+}
+
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := align(C.sizeof_VkRenderPassBeginInfo)
 	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))

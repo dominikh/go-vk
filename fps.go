@@ -70,6 +70,11 @@ const (
 	vkUnmapMemory
 	vkFreeMemory
 	vkCreateImage
+	vkCmdSetViewport
+	vkCmdSetScissor
+	vkCmdSetDeviceMask
+	vkCmdSetDepthBounds
+	vkCmdPushConstants
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -148,4 +153,9 @@ var deviceFpNames = [...]string{
 	vkUnmapMemory:                 "vkUnmapMemory",
 	vkFreeMemory:                  "vkFreeMemory",
 	vkCreateImage:                 "vkCreateImage",
+	vkCmdSetViewport:              "vkCmdSetViewport",
+	vkCmdSetScissor:               "vkCmdSetScissor",
+	vkCmdSetDeviceMask:            "vkCmdSetDeviceMask",
+	vkCmdSetDepthBounds:           "vkCmdSetDepthBounds",
+	vkCmdPushConstants:            "vkCmdPushConstants",
 }

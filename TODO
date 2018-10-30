@@ -44,9 +44,14 @@ follow, then vendor extensions.
 - [x] vkCreateDevice
 - [x] vkCreateCommandPool
 - [x] vkCreateBuffer
+- [x] vkCmdSetViewport
+- [x] vkCmdSetScissor
 - [x] vkCmdSetLineWidth
+- [x] vkCmdSetDeviceMask
+- [x] vkCmdSetDepthBounds
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetBlendConstants
+- [x] vkCmdPushConstants
 - [x] vkCmdEndRenderPass
 - [x] vkCmdDraw
 - [x] vkCmdBindPipeline
@@ -138,18 +143,13 @@ follow, then vendor extensions.
 - [ ] vkCmdWriteTimestamp
 - [ ] vkCmdWaitEvents
 - [ ] vkCmdUpdateBuffer
-- [ ] vkCmdSetViewport
 - [ ] vkCmdSetStencilWriteMask
 - [ ] vkCmdSetStencilReference
 - [ ] vkCmdSetStencilCompareMask
-- [ ] vkCmdSetScissor
 - [ ] vkCmdSetEvent
-- [ ] vkCmdSetDeviceMask
-- [ ] vkCmdSetDepthBounds
 - [ ] vkCmdResolveImage
 - [ ] vkCmdResetQueryPool
 - [ ] vkCmdResetEvent
-- [ ] vkCmdPushConstants
 - [ ] vkCmdPipelineBarrier
 - [ ] vkCmdNextSubpass
 - [ ] vkCmdFillBuffer

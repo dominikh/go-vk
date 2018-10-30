@@ -55,3 +55,8 @@ VkResult domVkMapMemory(PFN_vkMapMemory fp, VkDevice device, VkDeviceMemory memo
 void     domVkUnmapMemory(PFN_vkUnmapMemory fp, VkDevice device, VkDeviceMemory memory);
 void     domVkFreeMemory(PFN_vkFreeMemory fp, VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks* pAllocator);
 VkResult domVkCreateImage(PFN_vkCreateImage fp, VkDevice device, const VkImageCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImage* pImage);
+void     domVkCmdSetViewport(PFN_vkCmdSetViewport fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewport* pViewports);
+void     domVkCmdSetScissor(PFN_vkCmdSetScissor fp, VkCommandBuffer commandBuffer, uint32_t firstScissor, uint32_t scissorCount, const VkRect2D* pScissors);
+void     domVkCmdSetDeviceMask(PFN_vkCmdSetDeviceMask fp, VkCommandBuffer commandBuffer, uint32_t deviceMask);
+void     domVkCmdSetDepthBounds(PFN_vkCmdSetDepthBounds fp, VkCommandBuffer commandBuffer, float minDepthBounds, float maxDepthBounds);
+void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues);
