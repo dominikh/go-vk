@@ -237,3 +237,6 @@ void domVkCmdClearColorImage(PFN_vkCmdClearColorImage fp, VkCommandBuffer comman
 void domVkCmdClearDepthStencilImage(PFN_vkCmdClearDepthStencilImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearDepthStencilValue* pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange* pRanges) {
 	(*fp)(commandBuffer, image, imageLayout, pDepthStencil, rangeCount, pRanges);
 }
+VkResult domVkGetFenceStatus(PFN_vkGetFenceStatus fp, VkDevice device, VkFence fence) {
+	return (*fp)(device, fence);
+}

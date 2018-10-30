@@ -95,6 +95,7 @@ const (
 	vkCmdClearAttachments
 	vkCmdClearColorImage
 	vkCmdClearDepthStencilImage
+	vkGetFenceStatus
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -198,4 +199,5 @@ var deviceFpNames = [...]string{
 	vkCmdClearAttachments:         "vkCmdClearAttachments",
 	vkCmdClearColorImage:          "vkCmdClearColorImage",
 	vkCmdClearDepthStencilImage:   "vkCmdClearDepthStencilImage",
+	vkGetFenceStatus:              "vkGetFenceStatus",
 }

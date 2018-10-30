@@ -2122,6 +2122,16 @@ func (dev *Device) DestroyFence(fence Fence) {
 	C.domVkDestroyFence(dev.fps[vkDestroyFence], dev.hnd, fence.hnd, nil)
 }
 
+func (dev *Device) FenceStatus(fence Fence) (Result, error) {
+	res := Result(C.domVkGetFenceStatus(dev.fps[vkGetFenceStatus], dev.hnd, fence.hnd))
+	switch res {
+	case Success, NotReady:
+		return res, nil
+	default:
+		return res, res
+	}
+}
+
 func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Duration) error {
 	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(uptr(&fences))), vkBool(waitAll), C.uint64_t(timeout)))
 	return result2error(res)

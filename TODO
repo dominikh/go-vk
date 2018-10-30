@@ -23,6 +23,7 @@ follow, then vendor extensions.
 - [x] vkGetPhysicalDeviceMemoryProperties
 - [x] vkGetPhysicalDeviceFeatures
 - [x] vkGetInstanceProcAddr
+- [x] vkGetFenceStatus
 - [x] vkGetEventStatus
 - [x] vkGetDeviceQueue
 - [x] vkGetDeviceProcAddr
@@ -110,7 +111,6 @@ follow, then vendor extensions.
 - [ ] vkGetImageSparseMemoryRequirements
 - [ ] vkGetImageMemoryRequirements2
 - [ ] vkGetImageMemoryRequirements
-- [ ] vkGetFenceStatus
 - [ ] vkGetDeviceQueue2
 - [ ] vkGetDeviceMemoryCommitment
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
