@@ -718,6 +718,14 @@ type DeviceCreateInfo struct {
 	EnabledFeatures       *PhysicalDeviceFeatures
 }
 
+type Device struct {
+	// VK_DEFINE_HANDLE(VkDevice)
+	hnd C.VkDevice
+
+	fps                 [deviceMaxPFN]C.PFN_vkVoidFunction
+	vkGetDeviceProcAddr C.PFN_vkGetDeviceProcAddr
+}
+
 func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error) {
 	// TODO(dh): support custom allocators
 	var free1 func()
@@ -817,12 +825,9 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 	return ldev, nil
 }
 
-type Device struct {
-	// VK_DEFINE_HANDLE(VkDevice)
-	hnd C.VkDevice
-
-	fps                 [deviceMaxPFN]C.PFN_vkVoidFunction
-	vkGetDeviceProcAddr C.PFN_vkGetDeviceProcAddr
+func (dev *Device) Destroy() {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyDevice(dev.fps[vkDestroyDevice], dev.hnd, nil)
 }
 
 func (dev *Device) init() {
@@ -1056,6 +1061,11 @@ func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (*CommandPool,
 	return pool, result2error(res)
 }
 
+func (dev *Device) DestroyCommandPool(pool *CommandPool) {
+	// TODO(dh): support callbacks
+	C.domVkDestroyCommandPool(dev.fps[vkDestroyCommandPool], dev.hnd, pool.hnd, nil)
+}
+
 func (pool *CommandPool) Trim(flags CommandPoolTrimFlags) {
 	C.domVkTrimCommandPool(pool.dev.fps[vkTrimCommandPool], pool.dev.hnd, pool.hnd, C.VkCommandPoolTrimFlags(flags))
 }
@@ -1181,6 +1191,11 @@ func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error)
 	internalizeChain(info.Extensions, ptr.pNext)
 	free(unsafe.Pointer(ptr))
 	return out, result2error(res)
+}
+
+func (dev *Device) DestroyImageView(view ImageView) {
+	// TODO(dh): support custom allocator
+	C.domVkDestroyImageView(dev.fps[vkDestroyImageView], dev.hnd, view.hnd, nil)
 }
 
 type ShaderModule struct {
@@ -1531,6 +1546,11 @@ func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (Pipelin
 	return out, result2error(res)
 }
 
+func (dev *Device) DestroyPipelineLayout(layout PipelineLayout) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyPipelineLayout(dev.fps[vkDestroyPipelineLayout], dev.hnd, layout.hnd, nil)
+}
+
 type DescriptorSetLayout struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSetLayout)
 	hnd C.VkDescriptorSetLayout
@@ -1876,6 +1896,11 @@ func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, 
 	return fb, result2error(res)
 }
 
+func (dev *Device) DestroyFramebuffer(fb Framebuffer) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyFramebuffer(dev.fps[vkDestroyFramebuffer], dev.hnd, fb.hnd, nil)
+}
+
 type RenderPassBeginInfo struct {
 	Extensions  []Extension
 	RenderPass  RenderPass
@@ -1930,6 +1955,11 @@ func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error)
 	internalizeChain(info.Extensions, cinfo.pNext)
 	free(unsafe.Pointer(cinfo))
 	return sem, result2error(res)
+}
+
+func (dev *Device) DestroySemaphore(sem Semaphore) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroySemaphore(dev.fps[vkDestroySemaphore], dev.hnd, sem.hnd, nil)
 }
 
 type SubmitInfo struct {
@@ -2032,6 +2062,11 @@ func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
 	return fence, result2error(res)
 }
 
+func (dev *Device) DestroyFence(fence Fence) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyFence(dev.fps[vkDestroyFence], dev.hnd, fence.hnd, nil)
+}
+
 func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Duration) error {
 	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(unsafe.Pointer(&fences))), vkBool(waitAll), C.uint64_t(timeout)))
 	return result2error(res)
@@ -2084,6 +2119,11 @@ func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
 	internalizeChain(info.Extensions, cinfo.pNext)
 	free(unsafe.Pointer(cinfo))
 	return buf, result2error(res)
+}
+
+func (dev *Device) DestroyBuffer(buf Buffer) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyBuffer(dev.fps[vkDestroyBuffer], dev.hnd, buf.hnd, nil)
 }
 
 type MemoryRequirements struct {
@@ -2231,6 +2271,11 @@ func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
 	return img, result2error(res)
 }
 
+func (dev *Device) DestroyImage(img Image) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyImage(dev.fps[vkDestroyImage], dev.hnd, img.hnd, nil)
+}
+
 type Event struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkEvent)
 	hnd C.VkEvent
@@ -2258,6 +2303,11 @@ func (dev *Device) CreateEvent(info *EventCreateInfo) (Event, error) {
 	internalizeChain(info.Extensions, cinfo.pNext)
 	free(unsafe.Pointer(cinfo))
 	return ev, result2error(res)
+}
+
+func (dev *Device) DestroyEvent(ev Event) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyEvent(dev.fps[vkDestroyEvent], dev.hnd, ev.hnd, nil)
 }
 
 func (dev *Device) SetEvent(ev Event) error {

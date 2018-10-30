@@ -82,6 +82,16 @@ const (
 	vkResetEvent
 	vkGetEventStatus
 	vkCmdSetEvent
+	vkDestroyBuffer
+	vkDestroySemaphore
+	vkDestroyEvent
+	vkDestroyFence
+	vkDestroyFramebuffer
+	vkDestroyImage
+	vkDestroyDevice
+	vkDestroyImageView
+	vkDestroyCommandPool
+	vkDestroyPipelineLayout
 
 	// VK_KHR_swapchain
 	vkCreateSwapchainKHR
@@ -172,4 +182,14 @@ var deviceFpNames = [...]string{
 	vkResetEvent:                  "vkResetEvent",
 	vkGetEventStatus:              "vkGetEventStatus",
 	vkCmdSetEvent:                 "vkCmdSetEvent",
+	vkDestroyBuffer:               "vkDestroyBuffer",
+	vkDestroySemaphore:            "vkDestroySemaphore",
+	vkDestroyEvent:                "vkDestroyEvent",
+	vkDestroyFence:                "vkDestroyFence",
+	vkDestroyFramebuffer:          "vkDestroyFramebuffer",
+	vkDestroyImage:                "vkDestroyImage",
+	vkDestroyDevice:               "vkDestroyDevice",
+	vkDestroyImageView:            "vkDestroyImageView",
+	vkDestroyCommandPool:          "vkDestroyCommandPool",
+	vkDestroyPipelineLayout:       "vkDestroyPipelineLayout",
 }

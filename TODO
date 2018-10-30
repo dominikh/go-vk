@@ -33,6 +33,16 @@ follow, then vendor extensions.
 - [x] vkEnumerateDeviceExtensionProperties
 - [x] vkEndCommandBuffer
 - [x] vkDeviceWaitIdle
+- [x] vkDestroySemaphore
+- [x] vkDestroyPipelineLayout
+- [x] vkDestroyImageView
+- [x] vkDestroyImage
+- [x] vkDestroyFramebuffer
+- [x] vkDestroyFence
+- [x] vkDestroyEvent
+- [x] vkDestroyDevice
+- [x] vkDestroyCommandPool
+- [x] vkDestroyBuffer
 - [x] vkCreateSwapchainKHR
 - [x] vkCreateShaderModule
 - [x] vkCreateSemaphore
@@ -112,27 +122,17 @@ follow, then vendor extensions.
 - [ ] vkEnumerateDeviceLayerProperties
 - [ ] vkDestroySwapchainKHR
 - [ ] vkDestroyShaderModule
-- [ ] vkDestroySemaphore
 - [ ] vkDestroySamplerYcbcrConversion
 - [ ] vkDestroySampler
 - [ ] vkDestroyRenderPass
 - [ ] vkDestroyQueryPool
-- [ ] vkDestroyPipelineLayout
 - [ ] vkDestroyPipelineCache
 - [ ] vkDestroyPipeline
 - [ ] vkDestroyInstance
-- [ ] vkDestroyImageView
-- [ ] vkDestroyImage
-- [ ] vkDestroyFramebuffer
-- [ ] vkDestroyFence
-- [ ] vkDestroyEvent
-- [ ] vkDestroyDevice
 - [ ] vkDestroyDescriptorUpdateTemplate
 - [ ] vkDestroyDescriptorSetLayout
 - [ ] vkDestroyDescriptorPool
-- [ ] vkDestroyCommandPool
 - [ ] vkDestroyBufferView
-- [ ] vkDestroyBuffer
 - [ ] vkCreateSharedSwapchainsKHR
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkCreateSampler

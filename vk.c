@@ -198,3 +198,33 @@ VkResult domVkGetEventStatus(PFN_vkGetEventStatus fp, VkDevice device, VkEvent e
 void domVkCmdSetEvent(PFN_vkCmdSetEvent fp, VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask) {
 	(*fp)(commandBuffer, event, stageMask);
 }
+void domVkDestroyBuffer(PFN_vkDestroyBuffer fp, VkDevice device, VkBuffer buffer, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, buffer, pAllocator);
+}
+void domVkDestroySemaphore(PFN_vkDestroySemaphore fp, VkDevice device, VkSemaphore semaphore, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, semaphore, pAllocator);
+}
+void domVkDestroyEvent(PFN_vkDestroyEvent fp, VkDevice device, VkEvent event, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, event, pAllocator);
+}
+void domVkDestroyFence(PFN_vkDestroyFence fp, VkDevice device, VkFence fence, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, fence, pAllocator);
+}
+void domVkDestroyFramebuffer(PFN_vkDestroyFramebuffer fp, VkDevice device, VkFramebuffer framebuffer, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, framebuffer, pAllocator);
+}
+void domVkDestroyImage(PFN_vkDestroyImage fp, VkDevice device, VkImage image, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, image, pAllocator);
+}
+void domVkDestroyDevice(PFN_vkDestroyDevice fp, VkDevice device, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, pAllocator);
+}
+void domVkDestroyImageView(PFN_vkDestroyImageView fp, VkDevice device, VkImageView imageView, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, imageView, pAllocator);
+}
+void domVkDestroyCommandPool(PFN_vkDestroyCommandPool fp, VkDevice device, VkCommandPool commandPool, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, commandPool, pAllocator);
+}
+void domVkDestroyPipelineLayout(PFN_vkDestroyPipelineLayout fp, VkDevice device, VkPipelineLayout pipelineLayout, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, pipelineLayout, pAllocator);
+}
