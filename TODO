@@ -9,7 +9,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdDispatchIndirect
 - [x] vkCmdExecuteCommands
 - [x] vkCmdNextSubpass
-- [ ] vkCmdPipelineBarrier
+- [x] vkCmdPipelineBarrier
 - [ ] vkCmdResolveImage
 - [x] vkCmdSetStencilCompareMask
 - [x] vkCmdSetStencilReference

@@ -1384,19 +1384,16 @@ type ImageMemoryBarrier struct {
 	SubresourceRange    ImageSubresourceRange
 }
 
-func (buf *CommandBuffer) WaitEvents(
-	events []Event,
-	srcStageMask, dstStageMask PipelineStageFlags,
+func barriers(
 	memoryBarriers []MemoryBarrier,
 	bufferMemoryBarriers []BufferMemoryBarrier,
 	imageMemoryBarriers []ImageMemoryBarrier,
-) {
+) (*C.VkMemoryBarrier, *C.VkBufferMemoryBarrier, *C.VkImageMemoryBarrier) {
 	size0 := align(C.sizeof_VkMemoryBarrier * uintptr(len(memoryBarriers)))
 	size1 := align(C.sizeof_VkBufferMemoryBarrier * uintptr(len(bufferMemoryBarriers)))
 	size2 := align(C.sizeof_VkImageMemoryBarrier * uintptr(len(imageMemoryBarriers)))
 	size := size0 + size1 + size2
 	mem := alloc(C.size_t(size))
-	defer free(mem)
 
 	cmem := mem
 	cbuf := unsafe.Pointer(uintptr(mem) + size0)
@@ -1447,6 +1444,19 @@ func (buf *CommandBuffer) WaitEvents(
 		defer internalizeChain(imageMemoryBarriers[i].Extensions, imgArr[i].pNext)
 	}
 
+	return (*C.VkMemoryBarrier)(cmem),
+		(*C.VkBufferMemoryBarrier)(cbuf),
+		(*C.VkImageMemoryBarrier)(cimg)
+}
+
+func (buf *CommandBuffer) WaitEvents(
+	events []Event,
+	srcStageMask, dstStageMask PipelineStageFlags,
+	memoryBarriers []MemoryBarrier,
+	bufferMemoryBarriers []BufferMemoryBarrier,
+	imageMemoryBarriers []ImageMemoryBarrier,
+) {
+	cmem, cbuf, cimg := barriers(memoryBarriers, bufferMemoryBarriers, imageMemoryBarriers)
 	C.domVkCmdWaitEvents(
 		buf.fps[vkCmdWaitEvents],
 		buf.hnd,
@@ -1455,11 +1465,12 @@ func (buf *CommandBuffer) WaitEvents(
 		C.VkPipelineStageFlags(srcStageMask),
 		C.VkPipelineStageFlags(dstStageMask),
 		C.uint32_t(len(memoryBarriers)),
-		(*C.VkMemoryBarrier)(cmem),
+		cmem,
 		C.uint32_t(len(bufferMemoryBarriers)),
-		(*C.VkBufferMemoryBarrier)(cbuf),
+		cbuf,
 		C.uint32_t(len(imageMemoryBarriers)),
-		(*C.VkImageMemoryBarrier)(cimg))
+		cimg)
+	free(unsafe.Pointer(cmem))
 }
 
 func (buf *CommandBuffer) NextSubpass(contents SubpassContents) {
@@ -1526,6 +1537,30 @@ func (buf *CommandBuffer) DispatchBase(baseGroupX, baseGroupY, baseGroupZ, group
 
 func (buf *CommandBuffer) DispatchIndirect(buffer Buffer, offset DeviceSize) {
 	C.domVkCmdDispatchIndirect(buf.fps[vkCmdDispatchIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset))
+}
+
+func (buf *CommandBuffer) PipelineBarrier(
+	srcStageMask PipelineStageFlags,
+	dstStageMask PipelineStageFlags,
+	dependencyFlags DependencyFlags,
+	memoryBarriers []MemoryBarrier,
+	bufferMemoryBarriers []BufferMemoryBarrier,
+	imageMemoryBarriers []ImageMemoryBarrier,
+) {
+	cmem, cbuf, cimg := barriers(memoryBarriers, bufferMemoryBarriers, imageMemoryBarriers)
+	C.domVkCmdPipelineBarrier(
+		buf.fps[vkCmdPipelineBarrier],
+		buf.hnd,
+		C.VkPipelineStageFlags(srcStageMask),
+		C.VkPipelineStageFlags(dstStageMask),
+		C.VkDependencyFlags(dependencyFlags),
+		C.uint32_t(len(memoryBarriers)),
+		cmem,
+		C.uint32_t(len(bufferMemoryBarriers)),
+		cbuf,
+		C.uint32_t(len(imageMemoryBarriers)),
+		cimg)
+	free(uptr(cmem))
 }
 
 type CommandPoolCreateInfo struct {
