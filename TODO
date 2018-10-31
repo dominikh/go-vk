@@ -16,7 +16,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdSetStencilWriteMask
 - [x] vkCmdWaitEvents
 - [x] vkCmdWriteTimestamp
-- [ ] vkCreateBufferView
+- [x] vkCreateBufferView
 - [ ] vkCreateComputePipelines
 - [ ] vkCreateDescriptorPool
 - [ ] vkCreateDescriptorSetLayout

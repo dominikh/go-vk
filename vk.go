@@ -3043,6 +3043,43 @@ func (dev *Device) DestroySampler(sampler Sampler) {
 	C.domVkDestroySampler(dev.fps[vkDestroySampler], dev.hnd, sampler.hnd, nil)
 }
 
+type BufferView struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBufferView)
+	hnd C.VkBufferView
+}
+
+type BufferViewCreateInfo struct {
+	Extensions []Extension
+	Buffer     Buffer
+	Format     Format
+	Offset     DeviceSize
+	Range      DeviceSize
+}
+
+func (info *BufferViewCreateInfo) c() *C.VkBufferViewCreateInfo {
+	cinfo := (*C.VkBufferViewCreateInfo)(alloc(C.sizeof_VkBufferViewCreateInfo))
+	*cinfo = C.VkBufferViewCreateInfo{
+		sType:  C.VkStructureType(StructureTypeBufferViewCreateInfo),
+		pNext:  buildChain(info.Extensions),
+		flags:  0,
+		buffer: info.Buffer.hnd,
+		format: C.VkFormat(info.Format),
+		offset: C.VkDeviceSize(info.Offset),
+		_range: C.VkDeviceSize(info.Range),
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var view BufferView
+	res := Result(C.domVkCreateBufferView(dev.fps[vkCreateBufferView], dev.hnd, cinfo, nil, &view.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return view, result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
@@ -3069,6 +3106,7 @@ func (hnd *Instance) String() string       { return fmt.Sprintf("VkInstance(%#x)
 func (hnd *PhysicalDevice) String() string { return fmt.Sprintf("VkPhysicalDevice(%#x)", hnd.hnd) }
 func (hnd *Queue) String() string          { return fmt.Sprintf("VkQueue(%#x)", hnd.hnd) }
 func (hnd Buffer) String() string          { return fmt.Sprintf("VkBuffer(%#x)", hnd.hnd) }
+func (hnd BufferView) String() string      { return fmt.Sprintf("VkBufferView(%#x)", hnd.hnd) }
 func (hnd CommandPool) String() string     { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
 func (hnd DeviceMemory) String() string    { return fmt.Sprintf("VkDeviceMemory(%#x)", hnd.hnd) }
 func (hnd Event) String() string           { return fmt.Sprintf("VkEvent(%#x)", hnd.hnd) }
