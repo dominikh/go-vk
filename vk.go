@@ -212,112 +212,631 @@ type PhysicalDevice struct {
 }
 
 type PhysicalDeviceLimits struct {
-	MaxImageDimension1D                             uint32
-	MaxImageDimension2D                             uint32
-	MaxImageDimension3D                             uint32
-	MaxImageDimensionCube                           uint32
-	MaxImageArrayLayers                             uint32
-	MaxTexelBufferElements                          uint32
-	MaxUniformBufferRange                           uint32
-	MaxStorageBufferRange                           uint32
-	MaxPushConstantsSize                            uint32
-	MaxMemoryAllocationCount                        uint32
-	MaxSamplerAllocationCount                       uint32
-	BufferImageGranularity                          DeviceSize
-	SparseAddressSpaceSize                          DeviceSize
-	MaxBoundDescriptorSets                          uint32
-	MaxPerStageDescriptorSamplers                   uint32
-	MaxPerStageDescriptorUniformBuffers             uint32
-	MaxPerStageDescriptorStorageBuffers             uint32
-	MaxPerStageDescriptorSampledImages              uint32
-	MaxPerStageDescriptorStorageImages              uint32
-	MaxPerStageDescriptorInputAttachments           uint32
-	MaxPerStageResources                            uint32
-	MaxDescriptorSetSamplers                        uint32
-	MaxDescriptorSetUniformBuffers                  uint32
-	MaxDescriptorSetUniformBuffersDynamic           uint32
-	MaxDescriptorSetStorageBuffers                  uint32
-	MaxDescriptorSetStorageBuffersDynamic           uint32
-	MaxDescriptorSetSampledImages                   uint32
-	MaxDescriptorSetStorageImages                   uint32
-	MaxDescriptorSetInputAttachments                uint32
-	MaxVertexInputAttributes                        uint32
-	MaxVertexInputBindings                          uint32
-	MaxVertexInputAttributeOffset                   uint32
-	MaxVertexInputBindingStride                     uint32
-	MaxVertexOutputComponents                       uint32
-	MaxTessellationGenerationLevel                  uint32
-	MaxTessellationPatchSize                        uint32
-	MaxTessellationControlPerVertexInputComponents  uint32
+	// MaxImageDimension1D is the maximum dimension (width) supported
+	// for all images created with an imageType of ImageType1D.
+	MaxImageDimension1D uint32
+	// MaxImageDimension2D is the maximum dimension (width or height)
+	// supported for all images created with an imageType of
+	// ImageType2D and without ImageCreateCubeCompatibleBit set in
+	// flags.
+	MaxImageDimension2D uint32
+	// MaxImageDimension3D is the maximum dimension (width, height, or
+	// depth) supported for all images created with an imageType of
+	// ImageType3D.
+	MaxImageDimension3D uint32
+	// MaxImageDimensionCube is the maximum dimension (width or
+	// height) supported for all images created with an imageType of
+	// ImageType2D and with ImageCreateCubeCompatibleBit set in flags.
+	MaxImageDimensionCube uint32
+	// MaxImageArrayLayers is the maximum number of layers
+	// (arrayLayers) for an image.
+	MaxImageArrayLayers uint32
+	// MaxTexelBufferElements is the maximum number of addressable
+	// texels for a buffer view created on a buffer which was created
+	// with the BufferUsageUniformTexelBufferBit or
+	// BufferUsageStorageTexelBufferBit set in the Usage field of the
+	// BufferCreateInfo structure.
+	MaxTexelBufferElements uint32
+	// MaxUniformBufferRange is the maximum value that can be
+	// specified in the Range field of any DescriptorBufferInfo
+	// structures passed to a call to UpdateDescriptorSets for
+	// descriptors of type DescriptorTypeUniformBuffer or
+	// DescriptorTypeUniformBufferDynamic.
+	MaxUniformBufferRange uint32
+	// MaxStorageBufferRange is the maximum value that can be
+	// specified in the Range field of any DescriptorBufferInfo
+	// structures passed to a call to UpdateDescriptorSets for
+	// descriptors of type DescriptorTypeStorageBuffer or
+	// DescriptorTypeStorageBufferDynamic.
+	MaxStorageBufferRange uint32
+	// MaxPushConstantsSize is the maximum size, in bytes, of the pool
+	// of push constant memory. For each of the push constant ranges
+	// indicated by the PushConstantRanges field of the
+	// PipelineLayoutCreateInfo structure, (offset + size) must be
+	// less than or equal to this limit.
+	MaxPushConstantsSize uint32
+	// MaxMemoryAllocationCount is the maximum number of device memory
+	// allocations, as created by AllocateMemory, which can
+	// simultaneously exist.
+	MaxMemoryAllocationCount uint32
+	// MaxSamplerAllocationCount is the maximum number of sampler
+	// objects, as created by CreateSampler, which can
+	// simultaneously exist on a device.
+	MaxSamplerAllocationCount uint32
+	// BufferImageGranularity is the granularity, in bytes, at which
+	// buffer or linear image resources, and optimal image resources
+	// can be bound to adjacent offsets in the same DeviceMemory
+	// object without aliasing. See Buffer-Image Granularity for more
+	// details.
+	BufferImageGranularity DeviceSize
+	// SparseAddressSpaceSize is the total amount of address space
+	// available, in bytes, for sparse memory resources. This is an
+	// upper bound on the sum of the size of all sparse resources,
+	// regardless of whether any memory is bound to them.
+	SparseAddressSpaceSize DeviceSize
+	// MaxBoundDescriptorSets is the maximum number of descriptor sets
+	// that can be simultaneously used by a pipeline. All
+	// DescriptorSet decorations in shader modules must have a value
+	// less than maxBoundDescriptorSets.
+	MaxBoundDescriptorSets uint32
+	// MaxPerStageDescriptorSamplers is the maximum number of samplers
+	// that can be accessible to a single shader stage in a pipeline
+	// layout. Descriptors with a type of DescriptorTypeSampler or
+	// DescriptorTypeCombinedImageSampler count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set.
+	MaxPerStageDescriptorSamplers uint32
+	// MaxPerStageDescriptorUniformBuffers is the maximum number of
+	// uniform buffers that can be accessible to a single shader stage
+	// in a pipeline layout. Descriptors with a type of
+	// DescriptorTypeUniformBuffer or
+	// DescriptorTypeUniformBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set.
+	MaxPerStageDescriptorUniformBuffers uint32
+	// MaxPerStageDescriptorStorageBuffers is the maximum number of
+	// storage buffers that can be accessible to a single shader stage
+	// in a pipeline layout. Descriptors with a type of
+	// DescriptorTypeStorageBuffer or
+	// DescriptorTypeStorageBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// pipeline shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set.
+	MaxPerStageDescriptorStorageBuffers uint32
+	// MaxPerStageDescriptorSampledImages is the maximum number of
+	// sampled images that can be accessible to a single shader stage
+	// in a pipeline layout. Descriptors with a type of
+	// DescriptorTypeCombinedImageSampler, DescriptorTypeSampledImage,
+	// or DescriptorTypeUniformTexelBuffer count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// pipeline shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set.
+	MaxPerStageDescriptorSampledImages uint32
+	// MaxPerStageDescriptorStorageImages is the maximum number of
+	// storage images that can be accessible to a single shader stage
+	// in a pipeline layout. Descriptors with a type of
+	// DescriptorTypeStorageImage, or DescriptorTypeStorageTexelBuffer
+	// count against this limit. Only descriptors in descriptor set
+	// layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// pipeline shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set.
+	MaxPerStageDescriptorStorageImages uint32
+	// MaxPerStageDescriptorInputAttachments is the maximum number of
+	// input attachments that can be accessible to a single shader
+	// stage in a pipeline layout. Descriptors with a type of
+	// DescriptorTypeInputAttachment count against this limit. Only
+	// descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. A descriptor is accessible to a
+	// pipeline shader stage when the StageFlags field of the
+	// DescriptorSetLayoutBinding structure has the bit for that
+	// shader stage set. These are only supported for the fragment
+	// stage.
+	MaxPerStageDescriptorInputAttachments uint32
+	// MaxPerStageResources is the maximum number of resources that
+	// can be accessible to a single shader stage in a pipeline
+	// layout. Descriptors with a type of
+	// DescriptorTypeCombinedImageSampler, DescriptorTypeSampledImage,
+	// DescriptorTypeStorageImage, DescriptorTypeUniformTexelBuffer,
+	// DescriptorTypeStorageTexelBuffer, DescriptorTypeUniformBuffer,
+	// DescriptorTypeStorageBuffer,
+	// DescriptorTypeUniformBufferDynamic,
+	// DescriptorTypeStorageBufferDynamic, or
+	// DescriptorTypeInputAttachment count against this limit. Only
+	// descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit. For the fragment shader stage the
+	// framebuffer color attachments also count against this limit.
+	MaxPerStageResources uint32
+	// MaxDescriptorSetSamplers is the maximum number of samplers that
+	// can be included in descriptor bindings in a pipeline layout
+	// across all pipeline shader stages and descriptor set numbers.
+	// Descriptors with a type of DescriptorTypeSampler or
+	// DescriptorTypeCombinedImageSampler count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetSamplers uint32
+	// MaxDescriptorSetUniformBuffers is the maximum number of uniform
+	// buffers that can be included in descriptor bindings in a
+	// pipeline layout across all pipeline shader stages and
+	// descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeUniformBuffer or
+	// DescriptorTypeUniformBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetUniformBuffers uint32
+	// MaxDescriptorSetUniformBuffersDynamic is the maximum number of
+	// dynamic uniform buffers that can be included in descriptor
+	// bindings in a pipeline layout across all pipeline shader stages
+	// and descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeUniformBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetUniformBuffersDynamic uint32
+	// MaxDescriptorSetStorageBuffers is the maximum number of storage
+	// buffers that can be included in descriptor bindings in a
+	// pipeline layout across all pipeline shader stages and
+	// descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeStorageBuffer or
+	// DescriptorTypeStorageBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetStorageBuffers uint32
+	// MaxDescriptorSetStorageBuffersDynamic is the maximum number of
+	// dynamic storage buffers that can be included in descriptor
+	// bindings in a pipeline layout across all pipeline shader stages
+	// and descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeStorageBufferDynamic count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetStorageBuffersDynamic uint32
+	// MaxDescriptorSetSampledImages is the maximum number of sampled
+	// images that can be included in descriptor bindings in a
+	// pipeline layout across all pipeline shader stages and
+	// descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeCombinedImageSampler, DescriptorTypeSampledImage,
+	// or DescriptorTypeUniformTexelBuffer count against this limit.
+	// Only descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetSampledImages uint32
+	// MaxDescriptorSetStorageImages is the maximum number of storage
+	// images that can be included in descriptor bindings in a
+	// pipeline layout across all pipeline shader stages and
+	// descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeStorageImage, or DescriptorTypeStorageTexelBuffer
+	// count against this limit. Only descriptors in descriptor set
+	// layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetStorageImages uint32
+	// MaxDescriptorSetInputAttachments is the maximum number of input
+	// attachments that can be included in descriptor bindings in a
+	// pipeline layout across all pipeline shader stages and
+	// descriptor set numbers. Descriptors with a type of
+	// DescriptorTypeInputAttachment count against this limit. Only
+	// descriptors in descriptor set layouts created without the
+	// DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT bit set
+	// count against this limit.
+	MaxDescriptorSetInputAttachments uint32
+	// MaxVertexInputAttributes is the maximum number of vertex input
+	// attributes that can be specified for a graphics pipeline. These
+	// are described in the array of VertexInputAttributeDescription
+	// structures that are provided at graphics pipeline creation time
+	// via the VertexAttributeDescriptions field of the
+	// PipelineVertexInputStateCreateInfo structure.
+	MaxVertexInputAttributes uint32
+	// MaxVertexInputBindings is the maximum number of vertex buffers
+	// that can be specified for providing vertex attributes to a
+	// graphics pipeline. These are described in the array of
+	// VertexInputBindingDescription structures that are provided at
+	// graphics pipeline creation time via the
+	// VertexBindingDescriptions field of the
+	// PipelineVertexInputStateCreateInfo structure. The Binding field
+	// of VertexInputBindingDescription must be less than this limit.
+	MaxVertexInputBindings uint32
+	// MaxVertexInputAttributeOffset is the maximum vertex input
+	// attribute offset that can be added to the vertex input binding
+	// stride. The Offset field of the VertexInputAttributeDescription
+	// structure must be less than or equal to this limit.
+	MaxVertexInputAttributeOffset uint32
+	// MaxVertexInputBindingStride is the maximum vertex input binding
+	// stride that can be specified in a vertex input binding. The
+	// Stride field of the VertexInputBindingDescription structure
+	// must be less than or equal to this limit.
+	MaxVertexInputBindingStride uint32
+	// MaxVertexOutputComponents is the maximum number of components
+	// of output variables which can be output by a vertex shader.
+	MaxVertexOutputComponents uint32
+	// MaxTessellationGenerationLevel is the maximum tessellation
+	// generation level supported by the fixed-function tessellation
+	// primitive generator.
+	MaxTessellationGenerationLevel uint32
+	// MaxTessellationPatchSize is the maximum patch size, in
+	// vertices, of patches that can be processed by the tessellation
+	// control shader and tessellation primitive generator. The
+	// PatchControlPoints field of the
+	// PipelineTessellationStateCreateInfo structure specified at
+	// pipeline creation time and the value provided in the
+	// OutputVertices execution mode of shader modules must be less
+	// than or equal to this limit.
+	MaxTessellationPatchSize uint32
+	// MaxTessellationControlPerVertexInputComponents is the maximum
+	// number of components of input variables which can be provided
+	// as per-vertex inputs to the tessellation control shader stage.
+	MaxTessellationControlPerVertexInputComponents uint32
+	// MaxTessellationControlPerVertexOutputComponents is the maximum
+	// number of components of per-vertex output variables which can
+	// be output from the tessellation control shader stage.
 	MaxTessellationControlPerVertexOutputComponents uint32
-	MaxTessellationControlPerPatchOutputComponents  uint32
-	MaxTessellationControlTotalOutputComponents     uint32
-	MaxTessellationEvaluationInputComponents        uint32
-	MaxTessellationEvaluationOutputComponents       uint32
-	MaxGeometryShaderInvocations                    uint32
-	MaxGeometryInputComponents                      uint32
-	MaxGeometryOutputComponents                     uint32
-	MaxGeometryOutputVertices                       uint32
-	MaxGeometryTotalOutputComponents                uint32
-	MaxFragmentInputComponents                      uint32
-	MaxFragmentOutputAttachments                    uint32
-	MaxFragmentDualSrcAttachments                   uint32
-	MaxFragmentCombinedOutputResources              uint32
-	MaxComputeSharedMemorySize                      uint32
-	MaxComputeWorkGroupCount                        [3]uint32
-	MaxComputeWorkGroupInvocations                  uint32
-	MaxComputeWorkGroupSize                         [3]uint32
-	SubPixelPrecisionBits                           uint32
-	SubTexelPrecisionBits                           uint32
-	MipmapPrecisionBits                             uint32
-	MaxDrawIndexedIndexValue                        uint32
-	MaxDrawIndirectCount                            uint32
-	MaxSamplerLodBias                               float32
-	MaxSamplerAnisotropy                            float32
-	MaxViewports                                    uint32
-	MaxViewportDimensions                           [2]uint32
-	ViewportBoundsRange                             [2]float32
-	ViewportSubPixelBits                            uint32
-	MinMemoryMapAlignment                           uintptr
-	MinTexelBufferOffsetAlignment                   DeviceSize
-	MinUniformBufferOffsetAlignment                 DeviceSize
-	MinStorageBufferOffsetAlignment                 DeviceSize
-	MinTexelOffset                                  int32
-	MaxTexelOffset                                  uint32
-	MinTexelGatherOffset                            int32
-	MaxTexelGatherOffset                            uint32
-	MinInterpolationOffset                          float32
-	MaxInterpolationOffset                          float32
-	SubPixelInterpolationOffsetBits                 uint32
-	MaxFramebufferWidth                             uint32
-	MaxFramebufferHeight                            uint32
-	MaxFramebufferLayers                            uint32
-	FramebufferColorSampleCounts                    SampleCountFlags
-	FramebufferDepthSampleCounts                    SampleCountFlags
-	FramebufferStencilSampleCounts                  SampleCountFlags
-	FramebufferNoAttachmentsSampleCounts            SampleCountFlags
-	MaxColorAttachments                             uint32
-	SampledImageColorSampleCounts                   SampleCountFlags
-	SampledImageIntegerSampleCounts                 SampleCountFlags
-	SampledImageDepthSampleCounts                   SampleCountFlags
-	SampledImageStencilSampleCounts                 SampleCountFlags
-	StorageImageSampleCounts                        SampleCountFlags
-	MaxSampleMaskWords                              uint32
-	TimestampComputeAndGraphics                     bool
-	TimestampPeriod                                 float32
-	MaxClipDistances                                uint32
-	MaxCullDistances                                uint32
-	MaxCombinedClipAndCullDistances                 uint32
-	DiscreteQueuePriorities                         uint32
-	PointSizeRange                                  [2]float32
-	LineWidthRange                                  [2]float32
-	PointSizeGranularity                            float32
-	LineWidthGranularity                            float32
-	StrictLines                                     bool
-	StandardSampleLocations                         bool
-	OptimalBufferCopyOffsetAlignment                DeviceSize
-	OptimalBufferCopyRowPitchAlignment              DeviceSize
-	NonCoherentAtomSize                             DeviceSize
+	// MaxTessellationControlPerPatchOutputComponents is the maximum
+	// number of components of per-patch output variables which can be
+	// output from the tessellation control shader stage.
+	MaxTessellationControlPerPatchOutputComponents uint32
+	// MaxTessellationControlTotalOutputComponents is the maximum
+	// total number of components of per-vertex and per-patch output
+	// variables which can be output from the tessellation control
+	// shader stage.
+	MaxTessellationControlTotalOutputComponents uint32
+	// MaxTessellationEvaluationInputComponents is the maximum number
+	// of components of input variables which can be provided as
+	// per-vertex inputs to the tessellation evaluation shader stage.
+	MaxTessellationEvaluationInputComponents uint32
+	// MaxTessellationEvaluationOutputComponents is the maximum number
+	// of components of per-vertex output variables which can be
+	// output from the tessellation evaluation shader stage.
+	MaxTessellationEvaluationOutputComponents uint32
+	// MaxGeometryShaderInvocations is the maximum invocation count
+	// supported for instanced geometry shaders. The value provided in
+	// the Invocations execution mode of shader modules must be less
+	// than or equal to this limit.
+	MaxGeometryShaderInvocations uint32
+	// MaxGeometryInputComponents is the maximum number of components
+	// of input variables which can be provided as inputs to the
+	// geometry shader stage.
+	MaxGeometryInputComponents uint32
+	// MaxGeometryOutputComponents is the maximum number of components
+	// of output variables which can be output from the geometry
+	// shader stage.
+	MaxGeometryOutputComponents uint32
+	// MaxGeometryOutputVertices is the maximum number of vertices
+	// which can be emitted by any geometry shader.
+	MaxGeometryOutputVertices uint32
+	// MaxGeometryTotalOutputComponents is the maximum total number of
+	// components of output, across all emitted vertices, which can be
+	// output from the geometry shader stage.
+	MaxGeometryTotalOutputComponents uint32
+	// MaxFragmentInputComponents is the maximum number of components
+	// of input variables which can be provided as inputs to the
+	// fragment shader stage.
+	MaxFragmentInputComponents uint32
+	// MaxFragmentOutputAttachments is the maximum number of output
+	// attachments which can be written to by the fragment shader
+	// stage.
+	MaxFragmentOutputAttachments uint32
+	// MaxFragmentDualSrcAttachments is the maximum number of output
+	// attachments which can be written to by the fragment shader
+	// stage when blending is enabled and one of the dual source blend
+	// modes is in use.
+	MaxFragmentDualSrcAttachments uint32
+	// MaxFragmentCombinedOutputResources is the total number of
+	// storage buffers, storage images, and output buffers which can
+	// be used in the fragment shader stage.
+	MaxFragmentCombinedOutputResources uint32
+	// MaxComputeSharedMemorySize is the maximum total storage size,
+	// in bytes, of all variables declared with the WorkgroupLocal
+	// storage class in shader modules (or with the shared storage
+	// qualifier in GLSL) in the compute shader stage.
+	MaxComputeSharedMemorySize uint32
+	// MaxComputeWorkGroupCount is the maximum number of local
+	// workgroups that can be dispatched by a single dispatch command.
+	// These three values represent the maximum number of local
+	// workgroups for the X, Y, and Z dimensions, respectively. The
+	// workgroup count parameters to the dispatch commands must be
+	// less than or equal to the corresponding limit.
+	MaxComputeWorkGroupCount [3]uint32
+	// MaxComputeWorkGroupInvocations is the maximum total number of
+	// compute shader invocations in a single local workgroup. The
+	// product of the X, Y, and Z sizes as specified by the LocalSize
+	// execution mode in shader modules and by the object decorated by
+	// the WorkgroupSize decoration must be less than or equal to this
+	// limit.
+	MaxComputeWorkGroupInvocations uint32
+	// MaxComputeWorkGroupSize is the maximum size of a local compute
+	// workgroup, per dimension. These three values represent the
+	// maximum local workgroup size in the X, Y, and Z dimensions,
+	// respectively. The x, y, and z sizes specified by the LocalSize
+	// execution mode and by the object decorated by the WorkgroupSize
+	// decoration in shader modules must be less than or equal to the
+	// corresponding limit.
+	MaxComputeWorkGroupSize [3]uint32
+	// SubPixelPrecisionBits is the number of bits of subpixel
+	// precision in framebuffer coordinates xf and yf.
+	SubPixelPrecisionBits uint32
+	// SubTexelPrecisionBits is the number of bits of precision in the
+	// division along an axis of an image used for minification and
+	// magnification filters. 2subTexelPrecisionBits is the actual
+	// number of divisions along each axis of the image represented.
+	// Sub-texel values calculated during image sampling will snap to
+	// these locations when generating the filtered results.
+	SubTexelPrecisionBits uint32
+	// MipmapPrecisionBits is the number of bits of division that the
+	// LOD calculation for mipmap fetching get snapped to when
+	// determining the contribution from each mip level to the mip
+	// filtered results. 2mipmapPrecisionBits is the actual number of
+	// divisions.
+	MipmapPrecisionBits uint32
+	// MaxDrawIndexedIndexValue is the maximum index value that can be
+	// used for indexed draw calls when using 32-bit indices. This
+	// excludes the primitive restart index value of 0xFFFFFFFF.
+	MaxDrawIndexedIndexValue uint32
+	// MaxDrawIndirectCount is the maximum draw count that is
+	// supported for indirect draw calls.
+	MaxDrawIndirectCount uint32
+	// MaxSamplerLodBias is the maximum absolute sampler LOD bias. The
+	// sum of the MipLodBias field of the SamplerCreateInfo structure
+	// and the Bias operand of image sampling operations in shader
+	// modules (or 0 if no Bias operand is provided to an image
+	// sampling operation) are clamped to the range
+	// [-maxSamplerLodBias,+maxSamplerLodBias].
+	MaxSamplerLodBias float32
+	// MaxSamplerAnisotropy is the maximum degree of sampler
+	// anisotropy. The maximum degree of anisotropic filtering used
+	// for an image sampling operation is the minimum of the
+	// MaxAnisotropy field of the SamplerCreateInfo structure and this
+	// limit.
+	MaxSamplerAnisotropy float32
+	// MaxViewports is the maximum number of active viewports. The
+	// ViewportCount field of the PipelineViewportStateCreateInfo
+	// structure that is provided at pipeline creation must be less
+	// than or equal to this limit.
+	MaxViewports uint32
+	// MaxViewportDimensions are the maximum viewport dimensions in
+	// the X (width) and Y (height) dimensions, respectively. The
+	// maximum viewport dimensions must be greater than or equal to
+	// the largest image which can be created and used as a
+	// framebuffer attachment.
+	MaxViewportDimensions [2]uint32
+	// ViewportBoundsRange is the [minimum, maximum] range that the
+	// corners of a viewport must be contained in. This range must be
+	// at least [-2 × size, 2 × size - 1], where size =
+	// max(maxViewportDimensions[0], maxViewportDimensions[1]).
+	ViewportBoundsRange [2]float32
+	// ViewportSubPixelBits is the number of bits of subpixel
+	// precision for viewport bounds. The subpixel precision that
+	// floating-point viewport bounds are interpreted at is given by
+	// this limit.
+	ViewportSubPixelBits uint32
+	// MinMemoryMapAlignment is the minimum required alignment, in
+	// bytes, of host visible memory allocations within the host
+	// address space. When mapping a memory allocation with
+	// MapMemory, subtracting offset bytes from the returned pointer
+	// will always produce an integer multiple of this limit.
+	MinMemoryMapAlignment uintptr
+	// MinTexelBufferOffsetAlignment is the minimum required
+	// alignment, in bytes, for the Offset field of the
+	// BufferViewCreateInfo structure for texel buffers. When a buffer
+	// view is created for a buffer which was created with
+	// BufferUsageUniformTexelBufferBit or
+	// BufferUsageStorageTexelBufferBit set in the Usage field of the
+	// BufferCreateInfo structure, the offset must be an integer
+	// multiple of this limit.
+	MinTexelBufferOffsetAlignment DeviceSize
+	// MinUniformBufferOffsetAlignment is the minimum required
+	// alignment, in bytes, for the Offset field of the
+	// DescriptorBufferInfo structure for uniform buffers. When a
+	// descriptor of type DescriptorTypeUniformBuffer or
+	// DescriptorTypeUniformBufferDynamic is updated, the offset must
+	// be an integer multiple of this limit. Similarly, dynamic
+	// offsets for uniform buffers must be multiples of this limit.
+	MinUniformBufferOffsetAlignment DeviceSize
+	// MinStorageBufferOffsetAlignment is the minimum required
+	// alignment, in bytes, for the Offset field of the
+	// DescriptorBufferInfo structure for storage buffers. When a
+	// descriptor of type DescriptorTypeStorageBuffer or
+	// DescriptorTypeStorageBufferDynamic is updated, the offset must
+	// be an integer multiple of this limit. Similarly, dynamic
+	// offsets for storage buffers must be multiples of this limit.
+	MinStorageBufferOffsetAlignment DeviceSize
+	// MinTexelOffset is the minimum offset value for the ConstOffset
+	// image operand of any of the OpImageSample* or OpImageFetch*
+	// image instructions.
+	MinTexelOffset int32
+	// MaxTexelOffset is the maximum offset value for the ConstOffset
+	// image operand of any of the OpImageSample* or OpImageFetch*
+	// image instructions.
+	MaxTexelOffset uint32
+	// MinTexelGatherOffset is the minimum offset value for the Offset
+	// or ConstOffsets image operands of any of the OpImage*Gather
+	// image instructions.
+	MinTexelGatherOffset int32
+	// MaxTexelGatherOffset is the maximum offset value for the Offset
+	// or ConstOffsets image operands of any of the OpImage*Gather
+	// image instructions.
+	MaxTexelGatherOffset uint32
+	// MinInterpolationOffset is the minimum negative offset value for
+	// the offset operand of the InterpolateAtOffset extended
+	// instruction.
+	MinInterpolationOffset float32
+	// MaxInterpolationOffset is the maximum positive offset value for
+	// the offset operand of the InterpolateAtOffset extended
+	// instruction.
+	MaxInterpolationOffset float32
+	// SubPixelInterpolationOffsetBits is the number of subpixel
+	// fractional bits that the x and y offsets to the
+	// InterpolateAtOffset extended instruction may be rounded to as
+	// fixed-point values.
+	SubPixelInterpolationOffsetBits uint32
+	// MaxFramebufferWidth is the maximum width for a framebuffer. The
+	// Width field of the FramebufferCreateInfo structure must be less
+	// than or equal to this limit.
+	MaxFramebufferWidth uint32
+	// MaxFramebufferHeight is the maximum height for a framebuffer.
+	// The Height field of the FramebufferCreateInfo structure must be
+	// less than or equal to this limit.
+	MaxFramebufferHeight uint32
+	// MaxFramebufferLayers is the maximum layer count for a layered
+	// framebuffer. The Layers field of the FramebufferCreateInfo
+	// structure must be less than or equal to this limit.
+	MaxFramebufferLayers uint32
+	// FramebufferColorSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the color sample counts that are
+	// supported for all framebuffer color attachments with floating-
+	// or fixed-point formats. There is no limit that specifies the
+	// color sample counts that are supported for all color
+	// attachments with integer formats.
+	FramebufferColorSampleCounts SampleCountFlags
+	// FramebufferDepthSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the supported depth sample
+	// counts for all framebuffer depth/stencil attachments, when the
+	// format includes a depth component.
+	FramebufferDepthSampleCounts SampleCountFlags
+	// FramebufferStencilSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the supported stencil sample
+	// counts for all framebuffer depth/stencil attachments, when the
+	// format includes a stencil component.
+	FramebufferStencilSampleCounts SampleCountFlags
+	// FramebufferNoAttachmentsSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the supported sample counts for
+	// a framebuffer with no attachments.
+	FramebufferNoAttachmentsSampleCounts SampleCountFlags
+	// MaxColorAttachments is the maximum number of color attachments
+	// that can be used by a subpass in a render pass. The
+	// ColorAttachmentCount field of the SubpassDescription structure
+	// must be less than or equal to this limit.
+	MaxColorAttachments uint32
+	// SampledImageColorSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the sample counts supported for
+	// all 2D images created with ImageTilingOptimal, usage containing
+	// ImageUsageSampledBit, and a non-integer color format.
+	SampledImageColorSampleCounts SampleCountFlags
+	// SampledImageIntegerSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the sample counts supported for
+	// all 2D images created with ImageTilingOptimal, usage containing
+	// ImageUsageSampledBit, and an integer color format.
+	SampledImageIntegerSampleCounts SampleCountFlags
+	// SampledImageDepthSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the sample counts supported for
+	// all 2D images created with ImageTilingOptimal, usage containing
+	// ImageUsageSampledBit, and a depth format.
+	SampledImageDepthSampleCounts SampleCountFlags
+	// SampledImageStencilSampleCounts is a bitmask1 of
+	// SampleCountFlagBits indicating the sample supported for all 2D
+	// images created with ImageTilingOptimal, usage containing
+	// ImageUsageSampledBit, and a stencil format.
+	SampledImageStencilSampleCounts SampleCountFlags
+	// StorageImageSampleCounts is a bitmask1 of SampleCountFlagBits
+	// indicating the sample counts supported for all 2D images
+	// created with ImageTilingOptimal, and usage containing
+	// ImageUsageStorageBit.
+	StorageImageSampleCounts SampleCountFlags
+	// MaxSampleMaskWords is the maximum number of array elements of a
+	// variable decorated with the SampleMask built-in decoration.
+	MaxSampleMaskWords uint32
+	// TimestampComputeAndGraphics specifies support for timestamps on
+	// all graphics and compute queues. If this limit is set to true,
+	// all queues that advertise the QueueGraphicsBit or
+	// QueueComputeBit in the QueueFamilyProperties::queueFlags
+	// support QueueFamilyProperties::timestampValidBits of at least
+	// 36.
+	TimestampComputeAndGraphics bool
+	// TimestampPeriod is the number of nanoseconds required for a
+	// timestamp query to be incremented by 1.
+	TimestampPeriod float32
+	// MaxClipDistances is the maximum number of clip distances that
+	// can be used in a single shader stage. The size of any array
+	// declared with the ClipDistance built-in decoration in a shader
+	// module must be less than or equal to this limit.
+	MaxClipDistances uint32
+	// MaxCullDistances is the maximum number of cull distances that
+	// can be used in a single shader stage. The size of any array
+	// declared with the CullDistance built-in decoration in a shader
+	// module must be less than or equal to this limit.
+	MaxCullDistances uint32
+	// MaxCombinedClipAndCullDistances is the maximum combined number
+	// of clip and cull distances that can be used in a single shader
+	// stage. The sum of the sizes of any pair of arrays declared with
+	// the ClipDistance and CullDistance built-in decoration used by a
+	// single shader stage in a shader module must be less than or
+	// equal to this limit.
+	MaxCombinedClipAndCullDistances uint32
+	// DiscreteQueuePriorities is the number of discrete priorities
+	// that can be assigned to a queue based on the value of each
+	// field of DeviceQueueCreateInfo.QueuePriorities. This must be at
+	// least 2, and levels must be spread evenly over the range, with
+	// at least one level at 1.0, and another at 0.0.
+	DiscreteQueuePriorities uint32
+	// PointSizeRange is the range [minimum,maximum] of supported
+	// sizes for points. Values written to variables decorated with
+	// the PointSize built-in decoration are clamped to this range.
+	PointSizeRange [2]float32
+	// LineWidthRange is the range [minimum,maximum] of supported
+	// widths for lines. Values specified by the LineWidth field of
+	// the PipelineRasterizationStateCreateInfo or the lineWidth
+	// parameter to SetLineWidth are clamped to this range.
+	LineWidthRange [2]float32
+	// PointSizeGranularity is the granularity of supported point
+	// sizes. Not all point sizes in the range defined by
+	// pointSizeRange are supported. This limit specifies the
+	// granularity (or increment) between successive supported point
+	// sizes.
+	PointSizeGranularity float32
+	// LineWidthGranularity is the granularity of supported line
+	// widths. Not all line widths in the range defined by
+	// lineWidthRange are supported. This limit specifies the
+	// granularity (or increment) between successive supported line
+	// widths.
+	LineWidthGranularity float32
+	// StrictLines specifies whether lines are rasterized according to
+	// the preferred method of rasterization. If set to false, lines
+	// may be rasterized under a relaxed set of rules. If set to true,
+	// lines are rasterized as per the strict definition.
+	StrictLines bool
+	// StandardSampleLocations specifies whether rasterization uses
+	// the standard sample locations as documented in Multisampling.
+	// If set to true, the implementation uses the documented sample
+	// locations. If set to false, the implementation may use
+	// different sample locations.
+	StandardSampleLocations bool
+	// OptimalBufferCopyOffsetAlignment is the optimal buffer offset
+	// alignment in bytes for CopyBufferToImage and
+	// CopyImageToBuffer. The per texel alignment requirements
+	// are enforced, but applications should use the optimal alignment
+	// for optimal performance and power use.
+	OptimalBufferCopyOffsetAlignment DeviceSize
+	// OptimalBufferCopyRowPitchAlignment is the optimal buffer row
+	// pitch alignment in bytes for CopyBufferToImage and
+	// CopyImageToBuffer. Row pitch is the number of bytes
+	// between texels with the same X coordinate in adjacent rows (Y
+	// coordinates differ by one). The per texel alignment
+	// requirements are enforced, but applications should use the
+	// optimal alignment for optimal performance and power use.
+	OptimalBufferCopyRowPitchAlignment DeviceSize
+	// NonCoherentAtomSize is the size and alignment in bytes that
+	// bounds concurrent access to host-mapped device memory.
+	NonCoherentAtomSize DeviceSize
 }
 
 type PhysicalDeviceSparseProperties struct {
@@ -1677,7 +2196,7 @@ type ImageResolve struct {
 // in texels of the sub-regions of the source and destination image data.
 // extent is the size in texels of the source image to resolve in width, height and depth.
 //
-// Resolves are done layer by layer starting with baseArrayLayer member of srcSubresource for the source
+// Resolves are done layer by layer starting with BaseArrayLayer field of srcSubresource for the source
 // and dstSubresource for the destination.
 // layerCount layers are resolved to the destination image.
 func (buf *CommandBuffer) ResolveImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageResolve) {
