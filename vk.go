@@ -17,6 +17,9 @@ import (
 	"unsafe"
 )
 
+// OPT(dh): if we wrote our own memory allocator, we could avoid the
+// significant overhead of calling malloc and free.
+
 // OPT(dh): we could replace large chunks of C info struct
 // initializers with memcpys of our Go info structs. A lot of the
 // time, they're mostly identical, aside from pNext and slices. This
@@ -1313,12 +1316,16 @@ func (buf *CommandBuffer) WaitEvents(
 	bufferMemoryBarriers []BufferMemoryBarrier,
 	imageMemoryBarriers []ImageMemoryBarrier,
 ) {
-	cmem := allocn(len(memoryBarriers), C.sizeof_VkMemoryBarrier)
-	cbuf := allocn(len(bufferMemoryBarriers), C.sizeof_VkBufferMemoryBarrier)
-	cimg := allocn(len(imageMemoryBarriers), C.sizeof_VkImageMemoryBarrier)
-	defer free(cmem)
-	defer free(cbuf)
-	defer free(cimg)
+	size0 := align(C.sizeof_VkMemoryBarrier * uintptr(len(memoryBarriers)))
+	size1 := align(C.sizeof_VkBufferMemoryBarrier * uintptr(len(bufferMemoryBarriers)))
+	size2 := align(C.sizeof_VkImageMemoryBarrier * uintptr(len(imageMemoryBarriers)))
+	size := size0 + size1 + size2
+	mem := alloc(C.size_t(size))
+	defer free(mem)
+
+	cmem := mem
+	cbuf := unsafe.Pointer(uintptr(mem) + size0)
+	cimg := unsafe.Pointer(uintptr(mem) + size0 + size1)
 
 	memArr := (*[math.MaxInt32]C.VkMemoryBarrier)(cmem)[:len(memoryBarriers)]
 	bufArr := (*[math.MaxInt32]C.VkBufferMemoryBarrier)(cbuf)[:len(bufferMemoryBarriers)]
