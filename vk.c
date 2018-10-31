@@ -889,3 +889,73 @@ void domVkTrimCommandPoolKHR(PFN_vkTrimCommandPoolKHR fp, VkDevice device, VkCom
 void domVkUpdateDescriptorSetWithTemplateKHR(PFN_vkUpdateDescriptorSetWithTemplateKHR fp, VkDevice device, VkDescriptorSet descriptorSet, VkDescriptorUpdateTemplate descriptorUpdateTemplate, const void* pData) {
 	(*fp)(device, descriptorSet, descriptorUpdateTemplate, pData);
 }
+VkResult domVkEnumerateInstanceVersion(PFN_vkEnumerateInstanceVersion fp, uint32_t* pApiVersion) {
+	return (*fp)(pApiVersion);
+}
+VkResult domVkBindImageMemory2(PFN_vkBindImageMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindImageMemoryInfo* pBindInfos) {
+	return (*fp)(device, bindInfoCount, pBindInfos);
+}
+void domVkGetDeviceGroupPeerMemoryFeatures(PFN_vkGetDeviceGroupPeerMemoryFeatures fp, VkDevice device, uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex, VkPeerMemoryFeatureFlags* pPeerMemoryFeatures) {
+	(*fp)(device, heapIndex, localDeviceIndex, remoteDeviceIndex, pPeerMemoryFeatures);
+}
+void domVkCmdDispatchBase(PFN_vkCmdDispatchBase fp, VkCommandBuffer commandBuffer, uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) {
+	(*fp)(commandBuffer, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ);
+}
+VkResult domVkEnumeratePhysicalDeviceGroups(PFN_vkEnumeratePhysicalDeviceGroups fp, VkInstance instance, uint32_t* pPhysicalDeviceGroupCount, VkPhysicalDeviceGroupProperties* pPhysicalDeviceGroupProperties) {
+	return (*fp)(instance, pPhysicalDeviceGroupCount, pPhysicalDeviceGroupProperties);
+}
+void domVkGetImageMemoryRequirements2(PFN_vkGetImageMemoryRequirements2 fp, VkDevice device, const VkImageMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements) {
+	(*fp)(device, pInfo, pMemoryRequirements);
+}
+void domVkGetBufferMemoryRequirements2(PFN_vkGetBufferMemoryRequirements2 fp, VkDevice device, const VkBufferMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements) {
+	(*fp)(device, pInfo, pMemoryRequirements);
+}
+void domVkGetImageSparseMemoryRequirements2(PFN_vkGetImageSparseMemoryRequirements2 fp, VkDevice device, const VkImageSparseMemoryRequirementsInfo2* pInfo, uint32_t* pSparseMemoryRequirementCount, VkSparseImageMemoryRequirements2* pSparseMemoryRequirements) {
+	(*fp)(device, pInfo, pSparseMemoryRequirementCount, pSparseMemoryRequirements);
+}
+void domVkGetPhysicalDeviceFeatures2(PFN_vkGetPhysicalDeviceFeatures2 fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceFeatures2* pFeatures) {
+	(*fp)(physicalDevice, pFeatures);
+}
+void domVkGetPhysicalDeviceFormatProperties2(PFN_vkGetPhysicalDeviceFormatProperties2 fp, VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties2* pFormatProperties) {
+	(*fp)(physicalDevice, format, pFormatProperties);
+}
+VkResult domVkGetPhysicalDeviceImageFormatProperties2(PFN_vkGetPhysicalDeviceImageFormatProperties2 fp, VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2* pImageFormatInfo, VkImageFormatProperties2* pImageFormatProperties) {
+	return (*fp)(physicalDevice, pImageFormatInfo, pImageFormatProperties);
+}
+void domVkGetPhysicalDeviceQueueFamilyProperties2(PFN_vkGetPhysicalDeviceQueueFamilyProperties2 fp, VkPhysicalDevice physicalDevice, uint32_t* pQueueFamilyPropertyCount, VkQueueFamilyProperties2* pQueueFamilyProperties) {
+	(*fp)(physicalDevice, pQueueFamilyPropertyCount, pQueueFamilyProperties);
+}
+void domVkGetPhysicalDeviceMemoryProperties2(PFN_vkGetPhysicalDeviceMemoryProperties2 fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties2* pMemoryProperties) {
+	(*fp)(physicalDevice, pMemoryProperties);
+}
+void domVkGetPhysicalDeviceSparseImageFormatProperties2(PFN_vkGetPhysicalDeviceSparseImageFormatProperties2 fp, VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSparseImageFormatInfo2* pFormatInfo, uint32_t* pPropertyCount, VkSparseImageFormatProperties2* pProperties) {
+	(*fp)(physicalDevice, pFormatInfo, pPropertyCount, pProperties);
+}
+VkResult domVkCreateSamplerYcbcrConversion(PFN_vkCreateSamplerYcbcrConversion fp, VkDevice device, const VkSamplerYcbcrConversionCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSamplerYcbcrConversion* pYcbcrConversion) {
+	return (*fp)(device, pCreateInfo, pAllocator, pYcbcrConversion);
+}
+void domVkDestroySamplerYcbcrConversion(PFN_vkDestroySamplerYcbcrConversion fp, VkDevice device, VkSamplerYcbcrConversion ycbcrConversion, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, ycbcrConversion, pAllocator);
+}
+VkResult domVkCreateDescriptorUpdateTemplate(PFN_vkCreateDescriptorUpdateTemplate fp, VkDevice device, const VkDescriptorUpdateTemplateCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDescriptorUpdateTemplate* pDescriptorUpdateTemplate) {
+	return (*fp)(device, pCreateInfo, pAllocator, pDescriptorUpdateTemplate);
+}
+void domVkDestroyDescriptorUpdateTemplate(PFN_vkDestroyDescriptorUpdateTemplate fp, VkDevice device, VkDescriptorUpdateTemplate descriptorUpdateTemplate, const VkAllocationCallbacks* pAllocator) {
+	(*fp)(device, descriptorUpdateTemplate, pAllocator);
+}
+void domVkUpdateDescriptorSetWithTemplate(PFN_vkUpdateDescriptorSetWithTemplate fp, VkDevice device, VkDescriptorSet descriptorSet, VkDescriptorUpdateTemplate descriptorUpdateTemplate, const void* pData) {
+	(*fp)(device, descriptorSet, descriptorUpdateTemplate, pData);
+}
+void domVkGetPhysicalDeviceExternalBufferProperties(PFN_vkGetPhysicalDeviceExternalBufferProperties fp, VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalBufferInfo* pExternalBufferInfo, VkExternalBufferProperties* pExternalBufferProperties) {
+	(*fp)(physicalDevice, pExternalBufferInfo, pExternalBufferProperties);
+}
+void domVkGetPhysicalDeviceExternalFenceProperties(PFN_vkGetPhysicalDeviceExternalFenceProperties fp, VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalFenceInfo* pExternalFenceInfo, VkExternalFenceProperties* pExternalFenceProperties) {
+	(*fp)(physicalDevice, pExternalFenceInfo, pExternalFenceProperties);
+}
+void domVkGetPhysicalDeviceExternalSemaphoreProperties(PFN_vkGetPhysicalDeviceExternalSemaphoreProperties fp, VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalSemaphoreInfo* pExternalSemaphoreInfo, VkExternalSemaphoreProperties* pExternalSemaphoreProperties) {
+	(*fp)(physicalDevice, pExternalSemaphoreInfo, pExternalSemaphoreProperties);
+}
+void domVkGetDescriptorSetLayoutSupport(PFN_vkGetDescriptorSetLayoutSupport fp, VkDevice device, const VkDescriptorSetLayoutCreateInfo* pCreateInfo, VkDescriptorSetLayoutSupport* pSupport) {
+	(*fp)(device, pCreateInfo, pSupport);
+}
+
