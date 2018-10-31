@@ -1,22 +1,103 @@
 List of Vulkan functions extracted from vk.xml, and whether they've been implemented yet.
 
+- [ ] vkAllocateDescriptorSets
+- [ ] vkBindImageMemory
+- [ ] vkBindImageMemory2
+- [ ] vkCmdBindDescriptorSets
+- [ ] vkCmdBindVertexBuffers
+- [ ] vkCmdDispatchBase
+- [ ] vkCmdDispatchIndirect
+- [ ] vkCmdExecuteCommands
+- [ ] vkCmdNextSubpass
+- [ ] vkCmdPipelineBarrier
+- [ ] vkCmdResolveImage
+- [ ] vkCmdSetStencilCompareMask
+- [ ] vkCmdSetStencilReference
+- [ ] vkCmdSetStencilWriteMask
+- [ ] vkCmdWaitEvents
+- [ ] vkCmdWriteTimestamp
+- [ ] vkCreateBufferView
+- [ ] vkCreateComputePipelines
+- [ ] vkCreateDescriptorPool
+- [ ] vkCreateDescriptorSetLayout
+- [ ] vkCreateDescriptorUpdateTemplate
+- [ ] vkCreatePipelineCache
+- [ ] vkCreateSamplerYcbcrConversion
+- [ ] vkDestroyBufferView
+- [ ] vkDestroyDescriptorPool
+- [ ] vkDestroyDescriptorSetLayout
+- [ ] vkDestroyDescriptorUpdateTemplate
+- [ ] vkDestroyPipelineCache
+- [ ] vkDestroySamplerYcbcrConversion
+- [ ] vkEnumerateDeviceLayerProperties
+- [ ] vkEnumerateInstanceExtensionProperties
+- [ ] vkEnumerateInstanceLayerProperties
+- [ ] vkEnumerateInstanceVersion
+- [ ] vkEnumeratePhysicalDeviceGroups
+- [ ] vkFlushMappedMemoryRanges
+- [ ] vkFreeDescriptorSets
+- [ ] vkGetBufferMemoryRequirements2
+- [ ] vkGetDescriptorSetLayoutSupport
+- [ ] vkGetDeviceGroupPeerMemoryFeatures
+- [ ] vkGetDeviceMemoryCommitment
+- [ ] vkGetDeviceQueue2
+- [ ] vkGetImageMemoryRequirements
+- [ ] vkGetImageMemoryRequirements2
+- [ ] vkGetImageSparseMemoryRequirements
+- [ ] vkGetImageSparseMemoryRequirements2
+- [ ] vkGetImageSubresourceLayout
+- [ ] vkGetPhysicalDeviceExternalBufferProperties
+- [ ] vkGetPhysicalDeviceExternalFenceProperties
+- [ ] vkGetPhysicalDeviceExternalSemaphoreProperties
+- [ ] vkGetPhysicalDeviceFeatures2
+- [ ] vkGetPhysicalDeviceFormatProperties
+- [ ] vkGetPhysicalDeviceFormatProperties2
+- [ ] vkGetPhysicalDeviceImageFormatProperties
+- [ ] vkGetPhysicalDeviceImageFormatProperties2
+- [ ] vkGetPhysicalDeviceMemoryProperties2
+- [ ] vkGetPhysicalDeviceProperties2
+- [ ] vkGetPhysicalDeviceQueueFamilyProperties2
+- [ ] vkGetPhysicalDeviceSparseImageFormatProperties
+- [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
+- [ ] vkGetPipelineCacheData
+- [ ] vkGetQueryPoolResults
+- [ ] vkGetRenderAreaGranularity
+- [ ] vkInvalidateMappedMemoryRanges
+- [ ] vkMergePipelineCaches
+- [ ] vkQueueBindSparse
+- [ ] vkResetDescriptorPool
+- [ ] vkUpdateDescriptorSetWithTemplate
+- [ ] vkUpdateDescriptorSets
 - [x] VkResetCommandBuffer
-- [x] vkAcquireNextImageKHR
 - [x] vkAllocateCommandBuffers
 - [x] vkAllocateMemory
 - [x] vkBeginCommandBuffer
 - [x] vkBindBufferMemory
 - [x] vkBindBufferMemory2
+- [x] vkCmdBeginQuery
 - [x] vkCmdBeginRenderPass
+- [x] vkCmdBindIndexBuffer
 - [x] vkCmdBindPipeline
+- [x] vkCmdBlitImage
 - [x] vkCmdClearAttachments
 - [x] vkCmdClearColorImage
 - [x] vkCmdClearDepthStencilImage
+- [x] vkCmdCopyBuffer
+- [x] vkCmdCopyBufferToImage
+- [x] vkCmdCopyImage
+- [x] vkCmdCopyImageToBuffer
+- [x] vkCmdCopyQueryPoolResults
 - [x] vkCmdDispatch
 - [x] vkCmdDraw
+- [x] vkCmdDrawIndexed
+- [x] vkCmdDrawIndexedIndirect
+- [x] vkCmdDrawIndirect
+- [x] vkCmdEndQuery
 - [x] vkCmdEndRenderPass
 - [x] vkCmdFillBuffer
 - [x] vkCmdPushConstants
+- [x] vkCmdResetEvent
+- [x] vkCmdResetQueryPool
 - [x] vkCmdSetBlendConstants
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetDepthBounds
@@ -25,6 +106,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetScissor
 - [x] vkCmdSetViewport
+- [x] vkCmdUpdateBuffer
 - [x] vkCreateBuffer
 - [x] vkCreateCommandPool
 - [x] vkCreateDevice
@@ -36,10 +118,11 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCreateImageView
 - [x] vkCreateInstance
 - [x] vkCreatePipelineLayout
+- [x] vkCreateQueryPool
 - [x] vkCreateRenderPass
+- [x] vkCreateSampler
 - [x] vkCreateSemaphore
 - [x] vkCreateShaderModule
-- [x] vkCreateSwapchainKHR
 - [x] vkDestroyBuffer
 - [x] vkDestroyCommandPool
 - [x] vkDestroyDevice
@@ -48,8 +131,14 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkDestroyFramebuffer
 - [x] vkDestroyImage
 - [x] vkDestroyImageView
+- [x] vkDestroyInstance
+- [x] vkDestroyPipeline
 - [x] vkDestroyPipelineLayout
+- [x] vkDestroyQueryPool
+- [x] vkDestroyRenderPass
+- [x] vkDestroySampler
 - [x] vkDestroySemaphore
+- [x] vkDestroyShaderModule
 - [x] vkDeviceWaitIdle
 - [x] vkEndCommandBuffer
 - [x] vkEnumerateDeviceExtensionProperties
@@ -66,10 +155,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkGetPhysicalDeviceMemoryProperties
 - [x] vkGetPhysicalDeviceProperties
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
-- [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
-- [x] vkGetSwapchainImagesKHR
 - [x] vkMapMemory
-- [x] vkQueuePresentKHR
 - [x] vkQueueSubmit
 - [x] vkQueueWaitIdle
 - [x] vkResetCommandPool
@@ -80,156 +166,92 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkUnmapMemory
 - [x] vkWaitForFences
 
+- [ ] vkCmdDrawIndexedIndirectCountAMD
+- [ ] vkCmdDrawIndirectCountAMD
+- [ ] vkCmdWriteBufferMarkerAMD
+- [ ] vkGetShaderInfoAMD
+
 - [ ] vkAcquireImageANDROID
-- [ ] vkAcquireNextImage2KHR
+- [ ] vkGetAndroidHardwareBufferPropertiesANDROID
+- [ ] vkGetMemoryAndroidHardwareBufferANDROID
+- [ ] vkGetSwapchainGrallocUsageANDROID
+- [ ] vkQueueSignalReleaseImageANDROID
+
 - [ ] vkAcquireXlibDisplayEXT
-- [ ] vkAllocateDescriptorSets
-- [ ] vkBindAccelerationStructureMemoryNVX
-- [ ] vkBindImageMemory
-- [ ] vkBindImageMemory2
 - [ ] vkCmdBeginConditionalRenderingEXT
 - [ ] vkCmdBeginDebugUtilsLabelEXT
-- [x] vkCmdBeginQuery
 - [ ] vkCmdBeginQueryIndexedEXT
-- [ ] vkCmdBeginRenderPass2KHR
 - [ ] vkCmdBeginTransformFeedbackEXT
-- [ ] vkCmdBindDescriptorSets
-- [x] vkCmdBindIndexBuffer
-- [ ] vkCmdBindShadingRateImageNV
 - [ ] vkCmdBindTransformFeedbackBuffersEXT
-- [ ] vkCmdBindVertexBuffers
-- [x] vkCmdBlitImage
-- [ ] vkCmdBuildAccelerationStructureNVX
-- [ ] vkCmdCopyAccelerationStructureNVX
-- [x] vkCmdCopyBuffer
-- [x] vkCmdCopyBufferToImage
-- [x] vkCmdCopyImage
-- [x] vkCmdCopyImageToBuffer
-- [x] vkCmdCopyQueryPoolResults
 - [ ] vkCmdDebugMarkerBeginEXT
 - [ ] vkCmdDebugMarkerEndEXT
 - [ ] vkCmdDebugMarkerInsertEXT
-- [ ] vkCmdDispatchBase
-- [ ] vkCmdDispatchIndirect
-- [x] vkCmdDrawIndexed
-- [x] vkCmdDrawIndexedIndirect
-- [ ] vkCmdDrawIndexedIndirectCountAMD
-- [ ] vkCmdDrawIndexedIndirectCountKHR
-- [x] vkCmdDrawIndirect
 - [ ] vkCmdDrawIndirectByteCountEXT
-- [ ] vkCmdDrawIndirectCountAMD
-- [ ] vkCmdDrawIndirectCountKHR
-- [ ] vkCmdDrawMeshTasksIndirectCountNV
-- [ ] vkCmdDrawMeshTasksIndirectNV
-- [ ] vkCmdDrawMeshTasksNV
 - [ ] vkCmdEndConditionalRenderingEXT
 - [ ] vkCmdEndDebugUtilsLabelEXT
-- [x] vkCmdEndQuery
 - [ ] vkCmdEndQueryIndexedEXT
-- [ ] vkCmdEndRenderPass2KHR
 - [ ] vkCmdEndTransformFeedbackEXT
-- [ ] vkCmdExecuteCommands
 - [ ] vkCmdInsertDebugUtilsLabelEXT
-- [ ] vkCmdNextSubpass
-- [ ] vkCmdNextSubpass2KHR
-- [ ] vkCmdPipelineBarrier
-- [ ] vkCmdProcessCommandsNVX
-- [ ] vkCmdPushDescriptorSetKHR
-- [ ] vkCmdPushDescriptorSetWithTemplateKHR
-- [ ] vkCmdReserveSpaceForCommandsNVX
-- [x] vkCmdResetEvent
-- [x] vkCmdResetQueryPool
-- [ ] vkCmdResolveImage
-- [ ] vkCmdSetCheckpointNV
-- [ ] vkCmdSetCoarseSampleOrderNV
 - [ ] vkCmdSetDiscardRectangleEXT
-- [ ] vkCmdSetExclusiveScissorNV
 - [ ] vkCmdSetSampleLocationsEXT
-- [ ] vkCmdSetStencilCompareMask
-- [ ] vkCmdSetStencilReference
-- [ ] vkCmdSetStencilWriteMask
-- [ ] vkCmdSetViewportShadingRatePaletteNV
-- [ ] vkCmdSetViewportWScalingNV
-- [ ] vkCmdTraceRaysNVX
-- [x] vkCmdUpdateBuffer
-- [ ] vkCmdWaitEvents
-- [ ] vkCmdWriteAccelerationStructurePropertiesNVX
-- [ ] vkCmdWriteBufferMarkerAMD
-- [ ] vkCmdWriteTimestamp
-- [ ] vkCompileDeferredNVX
-- [ ] vkCreateAccelerationStructureNVX
-- [ ] vkCreateAndroidSurfaceKHR
-- [ ] vkCreateBufferView
-- [ ] vkCreateComputePipelines
 - [ ] vkCreateDebugReportCallbackEXT
 - [ ] vkCreateDebugUtilsMessengerEXT
-- [ ] vkCreateDescriptorPool
-- [ ] vkCreateDescriptorSetLayout
-- [ ] vkCreateDescriptorUpdateTemplate
+- [ ] vkCreateValidationCacheEXT
+- [ ] vkDebugMarkerSetObjectNameEXT
+- [ ] vkDebugMarkerSetObjectTagEXT
+- [ ] vkDebugReportMessageEXT
+- [ ] vkDestroyDebugReportCallbackEXT
+- [ ] vkDestroyDebugUtilsMessengerEXT
+- [ ] vkDestroyValidationCacheEXT
+- [ ] vkDisplayPowerControlEXT
+- [ ] vkGetCalibratedTimestampsEXT
+- [ ] vkGetImageDrmFormatModifierPropertiesEXT
+- [ ] vkGetMemoryHostPointerPropertiesEXT
+- [ ] vkGetPhysicalDeviceCalibrateableTimeDomainsEXT
+- [ ] vkGetPhysicalDeviceMultisamplePropertiesEXT
+- [ ] vkGetPhysicalDeviceSurfaceCapabilities2EXT
+- [ ] vkGetRandROutputDisplayEXT
+- [ ] vkGetSwapchainCounterEXT
+- [ ] vkGetValidationCacheDataEXT
+- [ ] vkMergeValidationCachesEXT
+- [ ] vkQueueBeginDebugUtilsLabelEXT
+- [ ] vkQueueEndDebugUtilsLabelEXT
+- [ ] vkQueueInsertDebugUtilsLabelEXT
+- [ ] vkRegisterDeviceEventEXT
+- [ ] vkRegisterDisplayEventEXT
+- [ ] vkReleaseDisplayEXT
+- [ ] vkSetDebugUtilsObjectNameEXT
+- [ ] vkSetDebugUtilsObjectTagEXT
+- [ ] vkSetHdrMetadataEXT
+- [ ] vkSubmitDebugUtilsMessageEXT
+
+- [ ] vkCreateImagePipeSurfaceFUCHSIA
+
+- [ ] vkGetPastPresentationTimingGOOGLE
+- [ ] vkGetRefreshCycleDurationGOOGLE
+
+- [ ] vkAcquireNextImage2KHR
+- [ ] vkCmdBeginRenderPass2KHR
+- [ ] vkCmdDrawIndexedIndirectCountKHR
+- [ ] vkCmdDrawIndirectCountKHR
+- [ ] vkCmdEndRenderPass2KHR
+- [ ] vkCmdNextSubpass2KHR
+- [ ] vkCmdPushDescriptorSetKHR
+- [ ] vkCmdPushDescriptorSetWithTemplateKHR
+- [ ] vkCreateAndroidSurfaceKHR
 - [ ] vkCreateDisplayModeKHR
 - [ ] vkCreateDisplayPlaneSurfaceKHR
-- [ ] vkCreateIOSSurfaceMVK
-- [ ] vkCreateImagePipeSurfaceFUCHSIA
-- [ ] vkCreateIndirectCommandsLayoutNVX
-- [ ] vkCreateMacOSSurfaceMVK
 - [ ] vkCreateMirSurfaceKHR
-- [ ] vkCreateObjectTableNVX
-- [ ] vkCreatePipelineCache
-- [x] vkCreateQueryPool
-- [ ] vkCreateRaytracingPipelinesNVX
 - [ ] vkCreateRenderPass2KHR
-- [x] vkCreateSampler
-- [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkCreateSharedSwapchainsKHR
-- [ ] vkCreateValidationCacheEXT
-- [ ] vkCreateViSurfaceNN
 - [ ] vkCreateWaylandSurfaceKHR
 - [ ] vkCreateWin32SurfaceKHR
 - [ ] vkCreateXcbSurfaceKHR
 - [ ] vkCreateXlibSurfaceKHR
-- [ ] vkDebugMarkerSetObjectNameEXT
-- [ ] vkDebugMarkerSetObjectTagEXT
-- [ ] vkDebugReportMessageEXT
-- [ ] vkDestroyAccelerationStructureNVX
-- [ ] vkDestroyBufferView
-- [ ] vkDestroyDebugReportCallbackEXT
-- [ ] vkDestroyDebugUtilsMessengerEXT
-- [ ] vkDestroyDescriptorPool
-- [ ] vkDestroyDescriptorSetLayout
-- [ ] vkDestroyDescriptorUpdateTemplate
-- [ ] vkDestroyIndirectCommandsLayoutNVX
-- [x] vkDestroyInstance
-- [ ] vkDestroyObjectTableNVX
-- [x] vkDestroyPipeline
-- [ ] vkDestroyPipelineCache
-- [x] vkDestroyQueryPool
-- [x] vkDestroyRenderPass
-- [x] vkDestroySampler
-- [ ] vkDestroySamplerYcbcrConversion
-- [x] vkDestroyShaderModule
 - [ ] vkDestroySurfaceKHR
 - [ ] vkDestroySwapchainKHR
-- [ ] vkDestroyValidationCacheEXT
-- [ ] vkDisplayPowerControlEXT
-- [ ] vkEnumerateDeviceLayerProperties
-- [ ] vkEnumerateInstanceExtensionProperties
-- [ ] vkEnumerateInstanceLayerProperties
-- [ ] vkEnumerateInstanceVersion
-- [ ] vkEnumeratePhysicalDeviceGroups
-- [ ] vkFlushMappedMemoryRanges
-- [ ] vkFreeDescriptorSets
-- [ ] vkGetAccelerationStructureHandleNVX
-- [ ] vkGetAccelerationStructureMemoryRequirementsNVX
-- [ ] vkGetAccelerationStructureScratchMemoryRequirementsNVX
-- [ ] vkGetAndroidHardwareBufferPropertiesANDROID
-- [ ] vkGetBufferMemoryRequirements2
-- [ ] vkGetCalibratedTimestampsEXT
-- [ ] vkGetDescriptorSetLayoutSupport
-- [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDeviceGroupPresentCapabilitiesKHR
 - [ ] vkGetDeviceGroupSurfacePresentModesKHR
-- [ ] vkGetDeviceMemoryCommitment
-- [ ] vkGetDeviceQueue2
 - [ ] vkGetDisplayModeProperties2KHR
 - [ ] vkGetDisplayModePropertiesKHR
 - [ ] vkGetDisplayPlaneCapabilities2KHR
@@ -237,44 +259,16 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetDisplayPlaneSupportedDisplaysKHR
 - [ ] vkGetFenceFdKHR
 - [ ] vkGetFenceWin32HandleKHR
-- [ ] vkGetImageDrmFormatModifierPropertiesEXT
-- [ ] vkGetImageMemoryRequirements
-- [ ] vkGetImageMemoryRequirements2
-- [ ] vkGetImageSparseMemoryRequirements
-- [ ] vkGetImageSparseMemoryRequirements2
-- [ ] vkGetImageSubresourceLayout
-- [ ] vkGetMemoryAndroidHardwareBufferANDROID
 - [ ] vkGetMemoryFdKHR
 - [ ] vkGetMemoryFdPropertiesKHR
-- [ ] vkGetMemoryHostPointerPropertiesEXT
 - [ ] vkGetMemoryWin32HandleKHR
-- [ ] vkGetMemoryWin32HandleNV
 - [ ] vkGetMemoryWin32HandlePropertiesKHR
-- [ ] vkGetPastPresentationTimingGOOGLE
-- [ ] vkGetPhysicalDeviceCalibrateableTimeDomainsEXT
 - [ ] vkGetPhysicalDeviceDisplayPlaneProperties2KHR
 - [ ] vkGetPhysicalDeviceDisplayPlanePropertiesKHR
 - [ ] vkGetPhysicalDeviceDisplayProperties2KHR
 - [ ] vkGetPhysicalDeviceDisplayPropertiesKHR
-- [ ] vkGetPhysicalDeviceExternalBufferProperties
-- [ ] vkGetPhysicalDeviceExternalFenceProperties
-- [ ] vkGetPhysicalDeviceExternalImageFormatPropertiesNV
-- [ ] vkGetPhysicalDeviceExternalSemaphoreProperties
-- [ ] vkGetPhysicalDeviceFeatures2
-- [ ] vkGetPhysicalDeviceFormatProperties
-- [ ] vkGetPhysicalDeviceFormatProperties2
-- [ ] vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX
-- [ ] vkGetPhysicalDeviceImageFormatProperties
-- [ ] vkGetPhysicalDeviceImageFormatProperties2
-- [ ] vkGetPhysicalDeviceMemoryProperties2
 - [ ] vkGetPhysicalDeviceMirPresentationSupportKHR
-- [ ] vkGetPhysicalDeviceMultisamplePropertiesEXT
 - [ ] vkGetPhysicalDevicePresentRectanglesKHR
-- [ ] vkGetPhysicalDeviceProperties2
-- [ ] vkGetPhysicalDeviceQueueFamilyProperties2
-- [ ] vkGetPhysicalDeviceSparseImageFormatProperties
-- [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
-- [ ] vkGetPhysicalDeviceSurfaceCapabilities2EXT
 - [ ] vkGetPhysicalDeviceSurfaceCapabilities2KHR
 - [ ] vkGetPhysicalDeviceSurfaceFormats2KHR
 - [ ] vkGetPhysicalDeviceSurfaceFormatsKHR
@@ -284,41 +278,56 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetPhysicalDeviceWin32PresentationSupportKHR
 - [ ] vkGetPhysicalDeviceXcbPresentationSupportKHR
 - [ ] vkGetPhysicalDeviceXlibPresentationSupportKHR
-- [ ] vkGetPipelineCacheData
-- [ ] vkGetQueryPoolResults
-- [ ] vkGetQueueCheckpointDataNV
-- [ ] vkGetRandROutputDisplayEXT
-- [ ] vkGetRaytracingShaderHandlesNVX
-- [ ] vkGetRefreshCycleDurationGOOGLE
-- [ ] vkGetRenderAreaGranularity
 - [ ] vkGetSemaphoreFdKHR
 - [ ] vkGetSemaphoreWin32HandleKHR
-- [ ] vkGetShaderInfoAMD
-- [ ] vkGetSwapchainCounterEXT
-- [ ] vkGetSwapchainGrallocUsageANDROID
 - [ ] vkGetSwapchainStatusKHR
-- [ ] vkGetValidationCacheDataEXT
 - [ ] vkImportFenceFdKHR
 - [ ] vkImportFenceWin32HandleKHR
 - [ ] vkImportSemaphoreFdKHR
 - [ ] vkImportSemaphoreWin32HandleKHR
-- [ ] vkInvalidateMappedMemoryRanges
-- [ ] vkMergePipelineCaches
-- [ ] vkMergeValidationCachesEXT
-- [ ] vkQueueBeginDebugUtilsLabelEXT
-- [ ] vkQueueBindSparse
-- [ ] vkQueueEndDebugUtilsLabelEXT
-- [ ] vkQueueInsertDebugUtilsLabelEXT
-- [ ] vkQueueSignalReleaseImageANDROID
-- [ ] vkRegisterDeviceEventEXT
-- [ ] vkRegisterDisplayEventEXT
+- [x] vkAcquireNextImageKHR
+- [x] vkCreateSwapchainKHR
+- [x] vkGetPhysicalDeviceSurfaceCapabilitiesKHR
+- [x] vkGetSwapchainImagesKHR
+- [x] vkQueuePresentKHR
+
+- [ ] vkCreateMacOSSurfaceMVK
+- [ ] vkCreateIOSSurfaceMVK
+
+- [ ] vkCreateViSurfaceNN
+
+- [ ] vkCmdBindShadingRateImageNV
+- [ ] vkCmdDrawMeshTasksIndirectCountNV
+- [ ] vkCmdDrawMeshTasksIndirectNV
+- [ ] vkCmdDrawMeshTasksNV
+- [ ] vkCmdSetCheckpointNV
+- [ ] vkCmdSetCoarseSampleOrderNV
+- [ ] vkCmdSetExclusiveScissorNV
+- [ ] vkCmdSetViewportShadingRatePaletteNV
+- [ ] vkCmdSetViewportWScalingNV
+- [ ] vkGetMemoryWin32HandleNV
+- [ ] vkGetPhysicalDeviceExternalImageFormatPropertiesNV
+- [ ] vkGetQueueCheckpointDataNV
+
+- [ ] vkBindAccelerationStructureMemoryNVX
+- [ ] vkCmdBuildAccelerationStructureNVX
+- [ ] vkCmdCopyAccelerationStructureNVX
+- [ ] vkCmdProcessCommandsNVX
+- [ ] vkCmdReserveSpaceForCommandsNVX
+- [ ] vkCmdTraceRaysNVX
+- [ ] vkCmdWriteAccelerationStructurePropertiesNVX
+- [ ] vkCompileDeferredNVX
+- [ ] vkCreateAccelerationStructureNVX
+- [ ] vkCreateIndirectCommandsLayoutNVX
+- [ ] vkCreateObjectTableNVX
+- [ ] vkCreateRaytracingPipelinesNVX
+- [ ] vkDestroyAccelerationStructureNVX
+- [ ] vkDestroyIndirectCommandsLayoutNVX
+- [ ] vkDestroyObjectTableNVX
+- [ ] vkGetAccelerationStructureHandleNVX
+- [ ] vkGetAccelerationStructureMemoryRequirementsNVX
+- [ ] vkGetAccelerationStructureScratchMemoryRequirementsNVX
+- [ ] vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX
+- [ ] vkGetRaytracingShaderHandlesNVX
 - [ ] vkRegisterObjectsNVX
-- [ ] vkReleaseDisplayEXT
-- [ ] vkResetDescriptorPool
-- [ ] vkSetDebugUtilsObjectNameEXT
-- [ ] vkSetDebugUtilsObjectTagEXT
-- [ ] vkSetHdrMetadataEXT
-- [ ] vkSubmitDebugUtilsMessageEXT
 - [ ] vkUnregisterObjectsNVX
-- [ ] vkUpdateDescriptorSetWithTemplate
-- [ ] vkUpdateDescriptorSets
