@@ -909,6 +909,8 @@ type CommandBuffer struct {
 	// VK_DEFINE_HANDLE(VkCommandBuffer)
 	hnd C.VkCommandBuffer
 	fps *[deviceMaxPFN]C.PFN_vkVoidFunction
+
+	bufs []C.VkCommandBuffer
 }
 
 func (buf *CommandBuffer) Reset(flags CommandBufferResetFlags) error {
@@ -1417,6 +1419,24 @@ func (buf *CommandBuffer) BindVertexBuffers(firstBinding uint32, buffers []Buffe
 		C.uint32_t(len(buffers)),
 		(*C.VkBuffer)(slice2ptr(uptr(&buffers))),
 		(*C.VkDeviceSize)(slice2ptr(uptr(&offsets))))
+}
+
+func (buf *CommandBuffer) ExecuteCommands(buffers []CommandBuffer) {
+	if len(buffers) == 1 {
+		C.domVkCmdExecuteCommands(buf.fps[vkCmdExecuteCommands], buf.hnd, 1, (*C.VkCommandBuffer)(uptr(&buffers[0].hnd)))
+		return
+	}
+	arr := buf.bufs
+	if cap(arr) >= len(buffers) {
+		arr = arr[:len(buffers)]
+	} else {
+		arr = make([]C.VkCommandBuffer, len(buffers))
+	}
+	for i, cmd := range buffers {
+		arr[i] = cmd.hnd
+	}
+	C.domVkCmdExecuteCommands(buf.fps[vkCmdExecuteCommands], buf.hnd, C.uint32_t(len(buffers)), (*C.VkCommandBuffer)(slice2ptr(uptr(&arr))))
+	buf.bufs = arr
 }
 
 type CommandPoolCreateInfo struct {
