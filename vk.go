@@ -1403,6 +1403,10 @@ func (buf *CommandBuffer) SetStencilWriteMask(faceMask StencilFaceFlags, writeMa
 	C.domVkCmdSetStencilWriteMask(buf.fps[vkCmdSetStencilWriteMask], buf.hnd, C.VkStencilFaceFlags(faceMask), C.uint32_t(writeMask))
 }
 
+func (buf *CommandBuffer) WriteTimestamp(pipelineStage PipelineStageFlags, queryPool QueryPool, query uint32) {
+	C.domVkCmdWriteTimestamp(buf.fps[vkCmdWriteTimestamp], buf.hnd, C.VkPipelineStageFlagBits(pipelineStage), queryPool.hnd, C.uint32_t(query))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
