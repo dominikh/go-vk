@@ -98,7 +98,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdBindShadingRateImageNV
 - [ ] vkCmdBindTransformFeedbackBuffersEXT
 - [ ] vkCmdBindVertexBuffers
-- [ ] vkCmdBlitImage
+- [x] vkCmdBlitImage
 - [ ] vkCmdBuildAccelerationStructureNVX
 - [ ] vkCmdCopyAccelerationStructureNVX
 - [x] vkCmdCopyBuffer

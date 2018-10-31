@@ -68,6 +68,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(BufferImageCopy{}), C.sizeof_VkBufferImageCopy)
 	assertSameSize(unsafe.Sizeof(ImageSubresourceLayers{}), C.sizeof_VkImageSubresourceLayers)
 	assertSameSize(unsafe.Sizeof(ImageCopy{}), C.sizeof_VkImageCopy)
+	assertSameSize(unsafe.Sizeof(ImageBlit{}), C.sizeof_VkImageBlit)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1204,6 +1205,28 @@ func (buf *CommandBuffer) CopyQueryPoolResults(queryPool QueryPool, firstQuery, 
 		C.VkDeviceSize(dstOffset),
 		C.VkDeviceSize(stride),
 		C.VkQueryResultFlags(flags))
+}
+
+type ImageBlit struct {
+	SrcSubresource ImageSubresourceLayers
+	SrcOffsets     [2]Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffsets     [2]Offset3D
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) BlitImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageBlit, filter Filter) {
+	C.domVkCmdBlitImage(
+		buf.fps[vkCmdBlitImage],
+		buf.hnd,
+		srcImage.hnd,
+		C.VkImageLayout(srcImageLayout),
+		dstImage.hnd,
+		C.VkImageLayout(dstImageLayout),
+		C.uint32_t(len(regions)),
+		(*C.VkImageBlit)(slice2ptr(uptr(&regions))),
+		C.VkFilter(filter))
 }
 
 type CommandPoolCreateInfo struct {
