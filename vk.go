@@ -2854,13 +2854,16 @@ func (hnd *Queue) String() string          { return fmt.Sprintf("VkQueue(%#x)", 
 func (hnd Buffer) String() string          { return fmt.Sprintf("VkBuffer(%#x)", hnd.hnd) }
 func (hnd CommandPool) String() string     { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
 func (hnd DeviceMemory) String() string    { return fmt.Sprintf("VkDeviceMemory(%#x)", hnd.hnd) }
+func (hnd Event) String() string           { return fmt.Sprintf("VkEvent(%#x)", hnd.hnd) }
 func (hnd Fence) String() string           { return fmt.Sprintf("VkFence(%#x)", hnd.hnd) }
 func (hnd Framebuffer) String() string     { return fmt.Sprintf("VkFramebuffer(%#x)", hnd.hnd) }
 func (hnd Image) String() string           { return fmt.Sprintf("VkImage(%#x)", hnd.hnd) }
 func (hnd ImageView) String() string       { return fmt.Sprintf("VkImageView(%#x)", hnd.hnd) }
 func (hnd Pipeline) String() string        { return fmt.Sprintf("VkPipeline(%#x)", hnd.hnd) }
 func (hnd PipelineLayout) String() string  { return fmt.Sprintf("VkPipelineLayout(%#x)", hnd.hnd) }
+func (hnd QueryPool) String() string       { return fmt.Sprintf("VkQueryPool(%#x)", hnd.hnd) }
 func (hnd RenderPass) String() string      { return fmt.Sprintf("VkRenderPass(%#x)", hnd.hnd) }
+func (hnd Sampler) String() string         { return fmt.Sprintf("VkSampler(%#x)", hnd.hnd) }
 func (hnd Semaphore) String() string       { return fmt.Sprintf("VkSemaphore(%#x)", hnd.hnd) }
 func (hnd ShaderModule) String() string    { return fmt.Sprintf("VkShaderModule(%#x)", hnd.hnd) }
 func (hnd DescriptorSetLayout) String() string {
