@@ -873,6 +873,34 @@ func (dev *Device) Queue(family, index uint32) *Queue {
 	return &Queue{hnd: out, fps: &dev.fps}
 }
 
+type DeviceQueueInfo2 struct {
+	Extensions       []Extension
+	Flags            DeviceQueueCreateFlags
+	QueueFamilyIndex uint32
+	QueueIndex       uint32
+}
+
+func (info *DeviceQueueInfo2) c() *C.VkDeviceQueueInfo2 {
+	cinfo := (*C.VkDeviceQueueInfo2)(alloc(C.sizeof_VkDeviceQueueInfo2))
+	*cinfo = C.VkDeviceQueueInfo2{
+		sType:            C.VkStructureType(StructureTypeDeviceQueueInfo2),
+		pNext:            buildChain(info.Extensions),
+		flags:            C.VkDeviceQueueCreateFlags(info.Flags),
+		queueFamilyIndex: C.uint32_t(info.QueueFamilyIndex),
+		queueIndex:       C.uint32_t(info.QueueIndex),
+	}
+	return cinfo
+}
+
+func (dev *Device) Queue2(info *DeviceQueueInfo2) *Queue {
+	cinfo := info.c()
+	out := &Queue{fps: &dev.fps}
+	C.domVkGetDeviceQueue2(dev.fps[vkGetDeviceQueue2], dev.hnd, cinfo, &out.hnd)
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out
+}
+
 type CommandBuffer struct {
 	// VK_DEFINE_HANDLE(VkCommandBuffer)
 	hnd C.VkCommandBuffer

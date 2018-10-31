@@ -379,6 +379,9 @@ void domVkGetDeviceMemoryCommitment(PFN_vkGetDeviceMemoryCommitment fp, VkDevice
 void domVkGetDeviceQueue(PFN_vkGetDeviceQueue fp, VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue) {
 	(*fp)(device, queueFamilyIndex, queueIndex, pQueue);
 }
+void domVkGetDeviceQueue2(PFN_vkGetDeviceQueue2 fp, VkDevice device, const VkDeviceQueueInfo2* pQueueInfo, VkQueue* pQueue) {
+	(*fp)(device, pQueueInfo, pQueue);
+}
 void domVkGetImageMemoryRequirements(PFN_vkGetImageMemoryRequirements fp, VkDevice device, VkImage image, VkMemoryRequirements* pMemoryRequirements) {
 	(*fp)(device, image, pMemoryRequirements);
 }

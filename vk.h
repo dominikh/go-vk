@@ -268,6 +268,7 @@ void     domVkGetDescriptorSetLayoutSupportKHR(PFN_vkGetDescriptorSetLayoutSuppo
 void     domVkGetDeviceGroupPeerMemoryFeaturesKHR(PFN_vkGetDeviceGroupPeerMemoryFeaturesKHR fp, VkDevice device, uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex, VkPeerMemoryFeatureFlags* pPeerMemoryFeatures);
 void     domVkGetDeviceMemoryCommitment(PFN_vkGetDeviceMemoryCommitment fp, VkDevice device, VkDeviceMemory memory, VkDeviceSize* pCommittedMemoryInBytes);
 void     domVkGetDeviceQueue(PFN_vkGetDeviceQueue fp, VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue);
+void     domVkGetDeviceQueue2(PFN_vkGetDeviceQueue2 fp, VkDevice device, const VkDeviceQueueInfo2* pQueueInfo, VkQueue* pQueue);
 void     domVkGetImageMemoryRequirements(PFN_vkGetImageMemoryRequirements fp, VkDevice device, VkImage image, VkMemoryRequirements* pMemoryRequirements);
 void     domVkGetImageMemoryRequirements2KHR(PFN_vkGetImageMemoryRequirements2KHR fp, VkDevice device, const VkImageMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements);
 void     domVkGetImageSparseMemoryRequirements(PFN_vkGetImageSparseMemoryRequirements fp, VkDevice device, VkImage image, uint32_t* pSparseMemoryRequirementCount, VkSparseImageMemoryRequirements* pSparseMemoryRequirements);

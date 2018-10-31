@@ -40,7 +40,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetDescriptorSetLayoutSupport
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDeviceMemoryCommitment
-- [ ] vkGetDeviceQueue2
+- [x] vkGetDeviceQueue2
 - [ ] vkGetImageMemoryRequirements
 - [ ] vkGetImageMemoryRequirements2
 - [ ] vkGetImageSparseMemoryRequirements
