@@ -1408,7 +1408,7 @@ func (buf *CommandBuffer) WriteTimestamp(pipelineStage PipelineStageFlags, query
 }
 
 func (buf *CommandBuffer) BindVertexBuffers(firstBinding uint32, buffers []Buffer, offsets []DeviceSize) {
-	if len(buffers) != len(offsets) {
+	if safe && len(buffers) != len(offsets) {
 		panic("buffers and offsets must have same length")
 	}
 	C.domVkCmdBindVertexBuffers(buf.fps[vkCmdBindVertexBuffers],
@@ -1487,7 +1487,7 @@ func (dev *Device) AllocateCommandBuffers(pool CommandPool, info *CommandBufferA
 
 func (dev *Device) FreeCommandBuffers(pool CommandPool, bufs []*CommandBuffer) {
 	if len(bufs) == 1 {
-		C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, 1, (*C.VkCommandBuffer)(uptr(bufs[0])))
+		C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, 1, (*C.VkCommandBuffer)(uptr(bufs[0].hnd)))
 		return
 	}
 
@@ -1780,6 +1780,11 @@ type PipelineMultisampleStateCreateInfo struct {
 }
 
 func (info *PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStateCreateInfo {
+	if safe && info.SampleMask != nil {
+		if (info.RasterizationSamples == 64 && len(info.SampleMask) < 2) || len(info.SampleMask) < 1 {
+			panic("SampleMask must be nil or have ceil(rasterizationSamples / 32) elements")
+		}
+	}
 	size0 := align(C.sizeof_VkPipelineMultisampleStateCreateInfo)
 	size1 := align(uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask)
 	size := size0 + size1
@@ -2402,7 +2407,7 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 	signalSemaphores := mem + size0 + size1 + size2 + size3
 
 	for _, info := range infos {
-		if len(info.WaitSemaphores) != len(info.WaitDstStageMask) {
+		if safe && len(info.WaitSemaphores) != len(info.WaitDstStageMask) {
 			panic("WaitSemaphores and WaitDstStageMask must have same length")
 		}
 		*(*C.VkSubmitInfo)(uptr(cinfos)) = C.VkSubmitInfo{

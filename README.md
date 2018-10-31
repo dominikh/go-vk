@@ -12,11 +12,12 @@ Package `vk` provides bindings for the Vulkan graphics API.
 
 ## Build tags
 
-We use a number of build tags to guard platform-specific functionality.
+We use a number of build tags to guard platform-specific functionality and safety checks.
 
-| Tag  | Description                             |
-|------|-----------------------------------------|
-| xlib | Include support for VK_KHR_xlib_surface |
+| Tag    | Description                                                                     |
+|--------|---------------------------------------------------------------------------------|
+| unsafe | Disable runtime checks that prevent memory corruption in the case of API misuse |
+| xlib   | Include support for VK_KHR_xlib_surface                                         |
 
 ## Comparison to github.com/vulkan-go/vulkan
 
