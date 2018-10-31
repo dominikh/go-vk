@@ -69,6 +69,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ImageSubresourceLayers{}), C.sizeof_VkImageSubresourceLayers)
 	assertSameSize(unsafe.Sizeof(ImageCopy{}), C.sizeof_VkImageCopy)
 	assertSameSize(unsafe.Sizeof(ImageBlit{}), C.sizeof_VkImageBlit)
+	assertSameSize(unsafe.Sizeof(Event{}), C.sizeof_VkEvent)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1274,6 +1275,109 @@ func (buf *CommandBuffer) DrawIndexedIndirect(buffer Buffer, offset DeviceSize, 
 
 func (buf *CommandBuffer) DrawIndirect(buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
 	C.domVkCmdDrawIndirect(buf.fps[vkCmdDrawIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset), C.uint32_t(drawCount), C.uint32_t(stride))
+}
+
+type MemoryBarrier struct {
+	Extensions    []Extension
+	SrcAccessMask AccessFlags
+	DstAccessMask AccessFlags
+}
+
+type BufferMemoryBarrier struct {
+	Extensions          []Extension
+	SrcAccessMask       AccessFlags
+	DstAccessMask       AccessFlags
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Buffer              Buffer
+	Offset              DeviceSize
+	Size                DeviceSize
+}
+
+type ImageMemoryBarrier struct {
+	Extensions          []Extension
+	SrcAccessMask       AccessFlags
+	DstAccessMask       AccessFlags
+	OldLayout           ImageLayout
+	NewLayout           ImageLayout
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Image               Image
+	SubresourceRange    ImageSubresourceRange
+}
+
+func (buf *CommandBuffer) WaitEvents(
+	events []Event,
+	srcStageMask, dstStageMask PipelineStageFlags,
+	memoryBarriers []MemoryBarrier,
+	bufferMemoryBarriers []BufferMemoryBarrier,
+	imageMemoryBarriers []ImageMemoryBarrier,
+) {
+	cmem := allocn(len(memoryBarriers), C.sizeof_VkMemoryBarrier)
+	cbuf := allocn(len(bufferMemoryBarriers), C.sizeof_VkBufferMemoryBarrier)
+	cimg := allocn(len(imageMemoryBarriers), C.sizeof_VkImageMemoryBarrier)
+	defer free(cmem)
+	defer free(cbuf)
+	defer free(cimg)
+
+	memArr := (*[math.MaxInt32]C.VkMemoryBarrier)(cmem)[:len(memoryBarriers)]
+	bufArr := (*[math.MaxInt32]C.VkBufferMemoryBarrier)(cbuf)[:len(bufferMemoryBarriers)]
+	imgArr := (*[math.MaxInt32]C.VkImageMemoryBarrier)(cimg)[:len(imageMemoryBarriers)]
+
+	for i := range memArr {
+		memArr[i] = C.VkMemoryBarrier{
+			sType:         C.VkStructureType(StructureTypeMemoryBarrier),
+			pNext:         buildChain(memoryBarriers[i].Extensions),
+			srcAccessMask: C.VkAccessFlags(memoryBarriers[i].SrcAccessMask),
+			dstAccessMask: C.VkAccessFlags(memoryBarriers[i].DstAccessMask),
+		}
+		defer internalizeChain(memoryBarriers[i].Extensions, memArr[i].pNext)
+	}
+
+	for i := range bufArr {
+		bufArr[i] = C.VkBufferMemoryBarrier{
+			sType:               C.VkStructureType(StructureTypeBufferMemoryBarrier),
+			pNext:               buildChain(bufferMemoryBarriers[i].Extensions),
+			srcAccessMask:       C.VkAccessFlags(bufferMemoryBarriers[i].SrcAccessMask),
+			dstAccessMask:       C.VkAccessFlags(bufferMemoryBarriers[i].DstAccessMask),
+			srcQueueFamilyIndex: C.uint32_t(bufferMemoryBarriers[i].SrcQueueFamilyIndex),
+			dstQueueFamilyIndex: C.uint32_t(bufferMemoryBarriers[i].DstQueueFamilyIndex),
+			buffer:              bufferMemoryBarriers[i].Buffer.hnd,
+			offset:              C.VkDeviceSize(bufferMemoryBarriers[i].Offset),
+			size:                C.VkDeviceSize(bufferMemoryBarriers[i].Size),
+		}
+		defer internalizeChain(bufferMemoryBarriers[i].Extensions, bufArr[i].pNext)
+	}
+
+	for i := range imgArr {
+		imgArr[i] = C.VkImageMemoryBarrier{
+			sType:               C.VkStructureType(StructureTypeImageMemoryBarrier),
+			pNext:               buildChain(imageMemoryBarriers[i].Extensions),
+			srcAccessMask:       C.VkAccessFlags(imageMemoryBarriers[i].SrcAccessMask),
+			dstAccessMask:       C.VkAccessFlags(imageMemoryBarriers[i].DstAccessMask),
+			oldLayout:           C.VkImageLayout(imageMemoryBarriers[i].OldLayout),
+			newLayout:           C.VkImageLayout(imageMemoryBarriers[i].NewLayout),
+			srcQueueFamilyIndex: C.uint32_t(imageMemoryBarriers[i].SrcQueueFamilyIndex),
+			dstQueueFamilyIndex: C.uint32_t(imageMemoryBarriers[i].DstQueueFamilyIndex),
+			image:               imageMemoryBarriers[i].Image.hnd,
+		}
+		ucopy1(uptr(&imgArr[i].subresourceRange), uptr(&imageMemoryBarriers[i].SubresourceRange), C.sizeof_VkImageSubresourceRange)
+		defer internalizeChain(imageMemoryBarriers[i].Extensions, imgArr[i].pNext)
+	}
+
+	C.domVkCmdWaitEvents(
+		buf.fps[vkCmdWaitEvents],
+		buf.hnd,
+		C.uint32_t(len(events)),
+		(*C.VkEvent)(slice2ptr(uptr(&events))),
+		C.VkPipelineStageFlags(srcStageMask),
+		C.VkPipelineStageFlags(dstStageMask),
+		C.uint32_t(len(memoryBarriers)),
+		(*C.VkMemoryBarrier)(cmem),
+		C.uint32_t(len(bufferMemoryBarriers)),
+		(*C.VkBufferMemoryBarrier)(cbuf),
+		C.uint32_t(len(imageMemoryBarriers)),
+		(*C.VkImageMemoryBarrier)(cimg))
 }
 
 type CommandPoolCreateInfo struct {
@@ -2551,6 +2655,8 @@ func (dev *Device) DestroyImage(img Image) {
 type Event struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkEvent)
 	hnd C.VkEvent
+
+	// must be kept identical to C struct
 }
 
 type EventCreateInfo struct {
