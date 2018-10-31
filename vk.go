@@ -73,6 +73,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ImageCopy{}), C.sizeof_VkImageCopy)
 	assertSameSize(unsafe.Sizeof(ImageBlit{}), C.sizeof_VkImageBlit)
 	assertSameSize(unsafe.Sizeof(Event{}), C.sizeof_VkEvent)
+	assertSameSize(unsafe.Sizeof(ImageResolve{}), C.sizeof_VkImageResolve)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1561,6 +1562,28 @@ func (buf *CommandBuffer) PipelineBarrier(
 		C.uint32_t(len(imageMemoryBarriers)),
 		cimg)
 	free(uptr(cmem))
+}
+
+type ImageResolve struct {
+	SrcSubresource ImageSubresourceLayers
+	SrcOffset      Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffset      Offset3D
+	Extent         Extent3D
+
+	// must be kept identical to C struct
+}
+
+func (buf *CommandBuffer) ResolveImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageResolve) {
+	C.domVkCmdResolveImage(
+		buf.fps[vkCmdResolveImage],
+		buf.hnd,
+		srcImage.hnd,
+		C.VkImageLayout(srcImageLayout),
+		dstImage.hnd,
+		C.VkImageLayout(dstImageLayout),
+		C.uint32_t(len(regions)),
+		(*C.VkImageResolve)(slice2ptr(uptr(&regions))))
 }
 
 type CommandPoolCreateInfo struct {
