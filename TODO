@@ -6,7 +6,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdBindDescriptorSets
 - [x] vkCmdBindVertexBuffers
 - [x] vkCmdDispatchBase
-- [ ] vkCmdDispatchIndirect
+- [x] vkCmdDispatchIndirect
 - [x] vkCmdExecuteCommands
 - [x] vkCmdNextSubpass
 - [ ] vkCmdPipelineBarrier

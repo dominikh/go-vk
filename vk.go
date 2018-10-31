@@ -1524,6 +1524,10 @@ func (buf *CommandBuffer) DispatchBase(baseGroupX, baseGroupY, baseGroupZ, group
 		C.uint32_t(groupCountZ))
 }
 
+func (buf *CommandBuffer) DispatchIndirect(buffer Buffer, offset DeviceSize) {
+	C.domVkCmdDispatchIndirect(buf.fps[vkCmdDispatchIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
