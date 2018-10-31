@@ -4,7 +4,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkBindImageMemory
 - [ ] vkBindImageMemory2
 - [ ] vkCmdBindDescriptorSets
-- [ ] vkCmdBindVertexBuffers
+- [x] vkCmdBindVertexBuffers
 - [ ] vkCmdDispatchBase
 - [ ] vkCmdDispatchIndirect
 - [ ] vkCmdExecuteCommands

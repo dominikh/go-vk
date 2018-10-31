@@ -1407,6 +1407,18 @@ func (buf *CommandBuffer) WriteTimestamp(pipelineStage PipelineStageFlags, query
 	C.domVkCmdWriteTimestamp(buf.fps[vkCmdWriteTimestamp], buf.hnd, C.VkPipelineStageFlagBits(pipelineStage), queryPool.hnd, C.uint32_t(query))
 }
 
+func (buf *CommandBuffer) BindVertexBuffers(firstBinding uint32, buffers []Buffer, offsets []DeviceSize) {
+	if len(buffers) != len(offsets) {
+		panic("buffers and offsets must have same length")
+	}
+	C.domVkCmdBindVertexBuffers(buf.fps[vkCmdBindVertexBuffers],
+		buf.hnd,
+		C.uint32_t(firstBinding),
+		C.uint32_t(len(buffers)),
+		(*C.VkBuffer)(slice2ptr(uptr(&buffers))),
+		(*C.VkDeviceSize)(slice2ptr(uptr(&offsets))))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
@@ -2492,6 +2504,8 @@ type BufferCreateInfo struct {
 type Buffer struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBuffer)
 	hnd C.VkBuffer
+
+	// must be kept identical to C struct
 }
 
 func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
