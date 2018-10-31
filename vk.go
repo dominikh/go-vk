@@ -549,7 +549,12 @@ func (dev *PhysicalDevice) ExtensionProperties(layer string) ([]ExtensionPropert
 		return nil, res
 	}
 	properties := make([]C.VkExtensionProperties, count)
-	res = Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, (*C.VkExtensionProperties)(slice2ptr(uptr(&properties)))))
+	res = Result(C.domVkEnumerateDeviceExtensionProperties(
+		dev.instance.fps[vkEnumerateDeviceExtensionProperties],
+		dev.hnd,
+		cLayer,
+		&count,
+		(*C.VkExtensionProperties)(slice2ptr(uptr(&properties)))))
 	if res != Success {
 		return nil, res
 	}
@@ -713,9 +718,17 @@ type Extent3D struct {
 
 func (dev *PhysicalDevice) QueueFamilyProperties() []QueueFamilyProperties {
 	var count C.uint32_t
-	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, nil)
+	C.domVkGetPhysicalDeviceQueueFamilyProperties(
+		dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties],
+		dev.hnd,
+		&count,
+		nil)
 	props := make([]QueueFamilyProperties, count)
-	C.domVkGetPhysicalDeviceQueueFamilyProperties(dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties], dev.hnd, &count, (*C.VkQueueFamilyProperties)(slice2ptr(uptr(&props))))
+	C.domVkGetPhysicalDeviceQueueFamilyProperties(
+		dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties],
+		dev.hnd,
+		&count,
+		(*C.VkQueueFamilyProperties)(slice2ptr(uptr(&props))))
 	return props
 }
 
@@ -986,15 +999,31 @@ func (buf *CommandBuffer) SetBlendConstants(blendConstants [4]float32) {
 }
 
 func (buf *CommandBuffer) Draw(vertexCount, instanceCount, firstVertex, firstInstance uint32) {
-	C.domVkCmdDraw(buf.fps[vkCmdDraw], buf.hnd, C.uint32_t(vertexCount), C.uint32_t(instanceCount), C.uint32_t(firstVertex), C.uint32_t(firstInstance))
+	C.domVkCmdDraw(
+		buf.fps[vkCmdDraw],
+		buf.hnd,
+		C.uint32_t(vertexCount),
+		C.uint32_t(instanceCount),
+		C.uint32_t(firstVertex),
+		C.uint32_t(firstInstance))
 }
 
 func (buf *CommandBuffer) SetViewport(firstViewport uint32, viewports []Viewport) {
-	C.domVkCmdSetViewport(buf.fps[vkCmdSetViewport], buf.hnd, C.uint32_t(firstViewport), C.uint32_t(len(viewports)), (*C.VkViewport)(slice2ptr(uptr(&viewports))))
+	C.domVkCmdSetViewport(
+		buf.fps[vkCmdSetViewport],
+		buf.hnd,
+		C.uint32_t(firstViewport),
+		C.uint32_t(len(viewports)),
+		(*C.VkViewport)(slice2ptr(uptr(&viewports))))
 }
 
 func (buf *CommandBuffer) SetScissor(firstScissor uint32, scissors []Rect2D) {
-	C.domVkCmdSetScissor(buf.fps[vkCmdSetScissor], buf.hnd, C.uint32_t(firstScissor), C.uint32_t(len(scissors)), (*C.VkRect2D)(slice2ptr(uptr(&scissors))))
+	C.domVkCmdSetScissor(
+		buf.fps[vkCmdSetScissor],
+		buf.hnd,
+		C.uint32_t(firstScissor),
+		C.uint32_t(len(scissors)),
+		(*C.VkRect2D)(slice2ptr(uptr(&scissors))))
 }
 
 func (buf *CommandBuffer) SetDeviceMask(deviceMask uint32) {
@@ -1006,7 +1035,14 @@ func (buf *CommandBuffer) SetDepthBounds(min, max float32) {
 }
 
 func (buf *CommandBuffer) PushConstants(layout PipelineLayout, stageFlags ShaderStageFlags, offset uint32, size uint32, data []byte) {
-	C.domVkCmdPushConstants(buf.fps[vkCmdPushConstants], buf.hnd, layout.hnd, C.VkShaderStageFlags(stageFlags), C.uint32_t(offset), C.uint32_t(len(data)), slice2ptr(uptr(&data)))
+	C.domVkCmdPushConstants(
+		buf.fps[vkCmdPushConstants],
+		buf.hnd,
+		layout.hnd,
+		C.VkShaderStageFlags(stageFlags),
+		C.uint32_t(offset),
+		C.uint32_t(len(data)),
+		slice2ptr(uptr(&data)))
 }
 
 func (buf *CommandBuffer) FillBuffer(dstBuffer Buffer, dstOffset DeviceSize, size DeviceSize, data uint32) {
@@ -1056,7 +1092,13 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 			panic(fmt.Sprintf("unreachable: %T", v))
 		}
 	}
-	C.domVkCmdClearAttachments(buf.fps[vkCmdClearAttachments], buf.hnd, C.uint32_t(len(attachments)), (*C.VkClearAttachment)(mem), C.uint32_t(len(rects)), (*C.VkClearRect)(slice2ptr(uptr(&rects))))
+	C.domVkCmdClearAttachments(
+		buf.fps[vkCmdClearAttachments],
+		buf.hnd,
+		C.uint32_t(len(attachments)),
+		(*C.VkClearAttachment)(mem),
+		C.uint32_t(len(rects)),
+		(*C.VkClearRect)(slice2ptr(uptr(&rects))))
 	free(uptr(mem))
 }
 
@@ -1072,12 +1114,26 @@ func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, 
 	default:
 		panic(fmt.Sprintf("unreachable: %T", v))
 	}
-	C.domVkCmdClearColorImage(buf.fps[vkCmdClearColorImage], buf.hnd, image.hnd, C.VkImageLayout(imageLayout), cColor, C.uint32_t(len(ranges)), (*C.VkImageSubresourceRange)(slice2ptr(uptr(&ranges))))
+	C.domVkCmdClearColorImage(
+		buf.fps[vkCmdClearColorImage],
+		buf.hnd,
+		image.hnd,
+		C.VkImageLayout(imageLayout),
+		cColor,
+		C.uint32_t(len(ranges)),
+		(*C.VkImageSubresourceRange)(slice2ptr(uptr(&ranges))))
 	free(uptr(cColor))
 }
 
 func (buf *CommandBuffer) ClearDepthStencilImage(image Image, imageLayout ImageLayout, depthStencil ClearDepthStencilValue, ranges []ImageSubresourceRange) {
-	C.domVkCmdClearDepthStencilImage(buf.fps[vkCmdClearDepthStencilImage], buf.hnd, image.hnd, C.VkImageLayout(imageLayout), (*C.VkClearDepthStencilValue)(uptr(&depthStencil)), C.uint32_t(len(ranges)), (*C.VkImageSubresourceRange)(slice2ptr(uptr(&ranges))))
+	C.domVkCmdClearDepthStencilImage(
+		buf.fps[vkCmdClearDepthStencilImage],
+		buf.hnd,
+		image.hnd,
+		C.VkImageLayout(imageLayout),
+		(*C.VkClearDepthStencilValue)(uptr(&depthStencil)),
+		C.uint32_t(len(ranges)),
+		(*C.VkImageSubresourceRange)(slice2ptr(uptr(&ranges))))
 }
 
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
@@ -1141,7 +1197,13 @@ type BufferCopy struct {
 }
 
 func (buf *CommandBuffer) CopyBuffer(srcBuffer, dstBuffer Buffer, regions []BufferCopy) {
-	C.domVkCmdCopyBuffer(buf.fps[vkCmdCopyBuffer], buf.hnd, srcBuffer.hnd, dstBuffer.hnd, C.uint32_t(len(regions)), (*C.VkBufferCopy)(slice2ptr(uptr(&regions))))
+	C.domVkCmdCopyBuffer(
+		buf.fps[vkCmdCopyBuffer],
+		buf.hnd,
+		srcBuffer.hnd,
+		dstBuffer.hnd,
+		C.uint32_t(len(regions)),
+		(*C.VkBufferCopy)(slice2ptr(uptr(&regions))))
 }
 
 type BufferImageCopy struct {
@@ -1217,7 +1279,13 @@ func (buf *CommandBuffer) ResetQueryPool(queryPool QueryPool, firstQuery, queryC
 }
 
 func (buf *CommandBuffer) UpdateBuffer(dstBuffer Buffer, dstOffset DeviceSize, data []byte) {
-	C.domVkCmdUpdateBuffer(buf.fps[vkCmdUpdateBuffer], buf.hnd, dstBuffer.hnd, C.VkDeviceSize(dstOffset), C.VkDeviceSize(len(data)), slice2ptr(uptr(&data)))
+	C.domVkCmdUpdateBuffer(
+		buf.fps[vkCmdUpdateBuffer],
+		buf.hnd,
+		dstBuffer.hnd,
+		C.VkDeviceSize(dstOffset),
+		C.VkDeviceSize(len(data)),
+		slice2ptr(uptr(&data)))
 }
 
 func (buf *CommandBuffer) BeginQuery(queryPool QueryPool, query uint32, flags QueryControlFlags) {
@@ -1229,8 +1297,7 @@ func (buf *CommandBuffer) EndQuery(queryPool QueryPool, query uint32) {
 }
 
 func (buf *CommandBuffer) CopyQueryPoolResults(queryPool QueryPool, firstQuery, queryCount uint32, dstBuffer Buffer, dstOffset, stride DeviceSize, flags QueryResultFlags) {
-	C.domVkCmdCopyQueryPoolResults(
-		buf.fps[vkCmdCopyQueryPoolResults],
+	C.domVkCmdCopyQueryPoolResults(buf.fps[vkCmdCopyQueryPoolResults],
 		buf.hnd,
 		queryPool.hnd,
 		C.uint32_t(firstQuery),
@@ -1275,7 +1342,13 @@ func (buf *CommandBuffer) DrawIndexed(indexCount, instanceCount, firstIndex uint
 }
 
 func (buf *CommandBuffer) DrawIndexedIndirect(buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
-	C.domVkCmdDrawIndexedIndirect(buf.fps[vkCmdDrawIndexedIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset), C.uint32_t(drawCount), C.uint32_t(stride))
+	C.domVkCmdDrawIndexedIndirect(
+		buf.fps[vkCmdDrawIndexedIndirect],
+		buf.hnd,
+		buffer.hnd,
+		C.VkDeviceSize(offset),
+		C.uint32_t(drawCount),
+		C.uint32_t(stride))
 }
 
 func (buf *CommandBuffer) DrawIndirect(buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
@@ -1437,6 +1510,18 @@ func (buf *CommandBuffer) ExecuteCommands(buffers []CommandBuffer) {
 	}
 	C.domVkCmdExecuteCommands(buf.fps[vkCmdExecuteCommands], buf.hnd, C.uint32_t(len(buffers)), (*C.VkCommandBuffer)(slice2ptr(uptr(&arr))))
 	buf.bufs = arr
+}
+
+func (buf *CommandBuffer) DispatchBase(baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ uint32) {
+	C.domVkCmdDispatchBase(
+		buf.fps[vkCmdDispatchBase],
+		buf.hnd,
+		C.uint32_t(baseGroupX),
+		C.uint32_t(baseGroupY),
+		C.uint32_t(baseGroupZ),
+		C.uint32_t(groupCountX),
+		C.uint32_t(groupCountY),
+		C.uint32_t(groupCountZ))
 }
 
 type CommandPoolCreateInfo struct {
@@ -2146,7 +2231,14 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 	}
 
 	hnds := make([]C.VkPipeline, len(infos))
-	res := Result(C.domVkCreateGraphicsPipelines(dev.fps[vkCreateGraphicsPipelines], dev.hnd, 0, C.uint32_t(len(infos)), ptrs, nil, (*C.VkPipeline)(slice2ptr(uptr(&hnds)))))
+	res := Result(C.domVkCreateGraphicsPipelines(
+		dev.fps[vkCreateGraphicsPipelines],
+		dev.hnd,
+		0,
+		C.uint32_t(len(infos)),
+		ptrs,
+		nil,
+		(*C.VkPipeline)(slice2ptr(uptr(&hnds)))))
 	if res != Success {
 		return nil, res
 	}
@@ -2508,7 +2600,13 @@ func (dev *Device) FenceStatus(fence Fence) (Result, error) {
 }
 
 func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Duration) error {
-	res := Result(C.domVkWaitForFences(dev.fps[vkWaitForFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(uptr(&fences))), vkBool(waitAll), C.uint64_t(timeout)))
+	res := Result(C.domVkWaitForFences(
+		dev.fps[vkWaitForFences],
+		dev.hnd,
+		C.uint32_t(len(fences)),
+		(*C.VkFence)(slice2ptr(uptr(&fences))),
+		vkBool(waitAll),
+		C.uint64_t(timeout)))
 	return result2error(res)
 }
 
@@ -2652,7 +2750,14 @@ func (dev *Device) BindBufferMemory2(infos []BindBufferMemoryInfo) error {
 
 func (dev *Device) MapMemory(mem DeviceMemory, offset, size DeviceSize, flags MemoryMapFlags) (uintptr, error) {
 	var ptr uptr
-	res := Result(C.domVkMapMemory(dev.fps[vkMapMemory], dev.hnd, mem.hnd, C.VkDeviceSize(offset), C.VkDeviceSize(size), C.VkMemoryMapFlags(flags), &ptr))
+	res := Result(C.domVkMapMemory(
+		dev.fps[vkMapMemory],
+		dev.hnd,
+		mem.hnd,
+		C.VkDeviceSize(offset),
+		C.VkDeviceSize(size),
+		C.VkMemoryMapFlags(flags),
+		&ptr))
 	return uintptr(ptr), result2error(res)
 }
 
