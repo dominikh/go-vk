@@ -77,6 +77,7 @@ type Filter uint32
 type SamplerAddressMode uint32
 type SamplerMipmapMode uint32
 type BorderColor uint32
+type QueryResultFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1604,6 +1605,13 @@ const (
 	BorderColorIntOpaqueWhite        BorderColor = 5
 )
 
+const (
+	QueryResult64Bit               QueryResultFlags = 0x00000001
+	QueryResultWaitBit             QueryResultFlags = 0x00000002
+	QueryResultWithAvailabilityBit QueryResultFlags = 0x00000004
+	QueryResultPartialBit          QueryResultFlags = 0x00000008
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2291,6 +2299,23 @@ func (flags MemoryHeapFlags) String() string {
 	}
 	if (flags & MemoryHeapMultiInstanceBitKHR) != 0 {
 		out = append(out, "MemoryHeapMultiInstanceBitKHR")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags QueryResultFlags) String() string {
+	var out []string
+	if (flags & QueryResult64Bit) != 0 {
+		out = append(out, "QueryResult64Bit")
+	}
+	if (flags & QueryResultWaitBit) != 0 {
+		out = append(out, "QueryResultWaitBit")
+	}
+	if (flags & QueryResultWithAvailabilityBit) != 0 {
+		out = append(out, "QueryResultWithAvailabilityBit")
+	}
+	if (flags & QueryResultPartialBit) != 0 {
+		out = append(out, "QueryResultPartialBit")
 	}
 	return strings.Join(out, " | ")
 }

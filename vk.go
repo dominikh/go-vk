@@ -1193,6 +1193,19 @@ func (buf *CommandBuffer) EndQuery(queryPool QueryPool, query uint32) {
 	C.domVkCmdEndQuery(buf.fps[vkCmdEndQuery], buf.hnd, queryPool.hnd, C.uint32_t(query))
 }
 
+func (buf *CommandBuffer) CopyQueryPoolResults(queryPool QueryPool, firstQuery, queryCount uint32, dstBuffer Buffer, dstOffset, stride DeviceSize, flags QueryResultFlags) {
+	C.domVkCmdCopyQueryPoolResults(
+		buf.fps[vkCmdCopyQueryPoolResults],
+		buf.hnd,
+		queryPool.hnd,
+		C.uint32_t(firstQuery),
+		C.uint32_t(queryCount),
+		dstBuffer.hnd,
+		C.VkDeviceSize(dstOffset),
+		C.VkDeviceSize(stride),
+		C.VkQueryResultFlags(flags))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
