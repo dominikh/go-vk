@@ -89,7 +89,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkBindImageMemory2
 - [ ] vkCmdBeginConditionalRenderingEXT
 - [ ] vkCmdBeginDebugUtilsLabelEXT
-- [ ] vkCmdBeginQuery
+- [x] vkCmdBeginQuery
 - [ ] vkCmdBeginQueryIndexedEXT
 - [ ] vkCmdBeginRenderPass2KHR
 - [ ] vkCmdBeginTransformFeedbackEXT
@@ -124,7 +124,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdDrawMeshTasksNV
 - [ ] vkCmdEndConditionalRenderingEXT
 - [ ] vkCmdEndDebugUtilsLabelEXT
-- [ ] vkCmdEndQuery
+- [x] vkCmdEndQuery
 - [ ] vkCmdEndQueryIndexedEXT
 - [ ] vkCmdEndRenderPass2KHR
 - [ ] vkCmdEndTransformFeedbackEXT

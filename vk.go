@@ -1185,6 +1185,14 @@ func (buf *CommandBuffer) UpdateBuffer(dstBuffer Buffer, dstOffset DeviceSize, d
 	C.domVkCmdUpdateBuffer(buf.fps[vkCmdUpdateBuffer], buf.hnd, dstBuffer.hnd, C.VkDeviceSize(dstOffset), C.VkDeviceSize(len(data)), slice2ptr(uptr(&data)))
 }
 
+func (buf *CommandBuffer) BeginQuery(queryPool QueryPool, query uint32, flags QueryControlFlags) {
+	C.domVkCmdBeginQuery(buf.fps[vkCmdBeginQuery], buf.hnd, queryPool.hnd, C.uint32_t(query), C.VkQueryControlFlags(flags))
+}
+
+func (buf *CommandBuffer) EndQuery(queryPool QueryPool, query uint32) {
+	C.domVkCmdEndQuery(buf.fps[vkCmdEndQuery], buf.hnd, queryPool.hnd, C.uint32_t(query))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
