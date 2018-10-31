@@ -1380,6 +1380,10 @@ func (buf *CommandBuffer) WaitEvents(
 		(*C.VkImageMemoryBarrier)(cimg))
 }
 
+func (buf *CommandBuffer) NextSubpass(contents SubpassContents) {
+	C.domVkCmdNextSubpass(buf.fps[vkCmdNextSubpass], buf.hnd, C.VkSubpassContents(contents))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
