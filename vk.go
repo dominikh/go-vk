@@ -1170,7 +1170,12 @@ func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, 
 	free(uptr(cColor))
 }
 
-func (buf *CommandBuffer) ClearDepthStencilImage(image Image, imageLayout ImageLayout, depthStencil ClearDepthStencilValue, ranges []ImageSubresourceRange) {
+func (buf *CommandBuffer) ClearDepthStencilImage(
+	image Image,
+	imageLayout ImageLayout,
+	depthStencil ClearDepthStencilValue,
+	ranges []ImageSubresourceRange,
+) {
 	C.domVkCmdClearDepthStencilImage(
 		buf.fps[vkCmdClearDepthStencilImage],
 		buf.hnd,
@@ -1341,7 +1346,13 @@ func (buf *CommandBuffer) EndQuery(queryPool QueryPool, query uint32) {
 	C.domVkCmdEndQuery(buf.fps[vkCmdEndQuery], buf.hnd, queryPool.hnd, C.uint32_t(query))
 }
 
-func (buf *CommandBuffer) CopyQueryPoolResults(queryPool QueryPool, firstQuery, queryCount uint32, dstBuffer Buffer, dstOffset, stride DeviceSize, flags QueryResultFlags) {
+func (buf *CommandBuffer) CopyQueryPoolResults(
+	queryPool QueryPool,
+	firstQuery, queryCount uint32,
+	dstBuffer Buffer,
+	dstOffset, stride DeviceSize,
+	flags QueryResultFlags,
+) {
 	C.domVkCmdCopyQueryPoolResults(buf.fps[vkCmdCopyQueryPoolResults],
 		buf.hnd,
 		queryPool.hnd,
@@ -1362,7 +1373,14 @@ type ImageBlit struct {
 	// must be kept identical to C struct
 }
 
-func (buf *CommandBuffer) BlitImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageBlit, filter Filter) {
+func (buf *CommandBuffer) BlitImage(
+	srcImage Image,
+	srcImageLayout ImageLayout,
+	dstImage Image,
+	dstImageLayout ImageLayout,
+	regions []ImageBlit,
+	filter Filter,
+) {
 	C.domVkCmdBlitImage(
 		buf.fps[vkCmdBlitImage],
 		buf.hnd,

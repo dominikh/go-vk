@@ -1467,19 +1467,23 @@ const (
 )
 
 const (
-	// BufferUsageTransferSrcBit specifies that the buffer can be used as the source of a transfer command (see the definition of PipelineStageTransferBit).
+	// BufferUsageTransferSrcBit specifies that the buffer can be used as the source of a transfer command
+	// (see the definition of PipelineStageTransferBit).
 	BufferUsageTransferSrcBit BufferUsageFlags = 0x00000001
 
 	// BufferUsageTransferDstBit specifies that the buffer can be used as the destination of a transfer command.
 	BufferUsageTransferDstBit BufferUsageFlags = 0x00000002
 
-	// BufferUsageUniformTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for occupying a DescriptorSet slot of type DescriptorTypeUniformTexelBuffer.
+	// BufferUsageUniformTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for
+	// occupying a DescriptorSet slot of type DescriptorTypeUniformTexelBuffer.
 	BufferUsageUniformTexelBufferBit BufferUsageFlags = 0x00000004
 
-	// BufferUsageStorageTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for occupying a DescriptorSet slot of type DescriptorTypeStorageTexelBUFFER.
+	// BufferUsageStorageTexelBufferBit specifies that the buffer can be used to create a BufferView suitable for
+	// occupying a DescriptorSet slot of type DescriptorTypeStorageTexelBUFFER.
 	BufferUsageStorageTexelBufferBit BufferUsageFlags = 0x00000008
 
-	// BufferUsageUniformBufferBit specifies that the buffer can be used in a DescriptorBufferInfo suitable for occupying a DescriptorSet slot either of type DescriptorTypeUniformBuffer or DescriptorTypeUniformBufferDynamic.
+	// BufferUsageUniformBufferBit specifies that the buffer can be used in a DescriptorBufferInfo suitable for
+	// occupying a DescriptorSet slot either of type DescriptorTypeUniformBuffer or DescriptorTypeUniformBufferDynamic.
 	BufferUsageUniformBufferBit BufferUsageFlags = 0x00000010
 
 	// BufferUsageStorageBufferBit specifies that the buffer can be used in a DescriptorBufferInfo suitable for occupying
@@ -1494,16 +1498,20 @@ const (
 
 	// BufferUsageIndirectBufferBit specifies that the buffer is suitable for passing as the buffer parameter to
 	// DrawIndirect, DrawIndexedIndirect, DrawMeshTasksIndirectNV, DrawMeshTasksIndirectCount, or DispatchIndirect.
-	// It is also suitable for passing as the buffer member of IndirectCommandsTokenNVX, or sequencesCountBuffer or sequencesIndexBuffer member of CmdProcessCommandsInfoNVX
+	// It is also suitable for passing as the buffer member of IndirectCommandsTokenNVX, or sequencesCountBuffer or
+	// sequencesIndexBuffer member of CmdProcessCommandsInfoNVX
 	BufferUsageIndirectBufferBit BufferUsageFlags = 0x00000100
 
-	// BufferUsageTransformFeedbackBufferBitEXT specifies that the buffer is suitable for using for binding as a transform feedback buffer with BindTransformFeedbackBuffersEXT.
+	// BufferUsageTransformFeedbackBufferBitEXT specifies that the buffer is suitable for using for binding as a
+	// transform feedback buffer with BindTransformFeedbackBuffersEXT.
 	BufferUsageTransformFeedbackBufferBitEXT BufferUsageFlags = 0x00000800
 
-	// BufferUsageTransformFeedbackCounterBufferBitEXT specifies that the buffer is suitable for using as a counter buffer with BeginTransformFeedbackEXT and EndTransformFeedbackEXT.
+	// BufferUsageTransformFeedbackCounterBufferBitEXT specifies that the buffer is suitable for using as a
+	// counter buffer with BeginTransformFeedbackEXT and EndTransformFeedbackEXT.
 	BufferUsageTransformFeedbackCounterBufferBitEXT BufferUsageFlags = 0x00001000
 
-	// BufferUsageConditionalRenderingBitEXT specifies that the buffer is suitable for passing as the buffer parameter to BeginConditionalRenderingEXT.
+	// BufferUsageConditionalRenderingBitEXT specifies that the buffer is suitable for passing as
+	// the buffer parameter to BeginConditionalRenderingEXT.
 	BufferUsageConditionalRenderingBitEXT BufferUsageFlags = 0x00000200
 
 	BufferUsageRaytracingBitNVX BufferUsageFlags = 0x00000400
