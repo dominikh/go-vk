@@ -111,11 +111,11 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCmdDebugMarkerInsertEXT
 - [ ] vkCmdDispatchBase
 - [ ] vkCmdDispatchIndirect
-- [ ] vkCmdDrawIndexed
-- [ ] vkCmdDrawIndexedIndirect
+- [x] vkCmdDrawIndexed
+- [x] vkCmdDrawIndexedIndirect
 - [ ] vkCmdDrawIndexedIndirectCountAMD
 - [ ] vkCmdDrawIndexedIndirectCountKHR
-- [ ] vkCmdDrawIndirect
+- [x] vkCmdDrawIndirect
 - [ ] vkCmdDrawIndirectByteCountEXT
 - [ ] vkCmdDrawIndirectCountAMD
 - [ ] vkCmdDrawIndirectCountKHR

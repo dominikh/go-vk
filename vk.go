@@ -1229,6 +1229,25 @@ func (buf *CommandBuffer) BlitImage(srcImage Image, srcImageLayout ImageLayout, 
 		C.VkFilter(filter))
 }
 
+func (buf *CommandBuffer) DrawIndexed(indexCount, instanceCount, firstIndex uint32, vertexOffset int32, firstInstance uint32) {
+	C.domVkCmdDrawIndexed(
+		buf.fps[vkCmdDrawIndexed],
+		buf.hnd,
+		C.uint32_t(indexCount),
+		C.uint32_t(instanceCount),
+		C.uint32_t(firstIndex),
+		C.int32_t(vertexOffset),
+		C.uint32_t(firstInstance))
+}
+
+func (buf *CommandBuffer) DrawIndexedIndirect(buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
+	C.domVkCmdDrawIndexedIndirect(buf.fps[vkCmdDrawIndexedIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset), C.uint32_t(drawCount), C.uint32_t(stride))
+}
+
+func (buf *CommandBuffer) DrawIndirect(buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
+	C.domVkCmdDrawIndirect(buf.fps[vkCmdDrawIndirect], buf.hnd, buffer.hnd, C.VkDeviceSize(offset), C.uint32_t(drawCount), C.uint32_t(stride))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags
