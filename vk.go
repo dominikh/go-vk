@@ -1384,6 +1384,18 @@ func (buf *CommandBuffer) NextSubpass(contents SubpassContents) {
 	C.domVkCmdNextSubpass(buf.fps[vkCmdNextSubpass], buf.hnd, C.VkSubpassContents(contents))
 }
 
+func (buf *CommandBuffer) SetStencilCompareMask(faceMask StencilFaceFlags, compareMask uint32) {
+	C.domVkCmdSetStencilCompareMask(buf.fps[vkCmdSetStencilCompareMask], buf.hnd, C.VkStencilFaceFlags(faceMask), C.uint32_t(compareMask))
+}
+
+func (buf *CommandBuffer) SetStencilReference(faceMask StencilFaceFlags, reference uint32) {
+	C.domVkCmdSetStencilReference(buf.fps[vkCmdSetStencilReference], buf.hnd, C.VkStencilFaceFlags(faceMask), C.uint32_t(reference))
+}
+
+func (buf *CommandBuffer) SetStencilWriteMask(faceMask StencilFaceFlags, writeMask uint32) {
+	C.domVkCmdSetStencilWriteMask(buf.fps[vkCmdSetStencilWriteMask], buf.hnd, C.VkStencilFaceFlags(faceMask), C.uint32_t(writeMask))
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags

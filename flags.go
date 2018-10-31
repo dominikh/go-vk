@@ -78,6 +78,7 @@ type SamplerAddressMode uint32
 type SamplerMipmapMode uint32
 type BorderColor uint32
 type QueryResultFlags uint32
+type StencilFaceFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1612,6 +1613,12 @@ const (
 	QueryResultPartialBit          QueryResultFlags = 0x00000008
 )
 
+const (
+	StencilFaceFrontBit StencilFaceFlags = 0x00000001
+	StencilFaceBackBit  StencilFaceFlags = 0x00000002
+	StencilFrontAndBack StencilFaceFlags = 0x00000003
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2316,6 +2323,17 @@ func (flags QueryResultFlags) String() string {
 	}
 	if (flags & QueryResultPartialBit) != 0 {
 		out = append(out, "QueryResultPartialBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags StencilFaceFlags) String() string {
+	var out []string
+	if (flags & StencilFaceFrontBit) != 0 {
+		out = append(out, "StencilFaceFrontBit")
+	}
+	if (flags & StencilFaceBackBit) != 0 {
+		out = append(out, "StencilFaceBackBit")
 	}
 	return strings.Join(out, " | ")
 }
