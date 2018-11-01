@@ -3697,6 +3697,8 @@ func (dev *Device) DestroyQueryPool(queryPool QueryPool) {
 type Sampler struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSampler)
 	hnd C.VkSampler
+
+	// must be kept identical to C struct
 }
 
 type SamplerCreateInfo struct {
@@ -3932,6 +3934,93 @@ func (dev *Device) DestroyDescriptorPool(pool DescriptorPool) {
 func (dev *Device) ResetDescriptorPool(pool DescriptorPool, flags DescriptorPoolResetFlags) error {
 	res := Result(C.domVkResetDescriptorPool(dev.fps[vkResetDescriptorPool], dev.hnd, pool.hnd, C.VkDescriptorPoolResetFlags(flags)))
 	return result2error(res)
+}
+
+type DescriptorSetLayoutBinding struct {
+	Binding           uint32
+	DescriptorType    DescriptorType
+	DescriptorCount   uint32
+	StageFlags        ShaderStageFlags
+	ImmutableSamplers []Sampler
+}
+
+type DescriptorSetLayoutCreateInfo struct {
+	Extensions []Extension
+	Flags      DescriptorSetLayoutCreateFlags
+	Bindings   []DescriptorSetLayoutBinding
+}
+
+func (info *DescriptorSetLayoutCreateInfo) c() *C.VkDescriptorSetLayoutCreateInfo {
+	size0 := align(C.sizeof_VkDescriptorSetLayoutCreateInfo)
+	size1 := align(C.sizeof_VkDescriptorSetLayoutBinding * uintptr(len(info.Bindings)))
+	var size2 uintptr
+	for _, binding := range info.Bindings {
+		size2 += C.sizeof_VkSampler * uintptr(len(binding.ImmutableSamplers))
+	}
+	size2 = align(size2)
+	size := size0 + size1 + size2
+
+	mem := alloc(C.size_t(size))
+	cinfo := (*C.VkDescriptorSetLayoutCreateInfo)(mem)
+	*cinfo = C.VkDescriptorSetLayoutCreateInfo{
+		sType:        C.VkStructureType(StructureTypeDescriptorSetLayoutCreateInfo),
+		pNext:        buildChain(info.Extensions),
+		flags:        C.VkDescriptorSetLayoutCreateFlags(info.Flags),
+		bindingCount: C.uint32_t(len(info.Bindings)),
+		pBindings:    (*C.VkDescriptorSetLayoutBinding)(uptr(uintptr(mem) + size0)),
+	}
+	samplers := uintptr(mem) + size0 + size1
+	arr := (*[math.MaxInt32]C.VkDescriptorSetLayoutBinding)(uptr(cinfo.pBindings))[:len(info.Bindings)]
+	for i := range arr {
+		arr[i] = C.VkDescriptorSetLayoutBinding{
+			binding:            C.uint32_t(info.Bindings[i].Binding),
+			descriptorType:     C.VkDescriptorType(info.Bindings[i].DescriptorType),
+			descriptorCount:    C.uint32_t(info.Bindings[i].DescriptorCount),
+			stageFlags:         C.VkShaderStageFlags(info.Bindings[i].StageFlags),
+			pImmutableSamplers: (*C.VkSampler)(uptr(samplers)),
+		}
+		ucopy(uptr(samplers), uptr(&info.Bindings[i].ImmutableSamplers), C.sizeof_VkSampler)
+		samplers += C.sizeof_VkSampler * uintptr(len(info.Bindings[i].ImmutableSamplers))
+	}
+	return cinfo
+}
+
+func (dev *Device) CreateDescriptorSetLayout(info *DescriptorSetLayoutCreateInfo) (DescriptorSetLayout, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var out DescriptorSetLayout
+	res := Result(C.domVkCreateDescriptorSetLayout(dev.fps[vkCreateDescriptorSetLayout], dev.hnd, cinfo, nil, &out.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
+func (dev *Device) DestroyDescriptorSetLayout(layout DescriptorSetLayout) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyDescriptorSetLayout(dev.fps[vkDestroyDescriptorSetLayout], dev.hnd, layout.hnd, nil)
+}
+
+type DescriptorSetLayoutSupport struct {
+	Extensions []Extension
+	Supported  bool
+}
+
+func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo, support *DescriptorSetLayoutSupport) bool {
+	cinfo := info.c()
+	var csupport *C.VkDescriptorSetLayoutSupport
+	csupport = (*C.VkDescriptorSetLayoutSupport)(alloc(C.sizeof_VkDescriptorSetLayoutSupport))
+	csupport.sType = C.VkStructureType(StructureTypeDescriptorSetLayoutSupport)
+	if support != nil {
+		csupport.pNext = buildChain(support.Extensions)
+	}
+	if support != nil {
+		support.Supported = csupport.supported == C.VK_TRUE
+		internalizeChain(support.Extensions, csupport.pNext)
+		free(uptr(csupport))
+	}
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return csupport.supported == C.VK_TRUE
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

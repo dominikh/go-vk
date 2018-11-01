@@ -82,6 +82,7 @@ type StencilFaceFlags uint32
 type DescriptorType uint32
 type DescriptorPoolCreateFlags uint32
 type DescriptorPoolResetFlags uint32
+type DescriptorSetLayoutCreateFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1651,6 +1652,11 @@ const (
 	DescriptorPoolCreateUpdateAfterBindBitEXT DescriptorPoolCreateFlags = 0x00000002
 )
 
+const (
+	DescriptorSetLayoutCreatePushDescriptorBitKHR      DescriptorSetLayoutCreateFlags = 0x00000001
+	DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT DescriptorSetLayoutCreateFlags = 0x00000002
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2377,6 +2383,17 @@ func (flags DescriptorPoolCreateFlags) String() string {
 	}
 	if (flags & DescriptorPoolCreateUpdateAfterBindBitEXT) != 0 {
 		out = append(out, "DescriptorPoolCreateUpdateAfterBindBitEXT")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags DescriptorSetLayoutCreateFlags) String() string {
+	var out []string
+	if (flags & DescriptorSetLayoutCreatePushDescriptorBitKHR) != 0 {
+		out = append(out, "DescriptorSetLayoutCreatePushDescriptorBitKHR")
+	}
+	if (flags & DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT) != 0 {
+		out = append(out, "DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT")
 	}
 	return strings.Join(out, " | ")
 }
