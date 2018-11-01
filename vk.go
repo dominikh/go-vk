@@ -74,6 +74,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ImageBlit{}), C.sizeof_VkImageBlit)
 	assertSameSize(unsafe.Sizeof(Event{}), C.sizeof_VkEvent)
 	assertSameSize(unsafe.Sizeof(ImageResolve{}), C.sizeof_VkImageResolve)
+	assertSameSize(unsafe.Sizeof(DescriptorPoolSize{}), C.sizeof_VkDescriptorPoolSize)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -3871,6 +3872,66 @@ func (dev *Device) PipelineCacheData(cache PipelineCache) ([]byte, error) {
 		}
 		return nil, res
 	}
+}
+
+type DescriptorPoolSize struct {
+	Type            DescriptorType
+	DescriptorCount uint32
+
+	// must be kept identical to C struct
+}
+
+type DescriptorPoolCreateInfo struct {
+	Extensions []Extension
+	Flags      DescriptorPoolCreateFlags
+	MaxSets    uint32
+	PoolSizes  []DescriptorPoolSize
+}
+
+func (info *DescriptorPoolCreateInfo) c() *C.VkDescriptorPoolCreateInfo {
+	size0 := align(uintptr(C.sizeof_VkDescriptorPoolCreateInfo))
+	size1 := align(C.sizeof_VkDescriptorPoolSize * uintptr(len(info.PoolSizes)))
+	size := size0 + size1
+	mem := alloc(C.size_t(size))
+	cinfo := (*C.VkDescriptorPoolCreateInfo)(mem)
+	*cinfo = C.VkDescriptorPoolCreateInfo{
+		sType:         C.VkStructureType(StructureTypeDescriptorPoolCreateInfo),
+		pNext:         buildChain(info.Extensions),
+		flags:         C.VkDescriptorPoolCreateFlags(info.Flags),
+		maxSets:       C.uint32_t(info.MaxSets),
+		poolSizeCount: C.uint32_t(len(info.PoolSizes)),
+		pPoolSizes:    (*C.VkDescriptorPoolSize)(uptr(uintptr(mem) + size0)),
+	}
+	ucopy(uptr(cinfo.pPoolSizes), uptr(&info.PoolSizes), C.sizeof_VkDescriptorPoolSize)
+	return cinfo
+}
+
+// A descriptor pool maintains a pool of descriptors, from which descriptor sets are allocated.
+// Descriptor pools are externally synchronized, meaning that the application must not
+// allocate and/or free descriptor sets from the same pool in multiple threads simultaneously.
+type DescriptorPool struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorPool)
+	hnd C.VkDescriptorPool
+}
+
+func (dev *Device) CreateDescriptorPool(info *DescriptorPoolCreateInfo) (DescriptorPool, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var out DescriptorPool
+	res := Result(C.domVkCreateDescriptorPool(dev.fps[vkCreateDescriptorPool], dev.hnd, cinfo, nil, &out.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
+func (dev *Device) DestroyDescriptorPool(pool DescriptorPool) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyDescriptorPool(dev.fps[vkDestroyDescriptorPool], dev.hnd, pool.hnd, nil)
+}
+
+func (dev *Device) ResetDescriptorPool(pool DescriptorPool, flags DescriptorPoolResetFlags) error {
+	res := Result(C.domVkResetDescriptorPool(dev.fps[vkResetDescriptorPool], dev.hnd, pool.hnd, C.VkDescriptorPoolResetFlags(flags)))
+	return result2error(res)
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {

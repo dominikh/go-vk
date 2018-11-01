@@ -18,13 +18,13 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdWriteTimestamp
 - [x] vkCreateBufferView
 - [ ] vkCreateComputePipelines
-- [ ] vkCreateDescriptorPool
+- [x] vkCreateDescriptorPool
 - [ ] vkCreateDescriptorSetLayout
 - [ ] vkCreateDescriptorUpdateTemplate
 - [x] vkCreatePipelineCache
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkDestroyBufferView
-- [ ] vkDestroyDescriptorPool
+- [x] vkDestroyDescriptorPool
 - [ ] vkDestroyDescriptorSetLayout
 - [ ] vkDestroyDescriptorUpdateTemplate
 - [x] vkDestroyPipelineCache
@@ -65,7 +65,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkInvalidateMappedMemoryRanges
 - [x] vkMergePipelineCaches
 - [ ] vkQueueBindSparse
-- [ ] vkResetDescriptorPool
+- [x] vkResetDescriptorPool
 - [ ] vkUpdateDescriptorSetWithTemplate
 - [ ] vkUpdateDescriptorSets
 - [x] VkResetCommandBuffer

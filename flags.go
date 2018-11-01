@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType,QueryType,Filter,SamplerAddressMode,SamplerMipmapMode,BorderColor
+//go:generate stringer -output flags_string.go -type=PresentModeKHR,CommandBufferLevel,ColorSpaceKHR,Format,StructureType,Result,PhysicalDeviceType,SharingMode,ImageViewType,ComponentSwizzle,VertexInputRate,PrimitiveTopology,PolygonMode,FrontFace,BlendFactor,BlendOp,LogicOp,DynamicState,CompareOp,StencilOp,AttachmentLoadOp,AttachmentStoreOp,ImageLayout,PipelineBindPoint,SubpassContents,ImageTiling,ImageType,IndexType,QueryType,Filter,SamplerAddressMode,SamplerMipmapMode,BorderColor,DescriptorType
 
 type DeviceQueueCreateFlags uint32
 type QueueFlags uint32
@@ -79,6 +79,9 @@ type SamplerMipmapMode uint32
 type BorderColor uint32
 type QueryResultFlags uint32
 type StencilFaceFlags uint32
+type DescriptorType uint32
+type DescriptorPoolCreateFlags uint32
+type DescriptorPoolResetFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1627,6 +1630,27 @@ const (
 	StencilFrontAndBack StencilFaceFlags = 0x00000003
 )
 
+const (
+	DescriptorTypeSampler                  DescriptorType = 0
+	DescriptorTypeCombinedImageSampler     DescriptorType = 1
+	DescriptorTypeSampledImage             DescriptorType = 2
+	DescriptorTypeStorageImage             DescriptorType = 3
+	DescriptorTypeUniformTexelBuffer       DescriptorType = 4
+	DescriptorTypeStorageTexelBuffer       DescriptorType = 5
+	DescriptorTypeUniformBuffer            DescriptorType = 6
+	DescriptorTypeStorageBuffer            DescriptorType = 7
+	DescriptorTypeUniformBufferDynamic     DescriptorType = 8
+	DescriptorTypeStorageBufferDynamic     DescriptorType = 9
+	DescriptorTypeInputAttachment          DescriptorType = 10
+	DescriptorTypeInlineUniformBlockEXT    DescriptorType = 1000138000
+	DescriptorTypeAccelerationStructureNVX DescriptorType = 1000165000
+)
+
+const (
+	DescriptorPoolCreateFreeDescriptorSetBit  DescriptorPoolCreateFlags = 0x00000001
+	DescriptorPoolCreateUpdateAfterBindBitEXT DescriptorPoolCreateFlags = 0x00000002
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2342,6 +2366,17 @@ func (flags StencilFaceFlags) String() string {
 	}
 	if (flags & StencilFaceBackBit) != 0 {
 		out = append(out, "StencilFaceBackBit")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags DescriptorPoolCreateFlags) String() string {
+	var out []string
+	if (flags & DescriptorPoolCreateFreeDescriptorSetBit) != 0 {
+		out = append(out, "DescriptorPoolCreateFreeDescriptorSetBit")
+	}
+	if (flags & DescriptorPoolCreateUpdateAfterBindBitEXT) != 0 {
+		out = append(out, "DescriptorPoolCreateUpdateAfterBindBitEXT")
 	}
 	return strings.Join(out, " | ")
 }
