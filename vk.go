@@ -4028,6 +4028,38 @@ func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo
 	return csupport.supported == C.VK_TRUE
 }
 
+func (dev *Device) BindImageMemory(image Image, memory DeviceMemory, offset DeviceSize) error {
+	res := Result(C.domVkBindImageMemory(dev.fps[vkBindImageMemory], dev.hnd, image.hnd, memory.hnd, C.VkDeviceSize(offset)))
+	return result2error(res)
+}
+
+type BindImageMemoryInfo struct {
+	Extensions   []Extension
+	Image        Image
+	Memory       DeviceMemory
+	MemoryOffset DeviceSize
+}
+
+func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
+	mem := alloc(C.size_t(C.sizeof_VkBindImageMemoryInfo * uintptr(len(infos))))
+	arr := (*[math.MaxInt32]C.VkBindImageMemoryInfo)(mem)[:len(infos)]
+	for i := range arr {
+		arr[i] = C.VkBindImageMemoryInfo{
+			sType:        C.VkStructureType(StructureTypeBindImageMemoryInfo),
+			pNext:        buildChain(infos[i].Extensions),
+			image:        infos[i].Image.hnd,
+			memory:       infos[i].Memory.hnd,
+			memoryOffset: C.VkDeviceSize(infos[i].MemoryOffset),
+		}
+	}
+	res := Result(C.domVkBindImageMemory2(dev.fps[vkBindImageMemory2], dev.hnd, C.uint32_t(len(infos)), (*C.VkBindImageMemoryInfo)(mem)))
+	for i := range arr {
+		internalizeChain(infos[i].Extensions, arr[i].pNext)
+	}
+	free(mem)
+	return result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
