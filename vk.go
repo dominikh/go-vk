@@ -4060,6 +4060,47 @@ func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
 	return result2error(res)
 }
 
+func (dev *Device) ImageMemoryRequirements(image Image) MemoryRequirements {
+	var out MemoryRequirements
+	C.domVkGetImageMemoryRequirements(dev.fps[vkGetImageMemoryRequirements], dev.hnd, image.hnd, (*C.VkMemoryRequirements)(uptr(&out)))
+	return out
+}
+
+type ImageMemoryRequirementsInfo2 struct {
+	Extensions []Extension
+	Image      Image
+}
+
+func (info *ImageMemoryRequirementsInfo2) c() *C.VkImageMemoryRequirementsInfo2 {
+	cinfo := (*C.VkImageMemoryRequirementsInfo2)(alloc(C.sizeof_VkImageMemoryRequirementsInfo2))
+	*cinfo = C.VkImageMemoryRequirementsInfo2{
+		sType: C.VkStructureType(StructureTypeImageMemoryRequirementsInfo2),
+		pNext: buildChain(info.Extensions),
+		image: info.Image.hnd,
+	}
+	return cinfo
+}
+
+type MemoryRequirements2 struct {
+	Extensions         []Extension
+	MemoryRequirements MemoryRequirements
+}
+
+func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
+	cinfo := info.c()
+	creqs := (*C.VkMemoryRequirements2)(alloc(C.sizeof_VkMemoryRequirements2))
+	*creqs = C.VkMemoryRequirements2{
+		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
+		pNext: buildChain(reqs.Extensions),
+	}
+	C.domVkGetImageMemoryRequirements2(dev.fps[vkGetImageMemoryRequirements2], dev.hnd, cinfo, creqs)
+	internalizeChain(info.Extensions, cinfo.pNext)
+	internalizeChain(reqs.Extensions, creqs.pNext)
+	ucopy1(uptr(&reqs.MemoryRequirements), uptr(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
+	free(uptr(creqs))
+	free(uptr(cinfo))
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
