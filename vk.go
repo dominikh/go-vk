@@ -3801,6 +3801,11 @@ func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, err
 	return view, result2error(res)
 }
 
+func (dev *Device) DestroyBufferView(view BufferView) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyBufferView(dev.fps[vkDestroyBufferView], dev.hnd, view.hnd, nil)
+}
+
 // Pipeline cache objects allow the result of pipeline construction to be reused between pipelines and between runs of an application.
 // Reuse between pipelines is achieved by passing the same pipeline cache object when creating multiple related pipelines.
 // Reuse across runs of an application is achieved by retrieving pipeline cache contents in one run of an application,
