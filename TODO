@@ -36,7 +36,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkEnumeratePhysicalDeviceGroups
 - [ ] vkFlushMappedMemoryRanges
 - [ ] vkFreeDescriptorSets
-- [ ] vkGetBufferMemoryRequirements2
+- [x] vkGetBufferMemoryRequirements2
 - [x] vkGetDescriptorSetLayoutSupport
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDeviceMemoryCommitment

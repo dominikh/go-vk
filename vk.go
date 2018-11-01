@@ -3442,6 +3442,36 @@ func (dev *Device) BufferMemoryRequirements(buf Buffer) MemoryRequirements {
 	return reqs
 }
 
+type BufferMemoryRequirementsInfo2 struct {
+	Extensions []Extension
+	Buffer     Buffer
+}
+
+func (info *BufferMemoryRequirementsInfo2) c() *C.VkBufferMemoryRequirementsInfo2 {
+	cinfo := (*C.VkBufferMemoryRequirementsInfo2)(alloc(C.sizeof_VkBufferMemoryRequirementsInfo2))
+	*cinfo = C.VkBufferMemoryRequirementsInfo2{
+		sType:  C.VkStructureType(StructureTypeBufferMemoryRequirementsInfo2),
+		pNext:  buildChain(info.Extensions),
+		buffer: info.Buffer.hnd,
+	}
+	return cinfo
+}
+
+func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
+	cinfo := info.c()
+	creqs := (*C.VkMemoryRequirements2)(alloc(C.sizeof_VkMemoryRequirements2))
+	*creqs = C.VkMemoryRequirements2{
+		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
+		pNext: buildChain(reqs.Extensions),
+	}
+	C.domVkGetBufferMemoryRequirements2(dev.fps[vkGetBufferMemoryRequirements2], dev.hnd, cinfo, creqs)
+	internalizeChain(info.Extensions, cinfo.pNext)
+	internalizeChain(reqs.Extensions, creqs.pNext)
+	ucopy1(uptr(&reqs.MemoryRequirements), uptr(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
+	free(uptr(creqs))
+	free(uptr(cinfo))
+}
+
 type MemoryAllocateInfo struct {
 	Extensions      []Extension
 	AllocationSize  DeviceSize
