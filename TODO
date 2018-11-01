@@ -21,13 +21,13 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkCreateDescriptorPool
 - [ ] vkCreateDescriptorSetLayout
 - [ ] vkCreateDescriptorUpdateTemplate
-- [ ] vkCreatePipelineCache
+- [x] vkCreatePipelineCache
 - [ ] vkCreateSamplerYcbcrConversion
 - [ ] vkDestroyBufferView
 - [ ] vkDestroyDescriptorPool
 - [ ] vkDestroyDescriptorSetLayout
 - [ ] vkDestroyDescriptorUpdateTemplate
-- [ ] vkDestroyPipelineCache
+- [x] vkDestroyPipelineCache
 - [ ] vkDestroySamplerYcbcrConversion
 - [ ] vkEnumerateDeviceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
@@ -59,11 +59,11 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetPhysicalDeviceQueueFamilyProperties2
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
-- [ ] vkGetPipelineCacheData
+- [x] vkGetPipelineCacheData
 - [ ] vkGetQueryPoolResults
 - [ ] vkGetRenderAreaGranularity
 - [ ] vkInvalidateMappedMemoryRanges
-- [ ] vkMergePipelineCaches
+- [x] vkMergePipelineCaches
 - [ ] vkQueueBindSparse
 - [ ] vkResetDescriptorPool
 - [ ] vkUpdateDescriptorSetWithTemplate

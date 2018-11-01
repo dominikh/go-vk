@@ -2861,8 +2861,7 @@ type GraphicsPipelineCreateInfo struct {
 	BasePipelineIndex  int32
 }
 
-func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) ([]Pipeline, error) {
-	// TODO(dh): support pipeline cache
+func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []GraphicsPipelineCreateInfo) ([]Pipeline, error) {
 	// TODO(dh): support custom allocators
 	ptrs := (*C.VkGraphicsPipelineCreateInfo)(allocn(len(infos), C.sizeof_VkGraphicsPipelineCreateInfo))
 	defer free(uptr(ptrs))
@@ -2947,11 +2946,15 @@ func (dev *Device) CreateGraphicsPipelines(infos []GraphicsPipelineCreateInfo) (
 		ptr.basePipelineIndex = C.int32_t(info.BasePipelineIndex)
 	}
 
+	var cacheHnd C.VkPipelineCache
+	if cache != nil {
+		cacheHnd = cache.hnd
+	}
 	hnds := make([]C.VkPipeline, len(infos))
 	res := Result(C.domVkCreateGraphicsPipelines(
 		dev.fps[vkCreateGraphicsPipelines],
 		dev.hnd,
-		0,
+		cacheHnd,
 		C.uint32_t(len(infos)),
 		ptrs,
 		nil,
@@ -3795,6 +3798,81 @@ func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, err
 	return view, result2error(res)
 }
 
+// Pipeline cache objects allow the result of pipeline construction to be reused between pipelines and between runs of an application.
+// Reuse between pipelines is achieved by passing the same pipeline cache object when creating multiple related pipelines.
+// Reuse across runs of an application is achieved by retrieving pipeline cache contents in one run of an application,
+// saving the contents, and using them to preinitialize a pipeline cache on a subsequent run.
+// The contents of the pipeline cache objects are managed by the implementation.
+// Applications can manage the host memory consumed by a pipeline cache object and control the amount of data retrieved from a pipeline cache object.
+type PipelineCache struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkPipelineCache)
+	hnd C.VkPipelineCache
+
+	// must be kept identical to C struct
+}
+
+type PipelineCacheCreateInfo struct {
+	Extensions  []Extension
+	InitialData []byte
+}
+
+func (info *PipelineCacheCreateInfo) c() *C.VkPipelineCacheCreateInfo {
+	cinfo := (*C.VkPipelineCacheCreateInfo)(alloc(C.sizeof_VkPipelineCacheCreateInfo))
+	*cinfo = C.VkPipelineCacheCreateInfo{
+		sType:           C.VkStructureType(StructureTypePipelineCacheCreateInfo),
+		pNext:           buildChain(info.Extensions),
+		flags:           0,
+		initialDataSize: C.size_t(len(info.InitialData)),
+		pInitialData:    slice2ptr(uptr(&info.InitialData)),
+	}
+	return cinfo
+}
+
+func (dev *Device) CreatePipelineCache(info *PipelineCacheCreateInfo) (PipelineCache, error) {
+	// TODO(dh): support custom allocators
+	cinfo := info.c()
+	var out PipelineCache
+	res := Result(C.domVkCreatePipelineCache(dev.fps[vkCreatePipelineCache], dev.hnd, cinfo, nil, &out.hnd))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
+func (dev *Device) DestroyPipelineCache(cache PipelineCache) {
+	// TODO(dh): support custom allocators
+	C.domVkDestroyPipelineCache(dev.fps[vkDestroyPipelineCache], dev.hnd, cache.hnd, nil)
+}
+
+func (dev *Device) MergePipelineCaches(dstCache PipelineCache, srcCaches []PipelineCache) error {
+	res := Result(C.domVkMergePipelineCaches(
+		dev.fps[vkMergePipelineCaches],
+		dev.hnd,
+		dstCache.hnd,
+		C.uint32_t(len(srcCaches)),
+		(*C.VkPipelineCache)(slice2ptr(uptr(&srcCaches)))))
+	return result2error(res)
+}
+
+func (dev *Device) PipelineCacheData(cache PipelineCache) ([]byte, error) {
+	var size C.size_t
+	var data []byte
+	for {
+		res := Result(C.domVkGetPipelineCacheData(dev.fps[vkGetPipelineCacheData], dev.hnd, cache.hnd, &size, nil))
+		if res != Success {
+			return nil, res
+		}
+		data = make([]byte, size)
+		res = Result(C.domVkGetPipelineCacheData(dev.fps[vkGetPipelineCacheData], dev.hnd, cache.hnd, &size, slice2ptr(uptr(&data))))
+		if res == Success {
+			return data[:size], nil
+		}
+		if res == Incomplete {
+			continue
+		}
+		return nil, res
+	}
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
@@ -3830,6 +3908,7 @@ func (hnd Framebuffer) String() string     { return fmt.Sprintf("VkFramebuffer(%
 func (hnd Image) String() string           { return fmt.Sprintf("VkImage(%#x)", hnd.hnd) }
 func (hnd ImageView) String() string       { return fmt.Sprintf("VkImageView(%#x)", hnd.hnd) }
 func (hnd Pipeline) String() string        { return fmt.Sprintf("VkPipeline(%#x)", hnd.hnd) }
+func (hnd PipelineCache) String() string   { return fmt.Sprintf("VkPipelineCache(%#x)", hnd.hnd) }
 func (hnd PipelineLayout) String() string  { return fmt.Sprintf("VkPipelineLayout(%#x)", hnd.hnd) }
 func (hnd QueryPool) String() string       { return fmt.Sprintf("VkQueryPool(%#x)", hnd.hnd) }
 func (hnd RenderPass) String() string      { return fmt.Sprintf("VkRenderPass(%#x)", hnd.hnd) }
