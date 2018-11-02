@@ -2213,6 +2213,26 @@ func (buf *CommandBuffer) ResolveImage(srcImage Image, srcImageLayout ImageLayou
 		(*C.VkImageResolve)(slice2ptr(uptr(&regions))))
 }
 
+func (buf *CommandBuffer) BindDescriptorSets(
+	pipelineBindPoint PipelineBindPoint,
+	layout PipelineLayout,
+	firstSet uint32,
+	descriptorSets []DescriptorSet,
+	dynamicOffsets []uint32,
+) {
+	C.domVkCmdBindDescriptorSets(
+		buf.fps[vkCmdBindDescriptorSets],
+		buf.hnd,
+		C.VkPipelineBindPoint(pipelineBindPoint),
+		layout.hnd,
+		C.uint32_t(firstSet),
+		C.uint32_t(len(descriptorSets)),
+		(*C.VkDescriptorSet)(slice2ptr(uptr(&descriptorSets))),
+		C.uint32_t(len(dynamicOffsets)),
+		(*C.uint32_t)(slice2ptr(uptr(&dynamicOffsets))),
+	)
+}
+
 type CommandPoolCreateInfo struct {
 	Extensions       []Extension
 	Flags            CommandPoolCreateFlags

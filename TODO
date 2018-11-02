@@ -1,7 +1,7 @@
 List of Vulkan functions extracted from vk.xml, and whether they've been implemented yet.
 
 - [x] vkAllocateDescriptorSets
-- [ ] vkCmdBindDescriptorSets
+- [x] vkCmdBindDescriptorSets
 - [ ] vkCreateComputePipelines
 - [ ] vkCreateDescriptorUpdateTemplate
 - [ ] vkCreateSamplerYcbcrConversion
