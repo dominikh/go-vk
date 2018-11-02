@@ -1,33 +1,11 @@
 List of Vulkan functions extracted from vk.xml, and whether they've been implemented yet.
 
-- [ ] vkAllocateDescriptorSets
-- [x] vkBindImageMemory
-- [x] vkBindImageMemory2
+- [x] vkAllocateDescriptorSets
 - [ ] vkCmdBindDescriptorSets
-- [x] vkCmdBindVertexBuffers
-- [x] vkCmdDispatchBase
-- [x] vkCmdDispatchIndirect
-- [x] vkCmdExecuteCommands
-- [x] vkCmdNextSubpass
-- [x] vkCmdPipelineBarrier
-- [x] vkCmdResolveImage
-- [x] vkCmdSetStencilCompareMask
-- [x] vkCmdSetStencilReference
-- [x] vkCmdSetStencilWriteMask
-- [x] vkCmdWaitEvents
-- [x] vkCmdWriteTimestamp
-- [x] vkCreateBufferView
 - [ ] vkCreateComputePipelines
-- [x] vkCreateDescriptorPool
-- [x] vkCreateDescriptorSetLayout
 - [ ] vkCreateDescriptorUpdateTemplate
-- [x] vkCreatePipelineCache
 - [ ] vkCreateSamplerYcbcrConversion
-- [x] vkDestroyBufferView
-- [x] vkDestroyDescriptorPool
-- [x] vkDestroyDescriptorSetLayout
 - [ ] vkDestroyDescriptorUpdateTemplate
-- [x] vkDestroyPipelineCache
 - [ ] vkDestroySamplerYcbcrConversion
 - [ ] vkEnumerateDeviceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
@@ -35,14 +13,9 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkEnumerateInstanceVersion
 - [ ] vkEnumeratePhysicalDeviceGroups
 - [ ] vkFlushMappedMemoryRanges
-- [ ] vkFreeDescriptorSets
-- [x] vkGetBufferMemoryRequirements2
-- [x] vkGetDescriptorSetLayoutSupport
+- [x] vkFreeDescriptorSets
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDeviceMemoryCommitment
-- [x] vkGetDeviceQueue2
-- [x] vkGetImageMemoryRequirements
-- [x] vkGetImageMemoryRequirements2
 - [ ] vkGetImageSparseMemoryRequirements
 - [ ] vkGetImageSparseMemoryRequirements2
 - [ ] vkGetImageSubresourceLayout
@@ -59,13 +32,10 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetPhysicalDeviceQueueFamilyProperties2
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
-- [x] vkGetPipelineCacheData
 - [ ] vkGetQueryPoolResults
 - [ ] vkGetRenderAreaGranularity
 - [ ] vkInvalidateMappedMemoryRanges
-- [x] vkMergePipelineCaches
 - [ ] vkQueueBindSparse
-- [x] vkResetDescriptorPool
 - [ ] vkUpdateDescriptorSetWithTemplate
 - [ ] vkUpdateDescriptorSets
 - [x] VkResetCommandBuffer
@@ -74,10 +44,13 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkBeginCommandBuffer
 - [x] vkBindBufferMemory
 - [x] vkBindBufferMemory2
+- [x] vkBindImageMemory
+- [x] vkBindImageMemory2
 - [x] vkCmdBeginQuery
 - [x] vkCmdBeginRenderPass
 - [x] vkCmdBindIndexBuffer
 - [x] vkCmdBindPipeline
+- [x] vkCmdBindVertexBuffers
 - [x] vkCmdBlitImage
 - [x] vkCmdClearAttachments
 - [x] vkCmdClearColorImage
@@ -88,16 +61,22 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdCopyImageToBuffer
 - [x] vkCmdCopyQueryPoolResults
 - [x] vkCmdDispatch
+- [x] vkCmdDispatchBase
+- [x] vkCmdDispatchIndirect
 - [x] vkCmdDraw
 - [x] vkCmdDrawIndexed
 - [x] vkCmdDrawIndexedIndirect
 - [x] vkCmdDrawIndirect
 - [x] vkCmdEndQuery
 - [x] vkCmdEndRenderPass
+- [x] vkCmdExecuteCommands
 - [x] vkCmdFillBuffer
+- [x] vkCmdNextSubpass
+- [x] vkCmdPipelineBarrier
 - [x] vkCmdPushConstants
 - [x] vkCmdResetEvent
 - [x] vkCmdResetQueryPool
+- [x] vkCmdResolveImage
 - [x] vkCmdSetBlendConstants
 - [x] vkCmdSetDepthBias
 - [x] vkCmdSetDepthBounds
@@ -105,10 +84,18 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCmdSetEvent
 - [x] vkCmdSetLineWidth
 - [x] vkCmdSetScissor
+- [x] vkCmdSetStencilCompareMask
+- [x] vkCmdSetStencilReference
+- [x] vkCmdSetStencilWriteMask
 - [x] vkCmdSetViewport
 - [x] vkCmdUpdateBuffer
+- [x] vkCmdWaitEvents
+- [x] vkCmdWriteTimestamp
 - [x] vkCreateBuffer
+- [x] vkCreateBufferView
 - [x] vkCreateCommandPool
+- [x] vkCreateDescriptorPool
+- [x] vkCreateDescriptorSetLayout
 - [x] vkCreateDevice
 - [x] vkCreateEvent
 - [x] vkCreateFence
@@ -117,6 +104,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCreateImage
 - [x] vkCreateImageView
 - [x] vkCreateInstance
+- [x] vkCreatePipelineCache
 - [x] vkCreatePipelineLayout
 - [x] vkCreateQueryPool
 - [x] vkCreateRenderPass
@@ -124,7 +112,10 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkCreateSemaphore
 - [x] vkCreateShaderModule
 - [x] vkDestroyBuffer
+- [x] vkDestroyBufferView
 - [x] vkDestroyCommandPool
+- [x] vkDestroyDescriptorPool
+- [x] vkDestroyDescriptorSetLayout
 - [x] vkDestroyDevice
 - [x] vkDestroyEvent
 - [x] vkDestroyFence
@@ -133,6 +124,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkDestroyImageView
 - [x] vkDestroyInstance
 - [x] vkDestroyPipeline
+- [x] vkDestroyPipelineCache
 - [x] vkDestroyPipelineLayout
 - [x] vkDestroyQueryPool
 - [x] vkDestroyRenderPass
@@ -146,19 +138,27 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkFreeCommandBuffers
 - [x] vkFreeMemory
 - [x] vkGetBufferMemoryRequirements
+- [x] vkGetBufferMemoryRequirements2
+- [x] vkGetDescriptorSetLayoutSupport
 - [x] vkGetDeviceProcAddr
 - [x] vkGetDeviceQueue
+- [x] vkGetDeviceQueue2
 - [x] vkGetEventStatus
 - [x] vkGetFenceStatus
+- [x] vkGetImageMemoryRequirements
+- [x] vkGetImageMemoryRequirements2
 - [x] vkGetInstanceProcAddr
 - [x] vkGetPhysicalDeviceFeatures
 - [x] vkGetPhysicalDeviceMemoryProperties
 - [x] vkGetPhysicalDeviceProperties
 - [x] vkGetPhysicalDeviceQueueFamilyProperties
+- [x] vkGetPipelineCacheData
 - [x] vkMapMemory
+- [x] vkMergePipelineCaches
 - [x] vkQueueSubmit
 - [x] vkQueueWaitIdle
 - [x] vkResetCommandPool
+- [x] vkResetDescriptorPool
 - [x] vkResetEvent
 - [x] vkResetFences
 - [x] vkSetEvent

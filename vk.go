@@ -75,6 +75,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(Event{}), C.sizeof_VkEvent)
 	assertSameSize(unsafe.Sizeof(ImageResolve{}), C.sizeof_VkImageResolve)
 	assertSameSize(unsafe.Sizeof(DescriptorPoolSize{}), C.sizeof_VkDescriptorPoolSize)
+	assertSameSize(unsafe.Sizeof(DescriptorSet{}), C.sizeof_VkDescriptorSet)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -4131,6 +4132,50 @@ func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, 
 	free(uptr(cinfo))
 }
 
+type DescriptorSetAllocateInfo struct {
+	Extensions     []Extension
+	DescriptorPool DescriptorPool
+	Layouts        []DescriptorSetLayout
+}
+
+func (info *DescriptorSetAllocateInfo) c() *C.VkDescriptorSetAllocateInfo {
+	size0 := uintptr(C.sizeof_VkDescriptorSetAllocateInfo)
+	size1 := C.sizeof_VkDescriptorSetLayout * uintptr(len(info.Layouts))
+	size := size0 + size1
+	mem := alloc(C.size_t(size))
+	cinfo := (*C.VkDescriptorSetAllocateInfo)(mem)
+	*cinfo = C.VkDescriptorSetAllocateInfo{
+		sType:              C.VkStructureType(StructureTypeDescriptorSetAllocateInfo),
+		pNext:              buildChain(info.Extensions),
+		descriptorPool:     info.DescriptorPool.hnd,
+		descriptorSetCount: C.uint32_t(len(info.Layouts)),
+		pSetLayouts:        (*C.VkDescriptorSetLayout)(uptr(uintptr(mem) + size0)),
+	}
+	ucopy(uptr(cinfo.pSetLayouts), uptr(&info.Layouts), C.sizeof_VkDescriptorSetLayout)
+	return cinfo
+}
+
+type DescriptorSet struct {
+	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSet)
+	hnd C.VkDescriptorSet
+
+	// must be kept identical to C struct
+}
+
+func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]DescriptorSet, error) {
+	cinfo := info.c()
+	out := make([]DescriptorSet, len(info.Layouts))
+	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, (*C.VkDescriptorSet)(slice2ptr(uptr(&out)))))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
+	return out, result2error(res)
+}
+
+func (dev *Device) FreeDescriptorSets(pool DescriptorPool, sets []DescriptorSet) error {
+	res := Result(C.domVkFreeDescriptorSets(dev.fps[vkFreeDescriptorSets], dev.hnd, pool.hnd, C.uint32_t(len(sets)), (*C.VkDescriptorSet)(slice2ptr(uptr(&sets)))))
+	return result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
@@ -4159,6 +4204,7 @@ func (hnd *Queue) String() string          { return fmt.Sprintf("VkQueue(%#x)", 
 func (hnd Buffer) String() string          { return fmt.Sprintf("VkBuffer(%#x)", hnd.hnd) }
 func (hnd BufferView) String() string      { return fmt.Sprintf("VkBufferView(%#x)", hnd.hnd) }
 func (hnd CommandPool) String() string     { return fmt.Sprintf("VkCommandPool(%#x)", hnd.hnd) }
+func (hnd DescriptorSet) String() string   { return fmt.Sprintf("VkDescriptorSet(%#x)", hnd.hnd) }
 func (hnd DeviceMemory) String() string    { return fmt.Sprintf("VkDeviceMemory(%#x)", hnd.hnd) }
 func (hnd Event) String() string           { return fmt.Sprintf("VkEvent(%#x)", hnd.hnd) }
 func (hnd Fence) String() string           { return fmt.Sprintf("VkFence(%#x)", hnd.hnd) }
