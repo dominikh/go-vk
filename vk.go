@@ -4196,6 +4196,27 @@ func (dev *Device) FreeDescriptorSets(pool DescriptorPool, sets []DescriptorSet)
 	return result2error(res)
 }
 
+func (dev *Device) QueryPoolResults(
+	pool QueryPool,
+	firstQuery uint32,
+	queryCount uint32,
+	data []byte,
+	stride DeviceSize,
+	flags QueryResultFlags,
+) error {
+	res := Result(C.domVkGetQueryPoolResults(
+		dev.fps[vkGetQueryPoolResults],
+		dev.hnd,
+		pool.hnd,
+		C.uint32_t(firstQuery),
+		C.uint32_t(queryCount),
+		C.size_t(len(data)),
+		slice2ptr(uptr(&data)),
+		C.VkDeviceSize(stride),
+		C.VkQueryResultFlags(flags)))
+	return result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
