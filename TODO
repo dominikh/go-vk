@@ -33,7 +33,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
 - [x] vkGetQueryPoolResults
-- [ ] vkGetRenderAreaGranularity
+- [x] vkGetRenderAreaGranularity
 - [ ] vkInvalidateMappedMemoryRanges
 - [ ] vkQueueBindSparse
 - [ ] vkUpdateDescriptorSetWithTemplate

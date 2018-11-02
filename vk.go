@@ -4217,6 +4217,12 @@ func (dev *Device) QueryPoolResults(
 	return result2error(res)
 }
 
+func (dev *Device) RenderAreaGranularity(renderPass RenderPass) Extent2D {
+	var out Extent2D
+	C.domVkGetRenderAreaGranularity(dev.fps[vkGetRenderAreaGranularity], dev.hnd, renderPass.hnd, (*C.VkExtent2D)(uptr(&out)))
+	return out
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
