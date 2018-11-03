@@ -5,6 +5,7 @@ package vk
 import "C"
 
 import (
+	"bytes"
 	"math"
 	"reflect"
 	"unsafe"
@@ -97,4 +98,10 @@ func vkBool(b bool) C.VkBool32 {
 		return C.VK_TRUE
 	}
 	return C.VK_FALSE
+}
+
+func str(x []C.char) string {
+	v := *(*[]byte)(uptr(&x))
+	idx := bytes.IndexByte(v, 0)
+	return string(v[:idx])
 }

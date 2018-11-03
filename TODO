@@ -9,7 +9,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkDestroySamplerYcbcrConversion
 - [ ] vkEnumerateDeviceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
-- [ ] vkEnumerateInstanceLayerProperties
+- [x] vkEnumerateInstanceLayerProperties
 - [x] vkEnumerateInstanceVersion
 - [ ] vkEnumeratePhysicalDeviceGroups
 - [x] vkFlushMappedMemoryRanges

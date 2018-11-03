@@ -110,6 +110,42 @@ func EnumerateInstanceVersion() Version {
 	return v
 }
 
+type LayerProperties struct {
+	LayerName             string
+	SpecVersion           Version
+	ImplementationVersion uint32
+	Description           string
+}
+
+func EnumerateInstanceLayerProperties() ([]LayerProperties, error) {
+	for {
+		var count C.uint32_t
+		res := Result(C.domVkEnumerateInstanceLayerProperties(vkEnumerateInstanceLayerProperties, &count, nil))
+		if res != Success {
+			return nil, res
+		}
+		cprops := make([]C.VkLayerProperties, count)
+		res = Result(C.domVkEnumerateInstanceLayerProperties(vkEnumerateInstanceLayerProperties, &count, (*C.VkLayerProperties)(slice2ptr(uptr(&cprops)))))
+		if res == Success {
+			out := make([]LayerProperties, count)
+			cprops = cprops[:count]
+			for i := range cprops {
+				out[i] = LayerProperties{
+					LayerName:             str(cprops[i].layerName[:]),
+					SpecVersion:           Version(cprops[i].specVersion),
+					ImplementationVersion: uint32(cprops[i].implementationVersion),
+					Description:           str(cprops[i].description[:]),
+				}
+			}
+			return out, nil
+		}
+		if res == Incomplete {
+			continue
+		}
+		return nil, res
+	}
+}
+
 type InstanceCreateInfo struct {
 	Extensions []Extension
 	// If not nil, this information helps implementations recognize behavior inherent to classes of applications
