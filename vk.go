@@ -146,6 +146,39 @@ func EnumerateInstanceLayerProperties() ([]LayerProperties, error) {
 	}
 }
 
+func EnumerateInstanceExtensionProperties(layerName string) ([]ExtensionProperties, error) {
+	var cname *C.char
+	if layerName != "" {
+		cname = C.CString(layerName)
+		defer free(uptr(cname))
+	}
+
+	for {
+		var count C.uint32_t
+		res := Result(C.domVkEnumerateInstanceExtensionProperties(vkEnumerateInstanceExtensionProperties, cname, &count, nil))
+		if res != Success {
+			return nil, res
+		}
+		cprops := make([]C.VkExtensionProperties, count)
+		res = Result(C.domVkEnumerateInstanceExtensionProperties(vkEnumerateInstanceExtensionProperties, cname, &count, (*C.VkExtensionProperties)(slice2ptr(uptr(&cprops)))))
+		if res == Success {
+			out := make([]ExtensionProperties, count)
+			cprops = cprops[:count]
+			for i := range cprops {
+				out[i] = ExtensionProperties{
+					Name:        str(cprops[i].extensionName[:]),
+					SpecVersion: uint32(cprops[i].specVersion),
+				}
+			}
+			return out, nil
+		}
+		if res == Incomplete {
+			continue
+		}
+		return nil, res
+	}
+}
+
 type InstanceCreateInfo struct {
 	Extensions []Extension
 	// If not nil, this information helps implementations recognize behavior inherent to classes of applications
