@@ -38,9 +38,9 @@ type (
 
 const (
 	// Vulkan 1.0 version number
-	APIVersion10 = uint32(C.VK_API_VERSION_1_0)
+	APIVersion10 = Version(C.VK_API_VERSION_1_0)
 	// Vulkan 1.1 version number
-	APIVersion11 = uint32(C.VK_API_VERSION_1_1)
+	APIVersion11 = Version(C.VK_API_VERSION_1_1)
 )
 
 var vkEnumerateInstanceVersion C.PFN_vkEnumerateInstanceVersion
@@ -90,8 +90,24 @@ func init() {
 }
 
 // MakeVersion constructs an API version number.
-func MakeVersion(major, minor, patch uint32) uint32 {
-	return major<<22 | minor<<12 | patch
+func MakeVersion(major, minor, patch uint32) Version {
+	return Version(major<<22 | minor<<12 | patch)
+}
+
+type Version uint32
+
+func (v Version) String() string {
+	// return major<<22 | minor<<12 | patch
+	major := (v >> 22)
+	minor := (v >> 12) & 0x3FF
+	patch := v & 0xFFF
+	return fmt.Sprintf("%d.%d.%d", major, minor, patch)
+}
+
+func EnumerateInstanceVersion() Version {
+	var v Version
+	C.domVkEnumerateInstanceVersion(vkEnumerateInstanceVersion, (*C.uint32_t)(uptr(&v)))
+	return v
 }
 
 type InstanceCreateInfo struct {
@@ -109,13 +125,13 @@ type ApplicationInfo struct {
 	// The name of the application
 	ApplicationName string
 	// The developer-supplied version number of the application
-	ApplicationVersion uint32
+	ApplicationVersion Version
 	// The name of the engine (if any) used to create the application
 	EngineName string
 	// The developer-supplied version number of the engine used to create the application
-	EngineVersion uint32
+	EngineVersion Version
 	// The highest version of Vulkan that the application is designed to use
-	APIVersion uint32
+	APIVersion Version
 }
 
 // There is no global state in Vulkan and all per-application state is stored in an Instance object.

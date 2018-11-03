@@ -10,7 +10,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkEnumerateDeviceLayerProperties
 - [ ] vkEnumerateInstanceExtensionProperties
 - [ ] vkEnumerateInstanceLayerProperties
-- [ ] vkEnumerateInstanceVersion
+- [x] vkEnumerateInstanceVersion
 - [ ] vkEnumeratePhysicalDeviceGroups
 - [x] vkFlushMappedMemoryRanges
 - [x] vkFreeDescriptorSets
