@@ -12,7 +12,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkEnumerateInstanceLayerProperties
 - [ ] vkEnumerateInstanceVersion
 - [ ] vkEnumeratePhysicalDeviceGroups
-- [ ] vkFlushMappedMemoryRanges
+- [x] vkFlushMappedMemoryRanges
 - [x] vkFreeDescriptorSets
 - [ ] vkGetDeviceGroupPeerMemoryFeatures
 - [ ] vkGetDeviceMemoryCommitment

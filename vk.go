@@ -4345,6 +4345,35 @@ func (dev *Device) UpdateDescriptorSets(writes []WriteDescriptorSet, copies []Co
 	}
 }
 
+type MappedMemoryRange struct {
+	Extensions []Extension
+	Memory     DeviceMemory
+	Offset     DeviceSize
+	Size       DeviceSize
+}
+
+func (rng *MappedMemoryRange) c(crng *C.VkMappedMemoryRange) {
+	*crng = C.VkMappedMemoryRange{
+		sType:  C.VkStructureType(StructureTypeMappedMemoryRange),
+		pNext:  buildChain(rng.Extensions),
+		memory: rng.Memory.hnd,
+		offset: C.VkDeviceSize(rng.Offset),
+		size:   C.VkDeviceSize(rng.Size),
+	}
+}
+
+func (dev *Device) FlushMappedMemoryRanges(ranges []MappedMemoryRange) error {
+	cranges := make([]C.VkMappedMemoryRange, len(ranges))
+	for i := range cranges {
+		ranges[i].c(&cranges[i])
+	}
+	res := Result(C.domVkFlushMappedMemoryRanges(dev.fps[vkFlushMappedMemoryRanges], dev.hnd, C.uint32_t(len(cranges)), (*C.VkMappedMemoryRange)(slice2ptr(uptr(&cranges)))))
+	for i := range cranges {
+		internalizeChain(ranges[i].Extensions, cranges[i].pNext)
+	}
+	return result2error(res)
+}
+
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
