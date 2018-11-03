@@ -104,7 +104,7 @@ func (v Version) String() string {
 	return fmt.Sprintf("%d.%d.%d", major, minor, patch)
 }
 
-func EnumerateInstanceVersion() Version {
+func InstanceVersion() Version {
 	var v Version
 	C.domVkEnumerateInstanceVersion(vkEnumerateInstanceVersion, (*C.uint32_t)(uptr(&v)))
 	return v
@@ -117,7 +117,7 @@ type LayerProperties struct {
 	Description           string
 }
 
-func EnumerateInstanceLayerProperties() ([]LayerProperties, error) {
+func InstanceLayerProperties() ([]LayerProperties, error) {
 	for {
 		var count C.uint32_t
 		res := Result(C.domVkEnumerateInstanceLayerProperties(vkEnumerateInstanceLayerProperties, &count, nil))
@@ -146,7 +146,7 @@ func EnumerateInstanceLayerProperties() ([]LayerProperties, error) {
 	}
 }
 
-func EnumerateInstanceExtensionProperties(layerName string) ([]ExtensionProperties, error) {
+func InstanceExtensionProperties(layerName string) ([]ExtensionProperties, error) {
 	var cname *C.char
 	if layerName != "" {
 		cname = C.CString(layerName)
@@ -263,7 +263,7 @@ func (ins *Instance) init() {
 	}
 }
 
-func (ins *Instance) EnumeratePhysicalDevices() ([]*PhysicalDevice, error) {
+func (ins *Instance) PhysicalDevices() ([]*PhysicalDevice, error) {
 	count := C.uint32_t(1)
 	var devs *C.VkPhysicalDevice
 	for {
