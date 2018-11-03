@@ -76,6 +76,8 @@ func init() {
 	assertSameSize(unsafe.Sizeof(ImageResolve{}), C.sizeof_VkImageResolve)
 	assertSameSize(unsafe.Sizeof(DescriptorPoolSize{}), C.sizeof_VkDescriptorPoolSize)
 	assertSameSize(unsafe.Sizeof(DescriptorSet{}), C.sizeof_VkDescriptorSet)
+	assertSameSize(unsafe.Sizeof(DescriptorBufferInfo{}), C.sizeof_VkDescriptorBufferInfo)
+	assertSameSize(unsafe.Sizeof(DescriptorImageInfo{}), C.sizeof_VkDescriptorImageInfo)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -4221,6 +4223,126 @@ func (dev *Device) RenderAreaGranularity(renderPass RenderPass) Extent2D {
 	var out Extent2D
 	C.domVkGetRenderAreaGranularity(dev.fps[vkGetRenderAreaGranularity], dev.hnd, renderPass.hnd, (*C.VkExtent2D)(uptr(&out)))
 	return out
+}
+
+type WriteDescriptorSet struct {
+	Extensions      []Extension
+	DstSet          DescriptorSet
+	DstBinding      uint32
+	DstArrayElement uint32
+	DescriptorType  DescriptorType
+	ImageInfo       []DescriptorImageInfo
+	BufferInfo      []DescriptorBufferInfo
+	TexelBufferView []BufferView
+}
+
+func (set *WriteDescriptorSet) c(cset *C.VkWriteDescriptorSet) {
+	if safe {
+		n := 0
+		if set.ImageInfo != nil {
+			n++
+		}
+		if set.BufferInfo != nil {
+			n++
+		}
+		if set.TexelBufferView != nil {
+			n++
+		}
+		if n > 1 {
+			panic("only one of ImageInfo, BufferInfo, or TexelBufferView must be provided")
+		}
+	}
+
+	// We trust the user that only one of ImageInfo, BufferInfo, or
+	// TexelBufferView has been provided. If that invariant is broken,
+	// and safety checks are disable, invalid memory may be read.
+	size0 := C.sizeof_VkDescriptorImageInfo * uintptr(len(set.ImageInfo))
+	size1 := C.sizeof_VkDescriptorBufferInfo * uintptr(len(set.BufferInfo))
+	size2 := C.sizeof_VkBufferView * uintptr(len(set.TexelBufferView))
+	size := size0 + size1 + size2
+
+	mem := alloc(C.size_t(size))
+	*cset = C.VkWriteDescriptorSet{
+		sType:            C.VkStructureType(StructureTypeWriteDescriptorSet),
+		pNext:            buildChain(set.Extensions),
+		dstSet:           set.DstSet.hnd,
+		dstBinding:       C.uint32_t(set.DstBinding),
+		dstArrayElement:  C.uint32_t(set.DstArrayElement),
+		descriptorCount:  C.uint32_t(len(set.ImageInfo) + len(set.BufferInfo) + len(set.TexelBufferView)),
+		descriptorType:   C.VkDescriptorType(set.DescriptorType),
+		pImageInfo:       (*C.VkDescriptorImageInfo)(uptr(uintptr(mem))),
+		pBufferInfo:      (*C.VkDescriptorBufferInfo)(uptr(uintptr(mem) + size0)),
+		pTexelBufferView: (*C.VkBufferView)(uptr(uintptr(mem) + size0 + size1)),
+	}
+	ucopy(uptr(cset.pImageInfo), uptr(&set.ImageInfo), C.sizeof_VkDescriptorImageInfo)
+	ucopy(uptr(cset.pBufferInfo), uptr(&set.BufferInfo), C.sizeof_VkDescriptorBufferInfo)
+	ucopy(uptr(cset.pTexelBufferView), uptr(&set.TexelBufferView), C.sizeof_VkBufferView)
+}
+
+type DescriptorBufferInfo struct {
+	Buffer Buffer
+	Offset DeviceSize
+	Range  DeviceSize
+
+	// must be kept identical to C struct
+}
+
+type DescriptorImageInfo struct {
+	Sampler     Sampler
+	ImageView   ImageView
+	ImageLayout ImageLayout
+
+	// must be kept identical to C struct
+}
+
+type CopyDescriptorSet struct {
+	Extensions      []Extension
+	SrcSet          DescriptorSet
+	SrcBinding      uint32
+	SrcArrayElement uint32
+	DstSet          DescriptorSet
+	DstBinding      uint32
+	DstArrayElement uint32
+	DescriptorCount uint32
+}
+
+func (set *CopyDescriptorSet) c(cset *C.VkCopyDescriptorSet) {
+	*cset = C.VkCopyDescriptorSet{
+		sType:           C.VkStructureType(StructureTypeCopyDescriptorSet),
+		pNext:           buildChain(set.Extensions),
+		srcSet:          set.SrcSet.hnd,
+		srcBinding:      C.uint32_t(set.SrcBinding),
+		srcArrayElement: C.uint32_t(set.SrcArrayElement),
+		dstSet:          set.DstSet.hnd,
+		dstBinding:      C.uint32_t(set.DstBinding),
+		dstArrayElement: C.uint32_t(set.DstArrayElement),
+		descriptorCount: C.uint32_t(set.DescriptorCount),
+	}
+}
+
+func (dev *Device) UpdateDescriptorSets(writes []WriteDescriptorSet, copies []CopyDescriptorSet) {
+	cwrites := make([]C.VkWriteDescriptorSet, len(writes))
+	ccopies := make([]C.VkCopyDescriptorSet, len(copies))
+	for i := range cwrites {
+		writes[i].c(&cwrites[i])
+	}
+	for i := range ccopies {
+		copies[i].c(&ccopies[i])
+	}
+	C.domVkUpdateDescriptorSets(
+		dev.fps[vkUpdateDescriptorSets],
+		dev.hnd,
+		C.uint32_t(len(cwrites)),
+		(*C.VkWriteDescriptorSet)(slice2ptr(uptr(&cwrites))),
+		C.uint32_t(len(ccopies)),
+		(*C.VkCopyDescriptorSet)(slice2ptr(uptr(&ccopies))))
+	for i := range cwrites {
+		internalizeChain(writes[i].Extensions, cwrites[i].pNext)
+		free(uptr(cwrites[i].pImageInfo))
+	}
+	for i := range ccopies {
+		internalizeChain(copies[i].Extensions, ccopies[i].pNext)
+	}
 }
 
 func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunction {
