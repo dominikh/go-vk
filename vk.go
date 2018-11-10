@@ -78,6 +78,7 @@ func init() {
 	assertSameSize(unsafe.Sizeof(DescriptorSet{}), C.sizeof_VkDescriptorSet)
 	assertSameSize(unsafe.Sizeof(DescriptorBufferInfo{}), C.sizeof_VkDescriptorBufferInfo)
 	assertSameSize(unsafe.Sizeof(DescriptorImageInfo{}), C.sizeof_VkDescriptorImageInfo)
+	assertSameSize(unsafe.Sizeof(FormatProperties{}), C.sizeof_VkFormatProperties)
 
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
@@ -1150,6 +1151,26 @@ func (dev *PhysicalDevice) MemoryProperties() PhysicalDeviceMemoryProperties {
 	}
 }
 
+type PhysicalDeviceMemoryProperties2 struct {
+	Extensions       []Extension
+	MemoryProperties PhysicalDeviceMemoryProperties
+}
+
+func (dev *PhysicalDevice) MemoryProperties2(props PhysicalDeviceMemoryProperties2) {
+	cprops := (*C.VkPhysicalDeviceMemoryProperties2)(alloc(C.sizeof_VkPhysicalDeviceMemoryProperties2))
+	*cprops = C.VkPhysicalDeviceMemoryProperties2{
+		sType: C.VkStructureType(StructureTypePhysicalDeviceMemoryProperties2),
+		pNext: buildChain(props.Extensions),
+	}
+	C.domVkGetPhysicalDeviceMemoryProperties2(dev.instance.fps[vkGetPhysicalDeviceMemoryProperties2], dev.hnd, cprops)
+	props.MemoryProperties = PhysicalDeviceMemoryProperties{
+		Types: (*[C.VK_MAX_MEMORY_TYPES]MemoryType)(uptr(&cprops.memoryProperties.memoryTypes))[:cprops.memoryProperties.memoryTypeCount],
+		Heaps: (*[C.VK_MAX_MEMORY_TYPES]MemoryHeap)(uptr(&cprops.memoryProperties.memoryHeaps))[:cprops.memoryProperties.memoryHeapCount],
+	}
+	internalizeChain(props.Extensions, cprops.pNext)
+	free(uptr(cprops))
+}
+
 type ExtensionProperties struct {
 	Name        string
 	SpecVersion uint32
@@ -1308,6 +1329,75 @@ func (dev *PhysicalDevice) Features() *PhysicalDeviceFeatures {
 		VariableMultisampleRate:                 features.variableMultisampleRate == C.VK_TRUE,
 		InheritedQueries:                        features.inheritedQueries == C.VK_TRUE,
 	}
+}
+
+type PhysicalDeviceFeatures2 struct {
+	Extensions []Extension
+	Features   PhysicalDeviceFeatures
+}
+
+func (dev *PhysicalDevice) Features2(features *PhysicalDeviceFeatures2) {
+	cfeatures := (*C.VkPhysicalDeviceFeatures2)(alloc(C.sizeof_VkPhysicalDeviceFeatures2))
+	C.domVkGetPhysicalDeviceFeatures2(dev.instance.fps[vkGetPhysicalDeviceFeatures2], dev.hnd, cfeatures)
+	features.Features = PhysicalDeviceFeatures{
+		RobustBufferAccess:                      cfeatures.features.robustBufferAccess == C.VK_TRUE,
+		FullDrawIndexUint32:                     cfeatures.features.fullDrawIndexUint32 == C.VK_TRUE,
+		ImageCubeArray:                          cfeatures.features.imageCubeArray == C.VK_TRUE,
+		IndependentBlend:                        cfeatures.features.independentBlend == C.VK_TRUE,
+		GeometryShader:                          cfeatures.features.geometryShader == C.VK_TRUE,
+		TessellationShader:                      cfeatures.features.tessellationShader == C.VK_TRUE,
+		SampleRateShading:                       cfeatures.features.sampleRateShading == C.VK_TRUE,
+		DualSrcBlend:                            cfeatures.features.dualSrcBlend == C.VK_TRUE,
+		LogicOp:                                 cfeatures.features.logicOp == C.VK_TRUE,
+		MultiDrawIndirect:                       cfeatures.features.multiDrawIndirect == C.VK_TRUE,
+		DrawIndirectFirstInstance:               cfeatures.features.drawIndirectFirstInstance == C.VK_TRUE,
+		DepthClamp:                              cfeatures.features.depthClamp == C.VK_TRUE,
+		DepthBiasClamp:                          cfeatures.features.depthBiasClamp == C.VK_TRUE,
+		FillModeNonSolid:                        cfeatures.features.fillModeNonSolid == C.VK_TRUE,
+		DepthBounds:                             cfeatures.features.depthBounds == C.VK_TRUE,
+		WideLines:                               cfeatures.features.wideLines == C.VK_TRUE,
+		LargePoints:                             cfeatures.features.largePoints == C.VK_TRUE,
+		AlphaToOne:                              cfeatures.features.alphaToOne == C.VK_TRUE,
+		MultiViewport:                           cfeatures.features.multiViewport == C.VK_TRUE,
+		SamplerAnisotropy:                       cfeatures.features.samplerAnisotropy == C.VK_TRUE,
+		TextureCompressionETC2:                  cfeatures.features.textureCompressionETC2 == C.VK_TRUE,
+		TextureCompressionASTC_LDR:              cfeatures.features.textureCompressionASTC_LDR == C.VK_TRUE,
+		TextureCompressionBC:                    cfeatures.features.textureCompressionBC == C.VK_TRUE,
+		OcclusionQueryPrecise:                   cfeatures.features.occlusionQueryPrecise == C.VK_TRUE,
+		PipelineStatisticsQuery:                 cfeatures.features.pipelineStatisticsQuery == C.VK_TRUE,
+		VertexPipelineStoresAndAtomics:          cfeatures.features.vertexPipelineStoresAndAtomics == C.VK_TRUE,
+		FragmentStoresAndAtomics:                cfeatures.features.fragmentStoresAndAtomics == C.VK_TRUE,
+		ShaderTessellationAndGeometryPointSize:  cfeatures.features.shaderTessellationAndGeometryPointSize == C.VK_TRUE,
+		ShaderImageGatherExtended:               cfeatures.features.shaderImageGatherExtended == C.VK_TRUE,
+		ShaderStorageImageExtendedFormats:       cfeatures.features.shaderStorageImageExtendedFormats == C.VK_TRUE,
+		ShaderStorageImageMultisample:           cfeatures.features.shaderStorageImageMultisample == C.VK_TRUE,
+		ShaderStorageImageReadWithoutFormat:     cfeatures.features.shaderStorageImageReadWithoutFormat == C.VK_TRUE,
+		ShaderStorageImageWriteWithoutFormat:    cfeatures.features.shaderStorageImageWriteWithoutFormat == C.VK_TRUE,
+		ShaderUniformBufferArrayDynamicIndexing: cfeatures.features.shaderUniformBufferArrayDynamicIndexing == C.VK_TRUE,
+		ShaderSampledImageArrayDynamicIndexing:  cfeatures.features.shaderSampledImageArrayDynamicIndexing == C.VK_TRUE,
+		ShaderStorageBufferArrayDynamicIndexing: cfeatures.features.shaderStorageBufferArrayDynamicIndexing == C.VK_TRUE,
+		ShaderStorageImageArrayDynamicIndexing:  cfeatures.features.shaderStorageImageArrayDynamicIndexing == C.VK_TRUE,
+		ShaderClipDistance:                      cfeatures.features.shaderClipDistance == C.VK_TRUE,
+		ShaderCullDistance:                      cfeatures.features.shaderCullDistance == C.VK_TRUE,
+		ShaderFloat64:                           cfeatures.features.shaderFloat64 == C.VK_TRUE,
+		ShaderInt64:                             cfeatures.features.shaderInt64 == C.VK_TRUE,
+		ShaderInt16:                             cfeatures.features.shaderInt16 == C.VK_TRUE,
+		ShaderResourceResidency:                 cfeatures.features.shaderResourceResidency == C.VK_TRUE,
+		ShaderResourceMinLod:                    cfeatures.features.shaderResourceMinLod == C.VK_TRUE,
+		SparseBinding:                           cfeatures.features.sparseBinding == C.VK_TRUE,
+		SparseResidencyBuffer:                   cfeatures.features.sparseResidencyBuffer == C.VK_TRUE,
+		SparseResidencyImage2D:                  cfeatures.features.sparseResidencyImage2D == C.VK_TRUE,
+		SparseResidencyImage3D:                  cfeatures.features.sparseResidencyImage3D == C.VK_TRUE,
+		SparseResidency2Samples:                 cfeatures.features.sparseResidency2Samples == C.VK_TRUE,
+		SparseResidency4Samples:                 cfeatures.features.sparseResidency4Samples == C.VK_TRUE,
+		SparseResidency8Samples:                 cfeatures.features.sparseResidency8Samples == C.VK_TRUE,
+		SparseResidency16Samples:                cfeatures.features.sparseResidency16Samples == C.VK_TRUE,
+		SparseResidencyAliased:                  cfeatures.features.sparseResidencyAliased == C.VK_TRUE,
+		VariableMultisampleRate:                 cfeatures.features.variableMultisampleRate == C.VK_TRUE,
+		InheritedQueries:                        cfeatures.features.inheritedQueries == C.VK_TRUE,
+	}
+	internalizeChain(features.Extensions, cfeatures.pNext)
+	free(uptr(cfeatures))
 }
 
 type QueueFamilyProperties struct {
@@ -4456,6 +4546,111 @@ func (dev *Device) FlushMappedMemoryRanges(ranges []MappedMemoryRange) error {
 	for i := range cranges {
 		internalizeChain(ranges[i].Extensions, cranges[i].pNext)
 	}
+	return result2error(res)
+}
+
+type FormatProperties struct {
+	LinearTilingFeatures  FormatFeatureFlags
+	OptimalTilingFeatures FormatFeatureFlags
+	BufferFeatures        FormatFeatureFlags
+
+	// must be kept identical to C struct
+}
+
+func (dev *PhysicalDevice) FormatProperties(format Format) FormatProperties {
+	var props FormatProperties
+	C.domVkGetPhysicalDeviceFormatProperties(dev.instance.fps[vkGetPhysicalDeviceFormatProperties], dev.hnd, C.VkFormat(format), (*C.VkFormatProperties)(uptr(&props)))
+	return props
+}
+
+type FormatProperties2 struct {
+	Extensions       []Extension
+	FormatProperties FormatProperties
+}
+
+func (dev *PhysicalDevice) FormatProperties2(format Format, props *FormatProperties2) {
+	cprops := (*C.VkFormatProperties2)(alloc(C.sizeof_VkFormatProperties2))
+	*cprops = C.VkFormatProperties2{
+		sType: C.VkStructureType(StructureTypeFormatProperties2),
+		pNext: buildChain(props.Extensions),
+	}
+	C.domVkGetPhysicalDeviceFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceFormatProperties2], dev.hnd, C.VkFormat(format), cprops)
+	ucopy1(uptr(&props.FormatProperties), uptr(&cprops.formatProperties), C.sizeof_VkFormatProperties)
+	internalizeChain(props.Extensions, cprops.pNext)
+	free(uptr(cprops))
+}
+
+type ImageFormatProperties struct {
+	MaxExtent       Extent3D
+	MaxMipLevels    uint32
+	MaxArrayLayers  uint32
+	SampleCounts    SampleCountFlags
+	MaxResourceSize DeviceSize
+
+	// must be kept identical to C struct
+}
+
+func (dev *PhysicalDevice) ImageFormatProperties(
+	format Format,
+	typ ImageType,
+	tiling ImageTiling,
+	usage ImageUsageFlags,
+	flags ImageCreateFlags,
+) (ImageFormatProperties, error) {
+	var props ImageFormatProperties
+	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties(
+		dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties],
+		dev.hnd,
+		C.VkFormat(format),
+		C.VkImageType(typ),
+		C.VkImageTiling(tiling),
+		C.VkImageUsageFlags(usage),
+		C.VkImageCreateFlags(flags),
+		(*C.VkImageFormatProperties)(uptr(&props))))
+	return props, result2error(res)
+}
+
+type PhysicalDeviceImageFormatInfo2 struct {
+	Extensions []Extension
+	Format     Format
+	Type       ImageType
+	Tiling     ImageTiling
+	Usage      ImageUsageFlags
+	Flags      ImageCreateFlags
+}
+
+func (info *PhysicalDeviceImageFormatInfo2) c() *C.VkPhysicalDeviceImageFormatInfo2 {
+	cinfo := (*C.VkPhysicalDeviceImageFormatInfo2)(alloc(C.sizeof_VkPhysicalDeviceImageFormatInfo2))
+	*cinfo = C.VkPhysicalDeviceImageFormatInfo2{
+		sType:  C.VkStructureType(StructureTypePhysicalDeviceImageFormatInfo2),
+		pNext:  buildChain(info.Extensions),
+		format: C.VkFormat(info.Format),
+		_type:  C.VkImageType(info.Type),
+		tiling: C.VkImageTiling(info.Tiling),
+		usage:  C.VkImageUsageFlags(info.Usage),
+		flags:  C.VkImageCreateFlags(info.Flags),
+	}
+	return cinfo
+}
+
+type ImageFormatProperties2 struct {
+	Extensions            []Extension
+	ImageFormatProperties ImageFormatProperties
+}
+
+func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageFormatInfo2, props *ImageFormatProperties2) error {
+	cinfo := info.c()
+	cprops := (*C.VkImageFormatProperties2)(alloc(C.sizeof_VkImageFormatProperties2))
+	*cprops = C.VkImageFormatProperties2{
+		sType: C.VkStructureType(StructureTypeImageFormatProperties2),
+		pNext: buildChain(props.Extensions),
+	}
+	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties2], dev.hnd, cinfo, cprops))
+	ucopy1(uptr(&props.ImageFormatProperties), uptr(&cprops.imageFormatProperties), C.sizeof_VkImageFormatProperties)
+	internalizeChain(props.Extensions, cprops.pNext)
+	free(uptr(cprops))
+	internalizeChain(info.Extensions, cinfo.pNext)
+	free(uptr(cinfo))
 	return result2error(res)
 }
 

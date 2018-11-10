@@ -22,12 +22,12 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [ ] vkGetPhysicalDeviceExternalBufferProperties
 - [ ] vkGetPhysicalDeviceExternalFenceProperties
 - [ ] vkGetPhysicalDeviceExternalSemaphoreProperties
-- [ ] vkGetPhysicalDeviceFeatures2
-- [ ] vkGetPhysicalDeviceFormatProperties
-- [ ] vkGetPhysicalDeviceFormatProperties2
-- [ ] vkGetPhysicalDeviceImageFormatProperties
-- [ ] vkGetPhysicalDeviceImageFormatProperties2
-- [ ] vkGetPhysicalDeviceMemoryProperties2
+- [x] vkGetPhysicalDeviceFeatures2
+- [x] vkGetPhysicalDeviceFormatProperties
+- [x] vkGetPhysicalDeviceFormatProperties2
+- [x] vkGetPhysicalDeviceImageFormatProperties
+- [x] vkGetPhysicalDeviceImageFormatProperties2
+- [x] vkGetPhysicalDeviceMemoryProperties2
 - [ ] vkGetPhysicalDeviceProperties2
 - [ ] vkGetPhysicalDeviceQueueFamilyProperties2
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties

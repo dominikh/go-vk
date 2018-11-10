@@ -83,6 +83,7 @@ type DescriptorType uint32
 type DescriptorPoolCreateFlags uint32
 type DescriptorPoolResetFlags uint32
 type DescriptorSetLayoutCreateFlags uint32
+type FormatFeatureFlags uint32
 
 const (
 	SubpassExternal = C.VK_SUBPASS_EXTERNAL
@@ -1657,6 +1658,42 @@ const (
 	DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT DescriptorSetLayoutCreateFlags = 0x00000002
 )
 
+const (
+	FormatFeatureSampledImageBit                                                        = 0x00000001
+	FormatFeatureStorageImageBit                                                        = 0x00000002
+	FormatFeatureStorageImageAtomicBit                                                  = 0x00000004
+	FormatFeatureUniformTexelBufferBit                                                  = 0x00000008
+	FormatFeatureStorageTexelBufferBit                                                  = 0x00000010
+	FormatFeatureStorageTexelBufferAtomicBit                                            = 0x00000020
+	FormatFeatureVertexBufferBit                                                        = 0x00000040
+	FormatFeatureColorAttachmentBit                                                     = 0x00000080
+	FormatFeatureColorAttachmentBlendBit                                                = 0x00000100
+	FormatFeatureDepthStencilAttachmentBit                                              = 0x00000200
+	FormatFeatureBlitSrcBit                                                             = 0x00000400
+	FormatFeatureBlitDstBit                                                             = 0x00000800
+	FormatFeatureSampledImageFilterLinearBit                                            = 0x00001000
+	FormatFeatureTransferSrcBit                                                         = 0x00004000
+	FormatFeatureTransferDstBit                                                         = 0x00008000
+	FormatFeatureMidpointChromaSamplesBit                                               = 0x00020000
+	FormatFeatureSampledImageYcbcrConversionLinearFilterBit                             = 0x00040000
+	FormatFeatureSampledImageYcbcrConversionSeparateReconstructionFilterBit             = 0x00080000
+	FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitBit             = 0x00100000
+	FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitForceableBit    = 0x00200000
+	FormatFeatureDisjointBit                                                            = 0x00400000
+	FormatFeatureCositedChromaSamplesBit                                                = 0x00800000
+	FormatFeatureSampledImageFilterCubicBitIMG                                          = 0x00002000
+	FormatFeatureSampledImageFilterMinmaxBitEXT                                         = 0x00010000
+	FormatFeatureTransferSrcBitKHR                                                      = FormatFeatureTransferSrcBit
+	FormatFeatureTransferDstBitKHR                                                      = FormatFeatureTransferDstBit
+	FormatFeatureMidpointChromaSamplesBitKHR                                            = FormatFeatureMidpointChromaSamplesBit
+	FormatFeatureSampledImageYcbcrConversionLinearFilterBitKHR                          = FormatFeatureSampledImageYcbcrConversionLinearFilterBit
+	FormatFeatureSampledImageYcbcrConversionSeparateReconstructionFilterBitKHR          = FormatFeatureSampledImageYcbcrConversionSeparateReconstructionFilterBit
+	FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitBitKHR          = FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitBit
+	FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitForceableBitKHR = FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitForceableBit
+	FormatFeatureDisjointBitKHR                                                         = FormatFeatureDisjointBit
+	FormatFeatureCositedChromaSamplesBitKHR                                             = FormatFeatureCositedChromaSamplesBit
+)
+
 func (res Result) Error() string { return res.String() }
 
 func (flags DeviceQueueCreateFlags) String() string {
@@ -2394,6 +2431,83 @@ func (flags DescriptorSetLayoutCreateFlags) String() string {
 	}
 	if (flags & DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT) != 0 {
 		out = append(out, "DescriptorSetLayoutCreateUpdateAfterBindPoolBitEXT")
+	}
+	return strings.Join(out, " | ")
+}
+
+func (flags FormatFeatureFlags) String() string {
+	var out []string
+	if (flags & FormatFeatureSampledImageBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageBit")
+	}
+	if (flags & FormatFeatureStorageImageBit) != 0 {
+		out = append(out, "FormatFeatureStorageImageBit")
+	}
+	if (flags & FormatFeatureStorageImageAtomicBit) != 0 {
+		out = append(out, "FormatFeatureStorageImageAtomicBit")
+	}
+	if (flags & FormatFeatureUniformTexelBufferBit) != 0 {
+		out = append(out, "FormatFeatureUniformTexelBufferBit")
+	}
+	if (flags & FormatFeatureStorageTexelBufferBit) != 0 {
+		out = append(out, "FormatFeatureStorageTexelBufferBit")
+	}
+	if (flags & FormatFeatureStorageTexelBufferAtomicBit) != 0 {
+		out = append(out, "FormatFeatureStorageTexelBufferAtomicBit")
+	}
+	if (flags & FormatFeatureVertexBufferBit) != 0 {
+		out = append(out, "FormatFeatureVertexBufferBit")
+	}
+	if (flags & FormatFeatureColorAttachmentBit) != 0 {
+		out = append(out, "FormatFeatureColorAttachmentBit")
+	}
+	if (flags & FormatFeatureColorAttachmentBlendBit) != 0 {
+		out = append(out, "FormatFeatureColorAttachmentBlendBit")
+	}
+	if (flags & FormatFeatureDepthStencilAttachmentBit) != 0 {
+		out = append(out, "FormatFeatureDepthStencilAttachmentBit")
+	}
+	if (flags & FormatFeatureBlitSrcBit) != 0 {
+		out = append(out, "FormatFeatureBlitSrcBit")
+	}
+	if (flags & FormatFeatureBlitDstBit) != 0 {
+		out = append(out, "FormatFeatureBlitDstBit")
+	}
+	if (flags & FormatFeatureSampledImageFilterLinearBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageFilterLinearBit")
+	}
+	if (flags & FormatFeatureTransferSrcBit) != 0 {
+		out = append(out, "FormatFeatureTransferSrcBit")
+	}
+	if (flags & FormatFeatureTransferDstBit) != 0 {
+		out = append(out, "FormatFeatureTransferDstBit")
+	}
+	if (flags & FormatFeatureMidpointChromaSamplesBit) != 0 {
+		out = append(out, "FormatFeatureMidpointChromaSamplesBit")
+	}
+	if (flags & FormatFeatureSampledImageYcbcrConversionLinearFilterBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageYcbcrConversionLinearFilterBit")
+	}
+	if (flags & FormatFeatureSampledImageYcbcrConversionSeparateReconstructionFilterBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageYcbcrConversionSeparateReconstructionFilterBit")
+	}
+	if (flags & FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitBit")
+	}
+	if (flags & FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitForceableBit) != 0 {
+		out = append(out, "FormatFeatureSampledImageYcbcrConversionChromaReconstructionExplicitForceableBit")
+	}
+	if (flags & FormatFeatureDisjointBit) != 0 {
+		out = append(out, "FormatFeatureDisjointBit")
+	}
+	if (flags & FormatFeatureCositedChromaSamplesBit) != 0 {
+		out = append(out, "FormatFeatureCositedChromaSamplesBit")
+	}
+	if (flags & FormatFeatureSampledImageFilterCubicBitIMG) != 0 {
+		out = append(out, "FormatFeatureSampledImageFilterCubicBitIMG")
+	}
+	if (flags & FormatFeatureSampledImageFilterMinmaxBitEXT) != 0 {
+		out = append(out, "FormatFeatureSampledImageFilterMinmaxBitEXT")
 	}
 	return strings.Join(out, " | ")
 }
