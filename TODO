@@ -28,7 +28,7 @@ List of Vulkan functions extracted from vk.xml, and whether they've been impleme
 - [x] vkGetPhysicalDeviceImageFormatProperties
 - [x] vkGetPhysicalDeviceImageFormatProperties2
 - [x] vkGetPhysicalDeviceMemoryProperties2
-- [ ] vkGetPhysicalDeviceProperties2
+- [x] vkGetPhysicalDeviceProperties2
 - [ ] vkGetPhysicalDeviceQueueFamilyProperties2
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties
 - [ ] vkGetPhysicalDeviceSparseImageFormatProperties2
