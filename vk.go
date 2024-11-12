@@ -2649,9 +2649,9 @@ func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStat
 	bindings := (*C.VkVertexInputBindingDescription)(uptr(uintptr(mem) + size0))
 	attribs := (*C.VkVertexInputAttributeDescription)(uptr(uintptr(mem) + size0 + size1))
 	*cinfo = C.VkPipelineVertexInputStateCreateInfo{
-		sType: C.VkStructureType(StructureType(StructureTypePipelineVertexInputStateCreateInfo)),
-		pNext: buildChain(info.Extensions),
-		flags: 0,
+		sType:                           C.VkStructureType(StructureType(StructureTypePipelineVertexInputStateCreateInfo)),
+		pNext:                           buildChain(info.Extensions),
+		flags:                           0,
 		vertexBindingDescriptionCount:   C.uint32_t(len(info.VertexBindingDescriptions)),
 		pVertexBindingDescriptions:      bindings,
 		vertexAttributeDescriptionCount: C.uint32_t(len(info.VertexAttributeDescriptions)),

@@ -1,16 +1,14 @@
 /*
 Package vk provides bindings to the Vulkan graphics API.
 
-
-Documentation
+# Documentation
 
 Vulkan is a complex beast, with a very extensive specification.
 It wouldn't be feasible to include the entire specification as part of the Go documentation.
 Where possible, we have copied parts of the specification (for example to describe constants),
 but in order to understand the full API, it is advised to read the specification.
 
-
-Performance
+# Performance
 
 Using the Go bindings will be slower than using C or C++, for many reasons.
 
@@ -24,7 +22,7 @@ Unlike OpenGL, Vulkan allows construction and reuse of command buffers (command 
 Depending on your scene, you may be able to record hundreds of draw calls once,
 then use them many times over, amortizing the cost of the command buffer construction.
 
-Dispatchable handles
+# Dispatchable handles
 
 Vulkan has two kinds of handles: dispatchable and non-dispatchable.
 In Vulkan, virtually all functions take a dispatchable handle as their first argument.
@@ -36,8 +34,7 @@ At first glance, it may make sense to treat VkBindBufferMemory as a method on Vk
 However, Vulkan later added VkBindBufferMemory2, which allows binding multiple buffers to memory at once.
 To avoid splitting related methods across multiple receivers, we define both on VkDevice.
 
-
-Error handling
+# Error handling
 
 In Vulkan, functions that can fail, or partially succeed, return a VkResult.
 Positive values indicate success, while negative values indicate failure.
