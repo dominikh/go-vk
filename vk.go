@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"structs"
 	"time"
 	"unsafe"
 )
@@ -1123,17 +1124,19 @@ func (dev *PhysicalDevice) Properties() *PhysicalDeviceProperties {
 }
 
 type MemoryType struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	PropertyFlags MemoryPropertyFlags
 	HeapIndex     uint32
-
-	// must be kept identical to C struct
 }
 
 type MemoryHeap struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Size  DeviceSize
 	Flags MemoryHeapFlags
-
-	// must be kept identical to C struct
 }
 
 type PhysicalDeviceMemoryProperties struct {
@@ -1401,27 +1404,30 @@ func (dev *PhysicalDevice) Features2(features *PhysicalDeviceFeatures2) {
 }
 
 type QueueFamilyProperties struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	QueueFlags                  QueueFlags
 	QueueCount                  uint32
 	TimestampValidBits          uint32
 	MinImageTransferGranularity Extent3D
-
-	// must be kept identical to C struct
 }
 
 type Extent2D struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Width  uint32
 	Height uint32
-
-	// must be kept identical to C struct
 }
 
 type Extent3D struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Width  uint32
 	Height uint32
 	Depth  uint32
-
-	// must be kept identical to C struct
 }
 
 func (dev *PhysicalDevice) QueueFamilyProperties() []QueueFamilyProperties {
@@ -1807,11 +1813,12 @@ type ClearAttachment struct {
 }
 
 type ClearRect struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Rect           Rect2D
 	BaseArrayLayer uint32
 	LayerCount     uint32
-
-	// must be kept identical to C struct
 }
 
 func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects []ClearRect) {
@@ -1937,11 +1944,12 @@ func (buf *CommandBuffer) BindIndexBuffer(buffer Buffer, offset DeviceSize, inde
 }
 
 type BufferCopy struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	SrcOffset DeviceSize
 	DstOffset DeviceSize
 	Size      DeviceSize
-
-	// must be kept identical to C struct
 }
 
 func (buf *CommandBuffer) CopyBuffer(srcBuffer, dstBuffer Buffer, regions []BufferCopy) {
@@ -1955,23 +1963,25 @@ func (buf *CommandBuffer) CopyBuffer(srcBuffer, dstBuffer Buffer, regions []Buff
 }
 
 type BufferImageCopy struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	BufferOfset       DeviceSize
 	BufferRowLength   uint32
 	BufferImageHeight uint32
 	ImageSubresource  ImageSubresourceLayers
 	ImageOffset       Offset3D
 	ImageExtent       Extent3D
-
-	// must be kept identical to C struct
 }
 
 type ImageSubresourceLayers struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	AspectMask     ImageAspectFlags
 	MipLevel       uint32
 	BaseArrayLayer uint32
 	LayerCount     uint32
-
-	// must be kept identical to C struct
 }
 
 func (buf *CommandBuffer) CopyBufferToImage(srcBuffer Buffer, dstImage Image, dstImageLayout ImageLayout, regions []BufferImageCopy) {
@@ -1986,13 +1996,14 @@ func (buf *CommandBuffer) CopyBufferToImage(srcBuffer Buffer, dstImage Image, ds
 }
 
 type ImageCopy struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	SrcSubresource ImageSubresourceLayers
 	SrcOffset      Offset3D
 	DstSubresource ImageSubresourceLayers
 	DstOffset      Offset3D
 	Extent         Extent3D
-
-	// must be kept identical to C struct
 }
 
 func (buf *CommandBuffer) CopyImage(srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regions []ImageCopy) {
@@ -2063,12 +2074,13 @@ func (buf *CommandBuffer) CopyQueryPoolResults(
 }
 
 type ImageBlit struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	SrcSubresource ImageSubresourceLayers
 	SrcOffsets     [2]Offset3D
 	DstSubresource ImageSubresourceLayers
 	DstOffsets     [2]Offset3D
-
-	// must be kept identical to C struct
 }
 
 func (buf *CommandBuffer) BlitImage(
@@ -2354,13 +2366,14 @@ func (buf *CommandBuffer) PipelineBarrier(
 }
 
 type ImageResolve struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	SrcSubresource ImageSubresourceLayers
 	SrcOffset      Offset3D
 	DstSubresource ImageSubresourceLayers
 	DstOffset      Offset3D
 	Extent         Extent3D
-
-	// must be kept identical to C struct
 }
 
 // ResolveImage resolves a multisample image to a non-multisample image.
@@ -2517,10 +2530,11 @@ type Image struct {
 // and containing additional metadata are used for that purpose.
 // Views must be created on images of compatible types, and must represent a valid subset of image subresources.
 type ImageView struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkImageView)
 	hnd C.VkImageView
-
-	// must be kept identical to C struct
 }
 
 type ImageViewCreateInfo struct {
@@ -2533,22 +2547,24 @@ type ImageViewCreateInfo struct {
 }
 
 type ComponentMapping struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	R ComponentSwizzle
 	G ComponentSwizzle
 	B ComponentSwizzle
 	A ComponentSwizzle
-
-	// must be kept identical to C struct
 }
 
 type ImageSubresourceRange struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	AspectMask     ImageAspectFlags
 	BaseMipLevel   uint32
 	LevelCount     uint32
 	BaseArrayLayer uint32
 	LayerCount     uint32
-
-	// must be kept identical to C struct
 }
 
 func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error) {
@@ -2647,20 +2663,22 @@ func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStat
 }
 
 type VertexInputBindingDescription struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Binding   uint32
 	Stride    uint32
 	InputRate VertexInputRate
-
-	// must be kept identical to C struct
 }
 
 type VertexInputAttributeDescription struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Location uint32
 	Binding  uint32
 	Format   Format
 	Offset   uint32
-
-	// must be kept identical to C struct
 }
 
 type PipelineInputAssemblyStateCreateInfo struct {
@@ -2682,36 +2700,40 @@ func (info *PipelineInputAssemblyStateCreateInfo) c() *C.VkPipelineInputAssembly
 }
 
 type Viewport struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	X        float32
 	Y        float32
 	Width    float32
 	Height   float32
 	MinDepth float32
 	MaxDepth float32
-
-	// must be kept identical to C struct
 }
 
 type Rect2D struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Offset Offset2D
 	Extent Extent2D
-
-	// must be kept identical to C struct
 }
 
 type Offset2D struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	X int32
 	Y int32
-
-	// must be kept identical to C struct
 }
 
 type Offset3D struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	X int32
 	Y int32
 	Z int32
-
-	// must be kept identical to C struct
 }
 
 type PipelineViewportStateCreateInfo struct {
@@ -2962,18 +2984,20 @@ func (dev *Device) DestroyPipelineLayout(layout PipelineLayout) {
 // a set of shader stages that can access the binding,
 // and (if using immutable samplers) an array of sampler descriptors.
 type DescriptorSetLayout struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSetLayout)
 	hnd C.VkDescriptorSetLayout
-
-	// must be kept identical to C struct
 }
 
 type PushConstantRange struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	StageFlags ShaderStageFlags
 	Offset     uint32
 	Size       uint32
-
-	// must be kept identical to C struct
 }
 
 type PipelineTessellationStateCreateInfo struct {
@@ -3174,6 +3198,8 @@ func (dev *Device) DestroyPipeline(pipeline Pipeline) {
 }
 
 type AttachmentDescription struct {
+	_ structs.HostLayout
+
 	Flags          AttachmentDescriptionFlags
 	Format         Format
 	Samples        SampleCountFlags
@@ -3183,15 +3209,13 @@ type AttachmentDescription struct {
 	StencilStoreOp AttachmentStoreOp
 	InitialLayout  ImageLayout
 	FinalLayout    ImageLayout
-
-	// must be kept identical to C struct
 }
 
 type AttachmentReference struct {
+	_ structs.HostLayout
+
 	Attachment uint32
 	Layout     ImageLayout
-
-	// must be kept identical to C struct
 }
 
 type SubpassDescription struct {
@@ -3212,6 +3236,9 @@ type RenderPassCreateInfo struct {
 }
 
 type SubpassDependency struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	SrcSubpass      uint32
 	DstSubpass      uint32
 	SrcStageMask    PipelineStageFlags
@@ -3219,8 +3246,6 @@ type SubpassDependency struct {
 	SrcAccessMask   AccessFlags
 	DstAccessMask   AccessFlags
 	DependencyFlags DependencyFlags
-
-	// must be kept identical to C struct
 }
 
 func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, error) {
@@ -3353,10 +3378,11 @@ type ClearColorValueInt32s [4]int32
 type ClearColorValueUint32s [4]uint32
 
 type ClearDepthStencilValue struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Depth   float32
 	Stencil uint32
-
-	// must be kept identical to C struct
 }
 
 func (ClearColorValueFloat32s) isClearColorValue() {}
@@ -3386,10 +3412,11 @@ func (ClearDepthStencilValue) isClearValue()  {}
 // These mechanisms indirectly enable applications to share semaphore state
 // between two or more semaphores and other synchronization primitives across process and API boundaries.
 type Semaphore struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSemaphore)
 	hnd C.VkSemaphore
-
-	// must be kept identical to C struct
 }
 
 type SemaphoreCreateInfo struct {
@@ -3514,10 +3541,11 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 // These mechanisms indirectly enable applications to share fence state between
 // two or more fences and other synchronization primitives across process and API boundaries.
 type Fence struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkFence)
 	hnd C.VkFence
-
-	// must be kept identical to C struct
 }
 
 type FenceCreateInfo struct {
@@ -3585,10 +3613,11 @@ type BufferCreateInfo struct {
 // via descriptor sets or via certain commands,
 // or by directly specifying them as parameters to certain commands.
 type Buffer struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkBuffer)
 	hnd C.VkBuffer
-
-	// must be kept identical to C struct
 }
 
 func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
@@ -3627,11 +3656,12 @@ func (dev *Device) DestroyBuffer(buf Buffer) {
 }
 
 type MemoryRequirements struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Size           DeviceSize
 	Alignment      DeviceSize
 	MemoryTypeBits uint32
-
-	// must be kept identical to C struct
 }
 
 func (dev *Device) BufferMemoryRequirements(buf Buffer) MemoryRequirements {
@@ -3823,10 +3853,11 @@ func (dev *Device) DestroyImage(img Image) {
 // No command exists to wait for an event to become signaled on the host,
 // but the current state of an event can be queried.
 type Event struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkEvent)
 	hnd C.VkEvent
-
-	// must be kept identical to C struct
 }
 
 type EventCreateInfo struct {
@@ -3923,10 +3954,11 @@ func (dev *Device) DestroyQueryPool(queryPool QueryPool) {
 // which is used by the implementation to read image data
 // and apply filtering and other transformations for the shader.
 type Sampler struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSampler)
 	hnd C.VkSampler
-
-	// must be kept identical to C struct
 }
 
 type SamplerCreateInfo struct {
@@ -4041,10 +4073,11 @@ func (dev *Device) DestroyBufferView(view BufferView) {
 // The contents of the pipeline cache objects are managed by the implementation.
 // Applications can manage the host memory consumed by a pipeline cache object and control the amount of data retrieved from a pipeline cache object.
 type PipelineCache struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkPipelineCache)
 	hnd C.VkPipelineCache
-
-	// must be kept identical to C struct
 }
 
 type PipelineCacheCreateInfo struct {
@@ -4110,10 +4143,11 @@ func (dev *Device) PipelineCacheData(cache PipelineCache) ([]byte, error) {
 }
 
 type DescriptorPoolSize struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Type            DescriptorType
 	DescriptorCount uint32
-
-	// must be kept identical to C struct
 }
 
 type DescriptorPoolCreateInfo struct {
@@ -4353,10 +4387,11 @@ func (info *DescriptorSetAllocateInfo) c() *C.VkDescriptorSetAllocateInfo {
 }
 
 type DescriptorSet struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDescriptorSet)
 	hnd C.VkDescriptorSet
-
-	// must be kept identical to C struct
 }
 
 func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]DescriptorSet, error) {
@@ -4455,19 +4490,21 @@ func (set *WriteDescriptorSet) c(cset *C.VkWriteDescriptorSet) {
 }
 
 type DescriptorBufferInfo struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Buffer Buffer
 	Offset DeviceSize
 	Range  DeviceSize
-
-	// must be kept identical to C struct
 }
 
 type DescriptorImageInfo struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Sampler     Sampler
 	ImageView   ImageView
 	ImageLayout ImageLayout
-
-	// must be kept identical to C struct
 }
 
 type CopyDescriptorSet struct {
@@ -4550,11 +4587,12 @@ func (dev *Device) FlushMappedMemoryRanges(ranges []MappedMemoryRange) error {
 }
 
 type FormatProperties struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	LinearTilingFeatures  FormatFeatureFlags
 	OptimalTilingFeatures FormatFeatureFlags
 	BufferFeatures        FormatFeatureFlags
-
-	// must be kept identical to C struct
 }
 
 func (dev *PhysicalDevice) FormatProperties(format Format) FormatProperties {
@@ -4581,13 +4619,14 @@ func (dev *PhysicalDevice) FormatProperties2(format Format, props *FormatPropert
 }
 
 type ImageFormatProperties struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	MaxExtent       Extent3D
 	MaxMipLevels    uint32
 	MaxArrayLayers  uint32
 	SampleCounts    SampleCountFlags
 	MaxResourceSize DeviceSize
-
-	// must be kept identical to C struct
 }
 
 func (dev *PhysicalDevice) ImageFormatProperties(

@@ -8,6 +8,7 @@ package vk
 import "C"
 import (
 	"fmt"
+	"structs"
 	"unsafe"
 )
 
@@ -26,6 +27,9 @@ func (hnd SurfaceKHR) String() string {
 }
 
 type SurfaceCapabilities struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	MinImageCount           uint32
 	MaxImageCount           uint32
 	CurrentExtent           Extent2D
@@ -36,15 +40,14 @@ type SurfaceCapabilities struct {
 	CurrentTransform        SurfaceTransformFlagsKHR
 	SupportedCompositeAlpha CompositeAlphaFlagsKHR
 	SupportedUsageFlags     ImageUsageFlags
-
-	// must be kept identical to C struct
 }
 
 type SurfaceFormatKHR struct {
+	// must be kept identical to C struct
+	_ structs.HostLayout
+
 	Format     Format
 	ColorSpace ColorSpaceKHR
-
-	// must be kept identical to C struct
 }
 
 func (dev *PhysicalDevice) SurfaceSupportKHR(queueFamilyIndex uint32, surface SurfaceKHR) (bool, error) {
