@@ -3,7 +3,6 @@
 
 package vk
 
-// #cgo pkg-config: vulkan
 // #include <stdlib.h>
 // #include "vk.h"
 import "C"

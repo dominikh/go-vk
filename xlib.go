@@ -5,7 +5,7 @@
 
 package vk
 
-// #cgo pkg-config: vulkan x11
+// #cgo pkg-config: x11
 // #include "vk.h"
 // #include "xlib.h"
 import "C"
