@@ -17,15 +17,12 @@ VkResult domVkAllocateCommandBuffers(PFN_vkAllocateCommandBuffers fp, VkDevice d
 VkResult domVkAllocateDescriptorSets(PFN_vkAllocateDescriptorSets fp, VkDevice device, const VkDescriptorSetAllocateInfo* pAllocateInfo, VkDescriptorSet* pDescriptorSets);
 VkResult domVkAllocateMemory(PFN_vkAllocateMemory fp, VkDevice device, const VkMemoryAllocateInfo* pAllocateInfo, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory);
 VkResult domVkBeginCommandBuffer(PFN_vkBeginCommandBuffer fp, VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo* pBeginInfo);
-VkResult domVkBindAccelerationStructureMemoryNVX(PFN_vkBindAccelerationStructureMemoryNVX fp, VkDevice device, uint32_t bindInfoCount, const VkBindAccelerationStructureMemoryInfoNVX* pBindInfos);
 VkResult domVkBindBufferMemory(PFN_vkBindBufferMemory fp, VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset);
 VkResult domVkBindBufferMemory2(PFN_vkBindBufferMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos);
 VkResult domVkBindBufferMemory2KHR(PFN_vkBindBufferMemory2KHR fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos);
 VkResult domVkBindImageMemory(PFN_vkBindImageMemory fp, VkDevice device, VkImage image, VkDeviceMemory memory, VkDeviceSize memoryOffset);
 VkResult domVkBindImageMemory2(PFN_vkBindImageMemory2 fp, VkDevice device, uint32_t bindInfoCount, const VkBindImageMemoryInfo* pBindInfos);
 VkResult domVkBindImageMemory2KHR(PFN_vkBindImageMemory2KHR fp, VkDevice device, uint32_t bindInfoCount, const VkBindImageMemoryInfo* pBindInfos);
-VkResult domVkCompileDeferredNVX(PFN_vkCompileDeferredNVX fp, VkDevice device, VkPipeline pipeline, uint32_t shader);
-VkResult domVkCreateAccelerationStructureNVX(PFN_vkCreateAccelerationStructureNVX fp, VkDevice device, const VkAccelerationStructureCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkAccelerationStructureNVX* pAccelerationStructure);
 VkResult domVkCreateBuffer(PFN_vkCreateBuffer fp, VkDevice device, const VkBufferCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBuffer* pBuffer);
 VkResult domVkCreateBufferView(PFN_vkCreateBufferView fp, VkDevice device, const VkBufferViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkBufferView* pView);
 VkResult domVkCreateCommandPool(PFN_vkCreateCommandPool fp, VkDevice device, const VkCommandPoolCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkCommandPool* pCommandPool);
@@ -45,13 +42,10 @@ VkResult domVkCreateFramebuffer(PFN_vkCreateFramebuffer fp, VkDevice device, con
 VkResult domVkCreateGraphicsPipelines(PFN_vkCreateGraphicsPipelines fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
 VkResult domVkCreateImage(PFN_vkCreateImage fp, VkDevice device, const VkImageCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImage* pImage);
 VkResult domVkCreateImageView(PFN_vkCreateImageView fp, VkDevice device, const VkImageViewCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkImageView* pView);
-VkResult domVkCreateIndirectCommandsLayoutNVX(PFN_vkCreateIndirectCommandsLayoutNVX fp, VkDevice device, const VkIndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkIndirectCommandsLayoutNVX* pIndirectCommandsLayout);
 VkResult domVkCreateInstance(PFN_vkCreateInstance fp, const VkInstanceCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkInstance* pInstance);
-VkResult domVkCreateObjectTableNVX(PFN_vkCreateObjectTableNVX fp, VkDevice device, const VkObjectTableCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkObjectTableNVX* pObjectTable);
 VkResult domVkCreatePipelineCache(PFN_vkCreatePipelineCache fp, VkDevice device, const VkPipelineCacheCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineCache* pPipelineCache);
 VkResult domVkCreatePipelineLayout(PFN_vkCreatePipelineLayout fp, VkDevice device, const VkPipelineLayoutCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkPipelineLayout* pPipelineLayout);
 VkResult domVkCreateQueryPool(PFN_vkCreateQueryPool fp, VkDevice device, const VkQueryPoolCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkQueryPool* pQueryPool);
-VkResult domVkCreateRaytracingPipelinesNVX(PFN_vkCreateRaytracingPipelinesNVX fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkRaytracingPipelineCreateInfoNVX* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines);
 VkResult domVkCreateRenderPass(PFN_vkCreateRenderPass fp, VkDevice device, const VkRenderPassCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
 VkResult domVkCreateRenderPass2KHR(PFN_vkCreateRenderPass2KHR fp, VkDevice device, const VkRenderPassCreateInfo2KHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass);
 VkResult domVkCreateSampler(PFN_vkCreateSampler fp, VkDevice device, const VkSamplerCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSampler* pSampler);
@@ -77,7 +71,6 @@ VkResult domVkEnumeratePhysicalDeviceGroupsKHR(PFN_vkEnumeratePhysicalDeviceGrou
 VkResult domVkEnumeratePhysicalDevices(PFN_vkEnumeratePhysicalDevices fp, VkInstance instance, uint32_t* pPhysicalDeviceCount, VkPhysicalDevice* pPhysicalDevices);
 VkResult domVkFlushMappedMemoryRanges(PFN_vkFlushMappedMemoryRanges fp, VkDevice device, uint32_t memoryRangeCount, const VkMappedMemoryRange* pMemoryRanges);
 VkResult domVkFreeDescriptorSets(PFN_vkFreeDescriptorSets fp, VkDevice device, VkDescriptorPool descriptorPool, uint32_t descriptorSetCount, const VkDescriptorSet* pDescriptorSets);
-VkResult domVkGetAccelerationStructureHandleNVX(PFN_vkGetAccelerationStructureHandleNVX fp, VkDevice device, VkAccelerationStructureNVX accelerationStructure, size_t dataSize, void* pData);
 VkResult domVkGetCalibratedTimestampsEXT(PFN_vkGetCalibratedTimestampsEXT fp, VkDevice device, uint32_t timestampCount, const VkCalibratedTimestampInfoEXT* pTimestampInfos, uint64_t* pTimestamps, uint64_t* pMaxDeviation);
 VkResult domVkGetDeviceGroupPresentCapabilitiesKHR(PFN_vkGetDeviceGroupPresentCapabilitiesKHR fp, VkDevice device, VkDeviceGroupPresentCapabilitiesKHR* pDeviceGroupPresentCapabilities);
 VkResult domVkGetDeviceGroupSurfacePresentModesKHR(PFN_vkGetDeviceGroupSurfacePresentModesKHR fp, VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR* pModes);
@@ -113,7 +106,6 @@ VkResult domVkGetPhysicalDeviceSurfacePresentModesKHR(PFN_vkGetPhysicalDeviceSur
 VkResult domVkGetPhysicalDeviceSurfaceSupportKHR(PFN_vkGetPhysicalDeviceSurfaceSupportKHR fp, VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, VkSurfaceKHR surface, VkBool32* pSupported);
 VkResult domVkGetPipelineCacheData(PFN_vkGetPipelineCacheData fp, VkDevice device, VkPipelineCache pipelineCache, size_t* pDataSize, void* pData);
 VkResult domVkGetQueryPoolResults(PFN_vkGetQueryPoolResults fp, VkDevice device, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount, size_t dataSize, void* pData, VkDeviceSize stride, VkQueryResultFlags flags);
-VkResult domVkGetRaytracingShaderHandlesNVX(PFN_vkGetRaytracingShaderHandlesNVX fp, VkDevice device, VkPipeline pipeline, uint32_t firstGroup, uint32_t groupCount, size_t dataSize, void* pData);
 VkResult domVkGetRefreshCycleDurationGOOGLE(PFN_vkGetRefreshCycleDurationGOOGLE fp, VkDevice device, VkSwapchainKHR swapchain, VkRefreshCycleDurationGOOGLE* pDisplayTimingProperties);
 VkResult domVkGetSemaphoreFdKHR(PFN_vkGetSemaphoreFdKHR fp, VkDevice device, const VkSemaphoreGetFdInfoKHR* pGetFdInfo, int* pFd);
 VkResult domVkGetShaderInfoAMD(PFN_vkGetShaderInfoAMD fp, VkDevice device, VkPipeline pipeline, VkShaderStageFlagBits shaderStage, VkShaderInfoTypeAMD infoType, size_t* pInfoSize, void* pInfo);
@@ -133,7 +125,6 @@ VkResult domVkQueueSubmit(PFN_vkQueueSubmit fp, VkQueue queue, uint32_t submitCo
 VkResult domVkQueueWaitIdle(PFN_vkQueueWaitIdle fp, VkQueue queue);
 VkResult domVkRegisterDeviceEventEXT(PFN_vkRegisterDeviceEventEXT fp, VkDevice device, const VkDeviceEventInfoEXT* pDeviceEventInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence);
 VkResult domVkRegisterDisplayEventEXT(PFN_vkRegisterDisplayEventEXT fp, VkDevice device, VkDisplayKHR display, const VkDisplayEventInfoEXT* pDisplayEventInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence);
-VkResult domVkRegisterObjectsNVX(PFN_vkRegisterObjectsNVX fp, VkDevice device, VkObjectTableNVX objectTable, uint32_t objectCount, const VkObjectTableEntryNVX* const*    ppObjectTableEntries, const uint32_t* pObjectIndices);
 VkResult domVkReleaseDisplayEXT(PFN_vkReleaseDisplayEXT fp, VkPhysicalDevice physicalDevice, VkDisplayKHR display);
 VkResult domVkResetCommandBuffer(PFN_vkResetCommandBuffer fp, VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
 VkResult domVkResetCommandPool(PFN_vkResetCommandPool fp, VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
@@ -143,7 +134,6 @@ VkResult domVkResetFences(PFN_vkResetFences fp, VkDevice device, uint32_t fenceC
 VkResult domVkSetDebugUtilsObjectNameEXT(PFN_vkSetDebugUtilsObjectNameEXT fp, VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo);
 VkResult domVkSetDebugUtilsObjectTagEXT(PFN_vkSetDebugUtilsObjectTagEXT fp, VkDevice device, const VkDebugUtilsObjectTagInfoEXT* pTagInfo);
 VkResult domVkSetEvent(PFN_vkSetEvent fp, VkDevice device, VkEvent event);
-VkResult domVkUnregisterObjectsNVX(PFN_vkUnregisterObjectsNVX fp, VkDevice device, VkObjectTableNVX objectTable, uint32_t objectCount, const VkObjectEntryTypeNVX* pObjectEntryTypes, const uint32_t* pObjectIndices);
 VkResult domVkWaitForFences(PFN_vkWaitForFences fp, VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);
 void     domVkCmdBeginConditionalRenderingEXT(PFN_vkCmdBeginConditionalRenderingEXT fp, VkCommandBuffer commandBuffer, const VkConditionalRenderingBeginInfoEXT* pConditionalRenderingBegin);
 void     domVkCmdBeginDebugUtilsLabelEXT(PFN_vkCmdBeginDebugUtilsLabelEXT fp, VkCommandBuffer commandBuffer, const VkDebugUtilsLabelEXT* pLabelInfo);
@@ -159,11 +149,9 @@ void     domVkCmdBindShadingRateImageNV(PFN_vkCmdBindShadingRateImageNV fp, VkCo
 void     domVkCmdBindTransformFeedbackBuffersEXT(PFN_vkCmdBindTransformFeedbackBuffersEXT fp, VkCommandBuffer commandBuffer, uint32_t firstBinding, uint32_t bindingCount, const VkBuffer* pBuffers, const VkDeviceSize* pOffsets, const VkDeviceSize* pSizes);
 void     domVkCmdBindVertexBuffers(PFN_vkCmdBindVertexBuffers fp, VkCommandBuffer commandBuffer, uint32_t firstBinding, uint32_t bindingCount, const VkBuffer* pBuffers, const VkDeviceSize* pOffsets);
 void     domVkCmdBlitImage(PFN_vkCmdBlitImage fp, VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageBlit* pRegions, VkFilter filter);
-void     domVkCmdBuildAccelerationStructureNVX(PFN_vkCmdBuildAccelerationStructureNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureTypeNVX type, uint32_t instanceCount, VkBuffer instanceData, VkDeviceSize instanceOffset, uint32_t geometryCount, const VkGeometryNVX* pGeometries, VkBuildAccelerationStructureFlagsNVX flags, VkBool32 update, VkAccelerationStructureNVX dst, VkAccelerationStructureNVX src, VkBuffer scratch, VkDeviceSize scratchOffset);
 void     domVkCmdClearAttachments(PFN_vkCmdClearAttachments fp, VkCommandBuffer commandBuffer, uint32_t attachmentCount, const VkClearAttachment* pAttachments, uint32_t rectCount, const VkClearRect* pRects);
 void     domVkCmdClearColorImage(PFN_vkCmdClearColorImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearColorValue* pColor, uint32_t rangeCount, const VkImageSubresourceRange* pRanges);
 void     domVkCmdClearDepthStencilImage(PFN_vkCmdClearDepthStencilImage fp, VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout, const VkClearDepthStencilValue* pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange* pRanges);
-void     domVkCmdCopyAccelerationStructureNVX(PFN_vkCmdCopyAccelerationStructureNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureNVX dst, VkAccelerationStructureNVX src, VkCopyAccelerationStructureModeNVX mode);
 void     domVkCmdCopyBuffer(PFN_vkCmdCopyBuffer fp, VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkBuffer dstBuffer, uint32_t regionCount, const VkBufferCopy* pRegions);
 void     domVkCmdCopyBufferToImage(PFN_vkCmdCopyBufferToImage fp, VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkBufferImageCopy* pRegions);
 void     domVkCmdCopyImage(PFN_vkCmdCopyImage fp, VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageCopy* pRegions);
@@ -201,11 +189,9 @@ void     domVkCmdInsertDebugUtilsLabelEXT(PFN_vkCmdInsertDebugUtilsLabelEXT fp, 
 void     domVkCmdNextSubpass(PFN_vkCmdNextSubpass fp, VkCommandBuffer commandBuffer, VkSubpassContents contents);
 void     domVkCmdNextSubpass2KHR(PFN_vkCmdNextSubpass2KHR fp, VkCommandBuffer commandBuffer, const VkSubpassBeginInfoKHR*      pSubpassBeginInfo, const VkSubpassEndInfoKHR*        pSubpassEndInfo);
 void     domVkCmdPipelineBarrier(PFN_vkCmdPipelineBarrier fp, VkCommandBuffer commandBuffer, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags, uint32_t memoryBarrierCount, const VkMemoryBarrier* pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier* pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier* pImageMemoryBarriers);
-void     domVkCmdProcessCommandsNVX(PFN_vkCmdProcessCommandsNVX fp, VkCommandBuffer commandBuffer, const VkCmdProcessCommandsInfoNVX* pProcessCommandsInfo);
 void     domVkCmdPushConstants(PFN_vkCmdPushConstants fp, VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void* pValues);
 void     domVkCmdPushDescriptorSetKHR(PFN_vkCmdPushDescriptorSetKHR fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipelineLayout layout, uint32_t set, uint32_t descriptorWriteCount, const VkWriteDescriptorSet* pDescriptorWrites);
 void     domVkCmdPushDescriptorSetWithTemplateKHR(PFN_vkCmdPushDescriptorSetWithTemplateKHR fp, VkCommandBuffer commandBuffer, VkDescriptorUpdateTemplate descriptorUpdateTemplate, VkPipelineLayout layout, uint32_t set, const void* pData);
-void     domVkCmdReserveSpaceForCommandsNVX(PFN_vkCmdReserveSpaceForCommandsNVX fp, VkCommandBuffer commandBuffer, const VkCmdReserveSpaceForCommandsInfoNVX* pReserveSpaceInfo);
 void     domVkCmdResetEvent(PFN_vkCmdResetEvent fp, VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask);
 void     domVkCmdResetQueryPool(PFN_vkCmdResetQueryPool fp, VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
 void     domVkCmdResolveImage(PFN_vkCmdResolveImage fp, VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageResolve* pRegions);
@@ -228,14 +214,11 @@ void     domVkCmdSetStencilWriteMask(PFN_vkCmdSetStencilWriteMask fp, VkCommandB
 void     domVkCmdSetViewport(PFN_vkCmdSetViewport fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewport* pViewports);
 void     domVkCmdSetViewportShadingRatePaletteNV(PFN_vkCmdSetViewportShadingRatePaletteNV fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkShadingRatePaletteNV* pShadingRatePalettes);
 void     domVkCmdSetViewportWScalingNV(PFN_vkCmdSetViewportWScalingNV fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewportWScalingNV* pViewportWScalings);
-void     domVkCmdTraceRaysNVX(PFN_vkCmdTraceRaysNVX fp, VkCommandBuffer commandBuffer, VkBuffer raygenShaderBindingTableBuffer, VkDeviceSize raygenShaderBindingOffset, VkBuffer missShaderBindingTableBuffer, VkDeviceSize missShaderBindingOffset, VkDeviceSize missShaderBindingStride, VkBuffer hitShaderBindingTableBuffer, VkDeviceSize hitShaderBindingOffset, VkDeviceSize hitShaderBindingStride, uint32_t width, uint32_t height);
 void     domVkCmdUpdateBuffer(PFN_vkCmdUpdateBuffer fp, VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize dataSize, const void* pData);
 void     domVkCmdWaitEvents(PFN_vkCmdWaitEvents fp, VkCommandBuffer commandBuffer, uint32_t eventCount, const VkEvent* pEvents, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, uint32_t memoryBarrierCount, const VkMemoryBarrier* pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier* pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier* pImageMemoryBarriers);
-void     domVkCmdWriteAccelerationStructurePropertiesNVX(PFN_vkCmdWriteAccelerationStructurePropertiesNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureNVX accelerationStructure, VkQueryType queryType, VkQueryPool queryPool, uint32_t query);
 void     domVkCmdWriteBufferMarkerAMD(PFN_vkCmdWriteBufferMarkerAMD fp, VkCommandBuffer commandBuffer, VkPipelineStageFlagBits pipelineStage, VkBuffer dstBuffer, VkDeviceSize dstOffset, uint32_t marker);
 void     domVkCmdWriteTimestamp(PFN_vkCmdWriteTimestamp fp, VkCommandBuffer commandBuffer, VkPipelineStageFlagBits pipelineStage, VkQueryPool queryPool, uint32_t query);
 void     domVkDebugReportMessageEXT(PFN_vkDebugReportMessageEXT fp, VkInstance instance, VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage);
-void     domVkDestroyAccelerationStructureNVX(PFN_vkDestroyAccelerationStructureNVX fp, VkDevice device, VkAccelerationStructureNVX accelerationStructure, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyBuffer(PFN_vkDestroyBuffer fp, VkDevice device, VkBuffer buffer, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyBufferView(PFN_vkDestroyBufferView fp, VkDevice device, VkBufferView bufferView, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyCommandPool(PFN_vkDestroyCommandPool fp, VkDevice device, VkCommandPool commandPool, const VkAllocationCallbacks* pAllocator);
@@ -251,9 +234,7 @@ void     domVkDestroyFence(PFN_vkDestroyFence fp, VkDevice device, VkFence fence
 void     domVkDestroyFramebuffer(PFN_vkDestroyFramebuffer fp, VkDevice device, VkFramebuffer framebuffer, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyImage(PFN_vkDestroyImage fp, VkDevice device, VkImage image, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyImageView(PFN_vkDestroyImageView fp, VkDevice device, VkImageView imageView, const VkAllocationCallbacks* pAllocator);
-void     domVkDestroyIndirectCommandsLayoutNVX(PFN_vkDestroyIndirectCommandsLayoutNVX fp, VkDevice device, VkIndirectCommandsLayoutNVX indirectCommandsLayout, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyInstance(PFN_vkDestroyInstance fp, VkInstance instance, const VkAllocationCallbacks* pAllocator);
-void     domVkDestroyObjectTableNVX(PFN_vkDestroyObjectTableNVX fp, VkDevice device, VkObjectTableNVX objectTable, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyPipeline(PFN_vkDestroyPipeline fp, VkDevice device, VkPipeline pipeline, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyPipelineCache(PFN_vkDestroyPipelineCache fp, VkDevice device, VkPipelineCache pipelineCache, const VkAllocationCallbacks* pAllocator);
 void     domVkDestroyPipelineLayout(PFN_vkDestroyPipelineLayout fp, VkDevice device, VkPipelineLayout pipelineLayout, const VkAllocationCallbacks* pAllocator);
@@ -269,8 +250,6 @@ void     domVkDestroySwapchainKHR(PFN_vkDestroySwapchainKHR fp, VkDevice device,
 void     domVkDestroyValidationCacheEXT(PFN_vkDestroyValidationCacheEXT fp, VkDevice device, VkValidationCacheEXT validationCache, const VkAllocationCallbacks* pAllocator);
 void     domVkFreeCommandBuffers(PFN_vkFreeCommandBuffers fp, VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers);
 void     domVkFreeMemory(PFN_vkFreeMemory fp, VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks* pAllocator);
-void     domVkGetAccelerationStructureMemoryRequirementsNVX(PFN_vkGetAccelerationStructureMemoryRequirementsNVX fp, VkDevice device, const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo, VkMemoryRequirements2KHR* pMemoryRequirements);
-void     domVkGetAccelerationStructureScratchMemoryRequirementsNVX(PFN_vkGetAccelerationStructureScratchMemoryRequirementsNVX fp, VkDevice device, const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo, VkMemoryRequirements2KHR* pMemoryRequirements);
 void     domVkGetBufferMemoryRequirements(PFN_vkGetBufferMemoryRequirements fp, VkDevice device, VkBuffer buffer, VkMemoryRequirements* pMemoryRequirements);
 void     domVkGetBufferMemoryRequirements2(PFN_vkGetBufferMemoryRequirements2 fp, VkDevice device, const VkBufferMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements);
 void     domVkGetBufferMemoryRequirements2KHR(PFN_vkGetBufferMemoryRequirements2KHR fp, VkDevice device, const VkBufferMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements);
@@ -300,7 +279,6 @@ void     domVkGetPhysicalDeviceFeatures2KHR(PFN_vkGetPhysicalDeviceFeatures2KHR 
 void     domVkGetPhysicalDeviceFormatProperties(PFN_vkGetPhysicalDeviceFormatProperties fp, VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties* pFormatProperties);
 void     domVkGetPhysicalDeviceFormatProperties2(PFN_vkGetPhysicalDeviceFormatProperties2 fp, VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties2* pFormatProperties);
 void     domVkGetPhysicalDeviceFormatProperties2KHR(PFN_vkGetPhysicalDeviceFormatProperties2KHR fp, VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties2* pFormatProperties);
-void     domVkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(PFN_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX fp, VkPhysicalDevice physicalDevice, VkDeviceGeneratedCommandsFeaturesNVX* pFeatures, VkDeviceGeneratedCommandsLimitsNVX* pLimits);
 void     domVkGetPhysicalDeviceMemoryProperties(PFN_vkGetPhysicalDeviceMemoryProperties fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties* pMemoryProperties);
 void     domVkGetPhysicalDeviceMemoryProperties2(PFN_vkGetPhysicalDeviceMemoryProperties2 fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties2* pMemoryProperties);
 void     domVkGetPhysicalDeviceMemoryProperties2KHR(PFN_vkGetPhysicalDeviceMemoryProperties2KHR fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties2* pMemoryProperties);

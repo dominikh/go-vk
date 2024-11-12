@@ -217,349 +217,331 @@ const (
 )
 
 const (
-	StructureTypeAccelerationStructureCreateInfoNVX                    StructureType = 1000165001
-	StructureTypeAccelerationStructureMemoryRequirementsInfoNVX        StructureType = 1000165008
-	StructureTypeAcquireNextImageInfoKHR                               StructureType = 1000060010
-	StructureTypeAndroidHardwareBufferFormatPropertiesAndroid          StructureType = 1000129002
-	StructureTypeAndroidHardwareBufferPropertiesAndroid                StructureType = 1000129001
-	StructureTypeAndroidHardwareBufferUsageAndroid                     StructureType = 1000129000
-	StructureTypeAndroidSurfaceCreateInfoKHR                           StructureType = 1000008000
-	StructureTypeAttachmentDescription2KHR                             StructureType = 1000109000
-	StructureTypeAttachmentReference2KHR                               StructureType = 1000109001
-	StructureTypeApplicationInfo                                       StructureType = 0
-	StructureTypeBindAccelerationStructureMemoryInfoNVX                StructureType = 1000165006
-	StructureTypeBindBufferMemoryDeviceGroupInfoKHR                    StructureType = 1000060013
-	StructureTypeBindBufferMemoryInfoKHR                               StructureType = 1000157000
-	StructureTypeBindImageMemoryDeviceGroupInfoKHR                     StructureType = 1000060014
-	StructureTypeBindImageMemoryInfoKHR                                StructureType = 1000157001
-	StructureTypeBindImageMemorySwapchainInfoKHR                       StructureType = 1000060009
-	StructureTypeBindImagePlaneMemoryINFO                              StructureType = 1000156002
-	StructureTypeBindImagePlaneMemoryInfoKHR                           StructureType = 1000156002
-	StructureTypeBufferMemoryRequirementsInfo2                         StructureType = 1000146000
-	StructureTypeBufferMemoryRequirementsInfo2KHR                      StructureType = 1000146000
-	StructureTypeBindBufferMemoryDeviceGroupInfo                       StructureType = 1000060013
-	StructureTypeBindBufferMemoryInfo                                  StructureType = 1000157000
-	StructureTypeBindImageMemoryDeviceGroupInfo                        StructureType = 1000060014
-	StructureTypeBindImageMemoryInfo                                   StructureType = 1000157001
-	StructureTypeBindSparseInfo                                        StructureType = 7
-	StructureTypeBufferCreateInfo                                      StructureType = 12
-	StructureTypeBufferMemoryBarrier                                   StructureType = 44
-	StructureTypeBufferViewCreateInfo                                  StructureType = 13
-	StructureTypeCheckpointDataNV                                      StructureType = 1000206000
-	StructureTypeCmdProcessCommandsInfoNVX                             StructureType = 1000086002
-	StructureTypeCmdReserveSpaceForCommandsInfoNVX                     StructureType = 1000086003
-	StructureTypeCommandBufferInheritanceConditionalRenderingInfoEXT   StructureType = 1000081000
-	StructureTypeConditionalRenderingBeginInfoEXT                      StructureType = 1000081002
-	StructureTypeCommandBufferAllocateInfo                             StructureType = 40
-	StructureTypeCommandBufferBeginInfo                                StructureType = 42
-	StructureTypeCommandBufferInheritanceInfo                          StructureType = 41
-	StructureTypeCommandPoolCreateInfo                                 StructureType = 39
-	StructureTypeComputePipelineCreateInfo                             StructureType = 29
-	StructureTypeCopyDescriptorSet                                     StructureType = 36
-	StructureTypeD3D12FenceSubmitInfoKHR                               StructureType = 1000078002
-	StructureTypeDebugMarkerMarkerInfoEXT                              StructureType = 1000022002
-	StructureTypeDebugMarkerObjectNameInfoEXT                          StructureType = 1000022000
-	StructureTypeDebugMarkerObjectTagInfoEXT                           StructureType = 1000022001
-	StructureTypeDebugReportCallbackCreateInfoEXT                      StructureType = 1000011000
-	StructureTypeDebugReportCreateInfoEXT                              StructureType = 1000011000
-	StructureTypeDebugUtilsLabelEXT                                    StructureType = 1000128002
-	StructureTypeDebugUtilsMessengerCallbackDataEXT                    StructureType = 1000128003
-	StructureTypeDebugUtilsMessengerCreateInfoEXT                      StructureType = 1000128004
-	StructureTypeDebugUtilsObjectNameInfoEXT                           StructureType = 1000128000
-	StructureTypeDebugUtilsObjectTagInfoEXT                            StructureType = 1000128001
-	StructureTypeDedicatedAllocationBufferCreateInfoNV                 StructureType = 1000026001
-	StructureTypeDedicatedAllocationImageCreateInfoNV                  StructureType = 1000026000
-	StructureTypeDedicatedAllocationMemoryAllocateInfoNV               StructureType = 1000026002
-	StructureTypeDescriptorAccelerationStructureInfoNVX                StructureType = 1000165007
-	StructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXT         StructureType = 1000138003
-	StructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXT          StructureType = 1000161000
-	StructureTypeDescriptorSetLayoutSupport                            StructureType = 1000168001
-	StructureTypeDescriptorSetLayoutSupportKHR                         StructureType = 1000168001
-	StructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExt   StructureType = 1000161003
-	StructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXT  StructureType = 1000161004
-	StructureTypeDescriptorUpdateTemplateCreateINFO                    StructureType = 1000085000
-	StructureTypeDescriptorUpdateTemplateCreateInfoKHR                 StructureType = 1000085000
-	StructureTypeDeviceEventInfoEXT                                    StructureType = 1000091001
-	StructureTypeDeviceGeneratedCommandsFeaturesNVX                    StructureType = 1000086005
-	StructureTypeDeviceGeneratedCommandsLimitsNVX                      StructureType = 1000086004
-	StructureTypeDeviceGroupBindSparseInfoKHR                          StructureType = 1000060006
-	StructureTypeDeviceGroupCommandBufferBeginInfoKHR                  StructureType = 1000060004
-	StructureTypeDeviceGroupDeviceCreateInfoKHR                        StructureType = 1000070001
-	StructureTypeDeviceGroupPresentCapabilitiesKHR                     StructureType = 1000060007
-	StructureTypeDeviceGroupPresentInfoKHR                             StructureType = 1000060011
-	StructureTypeDeviceGroupRenderPassBeginInfoKHR                     StructureType = 1000060003
-	StructureTypeDeviceGroupSubmitInfoKHR                              StructureType = 1000060005
-	StructureTypeDeviceGroupSwapchainCreateInfoKHR                     StructureType = 1000060012
-	StructureTypeDeviceQueueGlobalPriorityCreateInfoEXT                StructureType = 1000174000
-	StructureTypeDeviceQueueInfo2                                      StructureType = 1000145003
-	StructureTypeDisplayEventInfoEXT                                   StructureType = 1000091002
-	StructureTypeDisplayModeCreateInfoKHR                              StructureType = 1000002000
-	StructureTypeDisplayModeProperties2KHR                             StructureType = 1000121002
-	StructureTypeDisplayPlaneCapabilities2KHR                          StructureType = 1000121004
-	StructureTypeDisplayPlaneInfo2KHR                                  StructureType = 1000121003
-	StructureTypeDisplayPlaneProperties2KHR                            StructureType = 1000121001
-	StructureTypeDisplayPowerInfoEXT                                   StructureType = 1000091000
-	StructureTypeDisplayPresentInfoKHR                                 StructureType = 1000003000
-	StructureTypeDisplayProperties2KHR                                 StructureType = 1000121000
-	StructureTypeDisplaySurfaceCreateInfoKHR                           StructureType = 1000002001
-	StructureTypeDescriptorPoolCreateInfo                              StructureType = 33
-	StructureTypeDescriptorSetAllocateInfo                             StructureType = 34
-	StructureTypeDescriptorSetLayoutCreateInfo                         StructureType = 32
-	StructureTypeDeviceCreateInfo                                      StructureType = 3
-	StructureTypeDeviceGroupBindSparseInfo                             StructureType = 1000060006
-	StructureTypeDeviceGroupCommandBufferBeginInfo                     StructureType = 1000060004
-	StructureTypeDeviceGroupDeviceCreateInfo                           StructureType = 1000070001
-	StructureTypeDeviceGroupRenderPassBeginInfo                        StructureType = 1000060003
-	StructureTypeDeviceGroupSubmitInfo                                 StructureType = 1000060005
-	StructureTypeDeviceQueueCreateInfo                                 StructureType = 2
-	StructureTypeExportFenceCreateInfo                                 StructureType = 1000113000
-	StructureTypeExportFenceCreateInfoKHR                              StructureType = 1000113000
-	StructureTypeExportFenceWin32HandleInfoKHR                         StructureType = 1000114001
-	StructureTypeExportMemoryAllocateInfo                              StructureType = 1000072002
-	StructureTypeExportMemoryAllocateInfoKHR                           StructureType = 1000072002
-	StructureTypeExportMemoryAllocateInfoNV                            StructureType = 1000056001
-	StructureTypeExportMemoryWin32HandleInfoKHR                        StructureType = 1000073001
-	StructureTypeExportMemoryWin32HandleInfoNV                         StructureType = 1000057001
-	StructureTypeExportSemaphoreCreateInfo                             StructureType = 1000077000
-	StructureTypeExportSemaphoreCreateInfoKHR                          StructureType = 1000077000
-	StructureTypeExportSemaphoreWin32HandleInfoKHR                     StructureType = 1000078001
-	StructureTypeExternalBufferProperties                              StructureType = 1000071003
-	StructureTypeExternalBufferPropertiesKHR                           StructureType = 1000071003
-	StructureTypeExternalFenceProperties                               StructureType = 1000112001
-	StructureTypeExternalFencePropertiesKHR                            StructureType = 1000112001
-	StructureTypeExternalFormatAndroid                                 StructureType = 1000129005
-	StructureTypeExternalImageFormatProperties                         StructureType = 1000071001
-	StructureTypeExternalImageFormatPropertiesKHR                      StructureType = 1000071001
-	StructureTypeExternalMemoryBufferCreateInfo                        StructureType = 1000072000
-	StructureTypeExternalMemoryBufferCreateInfoKHR                     StructureType = 1000072000
-	StructureTypeExternalMemoryImageCreateInfo                         StructureType = 1000072001
-	StructureTypeExternalMemoryImageCreateInfoKHR                      StructureType = 1000072001
-	StructureTypeExternalMemoryImageCreateInfoNV                       StructureType = 1000056000
-	StructureTypeExternalSemaphoreProperties                           StructureType = 1000076001
-	StructureTypeExternalSemaphorePropertiesKHR                        StructureType = 1000076001
-	StructureTypeEventCreateInfo                                       StructureType = 10
-	StructureTypeFenceGetFdInfoKHR                                     StructureType = 1000115001
-	StructureTypeFenceGetWin32HandleInfoKHR                            StructureType = 1000114002
-	StructureTypeFormatProperties2                                     StructureType = 1000059002
-	StructureTypeFormatProperties2KHR                                  StructureType = 1000059002
-	StructureTypeFenceCreateInfo                                       StructureType = 8
-	StructureTypeFramebufferCreateInfo                                 StructureType = 37
-	StructureTypeGeometryAABB_NVX                                      StructureType = 1000165005
-	StructureTypeGeometryInstanceNVX                                   StructureType = 1000165002
-	StructureTypeGeometryNVX                                           StructureType = 1000165003
-	StructureTypeGeometryTrianglesNVX                                  StructureType = 1000165004
-	StructureTypeGraphicsPipelineCreateInfo                            StructureType = 28
-	StructureTypeHdrMetadataEXT                                        StructureType = 1000105000
-	StructureTypeHitShaderModuleCreateInfoNVX                          StructureType = 1000165010
-	StructureTypeImageFormatListCreateInfoKHR                          StructureType = 1000147000
-	StructureTypeImageFormatProperties2                                StructureType = 1000059003
-	StructureTypeImageFormatProperties2KHR                             StructureType = 1000059003
-	StructureTypeImageMemoryRequirementsInfo2                          StructureType = 1000146001
-	StructureTypeImageMemoryRequirementsInfo2KHR                       StructureType = 1000146001
-	StructureTypeImagePlaneMemoryRequirementsInfo                      StructureType = 1000156003
-	StructureTypeImagePlaneMemoryRequirementsInfoKHR                   StructureType = 1000156003
-	StructureTypeImageSparseMemoryRequirementsInfo2                    StructureType = 1000146002
-	StructureTypeImageSparseMemoryRequirementsInfo2KHR                 StructureType = 1000146002
-	StructureTypeImageSwapchainCreateInfoKHR                           StructureType = 1000060008
-	StructureTypeImageViewAstcDecodeModeEXT                            StructureType = 1000067000
-	StructureTypeImageViewUsageCreateInfo                              StructureType = 1000117002
-	StructureTypeImageViewUsageCreateInfoKHR                           StructureType = 1000117002
-	StructureTypeImportAndroidHardwareBufferInfoAndroid                StructureType = 1000129003
-	StructureTypeImportFenceFdInfoKHR                                  StructureType = 1000115000
-	StructureTypeImportFenceWin32HandleInfoKHR                         StructureType = 1000114000
-	StructureTypeImportMemoryFdInfoKHR                                 StructureType = 1000074000
-	StructureTypeImportMemoryHostPointerInfoEXT                        StructureType = 1000178000
-	StructureTypeImportMemoryWin32HandleInfoKHR                        StructureType = 1000073000
-	StructureTypeImportMemoryWin32HandleInfoNV                         StructureType = 1000057000
-	StructureTypeImportSemaphoreFdInfoKHR                              StructureType = 1000079000
-	StructureTypeImportSemaphoreWin32HandleInfoKHR                     StructureType = 1000078000
-	StructureTypeIndirectCommandsLayoutCreateInfoNVX                   StructureType = 1000086001
-	StructureTypeIosSurfaceCreateInfoMVK                               StructureType = 1000122000
-	StructureTypeImageCreateInfo                                       StructureType = 14
-	StructureTypeImageMemoryBarrier                                    StructureType = 45
-	StructureTypeImageViewCreateInfo                                   StructureType = 15
-	StructureTypeInstanceCreateInfo                                    StructureType = 1
-	StructureTypeLoaderDeviceCreateInfo                                StructureType = 48
-	StructureTypeLoaderInstanceCreateInfo                              StructureType = 47
-	StructureTypeMacosSurfaceCreateInfoMVK                             StructureType = 1000123000
-	StructureTypeMemoryAllocateFlagsInfoKHR                            StructureType = 1000060000
-	StructureTypeMemoryDedicatedAllocateInfoKHR                        StructureType = 1000127001
-	StructureTypeMemoryDedicatedRequirementsKHR                        StructureType = 1000127000
-	StructureTypeMemoryFdPropertiesKHR                                 StructureType = 1000074001
-	StructureTypeMemoryGetAndroidHardwareBufferInfoAndroid             StructureType = 1000129004
-	StructureTypeMemoryGetFdInfoKHR                                    StructureType = 1000074002
-	StructureTypeMemoryGetWin32HandleInfoKHR                           StructureType = 1000073003
-	StructureTypeMemoryHostPointerPropertiesEXT                        StructureType = 1000178001
-	StructureTypeMemoryRequirements2                                   StructureType = 1000146003
-	StructureTypeMemoryRequirements2KHR                                StructureType = 1000146003
-	StructureTypeMemoryWin32HandlePropertiesKHR                        StructureType = 1000073002
-	StructureTypeMirSurfaceCreateInfoKHR                               StructureType = 1000007000
-	StructureTypeMultisamplePropertiesEXT                              StructureType = 1000143004
-	StructureTypeMappedMemoryRange                                     StructureType = 6
-	StructureTypeMemoryAllocateFlagsInfo                               StructureType = 1000060000
-	StructureTypeMemoryAllocateInfo                                    StructureType = 5
-	StructureTypeMemoryBarrier                                         StructureType = 46
-	StructureTypeMemoryDedicatedAllocateInfo                           StructureType = 1000127001
-	StructureTypeMemoryDedicatedRequirements                           StructureType = 1000127000
-	StructureTypeObjectTableCreateInfoNVX                              StructureType = 1000086000
-	StructureTypePhysicalDevice16BitStorageFeaturesKHR                 StructureType = 1000083000
-	StructureTypePhysicalDevice8BitStorageFeaturesKHR                  StructureType = 1000177000
-	StructureTypePhysicalDeviceAstcDecodeFeaturesEXT                   StructureType = 1000067001
-	StructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXT       StructureType = 1000148000
-	StructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXT     StructureType = 1000148001
-	StructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NV     StructureType = 1000201000
-	StructureTypePhysicalDeviceConditionalRenderingFeaturesEXT         StructureType = 1000081001
-	StructureTypePhysicalDeviceConservativeRasterizationPropertiesEXT  StructureType = 1000101000
-	StructureTypePhysicalDeviceCornerSampledImageFeaturesNV            StructureType = 1000050000
-	StructureTypePhysicalDeviceDescriptorIndexingFeaturesEXT           StructureType = 1000161001
-	StructureTypePhysicalDeviceDescriptorIndexingPropertiesEXT         StructureType = 1000161002
-	StructureTypePhysicalDeviceDiscardRectanglePropertiesEXT           StructureType = 1000099000
-	StructureTypePhysicalDeviceExclusiveScissorFeaturesNV              StructureType = 1000205002
-	StructureTypePhysicalDeviceExternalBufferInfo                      StructureType = 1000071002
-	StructureTypePhysicalDeviceExternalBufferInfoKHR                   StructureType = 1000071002
-	StructureTypePhysicalDeviceExternalFenceInfo                       StructureType = 1000112000
-	StructureTypePhysicalDeviceExternalFenceInfoKHR                    StructureType = 1000112000
-	StructureTypePhysicalDeviceExternalImageFormatInfo                 StructureType = 1000071000
-	StructureTypePhysicalDeviceExternalImageFormatInfoKHR              StructureType = 1000071000
-	StructureTypePhysicalDeviceExternalMemoryHostPropertiesEXT         StructureType = 1000178002
-	StructureTypePhysicalDeviceExternalSemaphoreInfo                   StructureType = 1000076000
-	StructureTypePhysicalDeviceExternalSemaphoreInfoKHR                StructureType = 1000076000
-	StructureTypePhysicalDeviceFeatures2                               StructureType = 1000059000
-	StructureTypePhysicalDeviceFeatures2KHR                            StructureType = 1000059000
-	StructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNV     StructureType = 1000203000
-	StructureTypePhysicalDeviceGroupPropertiesKHR                      StructureType = 1000070000
-	StructureTypePhysicalDeviceIdProperties                            StructureType = 1000071004
-	StructureTypePhysicalDeviceIdPropertiesKHR                         StructureType = 1000071004
-	StructureTypePhysicalDeviceImageFormatInfo2                        StructureType = 1000059004
-	StructureTypePhysicalDeviceImageFormatInfo2KHR                     StructureType = 1000059004
-	StructureTypePhysicalDeviceInlineUniformBlockFeaturesEXT           StructureType = 1000138000
-	StructureTypePhysicalDeviceInlineUniformBlockPropertiesEXT         StructureType = 1000138001
-	StructureTypePhysicalDeviceMaintenance3Properties                  StructureType = 1000168000
-	StructureTypePhysicalDeviceMaintenance3PropertiesKHR               StructureType = 1000168000
-	StructureTypePhysicalDeviceMemoryProperties2                       StructureType = 1000059006
-	StructureTypePhysicalDeviceMemoryProperties2KHR                    StructureType = 1000059006
-	StructureTypePhysicalDeviceMeshShaderFeaturesNV                    StructureType = 1000202000
-	StructureTypePhysicalDeviceMeshShaderPropertiesNV                  StructureType = 1000202001
-	StructureTypePhysicalDeviceMultiviewFeatures                       StructureType = 1000053001
-	StructureTypePhysicalDeviceMultiviewFeaturesKHR                    StructureType = 1000053001
-	StructureTypePhysicalDeviceMultiviewPerViewAttributesPropertiesNVX StructureType = 1000097000
-	StructureTypePhysicalDeviceMultiviewProperties                     StructureType = 1000053002
-	StructureTypePhysicalDeviceMultiviewPropertiesKHR                  StructureType = 1000053002
-	StructureTypePhysicalDevicePointClippingProperties                 StructureType = 1000117000
-	StructureTypePhysicalDevicePointClippingPropertiesKHR              StructureType = 1000117000
-	StructureTypePhysicalDeviceProperties2                             StructureType = 1000059001
-	StructureTypePhysicalDeviceProperties2KHR                          StructureType = 1000059001
-	StructureTypePhysicalDeviceProtectedMemoryFeatures                 StructureType = 1000145001
-	StructureTypePhysicalDeviceProtectedMemoryProperties               StructureType = 1000145002
-	StructureTypePhysicalDevicePushDescriptorPropertiesKHR             StructureType = 1000080000
-	StructureTypePhysicalDeviceRaytracingPropertiesNVX                 StructureType = 1000165009
-	StructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNV    StructureType = 1000166000
-	StructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXT        StructureType = 1000130000
-	StructureTypePhysicalDeviceSamplerYCbCrConversionFeatures          StructureType = 1000156004
-	StructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesKHR       StructureType = 1000156004
-	StructureTypePhysicalDeviceSampleLocationsPropertiesEXT            StructureType = 1000143003
-	StructureTypePhysicalDeviceShaderCorePropertiesAMD                 StructureType = 1000185000
-	StructureTypePhysicalDeviceShaderDrawParameterFeatures             StructureType = 1000063000
-	StructureTypePhysicalDeviceShaderImageFootprintFeaturesNV          StructureType = 1000204000
-	StructureTypePhysicalDeviceShadingRateImageFeaturesNV              StructureType = 1000164001
-	StructureTypePhysicalDeviceShadingRateImagePropertiesNV            StructureType = 1000164002
-	StructureTypePhysicalDeviceSparseImageFormatInfo2                  StructureType = 1000059008
-	StructureTypePhysicalDeviceSparseImageFormatInfo2KHR               StructureType = 1000059008
-	StructureTypePhysicalDeviceSurfaceInfo2KHR                         StructureType = 1000119000
-	StructureTypePhysicalDeviceVariablePointerFeatures                 StructureType = 1000120000
-	StructureTypePhysicalDeviceVariablePointerFeaturesKHR              StructureType = 1000120000
-	StructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXT       StructureType = 1000190002
-	StructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXT     StructureType = 1000190000
-	StructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR            StructureType = 1000211000
-	StructureTypePipelineColorBlendAdvancedStateCreateInfoEXT          StructureType = 1000148002
-	StructureTypePipelineCoverageModulationStateCreateInfoNV           StructureType = 1000152000
-	StructureTypePipelineCoverageToColorStateCreateInfoNV              StructureType = 1000149000
-	StructureTypePipelineDiscardRectangleStateCreateInfoEXT            StructureType = 1000099001
-	StructureTypePipelineRasterizationConservativeStateCreateInfoEXT   StructureType = 1000101001
-	StructureTypePipelineRasterizationStateRasterizationOrderAMD       StructureType = 1000018000
-	StructureTypePipelineRepresentativeFragmentTestStateCreateInfoNV   StructureType = 1000166001
-	StructureTypePipelineSampleLocationsStateCreateInfoEXT             StructureType = 1000143002
-	StructureTypePipelineTessellationDomainOriginStateCreateInfo       StructureType = 1000117003
-	StructureTypePipelineTessellationDomainOriginStateCreateInfoKHR    StructureType = 1000117003
-	StructureTypePipelineVertexInputDivisorStateCreateInfoEXT          StructureType = 1000190001
-	StructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNV    StructureType = 1000164005
-	StructureTypePipelineViewportExclusiveScissorStateCreateInfoNV     StructureType = 1000205000
-	StructureTypePipelineViewportShadingRateImageStateCreateInfoNV     StructureType = 1000164000
-	StructureTypePipelineViewportSwizzleStateCreateInfoNV              StructureType = 1000098000
-	StructureTypePipelineViewportWScalingStateCreateInfoNV             StructureType = 1000087000
-	StructureTypePresentInfoKHR                                        StructureType = 1000001001
-	StructureTypePresentRegionsKHR                                     StructureType = 1000084000
-	StructureTypePresentTimesInfoGoogle                                StructureType = 1000092000
-	StructureTypeProtectedSubmitInfo                                   StructureType = 1000145000
-	StructureTypePhysicalDevice16ItStorageFeatures                     StructureType = 1000083000
-	StructureTypePhysicalDeviceGroupProperties                         StructureType = 1000070000
-	StructureTypePhysicalDeviceSubgroupProperties                      StructureType = 1000094000
-	StructureTypePipelineCacheCreateInfo                               StructureType = 17
-	StructureTypePipelineColorBlendStateCreateInfo                     StructureType = 26
-	StructureTypePipelineDepthStencilStateCreateInfo                   StructureType = 25
-	StructureTypePipelineDynamicStateCreateInfo                        StructureType = 27
-	StructureTypePipelineInputAssemblyStateCreateInfo                  StructureType = 20
-	StructureTypePipelineLayoutCreateInfo                              StructureType = 30
-	StructureTypePipelineMultisampleStateCreateInfo                    StructureType = 24
-	StructureTypePipelineRasterizationStateCreateInfo                  StructureType = 23
-	StructureTypePipelineShaderStageCreateInfo                         StructureType = 18
-	StructureTypePipelineTessellationStateCreateInfo                   StructureType = 21
-	StructureTypePipelineVertexInputStateCreateInfo                    StructureType = 19
-	StructureTypePipelineViewportStateCreateInfo                       StructureType = 22
-	StructureTypeQueueFamilyCheckpointPropertiesNV                     StructureType = 1000206001
-	StructureTypeQueueFamilyProperties2                                StructureType = 1000059005
-	StructureTypeQueueFamilyProperties2KHR                             StructureType = 1000059005
-	StructureTypeQueryPoolCreateInfo                                   StructureType = 11
-	StructureTypeRaytracingPipelineCreateInfoNVX                       StructureType = 1000165000
-	StructureTypeRenderPassCreateInfo2KHR                              StructureType = 1000109004
-	StructureTypeRenderPassInputAttachmentAspectCreateInfo             StructureType = 1000117001
-	StructureTypeRenderPassInputAttachmentAspectCreateInfoKHR          StructureType = 1000117001
-	StructureTypeRenderPassMultiviewCreateInfo                         StructureType = 1000053000
-	StructureTypeRenderPassMultiviewCreateInfoKHR                      StructureType = 1000053000
-	StructureTypeRenderPassSampleLocationsBeginInfoEXT                 StructureType = 1000143001
-	StructureTypeRenderPassBeginInfo                                   StructureType = 43
-	StructureTypeRenderPassCreateInfo                                  StructureType = 38
-	StructureTypeSamplerReductionModeCreateInfoEXT                     StructureType = 1000130001
-	StructureTypeSamplerYCbCrConversionCreateInfo                      StructureType = 1000156000
-	StructureTypeSamplerYCbCrConversionCreateInfoKHR                   StructureType = 1000156000
-	StructureTypeSamplerYCbCrConversionImageFormatProperties           StructureType = 1000156005
-	StructureTypeSamplerYCbCrConversionImageFormatPropertiesKHR        StructureType = 1000156005
-	StructureTypeSamplerYCbCrConversionINFO                            StructureType = 1000156001
-	StructureTypeSamplerYCbCrConversionINFO_KHR                        StructureType = 1000156001
-	StructureTypeSampleLocationsInfoEXT                                StructureType = 1000143000
-	StructureTypeSemaphoreGetFdInfoKHR                                 StructureType = 1000079001
-	StructureTypeSemaphoreGetWin32HandleInfoKHR                        StructureType = 1000078003
-	StructureTypeShaderModuleValidationCacheCreateInfoEXT              StructureType = 1000160001
-	StructureTypeSharedPresentSurfaceCapabilitiesKHR                   StructureType = 1000111000
-	StructureTypeSparseImageFormatProperties2                          StructureType = 1000059007
-	StructureTypeSparseImageFormatProperties2KHR                       StructureType = 1000059007
-	StructureTypeSparseImageMemoryRequirements2                        StructureType = 1000146004
-	StructureTypeSparseImageMemoryRequirements2KHR                     StructureType = 1000146004
-	StructureTypeSubpassBeginInfoKHR                                   StructureType = 1000109005
-	StructureTypeSubpassDependency2KHR                                 StructureType = 1000109003
-	StructureTypeSubpassDescription2KHR                                StructureType = 1000109002
-	StructureTypeSubpassEndInfoKHR                                     StructureType = 1000109006
-	StructureTypeSurfaceCapabilities2EXT                               StructureType = 1000090000
-	StructureTypeSurfaceCapabilities2KHR                               StructureType = 1000119001
-	StructureTypeSurfaceFormat2KHR                                     StructureType = 1000119002
-	StructureTypeSwapchainCounterCreateInfoEXT                         StructureType = 1000091003
-	StructureTypeSwapchainCreateInfoKHR                                StructureType = 1000001000
-	StructureTypeSamplerCreateInfo                                     StructureType = 31
-	StructureTypeSemaphoreCreateInfo                                   StructureType = 9
-	StructureTypeShaderModuleCreateInfo                                StructureType = 16
-	StructureTypeSubmitInfo                                            StructureType = 4
-	StructureTypeTextureLodGatherFormatPropertiesAMD                   StructureType = 1000041000
-	StructureTypeValidationCacheCreateInfoEXT                          StructureType = 1000160000
-	StructureTypeValidationFlagsEXT                                    StructureType = 1000061000
-	StructureTypeViSurfaceCreateInfoNN                                 StructureType = 1000062000
-	StructureTypeWaylandSurfaceCreateInfoKHR                           StructureType = 1000006000
-	StructureTypeWin32KeyedMutexAcquireReleaseInfoKHR                  StructureType = 1000075000
-	StructureTypeWin32KeyedMutexAcquireReleaseInfoNV                   StructureType = 1000058000
-	StructureTypeWin32SurfaceCreateInfoKHR                             StructureType = 1000009000
-	StructureTypeWriteDescriptorSetInlineUniformBlockEXT               StructureType = 1000138002
-	StructureTypeWriteDescriptorSet                                    StructureType = 35
-	StructureTypeXcbSurfaceCreateInfoKHR                               StructureType = 1000005000
-	StructureTypeXlibSurfaceCreateInfoKHR                              StructureType = 1000004000
+	StructureTypeAcquireNextImageInfoKHR                              StructureType = 1000060010
+	StructureTypeAndroidHardwareBufferFormatPropertiesAndroid         StructureType = 1000129002
+	StructureTypeAndroidHardwareBufferPropertiesAndroid               StructureType = 1000129001
+	StructureTypeAndroidHardwareBufferUsageAndroid                    StructureType = 1000129000
+	StructureTypeAndroidSurfaceCreateInfoKHR                          StructureType = 1000008000
+	StructureTypeAttachmentDescription2KHR                            StructureType = 1000109000
+	StructureTypeAttachmentReference2KHR                              StructureType = 1000109001
+	StructureTypeApplicationInfo                                      StructureType = 0
+	StructureTypeBindBufferMemoryDeviceGroupInfoKHR                   StructureType = 1000060013
+	StructureTypeBindBufferMemoryInfoKHR                              StructureType = 1000157000
+	StructureTypeBindImageMemoryDeviceGroupInfoKHR                    StructureType = 1000060014
+	StructureTypeBindImageMemoryInfoKHR                               StructureType = 1000157001
+	StructureTypeBindImageMemorySwapchainInfoKHR                      StructureType = 1000060009
+	StructureTypeBindImagePlaneMemoryINFO                             StructureType = 1000156002
+	StructureTypeBindImagePlaneMemoryInfoKHR                          StructureType = 1000156002
+	StructureTypeBufferMemoryRequirementsInfo2                        StructureType = 1000146000
+	StructureTypeBufferMemoryRequirementsInfo2KHR                     StructureType = 1000146000
+	StructureTypeBindBufferMemoryDeviceGroupInfo                      StructureType = 1000060013
+	StructureTypeBindBufferMemoryInfo                                 StructureType = 1000157000
+	StructureTypeBindImageMemoryDeviceGroupInfo                       StructureType = 1000060014
+	StructureTypeBindImageMemoryInfo                                  StructureType = 1000157001
+	StructureTypeBindSparseInfo                                       StructureType = 7
+	StructureTypeBufferCreateInfo                                     StructureType = 12
+	StructureTypeBufferMemoryBarrier                                  StructureType = 44
+	StructureTypeBufferViewCreateInfo                                 StructureType = 13
+	StructureTypeCheckpointDataNV                                     StructureType = 1000206000
+	StructureTypeCommandBufferInheritanceConditionalRenderingInfoEXT  StructureType = 1000081000
+	StructureTypeConditionalRenderingBeginInfoEXT                     StructureType = 1000081002
+	StructureTypeCommandBufferAllocateInfo                            StructureType = 40
+	StructureTypeCommandBufferBeginInfo                               StructureType = 42
+	StructureTypeCommandBufferInheritanceInfo                         StructureType = 41
+	StructureTypeCommandPoolCreateInfo                                StructureType = 39
+	StructureTypeComputePipelineCreateInfo                            StructureType = 29
+	StructureTypeCopyDescriptorSet                                    StructureType = 36
+	StructureTypeD3D12FenceSubmitInfoKHR                              StructureType = 1000078002
+	StructureTypeDebugMarkerMarkerInfoEXT                             StructureType = 1000022002
+	StructureTypeDebugMarkerObjectNameInfoEXT                         StructureType = 1000022000
+	StructureTypeDebugMarkerObjectTagInfoEXT                          StructureType = 1000022001
+	StructureTypeDebugReportCallbackCreateInfoEXT                     StructureType = 1000011000
+	StructureTypeDebugReportCreateInfoEXT                             StructureType = 1000011000
+	StructureTypeDebugUtilsLabelEXT                                   StructureType = 1000128002
+	StructureTypeDebugUtilsMessengerCallbackDataEXT                   StructureType = 1000128003
+	StructureTypeDebugUtilsMessengerCreateInfoEXT                     StructureType = 1000128004
+	StructureTypeDebugUtilsObjectNameInfoEXT                          StructureType = 1000128000
+	StructureTypeDebugUtilsObjectTagInfoEXT                           StructureType = 1000128001
+	StructureTypeDedicatedAllocationBufferCreateInfoNV                StructureType = 1000026001
+	StructureTypeDedicatedAllocationImageCreateInfoNV                 StructureType = 1000026000
+	StructureTypeDedicatedAllocationMemoryAllocateInfoNV              StructureType = 1000026002
+	StructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXT        StructureType = 1000138003
+	StructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXT         StructureType = 1000161000
+	StructureTypeDescriptorSetLayoutSupport                           StructureType = 1000168001
+	StructureTypeDescriptorSetLayoutSupportKHR                        StructureType = 1000168001
+	StructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExt  StructureType = 1000161003
+	StructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXT StructureType = 1000161004
+	StructureTypeDescriptorUpdateTemplateCreateINFO                   StructureType = 1000085000
+	StructureTypeDescriptorUpdateTemplateCreateInfoKHR                StructureType = 1000085000
+	StructureTypeDeviceEventInfoEXT                                   StructureType = 1000091001
+	StructureTypeDeviceGroupBindSparseInfoKHR                         StructureType = 1000060006
+	StructureTypeDeviceGroupCommandBufferBeginInfoKHR                 StructureType = 1000060004
+	StructureTypeDeviceGroupDeviceCreateInfoKHR                       StructureType = 1000070001
+	StructureTypeDeviceGroupPresentCapabilitiesKHR                    StructureType = 1000060007
+	StructureTypeDeviceGroupPresentInfoKHR                            StructureType = 1000060011
+	StructureTypeDeviceGroupRenderPassBeginInfoKHR                    StructureType = 1000060003
+	StructureTypeDeviceGroupSubmitInfoKHR                             StructureType = 1000060005
+	StructureTypeDeviceGroupSwapchainCreateInfoKHR                    StructureType = 1000060012
+	StructureTypeDeviceQueueGlobalPriorityCreateInfoEXT               StructureType = 1000174000
+	StructureTypeDeviceQueueInfo2                                     StructureType = 1000145003
+	StructureTypeDisplayEventInfoEXT                                  StructureType = 1000091002
+	StructureTypeDisplayModeCreateInfoKHR                             StructureType = 1000002000
+	StructureTypeDisplayModeProperties2KHR                            StructureType = 1000121002
+	StructureTypeDisplayPlaneCapabilities2KHR                         StructureType = 1000121004
+	StructureTypeDisplayPlaneInfo2KHR                                 StructureType = 1000121003
+	StructureTypeDisplayPlaneProperties2KHR                           StructureType = 1000121001
+	StructureTypeDisplayPowerInfoEXT                                  StructureType = 1000091000
+	StructureTypeDisplayPresentInfoKHR                                StructureType = 1000003000
+	StructureTypeDisplayProperties2KHR                                StructureType = 1000121000
+	StructureTypeDisplaySurfaceCreateInfoKHR                          StructureType = 1000002001
+	StructureTypeDescriptorPoolCreateInfo                             StructureType = 33
+	StructureTypeDescriptorSetAllocateInfo                            StructureType = 34
+	StructureTypeDescriptorSetLayoutCreateInfo                        StructureType = 32
+	StructureTypeDeviceCreateInfo                                     StructureType = 3
+	StructureTypeDeviceGroupBindSparseInfo                            StructureType = 1000060006
+	StructureTypeDeviceGroupCommandBufferBeginInfo                    StructureType = 1000060004
+	StructureTypeDeviceGroupDeviceCreateInfo                          StructureType = 1000070001
+	StructureTypeDeviceGroupRenderPassBeginInfo                       StructureType = 1000060003
+	StructureTypeDeviceGroupSubmitInfo                                StructureType = 1000060005
+	StructureTypeDeviceQueueCreateInfo                                StructureType = 2
+	StructureTypeExportFenceCreateInfo                                StructureType = 1000113000
+	StructureTypeExportFenceCreateInfoKHR                             StructureType = 1000113000
+	StructureTypeExportFenceWin32HandleInfoKHR                        StructureType = 1000114001
+	StructureTypeExportMemoryAllocateInfo                             StructureType = 1000072002
+	StructureTypeExportMemoryAllocateInfoKHR                          StructureType = 1000072002
+	StructureTypeExportMemoryAllocateInfoNV                           StructureType = 1000056001
+	StructureTypeExportMemoryWin32HandleInfoKHR                       StructureType = 1000073001
+	StructureTypeExportMemoryWin32HandleInfoNV                        StructureType = 1000057001
+	StructureTypeExportSemaphoreCreateInfo                            StructureType = 1000077000
+	StructureTypeExportSemaphoreCreateInfoKHR                         StructureType = 1000077000
+	StructureTypeExportSemaphoreWin32HandleInfoKHR                    StructureType = 1000078001
+	StructureTypeExternalBufferProperties                             StructureType = 1000071003
+	StructureTypeExternalBufferPropertiesKHR                          StructureType = 1000071003
+	StructureTypeExternalFenceProperties                              StructureType = 1000112001
+	StructureTypeExternalFencePropertiesKHR                           StructureType = 1000112001
+	StructureTypeExternalFormatAndroid                                StructureType = 1000129005
+	StructureTypeExternalImageFormatProperties                        StructureType = 1000071001
+	StructureTypeExternalImageFormatPropertiesKHR                     StructureType = 1000071001
+	StructureTypeExternalMemoryBufferCreateInfo                       StructureType = 1000072000
+	StructureTypeExternalMemoryBufferCreateInfoKHR                    StructureType = 1000072000
+	StructureTypeExternalMemoryImageCreateInfo                        StructureType = 1000072001
+	StructureTypeExternalMemoryImageCreateInfoKHR                     StructureType = 1000072001
+	StructureTypeExternalMemoryImageCreateInfoNV                      StructureType = 1000056000
+	StructureTypeExternalSemaphoreProperties                          StructureType = 1000076001
+	StructureTypeExternalSemaphorePropertiesKHR                       StructureType = 1000076001
+	StructureTypeEventCreateInfo                                      StructureType = 10
+	StructureTypeFenceGetFdInfoKHR                                    StructureType = 1000115001
+	StructureTypeFenceGetWin32HandleInfoKHR                           StructureType = 1000114002
+	StructureTypeFormatProperties2                                    StructureType = 1000059002
+	StructureTypeFormatProperties2KHR                                 StructureType = 1000059002
+	StructureTypeFenceCreateInfo                                      StructureType = 8
+	StructureTypeFramebufferCreateInfo                                StructureType = 37
+	StructureTypeGraphicsPipelineCreateInfo                           StructureType = 28
+	StructureTypeHdrMetadataEXT                                       StructureType = 1000105000
+	StructureTypeImageFormatListCreateInfoKHR                         StructureType = 1000147000
+	StructureTypeImageFormatProperties2                               StructureType = 1000059003
+	StructureTypeImageFormatProperties2KHR                            StructureType = 1000059003
+	StructureTypeImageMemoryRequirementsInfo2                         StructureType = 1000146001
+	StructureTypeImageMemoryRequirementsInfo2KHR                      StructureType = 1000146001
+	StructureTypeImagePlaneMemoryRequirementsInfo                     StructureType = 1000156003
+	StructureTypeImagePlaneMemoryRequirementsInfoKHR                  StructureType = 1000156003
+	StructureTypeImageSparseMemoryRequirementsInfo2                   StructureType = 1000146002
+	StructureTypeImageSparseMemoryRequirementsInfo2KHR                StructureType = 1000146002
+	StructureTypeImageSwapchainCreateInfoKHR                          StructureType = 1000060008
+	StructureTypeImageViewAstcDecodeModeEXT                           StructureType = 1000067000
+	StructureTypeImageViewUsageCreateInfo                             StructureType = 1000117002
+	StructureTypeImageViewUsageCreateInfoKHR                          StructureType = 1000117002
+	StructureTypeImportAndroidHardwareBufferInfoAndroid               StructureType = 1000129003
+	StructureTypeImportFenceFdInfoKHR                                 StructureType = 1000115000
+	StructureTypeImportFenceWin32HandleInfoKHR                        StructureType = 1000114000
+	StructureTypeImportMemoryFdInfoKHR                                StructureType = 1000074000
+	StructureTypeImportMemoryHostPointerInfoEXT                       StructureType = 1000178000
+	StructureTypeImportMemoryWin32HandleInfoKHR                       StructureType = 1000073000
+	StructureTypeImportMemoryWin32HandleInfoNV                        StructureType = 1000057000
+	StructureTypeImportSemaphoreFdInfoKHR                             StructureType = 1000079000
+	StructureTypeImportSemaphoreWin32HandleInfoKHR                    StructureType = 1000078000
+	StructureTypeIosSurfaceCreateInfoMVK                              StructureType = 1000122000
+	StructureTypeImageCreateInfo                                      StructureType = 14
+	StructureTypeImageMemoryBarrier                                   StructureType = 45
+	StructureTypeImageViewCreateInfo                                  StructureType = 15
+	StructureTypeInstanceCreateInfo                                   StructureType = 1
+	StructureTypeLoaderDeviceCreateInfo                               StructureType = 48
+	StructureTypeLoaderInstanceCreateInfo                             StructureType = 47
+	StructureTypeMacosSurfaceCreateInfoMVK                            StructureType = 1000123000
+	StructureTypeMemoryAllocateFlagsInfoKHR                           StructureType = 1000060000
+	StructureTypeMemoryDedicatedAllocateInfoKHR                       StructureType = 1000127001
+	StructureTypeMemoryDedicatedRequirementsKHR                       StructureType = 1000127000
+	StructureTypeMemoryFdPropertiesKHR                                StructureType = 1000074001
+	StructureTypeMemoryGetAndroidHardwareBufferInfoAndroid            StructureType = 1000129004
+	StructureTypeMemoryGetFdInfoKHR                                   StructureType = 1000074002
+	StructureTypeMemoryGetWin32HandleInfoKHR                          StructureType = 1000073003
+	StructureTypeMemoryHostPointerPropertiesEXT                       StructureType = 1000178001
+	StructureTypeMemoryRequirements2                                  StructureType = 1000146003
+	StructureTypeMemoryRequirements2KHR                               StructureType = 1000146003
+	StructureTypeMemoryWin32HandlePropertiesKHR                       StructureType = 1000073002
+	StructureTypeMirSurfaceCreateInfoKHR                              StructureType = 1000007000
+	StructureTypeMultisamplePropertiesEXT                             StructureType = 1000143004
+	StructureTypeMappedMemoryRange                                    StructureType = 6
+	StructureTypeMemoryAllocateFlagsInfo                              StructureType = 1000060000
+	StructureTypeMemoryAllocateInfo                                   StructureType = 5
+	StructureTypeMemoryBarrier                                        StructureType = 46
+	StructureTypeMemoryDedicatedAllocateInfo                          StructureType = 1000127001
+	StructureTypeMemoryDedicatedRequirements                          StructureType = 1000127000
+	StructureTypePhysicalDevice16BitStorageFeaturesKHR                StructureType = 1000083000
+	StructureTypePhysicalDevice8BitStorageFeaturesKHR                 StructureType = 1000177000
+	StructureTypePhysicalDeviceAstcDecodeFeaturesEXT                  StructureType = 1000067001
+	StructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXT      StructureType = 1000148000
+	StructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXT    StructureType = 1000148001
+	StructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NV    StructureType = 1000201000
+	StructureTypePhysicalDeviceConditionalRenderingFeaturesEXT        StructureType = 1000081001
+	StructureTypePhysicalDeviceConservativeRasterizationPropertiesEXT StructureType = 1000101000
+	StructureTypePhysicalDeviceCornerSampledImageFeaturesNV           StructureType = 1000050000
+	StructureTypePhysicalDeviceDescriptorIndexingFeaturesEXT          StructureType = 1000161001
+	StructureTypePhysicalDeviceDescriptorIndexingPropertiesEXT        StructureType = 1000161002
+	StructureTypePhysicalDeviceDiscardRectanglePropertiesEXT          StructureType = 1000099000
+	StructureTypePhysicalDeviceExclusiveScissorFeaturesNV             StructureType = 1000205002
+	StructureTypePhysicalDeviceExternalBufferInfo                     StructureType = 1000071002
+	StructureTypePhysicalDeviceExternalBufferInfoKHR                  StructureType = 1000071002
+	StructureTypePhysicalDeviceExternalFenceInfo                      StructureType = 1000112000
+	StructureTypePhysicalDeviceExternalFenceInfoKHR                   StructureType = 1000112000
+	StructureTypePhysicalDeviceExternalImageFormatInfo                StructureType = 1000071000
+	StructureTypePhysicalDeviceExternalImageFormatInfoKHR             StructureType = 1000071000
+	StructureTypePhysicalDeviceExternalMemoryHostPropertiesEXT        StructureType = 1000178002
+	StructureTypePhysicalDeviceExternalSemaphoreInfo                  StructureType = 1000076000
+	StructureTypePhysicalDeviceExternalSemaphoreInfoKHR               StructureType = 1000076000
+	StructureTypePhysicalDeviceFeatures2                              StructureType = 1000059000
+	StructureTypePhysicalDeviceFeatures2KHR                           StructureType = 1000059000
+	StructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNV    StructureType = 1000203000
+	StructureTypePhysicalDeviceGroupPropertiesKHR                     StructureType = 1000070000
+	StructureTypePhysicalDeviceIdProperties                           StructureType = 1000071004
+	StructureTypePhysicalDeviceIdPropertiesKHR                        StructureType = 1000071004
+	StructureTypePhysicalDeviceImageFormatInfo2                       StructureType = 1000059004
+	StructureTypePhysicalDeviceImageFormatInfo2KHR                    StructureType = 1000059004
+	StructureTypePhysicalDeviceInlineUniformBlockFeaturesEXT          StructureType = 1000138000
+	StructureTypePhysicalDeviceInlineUniformBlockPropertiesEXT        StructureType = 1000138001
+	StructureTypePhysicalDeviceMaintenance3Properties                 StructureType = 1000168000
+	StructureTypePhysicalDeviceMaintenance3PropertiesKHR              StructureType = 1000168000
+	StructureTypePhysicalDeviceMemoryProperties2                      StructureType = 1000059006
+	StructureTypePhysicalDeviceMemoryProperties2KHR                   StructureType = 1000059006
+	StructureTypePhysicalDeviceMeshShaderFeaturesNV                   StructureType = 1000202000
+	StructureTypePhysicalDeviceMeshShaderPropertiesNV                 StructureType = 1000202001
+	StructureTypePhysicalDeviceMultiviewFeatures                      StructureType = 1000053001
+	StructureTypePhysicalDeviceMultiviewFeaturesKHR                   StructureType = 1000053001
+	StructureTypePhysicalDeviceMultiviewProperties                    StructureType = 1000053002
+	StructureTypePhysicalDeviceMultiviewPropertiesKHR                 StructureType = 1000053002
+	StructureTypePhysicalDevicePointClippingProperties                StructureType = 1000117000
+	StructureTypePhysicalDevicePointClippingPropertiesKHR             StructureType = 1000117000
+	StructureTypePhysicalDeviceProperties2                            StructureType = 1000059001
+	StructureTypePhysicalDeviceProperties2KHR                         StructureType = 1000059001
+	StructureTypePhysicalDeviceProtectedMemoryFeatures                StructureType = 1000145001
+	StructureTypePhysicalDeviceProtectedMemoryProperties              StructureType = 1000145002
+	StructureTypePhysicalDevicePushDescriptorPropertiesKHR            StructureType = 1000080000
+	StructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNV   StructureType = 1000166000
+	StructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXT       StructureType = 1000130000
+	StructureTypePhysicalDeviceSamplerYCbCrConversionFeatures         StructureType = 1000156004
+	StructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesKHR      StructureType = 1000156004
+	StructureTypePhysicalDeviceSampleLocationsPropertiesEXT           StructureType = 1000143003
+	StructureTypePhysicalDeviceShaderCorePropertiesAMD                StructureType = 1000185000
+	StructureTypePhysicalDeviceShaderDrawParameterFeatures            StructureType = 1000063000
+	StructureTypePhysicalDeviceShaderImageFootprintFeaturesNV         StructureType = 1000204000
+	StructureTypePhysicalDeviceShadingRateImageFeaturesNV             StructureType = 1000164001
+	StructureTypePhysicalDeviceShadingRateImagePropertiesNV           StructureType = 1000164002
+	StructureTypePhysicalDeviceSparseImageFormatInfo2                 StructureType = 1000059008
+	StructureTypePhysicalDeviceSparseImageFormatInfo2KHR              StructureType = 1000059008
+	StructureTypePhysicalDeviceSurfaceInfo2KHR                        StructureType = 1000119000
+	StructureTypePhysicalDeviceVariablePointerFeatures                StructureType = 1000120000
+	StructureTypePhysicalDeviceVariablePointerFeaturesKHR             StructureType = 1000120000
+	StructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXT      StructureType = 1000190002
+	StructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXT    StructureType = 1000190000
+	StructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR           StructureType = 1000211000
+	StructureTypePipelineColorBlendAdvancedStateCreateInfoEXT         StructureType = 1000148002
+	StructureTypePipelineCoverageModulationStateCreateInfoNV          StructureType = 1000152000
+	StructureTypePipelineCoverageToColorStateCreateInfoNV             StructureType = 1000149000
+	StructureTypePipelineDiscardRectangleStateCreateInfoEXT           StructureType = 1000099001
+	StructureTypePipelineRasterizationConservativeStateCreateInfoEXT  StructureType = 1000101001
+	StructureTypePipelineRasterizationStateRasterizationOrderAMD      StructureType = 1000018000
+	StructureTypePipelineRepresentativeFragmentTestStateCreateInfoNV  StructureType = 1000166001
+	StructureTypePipelineSampleLocationsStateCreateInfoEXT            StructureType = 1000143002
+	StructureTypePipelineTessellationDomainOriginStateCreateInfo      StructureType = 1000117003
+	StructureTypePipelineTessellationDomainOriginStateCreateInfoKHR   StructureType = 1000117003
+	StructureTypePipelineVertexInputDivisorStateCreateInfoEXT         StructureType = 1000190001
+	StructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNV   StructureType = 1000164005
+	StructureTypePipelineViewportExclusiveScissorStateCreateInfoNV    StructureType = 1000205000
+	StructureTypePipelineViewportShadingRateImageStateCreateInfoNV    StructureType = 1000164000
+	StructureTypePipelineViewportSwizzleStateCreateInfoNV             StructureType = 1000098000
+	StructureTypePipelineViewportWScalingStateCreateInfoNV            StructureType = 1000087000
+	StructureTypePresentInfoKHR                                       StructureType = 1000001001
+	StructureTypePresentRegionsKHR                                    StructureType = 1000084000
+	StructureTypePresentTimesInfoGoogle                               StructureType = 1000092000
+	StructureTypeProtectedSubmitInfo                                  StructureType = 1000145000
+	StructureTypePhysicalDevice16ItStorageFeatures                    StructureType = 1000083000
+	StructureTypePhysicalDeviceGroupProperties                        StructureType = 1000070000
+	StructureTypePhysicalDeviceSubgroupProperties                     StructureType = 1000094000
+	StructureTypePipelineCacheCreateInfo                              StructureType = 17
+	StructureTypePipelineColorBlendStateCreateInfo                    StructureType = 26
+	StructureTypePipelineDepthStencilStateCreateInfo                  StructureType = 25
+	StructureTypePipelineDynamicStateCreateInfo                       StructureType = 27
+	StructureTypePipelineInputAssemblyStateCreateInfo                 StructureType = 20
+	StructureTypePipelineLayoutCreateInfo                             StructureType = 30
+	StructureTypePipelineMultisampleStateCreateInfo                   StructureType = 24
+	StructureTypePipelineRasterizationStateCreateInfo                 StructureType = 23
+	StructureTypePipelineShaderStageCreateInfo                        StructureType = 18
+	StructureTypePipelineTessellationStateCreateInfo                  StructureType = 21
+	StructureTypePipelineVertexInputStateCreateInfo                   StructureType = 19
+	StructureTypePipelineViewportStateCreateInfo                      StructureType = 22
+	StructureTypeQueueFamilyCheckpointPropertiesNV                    StructureType = 1000206001
+	StructureTypeQueueFamilyProperties2                               StructureType = 1000059005
+	StructureTypeQueueFamilyProperties2KHR                            StructureType = 1000059005
+	StructureTypeQueryPoolCreateInfo                                  StructureType = 11
+	StructureTypeRenderPassCreateInfo2KHR                             StructureType = 1000109004
+	StructureTypeRenderPassInputAttachmentAspectCreateInfo            StructureType = 1000117001
+	StructureTypeRenderPassInputAttachmentAspectCreateInfoKHR         StructureType = 1000117001
+	StructureTypeRenderPassMultiviewCreateInfo                        StructureType = 1000053000
+	StructureTypeRenderPassMultiviewCreateInfoKHR                     StructureType = 1000053000
+	StructureTypeRenderPassSampleLocationsBeginInfoEXT                StructureType = 1000143001
+	StructureTypeRenderPassBeginInfo                                  StructureType = 43
+	StructureTypeRenderPassCreateInfo                                 StructureType = 38
+	StructureTypeSamplerReductionModeCreateInfoEXT                    StructureType = 1000130001
+	StructureTypeSamplerYCbCrConversionCreateInfo                     StructureType = 1000156000
+	StructureTypeSamplerYCbCrConversionCreateInfoKHR                  StructureType = 1000156000
+	StructureTypeSamplerYCbCrConversionImageFormatProperties          StructureType = 1000156005
+	StructureTypeSamplerYCbCrConversionImageFormatPropertiesKHR       StructureType = 1000156005
+	StructureTypeSamplerYCbCrConversionINFO                           StructureType = 1000156001
+	StructureTypeSamplerYCbCrConversionINFO_KHR                       StructureType = 1000156001
+	StructureTypeSampleLocationsInfoEXT                               StructureType = 1000143000
+	StructureTypeSemaphoreGetFdInfoKHR                                StructureType = 1000079001
+	StructureTypeSemaphoreGetWin32HandleInfoKHR                       StructureType = 1000078003
+	StructureTypeShaderModuleValidationCacheCreateInfoEXT             StructureType = 1000160001
+	StructureTypeSharedPresentSurfaceCapabilitiesKHR                  StructureType = 1000111000
+	StructureTypeSparseImageFormatProperties2                         StructureType = 1000059007
+	StructureTypeSparseImageFormatProperties2KHR                      StructureType = 1000059007
+	StructureTypeSparseImageMemoryRequirements2                       StructureType = 1000146004
+	StructureTypeSparseImageMemoryRequirements2KHR                    StructureType = 1000146004
+	StructureTypeSubpassBeginInfoKHR                                  StructureType = 1000109005
+	StructureTypeSubpassDependency2KHR                                StructureType = 1000109003
+	StructureTypeSubpassDescription2KHR                               StructureType = 1000109002
+	StructureTypeSubpassEndInfoKHR                                    StructureType = 1000109006
+	StructureTypeSurfaceCapabilities2EXT                              StructureType = 1000090000
+	StructureTypeSurfaceCapabilities2KHR                              StructureType = 1000119001
+	StructureTypeSurfaceFormat2KHR                                    StructureType = 1000119002
+	StructureTypeSwapchainCounterCreateInfoEXT                        StructureType = 1000091003
+	StructureTypeSwapchainCreateInfoKHR                               StructureType = 1000001000
+	StructureTypeSamplerCreateInfo                                    StructureType = 31
+	StructureTypeSemaphoreCreateInfo                                  StructureType = 9
+	StructureTypeShaderModuleCreateInfo                               StructureType = 16
+	StructureTypeSubmitInfo                                           StructureType = 4
+	StructureTypeTextureLodGatherFormatPropertiesAMD                  StructureType = 1000041000
+	StructureTypeValidationCacheCreateInfoEXT                         StructureType = 1000160000
+	StructureTypeValidationFlagsEXT                                   StructureType = 1000061000
+	StructureTypeViSurfaceCreateInfoNN                                StructureType = 1000062000
+	StructureTypeWaylandSurfaceCreateInfoKHR                          StructureType = 1000006000
+	StructureTypeWin32KeyedMutexAcquireReleaseInfoKHR                 StructureType = 1000075000
+	StructureTypeWin32KeyedMutexAcquireReleaseInfoNV                  StructureType = 1000058000
+	StructureTypeWin32SurfaceCreateInfoKHR                            StructureType = 1000009000
+	StructureTypeWriteDescriptorSetInlineUniformBlockEXT              StructureType = 1000138002
+	StructureTypeWriteDescriptorSet                                   StructureType = 35
+	StructureTypeXcbSurfaceCreateInfoKHR                              StructureType = 1000005000
+	StructureTypeXlibSurfaceCreateInfoKHR                             StructureType = 1000004000
 )
 
 const (
@@ -1075,12 +1057,6 @@ const (
 	ShaderStageComputeBit                ShaderStageFlags = 0x00000020
 	ShaderStageAllGraphics               ShaderStageFlags = 0x0000001F
 	ShaderStageAll                       ShaderStageFlags = 0x7FFFFFFF
-	ShaderStageRaygenBitNVX              ShaderStageFlags = 0x00000100
-	ShaderStageAnyHitBitNVX              ShaderStageFlags = 0x00000200
-	ShaderStageClosestHitBitNVX          ShaderStageFlags = 0x00000400
-	ShaderStageMissBitNVX                ShaderStageFlags = 0x00000800
-	ShaderStageIntersectionBitNVX        ShaderStageFlags = 0x00001000
-	ShaderStageCallableBitNVX            ShaderStageFlags = 0x00002000
 	ShaderStageTaskBitNV                 ShaderStageFlags = 0x00000040
 	ShaderStageMeshBitNV                 ShaderStageFlags = 0x00000080
 )
@@ -1259,7 +1235,6 @@ const (
 	PipelineCreateDerivativeBit                  PipelineCreateFlags = 0x00000004
 	PipelineCreateViewIndexFromDeviceIndexBit    PipelineCreateFlags = 0x00000008
 	PipelineCreateDispatchBase                   PipelineCreateFlags = 0x00000010
-	PipelineCreateDeferCompileBitNVX             PipelineCreateFlags = 0x00000020
 	PipelineCreateViewIndexFromDeviceIndexBitKHR PipelineCreateFlags = PipelineCreateViewIndexFromDeviceIndexBit
 	PipelineCreateDispatchBaseKHR                PipelineCreateFlags = PipelineCreateDispatchBase
 )
@@ -1321,14 +1296,8 @@ const (
 )
 
 const (
-	PipelineBindPointGraphics      PipelineBindPoint = 0
-	PipelineBindPointCompute       PipelineBindPoint = 1
-	PipelineBindPointRaytracingNVX PipelineBindPoint = 1000165000
-)
-
-const (
-	SubpassDescriptionPerViewAttributesBitNVX    SubpassDescriptionFlags = 0x00000001
-	SubpassDescriptionPerViewPositionXOnlyBitNVX SubpassDescriptionFlags = 0x00000002
+	PipelineBindPointGraphics PipelineBindPoint = 0
+	PipelineBindPointCompute  PipelineBindPoint = 1
 )
 
 const (
@@ -1351,9 +1320,7 @@ const (
 	PipelineStageAllCommandsBit                  PipelineStageFlags = 0x00010000
 	PipelineStageTransformFeedbackBitEXT         PipelineStageFlags = 0x01000000
 	PipelineStageConditionalRenderingBitEXT      PipelineStageFlags = 0x00040000
-	PipelineStageCommandProcessBitNVX            PipelineStageFlags = 0x00020000
 	PipelineStageShadingRateImageBitNV           PipelineStageFlags = 0x00400000
-	PipelineStageRaytracingBitNVX                PipelineStageFlags = 0x00200000
 	PipelineStageTaskShaderBitNV                 PipelineStageFlags = 0x00080000
 	PipelineStageMeshShaderBitNV                 PipelineStageFlags = 0x00100000
 )
@@ -1430,20 +1397,11 @@ const (
 	// AccessConditionalRenderingReadBitEXT specifies read access to a predicate as part of conditional rendering.
 	AccessConditionalRenderingReadBitEXT AccessFlags = 0x00100000
 
-	// AccessCommandProcessReadBitNVX specifies reads from Buffer inputs to ProcessCommandsNVX.
-	AccessCommandProcessReadBitNVX AccessFlags = 0x00020000
-
-	// AccessCommandProcessWriteBitNVX specifies writes to the target command buffer in ProcessCommandsNVX.
-	AccessCommandProcessWriteBitNVX AccessFlags = 0x00040000
-
 	// AccessColorAttachmentReadNoncoherentBitEXT is similar to AccessColorAttachmentReadBit, but also includes advanced blend operations.
 	AccessColorAttachmentReadNoncoherentBitEXT AccessFlags = 0x00080000
 
 	// AccessShadingRateImageReadBitNV specifies read access to a shading rate image as part of a drawing command, as bound by BindShadingRateImageNV.
 	AccessShadingRateImageReadBitNV AccessFlags = 0x00800000
-
-	AccessAccelerationStructureReadBitNVX  AccessFlags = 0x00200000
-	AccessAccelerationStructureWriteBitNVX AccessFlags = 0x00400000
 )
 
 const (
@@ -1517,8 +1475,6 @@ const (
 	// BufferUsageConditionalRenderingBitEXT specifies that the buffer is suitable for passing as
 	// the buffer parameter to BeginConditionalRenderingEXT.
 	BufferUsageConditionalRenderingBitEXT BufferUsageFlags = 0x00000200
-
-	BufferUsageRaytracingBitNVX BufferUsageFlags = 0x00000400
 )
 
 const (
@@ -1587,7 +1543,6 @@ const (
 	QueryTypePipelineStatistics         QueryType = 1
 	QueryTypeTimestamp                  QueryType = 2
 	QueryTypeTransformFeedbackStreamEXT QueryType = 1000028004
-	QueryTypeCompactedSizeNVX           QueryType = 1000165000
 )
 
 const (
@@ -1632,19 +1587,18 @@ const (
 )
 
 const (
-	DescriptorTypeSampler                  DescriptorType = 0
-	DescriptorTypeCombinedImageSampler     DescriptorType = 1
-	DescriptorTypeSampledImage             DescriptorType = 2
-	DescriptorTypeStorageImage             DescriptorType = 3
-	DescriptorTypeUniformTexelBuffer       DescriptorType = 4
-	DescriptorTypeStorageTexelBuffer       DescriptorType = 5
-	DescriptorTypeUniformBuffer            DescriptorType = 6
-	DescriptorTypeStorageBuffer            DescriptorType = 7
-	DescriptorTypeUniformBufferDynamic     DescriptorType = 8
-	DescriptorTypeStorageBufferDynamic     DescriptorType = 9
-	DescriptorTypeInputAttachment          DescriptorType = 10
-	DescriptorTypeInlineUniformBlockEXT    DescriptorType = 1000138000
-	DescriptorTypeAccelerationStructureNVX DescriptorType = 1000165000
+	DescriptorTypeSampler               DescriptorType = 0
+	DescriptorTypeCombinedImageSampler  DescriptorType = 1
+	DescriptorTypeSampledImage          DescriptorType = 2
+	DescriptorTypeStorageImage          DescriptorType = 3
+	DescriptorTypeUniformTexelBuffer    DescriptorType = 4
+	DescriptorTypeStorageTexelBuffer    DescriptorType = 5
+	DescriptorTypeUniformBuffer         DescriptorType = 6
+	DescriptorTypeStorageBuffer         DescriptorType = 7
+	DescriptorTypeUniformBufferDynamic  DescriptorType = 8
+	DescriptorTypeStorageBufferDynamic  DescriptorType = 9
+	DescriptorTypeInputAttachment       DescriptorType = 10
+	DescriptorTypeInlineUniformBlockEXT DescriptorType = 1000138000
 )
 
 const (
@@ -1963,24 +1917,6 @@ func (flags ShaderStageFlags) String() string {
 	if (flags & ShaderStageAll) != 0 {
 		out = append(out, "ShaderStageAll")
 	}
-	if (flags & ShaderStageRaygenBitNVX) != 0 {
-		out = append(out, "ShaderStageRaygenBitNVX")
-	}
-	if (flags & ShaderStageAnyHitBitNVX) != 0 {
-		out = append(out, "ShaderStageAnyHitBitNVX")
-	}
-	if (flags & ShaderStageClosestHitBitNVX) != 0 {
-		out = append(out, "ShaderStageClosestHitBitNVX")
-	}
-	if (flags & ShaderStageMissBitNVX) != 0 {
-		out = append(out, "ShaderStageMissBitNVX")
-	}
-	if (flags & ShaderStageIntersectionBitNVX) != 0 {
-		out = append(out, "ShaderStageIntersectionBitNVX")
-	}
-	if (flags & ShaderStageCallableBitNVX) != 0 {
-		out = append(out, "ShaderStageCallableBitNVX")
-	}
 	if (flags & ShaderStageTaskBitNV) != 0 {
 		out = append(out, "ShaderStageTaskBitNV")
 	}
@@ -2086,12 +2022,6 @@ func (flags AttachmentDescriptionFlags) String() string {
 
 func (flags SubpassDescriptionFlags) String() string {
 	var out []string
-	if (flags & SubpassDescriptionPerViewAttributesBitNVX) != 0 {
-		out = append(out, "SubpassDescriptionPerViewAttributesBitNVX")
-	}
-	if (flags & SubpassDescriptionPerViewPositionXOnlyBitNVX) != 0 {
-		out = append(out, "SubpassDescriptionPerViewPositionXOnlyBitNVX")
-	}
 	return strings.Join(out, " | ")
 }
 
@@ -2154,14 +2084,8 @@ func (flags PipelineStageFlags) String() string {
 	if (flags & PipelineStageConditionalRenderingBitEXT) != 0 {
 		out = append(out, "PipelineStageConditionalRenderingBitEXT")
 	}
-	if (flags & PipelineStageCommandProcessBitNVX) != 0 {
-		out = append(out, "PipelineStageCommandProcessBitNVX")
-	}
 	if (flags & PipelineStageShadingRateImageBitNV) != 0 {
 		out = append(out, "PipelineStageShadingRateImageBitNV")
-	}
-	if (flags & PipelineStageRaytracingBitNVX) != 0 {
-		out = append(out, "PipelineStageRaytracingBitNVX")
 	}
 	if (flags & PipelineStageTaskShaderBitNV) != 0 {
 		out = append(out, "PipelineStageTaskShaderBitNV")
@@ -2237,23 +2161,11 @@ func (flags AccessFlags) String() string {
 	if (flags & AccessConditionalRenderingReadBitEXT) != 0 {
 		out = append(out, "AccessConditionalRenderingReadBitEXT")
 	}
-	if (flags & AccessCommandProcessReadBitNVX) != 0 {
-		out = append(out, "AccessCommandProcessReadBitNVX")
-	}
-	if (flags & AccessCommandProcessWriteBitNVX) != 0 {
-		out = append(out, "AccessCommandProcessWriteBitNVX")
-	}
 	if (flags & AccessColorAttachmentReadNoncoherentBitEXT) != 0 {
 		out = append(out, "AccessColorAttachmentReadNoncoherentBitEXT")
 	}
 	if (flags & AccessShadingRateImageReadBitNV) != 0 {
 		out = append(out, "AccessShadingRateImageReadBitNV")
-	}
-	if (flags & AccessAccelerationStructureReadBitNVX) != 0 {
-		out = append(out, "AccessAccelerationStructureReadBitNVX")
-	}
-	if (flags & AccessAccelerationStructureWriteBitNVX) != 0 {
-		out = append(out, "AccessAccelerationStructureWriteBitNVX")
 	}
 	return strings.Join(out, " | ")
 }
@@ -2340,9 +2252,6 @@ func (flags BufferUsageFlags) String() string {
 	}
 	if (flags & BufferUsageConditionalRenderingBitEXT) != 0 {
 		out = append(out, "BufferUsageConditionalRenderingBitEXT")
-	}
-	if (flags & BufferUsageRaytracingBitNVX) != 0 {
-		out = append(out, "BufferUsageRaytracingBitNVX")
 	}
 	return strings.Join(out, " | ")
 }

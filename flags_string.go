@@ -4,6 +4,18 @@ package vk
 
 import "strconv"
 
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[PresentModeImmediateKHR-0]
+	_ = x[PresentModeMailboxKHR-1]
+	_ = x[PresentModeFifoKHR-2]
+	_ = x[PresentModeFifoRelaxedKHR-3]
+	_ = x[PresentModeSharedDemandRefreshKHR-1000111000]
+	_ = x[PresentModeSharedContinuousRefreshKHR-1000111001]
+}
+
 const (
 	_PresentModeKHR_name_0 = "PresentModeImmediateKHRPresentModeMailboxKHRPresentModeFifoKHRPresentModeFifoRelaxedKHR"
 	_PresentModeKHR_name_1 = "PresentModeSharedDemandRefreshKHRPresentModeSharedContinuousRefreshKHR"
@@ -16,7 +28,7 @@ var (
 
 func (i PresentModeKHR) String() string {
 	switch {
-	case 0 <= i && i <= 3:
+	case i <= 3:
 		return _PresentModeKHR_name_0[_PresentModeKHR_index_0[i]:_PresentModeKHR_index_0[i+1]]
 	case 1000111000 <= i && i <= 1000111001:
 		i -= 1000111000
@@ -24,6 +36,13 @@ func (i PresentModeKHR) String() string {
 	default:
 		return "PresentModeKHR(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[CommandBufferLevelPrimary-0]
+	_ = x[CommandBufferLevelSecondary-1]
 }
 
 const _CommandBufferLevel_name = "CommandBufferLevelPrimaryCommandBufferLevelSecondary"
@@ -36,6 +55,12 @@ func (i CommandBufferLevel) String() string {
 	}
 	return _CommandBufferLevel_name[_CommandBufferLevel_index[i]:_CommandBufferLevel_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[COLOR_SPACE_SRGB_NONLINEAR_KHR-0]
+}
 
 const _ColorSpaceKHR_name = "COLOR_SPACE_SRGB_NONLINEAR_KHR"
 
@@ -46,6 +71,196 @@ func (i ColorSpaceKHR) String() string {
 		return "ColorSpaceKHR(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _ColorSpaceKHR_name[_ColorSpaceKHR_index[i]:_ColorSpaceKHR_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[FormatUndefined-0]
+	_ = x[FormatR4G4_UNORM_PACK8-1]
+	_ = x[FormatR4G4B4A4_UNORM_PACK16-2]
+	_ = x[FormatB4G4R4A4_UNORM_PACK16-3]
+	_ = x[FormatR5G6B5_UNORM_PACK16-4]
+	_ = x[FormatB5G6R5_UNORM_PACK16-5]
+	_ = x[FormatR5G5B5A1_UNORM_PACK16-6]
+	_ = x[FormatB5G5R5A1_UNORM_PACK16-7]
+	_ = x[FormatA1R5G5B5_UNORM_PACK16-8]
+	_ = x[FormatR8_UNORM-9]
+	_ = x[FormatR8_SNORM-10]
+	_ = x[FormatR8_USCALED-11]
+	_ = x[FormatR8_SSCALED-12]
+	_ = x[FormatR8_UINT-13]
+	_ = x[FormatR8_SINT-14]
+	_ = x[FormatR8_SRGB-15]
+	_ = x[FormatR8G8_UNORM-16]
+	_ = x[FormatR8G8_SNORM-17]
+	_ = x[FormatR8G8_USCALED-18]
+	_ = x[FormatR8G8_SSCALED-19]
+	_ = x[FormatR8G8_UINT-20]
+	_ = x[FormatR8G8_SINT-21]
+	_ = x[FormatR8G8_SRGB-22]
+	_ = x[FormatR8G8B8_UNORM-23]
+	_ = x[FormatR8G8B8_SNORM-24]
+	_ = x[FormatR8G8B8_USCALED-25]
+	_ = x[FormatR8G8B8_SSCALED-26]
+	_ = x[FormatR8G8B8_UINT-27]
+	_ = x[FormatR8G8B8_SINT-28]
+	_ = x[FormatR8G8B8_SRGB-29]
+	_ = x[FormatB8G8R8_UNORM-30]
+	_ = x[FormatB8G8R8_SNORM-31]
+	_ = x[FormatB8G8R8_USCALED-32]
+	_ = x[FormatB8G8R8_SSCALED-33]
+	_ = x[FormatB8G8R8_UINT-34]
+	_ = x[FormatB8G8R8_SINT-35]
+	_ = x[FormatB8G8R8_SRGB-36]
+	_ = x[FormatR8G8B8A8_UNORM-37]
+	_ = x[FormatR8G8B8A8_SNORM-38]
+	_ = x[FormatR8G8B8A8_USCALED-39]
+	_ = x[FormatR8G8B8A8_SSCALED-40]
+	_ = x[FormatR8G8B8A8_UINT-41]
+	_ = x[FormatR8G8B8A8_SINT-42]
+	_ = x[FormatR8G8B8A8_SRGB-43]
+	_ = x[FormatB8G8R8A8_UNORM-44]
+	_ = x[FormatB8G8R8A8_SNORM-45]
+	_ = x[FormatB8G8R8A8_USCALED-46]
+	_ = x[FormatB8G8R8A8_SSCALED-47]
+	_ = x[FormatB8G8R8A8_UINT-48]
+	_ = x[FormatB8G8R8A8_SINT-49]
+	_ = x[FormatB8G8R8A8_SRGB-50]
+	_ = x[FormatA8B8G8R8_UNORM_PACK32-51]
+	_ = x[FormatA8B8G8R8_SNORM_PACK32-52]
+	_ = x[FormatA8B8G8R8_USCALED_PACK32-53]
+	_ = x[FormatA8B8G8R8_SSCALED_PACK32-54]
+	_ = x[FormatA8B8G8R8_UINT_PACK32-55]
+	_ = x[FormatA8B8G8R8_SINT_PACK32-56]
+	_ = x[FormatA8B8G8R8_SRGB_PACK32-57]
+	_ = x[FormatA2R10G10B10_UNORM_PACK32-58]
+	_ = x[FormatA2R10G10B10_SNORM_PACK32-59]
+	_ = x[FormatA2R10G10B10_USCALED_PACK32-60]
+	_ = x[FormatA2R10G10B10_SSCALED_PACK32-61]
+	_ = x[FormatA2R10G10B10_UINT_PACK32-62]
+	_ = x[FormatA2R10G10B10_SINT_PACK32-63]
+	_ = x[FormatA2B10G10R10_UNORM_PACK32-64]
+	_ = x[FormatA2B10G10R10_SNORM_PACK32-65]
+	_ = x[FormatA2B10G10R10_USCALED_PACK32-66]
+	_ = x[FormatA2B10G10R10_SSCALED_PACK32-67]
+	_ = x[FormatA2B10G10R10_UINT_PACK32-68]
+	_ = x[FormatA2B10G10R10_SINT_PACK32-69]
+	_ = x[FormatR16_UNORM-70]
+	_ = x[FormatR16_SNORM-71]
+	_ = x[FormatR16_USCALED-72]
+	_ = x[FormatR16_SSCALED-73]
+	_ = x[FormatR16_UINT-74]
+	_ = x[FormatR16_SINT-75]
+	_ = x[FormatR16_SFLOAT-76]
+	_ = x[FormatR16G16_UNORM-77]
+	_ = x[FormatR16G16_SNORM-78]
+	_ = x[FormatR16G16_USCALED-79]
+	_ = x[FormatR16G16_SSCALED-80]
+	_ = x[FormatR16G16_UINT-81]
+	_ = x[FormatR16G16_SINT-82]
+	_ = x[FormatR16G16_SFLOAT-83]
+	_ = x[FormatR16G16B16_UNORM-84]
+	_ = x[FormatR16G16B16_SNORM-85]
+	_ = x[FormatR16G16B16_USCALED-86]
+	_ = x[FormatR16G16B16_SSCALED-87]
+	_ = x[FormatR16G16B16_UINT-88]
+	_ = x[FormatR16G16B16_SINT-89]
+	_ = x[FormatR16G16B16_SFLOAT-90]
+	_ = x[FormatR16G16B16A16_UNORM-91]
+	_ = x[FormatR16G16B16A16_SNORM-92]
+	_ = x[FormatR16G16B16A16_USCALED-93]
+	_ = x[FormatR16G16B16A16_SSCALED-94]
+	_ = x[FormatR16G16B16A16_UINT-95]
+	_ = x[FormatR16G16B16A16_SINT-96]
+	_ = x[FormatR16G16B16A16_SFLOAT-97]
+	_ = x[FormatR32_UINT-98]
+	_ = x[FormatR32_SINT-99]
+	_ = x[FormatR32_SFLOAT-100]
+	_ = x[FormatR32G32_UINT-101]
+	_ = x[FormatR32G32_SINT-102]
+	_ = x[FormatR32G32_SFLOAT-103]
+	_ = x[FormatR32G32B32_UINT-104]
+	_ = x[FormatR32G32B32_SINT-105]
+	_ = x[FormatR32G32B32_SFLOAT-106]
+	_ = x[FormatR32G32B32A32_UINT-107]
+	_ = x[FormatR32G32B32A32_SINT-108]
+	_ = x[FormatR32G32B32A32_SFLOAT-109]
+	_ = x[FormatR64_UINT-110]
+	_ = x[FormatR64_SINT-111]
+	_ = x[FormatR64_SFLOAT-112]
+	_ = x[FormatR64G64_UINT-113]
+	_ = x[FormatR64G64_SINT-114]
+	_ = x[FormatR64G64_SFLOAT-115]
+	_ = x[FormatR64G64B64_UINT-116]
+	_ = x[FormatR64G64B64_SINT-117]
+	_ = x[FormatR64G64B64_SFLOAT-118]
+	_ = x[FormatR64G64B64A64_UINT-119]
+	_ = x[FormatR64G64B64A64_SINT-120]
+	_ = x[FormatR64G64B64A64_SFLOAT-121]
+	_ = x[FormatB10G11R11_UFLOAT_PACK32-122]
+	_ = x[FormatE5B9G9R9_UFLOAT_PACK32-123]
+	_ = x[FormatD16_UNORM-124]
+	_ = x[FormatX8_D24_UNORM_PACK32-125]
+	_ = x[FormatD32_SFLOAT-126]
+	_ = x[FormatS8_UINT-127]
+	_ = x[FormatD16_UNORM_S8_UINT-128]
+	_ = x[FormatD24_UNORM_S8_UINT-129]
+	_ = x[FormatD32_SFLOAT_S8_UINT-130]
+	_ = x[FormatBC1_RGB_UNORM_BLOCK-131]
+	_ = x[FormatBC1_RGB_SRGB_BLOCK-132]
+	_ = x[FormatBC1_RGBA_UNORM_BLOCK-133]
+	_ = x[FormatBC1_RGBA_SRGB_BLOCK-134]
+	_ = x[FormatBC2_UNORM_BLOCK-135]
+	_ = x[FormatBC2_SRGB_BLOCK-136]
+	_ = x[FormatBC3_UNORM_BLOCK-137]
+	_ = x[FormatBC3_SRGB_BLOCK-138]
+	_ = x[FormatBC4_UNORM_BLOCK-139]
+	_ = x[FormatBC4_SNORM_BLOCK-140]
+	_ = x[FormatBC5_UNORM_BLOCK-141]
+	_ = x[FormatBC5_SNORM_BLOCK-142]
+	_ = x[FormatBC6H_UFLOAT_BLOCK-143]
+	_ = x[FormatBC6H_SFLOAT_BLOCK-144]
+	_ = x[FormatBC7_UNORM_BLOCK-145]
+	_ = x[FormatBC7_SRGB_BLOCK-146]
+	_ = x[FormatETC2_R8G8B8_UNORM_BLOCK-147]
+	_ = x[FormatETC2_R8G8B8_SRGB_BLOCK-148]
+	_ = x[FormatETC2_R8G8B8A1_UNORM_BLOCK-149]
+	_ = x[FormatETC2_R8G8B8A1_SRGB_BLOCK-150]
+	_ = x[FormatETC2_R8G8B8A8_UNORM_BLOCK-151]
+	_ = x[FormatETC2_R8G8B8A8_SRGB_BLOCK-152]
+	_ = x[FormatEAC_R11_UNORM_BLOCK-153]
+	_ = x[FormatEAC_R11_SNORM_BLOCK-154]
+	_ = x[FormatEAC_R11G11_UNORM_BLOCK-155]
+	_ = x[FormatEAC_R11G11_SNORM_BLOCK-156]
+	_ = x[FormatASTC_4x4_UNORM_BLOCK-157]
+	_ = x[FormatASTC_4x4_SRGB_BLOCK-158]
+	_ = x[FormatASTC_5x4_UNORM_BLOCK-159]
+	_ = x[FormatASTC_5x4_SRGB_BLOCK-160]
+	_ = x[FormatASTC_5x5_UNORM_BLOCK-161]
+	_ = x[FormatASTC_5x5_SRGB_BLOCK-162]
+	_ = x[FormatASTC_6x5_UNORM_BLOCK-163]
+	_ = x[FormatASTC_6x5_SRGB_BLOCK-164]
+	_ = x[FormatASTC_6x6_UNORM_BLOCK-165]
+	_ = x[FormatASTC_6x6_SRGB_BLOCK-166]
+	_ = x[FormatASTC_8x5_UNORM_BLOCK-167]
+	_ = x[FormatASTC_8x5_SRGB_BLOCK-168]
+	_ = x[FormatASTC_8x6_UNORM_BLOCK-169]
+	_ = x[FormatASTC_8x6_SRGB_BLOCK-170]
+	_ = x[FormatASTC_8x8_UNORM_BLOCK-171]
+	_ = x[FormatASTC_8x8_SRGB_BLOCK-172]
+	_ = x[FormatASTC_10x5_UNORM_BLOCK-173]
+	_ = x[FormatASTC_10x5_SRGB_BLOCK-174]
+	_ = x[FormatASTC_10x6_UNORM_BLOCK-175]
+	_ = x[FormatASTC_10x6_SRGB_BLOCK-176]
+	_ = x[FormatASTC_10x8_UNORM_BLOCK-177]
+	_ = x[FormatASTC_10x8_SRGB_BLOCK-178]
+	_ = x[FormatASTC_10x10_UNORM_BLOCK-179]
+	_ = x[FormatASTC_10x10_SRGB_BLOCK-180]
+	_ = x[FormatASTC_12x10_UNORM_BLOCK-181]
+	_ = x[FormatASTC_12x10_SRGB_BLOCK-182]
+	_ = x[FormatASTC_12x12_UNORM_BLOCK-183]
+	_ = x[FormatASTC_12x12_SRGB_BLOCK-184]
 }
 
 const _Format_name = "FormatUndefinedFormatR4G4_UNORM_PACK8FormatR4G4B4A4_UNORM_PACK16FormatB4G4R4A4_UNORM_PACK16FormatR5G6B5_UNORM_PACK16FormatB5G6R5_UNORM_PACK16FormatR5G5B5A1_UNORM_PACK16FormatB5G5R5A1_UNORM_PACK16FormatA1R5G5B5_UNORM_PACK16FormatR8_UNORMFormatR8_SNORMFormatR8_USCALEDFormatR8_SSCALEDFormatR8_UINTFormatR8_SINTFormatR8_SRGBFormatR8G8_UNORMFormatR8G8_SNORMFormatR8G8_USCALEDFormatR8G8_SSCALEDFormatR8G8_UINTFormatR8G8_SINTFormatR8G8_SRGBFormatR8G8B8_UNORMFormatR8G8B8_SNORMFormatR8G8B8_USCALEDFormatR8G8B8_SSCALEDFormatR8G8B8_UINTFormatR8G8B8_SINTFormatR8G8B8_SRGBFormatB8G8R8_UNORMFormatB8G8R8_SNORMFormatB8G8R8_USCALEDFormatB8G8R8_SSCALEDFormatB8G8R8_UINTFormatB8G8R8_SINTFormatB8G8R8_SRGBFormatR8G8B8A8_UNORMFormatR8G8B8A8_SNORMFormatR8G8B8A8_USCALEDFormatR8G8B8A8_SSCALEDFormatR8G8B8A8_UINTFormatR8G8B8A8_SINTFormatR8G8B8A8_SRGBFormatB8G8R8A8_UNORMFormatB8G8R8A8_SNORMFormatB8G8R8A8_USCALEDFormatB8G8R8A8_SSCALEDFormatB8G8R8A8_UINTFormatB8G8R8A8_SINTFormatB8G8R8A8_SRGBFormatA8B8G8R8_UNORM_PACK32FormatA8B8G8R8_SNORM_PACK32FormatA8B8G8R8_USCALED_PACK32FormatA8B8G8R8_SSCALED_PACK32FormatA8B8G8R8_UINT_PACK32FormatA8B8G8R8_SINT_PACK32FormatA8B8G8R8_SRGB_PACK32FormatA2R10G10B10_UNORM_PACK32FormatA2R10G10B10_SNORM_PACK32FormatA2R10G10B10_USCALED_PACK32FormatA2R10G10B10_SSCALED_PACK32FormatA2R10G10B10_UINT_PACK32FormatA2R10G10B10_SINT_PACK32FormatA2B10G10R10_UNORM_PACK32FormatA2B10G10R10_SNORM_PACK32FormatA2B10G10R10_USCALED_PACK32FormatA2B10G10R10_SSCALED_PACK32FormatA2B10G10R10_UINT_PACK32FormatA2B10G10R10_SINT_PACK32FormatR16_UNORMFormatR16_SNORMFormatR16_USCALEDFormatR16_SSCALEDFormatR16_UINTFormatR16_SINTFormatR16_SFLOATFormatR16G16_UNORMFormatR16G16_SNORMFormatR16G16_USCALEDFormatR16G16_SSCALEDFormatR16G16_UINTFormatR16G16_SINTFormatR16G16_SFLOATFormatR16G16B16_UNORMFormatR16G16B16_SNORMFormatR16G16B16_USCALEDFormatR16G16B16_SSCALEDFormatR16G16B16_UINTFormatR16G16B16_SINTFormatR16G16B16_SFLOATFormatR16G16B16A16_UNORMFormatR16G16B16A16_SNORMFormatR16G16B16A16_USCALEDFormatR16G16B16A16_SSCALEDFormatR16G16B16A16_UINTFormatR16G16B16A16_SINTFormatR16G16B16A16_SFLOATFormatR32_UINTFormatR32_SINTFormatR32_SFLOATFormatR32G32_UINTFormatR32G32_SINTFormatR32G32_SFLOATFormatR32G32B32_UINTFormatR32G32B32_SINTFormatR32G32B32_SFLOATFormatR32G32B32A32_UINTFormatR32G32B32A32_SINTFormatR32G32B32A32_SFLOATFormatR64_UINTFormatR64_SINTFormatR64_SFLOATFormatR64G64_UINTFormatR64G64_SINTFormatR64G64_SFLOATFormatR64G64B64_UINTFormatR64G64B64_SINTFormatR64G64B64_SFLOATFormatR64G64B64A64_UINTFormatR64G64B64A64_SINTFormatR64G64B64A64_SFLOATFormatB10G11R11_UFLOAT_PACK32FormatE5B9G9R9_UFLOAT_PACK32FormatD16_UNORMFormatX8_D24_UNORM_PACK32FormatD32_SFLOATFormatS8_UINTFormatD16_UNORM_S8_UINTFormatD24_UNORM_S8_UINTFormatD32_SFLOAT_S8_UINTFormatBC1_RGB_UNORM_BLOCKFormatBC1_RGB_SRGB_BLOCKFormatBC1_RGBA_UNORM_BLOCKFormatBC1_RGBA_SRGB_BLOCKFormatBC2_UNORM_BLOCKFormatBC2_SRGB_BLOCKFormatBC3_UNORM_BLOCKFormatBC3_SRGB_BLOCKFormatBC4_UNORM_BLOCKFormatBC4_SNORM_BLOCKFormatBC5_UNORM_BLOCKFormatBC5_SNORM_BLOCKFormatBC6H_UFLOAT_BLOCKFormatBC6H_SFLOAT_BLOCKFormatBC7_UNORM_BLOCKFormatBC7_SRGB_BLOCKFormatETC2_R8G8B8_UNORM_BLOCKFormatETC2_R8G8B8_SRGB_BLOCKFormatETC2_R8G8B8A1_UNORM_BLOCKFormatETC2_R8G8B8A1_SRGB_BLOCKFormatETC2_R8G8B8A8_UNORM_BLOCKFormatETC2_R8G8B8A8_SRGB_BLOCKFormatEAC_R11_UNORM_BLOCKFormatEAC_R11_SNORM_BLOCKFormatEAC_R11G11_UNORM_BLOCKFormatEAC_R11G11_SNORM_BLOCKFormatASTC_4x4_UNORM_BLOCKFormatASTC_4x4_SRGB_BLOCKFormatASTC_5x4_UNORM_BLOCKFormatASTC_5x4_SRGB_BLOCKFormatASTC_5x5_UNORM_BLOCKFormatASTC_5x5_SRGB_BLOCKFormatASTC_6x5_UNORM_BLOCKFormatASTC_6x5_SRGB_BLOCKFormatASTC_6x6_UNORM_BLOCKFormatASTC_6x6_SRGB_BLOCKFormatASTC_8x5_UNORM_BLOCKFormatASTC_8x5_SRGB_BLOCKFormatASTC_8x6_UNORM_BLOCKFormatASTC_8x6_SRGB_BLOCKFormatASTC_8x8_UNORM_BLOCKFormatASTC_8x8_SRGB_BLOCKFormatASTC_10x5_UNORM_BLOCKFormatASTC_10x5_SRGB_BLOCKFormatASTC_10x6_UNORM_BLOCKFormatASTC_10x6_SRGB_BLOCKFormatASTC_10x8_UNORM_BLOCKFormatASTC_10x8_SRGB_BLOCKFormatASTC_10x10_UNORM_BLOCKFormatASTC_10x10_SRGB_BLOCKFormatASTC_12x10_UNORM_BLOCKFormatASTC_12x10_SRGB_BLOCKFormatASTC_12x12_UNORM_BLOCKFormatASTC_12x12_SRGB_BLOCK"
@@ -58,8 +273,338 @@ func (i Format) String() string {
 	}
 	return _Format_name[_Format_index[i]:_Format_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[StructureTypeAcquireNextImageInfoKHR-1000060010]
+	_ = x[StructureTypeAndroidHardwareBufferFormatPropertiesAndroid-1000129002]
+	_ = x[StructureTypeAndroidHardwareBufferPropertiesAndroid-1000129001]
+	_ = x[StructureTypeAndroidHardwareBufferUsageAndroid-1000129000]
+	_ = x[StructureTypeAndroidSurfaceCreateInfoKHR-1000008000]
+	_ = x[StructureTypeAttachmentDescription2KHR-1000109000]
+	_ = x[StructureTypeAttachmentReference2KHR-1000109001]
+	_ = x[StructureTypeApplicationInfo-0]
+	_ = x[StructureTypeBindBufferMemoryDeviceGroupInfoKHR-1000060013]
+	_ = x[StructureTypeBindBufferMemoryInfoKHR-1000157000]
+	_ = x[StructureTypeBindImageMemoryDeviceGroupInfoKHR-1000060014]
+	_ = x[StructureTypeBindImageMemoryInfoKHR-1000157001]
+	_ = x[StructureTypeBindImageMemorySwapchainInfoKHR-1000060009]
+	_ = x[StructureTypeBindImagePlaneMemoryINFO-1000156002]
+	_ = x[StructureTypeBindImagePlaneMemoryInfoKHR-1000156002]
+	_ = x[StructureTypeBufferMemoryRequirementsInfo2-1000146000]
+	_ = x[StructureTypeBufferMemoryRequirementsInfo2KHR-1000146000]
+	_ = x[StructureTypeBindBufferMemoryDeviceGroupInfo-1000060013]
+	_ = x[StructureTypeBindBufferMemoryInfo-1000157000]
+	_ = x[StructureTypeBindImageMemoryDeviceGroupInfo-1000060014]
+	_ = x[StructureTypeBindImageMemoryInfo-1000157001]
+	_ = x[StructureTypeBindSparseInfo-7]
+	_ = x[StructureTypeBufferCreateInfo-12]
+	_ = x[StructureTypeBufferMemoryBarrier-44]
+	_ = x[StructureTypeBufferViewCreateInfo-13]
+	_ = x[StructureTypeCheckpointDataNV-1000206000]
+	_ = x[StructureTypeCommandBufferInheritanceConditionalRenderingInfoEXT-1000081000]
+	_ = x[StructureTypeConditionalRenderingBeginInfoEXT-1000081002]
+	_ = x[StructureTypeCommandBufferAllocateInfo-40]
+	_ = x[StructureTypeCommandBufferBeginInfo-42]
+	_ = x[StructureTypeCommandBufferInheritanceInfo-41]
+	_ = x[StructureTypeCommandPoolCreateInfo-39]
+	_ = x[StructureTypeComputePipelineCreateInfo-29]
+	_ = x[StructureTypeCopyDescriptorSet-36]
+	_ = x[StructureTypeD3D12FenceSubmitInfoKHR-1000078002]
+	_ = x[StructureTypeDebugMarkerMarkerInfoEXT-1000022002]
+	_ = x[StructureTypeDebugMarkerObjectNameInfoEXT-1000022000]
+	_ = x[StructureTypeDebugMarkerObjectTagInfoEXT-1000022001]
+	_ = x[StructureTypeDebugReportCallbackCreateInfoEXT-1000011000]
+	_ = x[StructureTypeDebugReportCreateInfoEXT-1000011000]
+	_ = x[StructureTypeDebugUtilsLabelEXT-1000128002]
+	_ = x[StructureTypeDebugUtilsMessengerCallbackDataEXT-1000128003]
+	_ = x[StructureTypeDebugUtilsMessengerCreateInfoEXT-1000128004]
+	_ = x[StructureTypeDebugUtilsObjectNameInfoEXT-1000128000]
+	_ = x[StructureTypeDebugUtilsObjectTagInfoEXT-1000128001]
+	_ = x[StructureTypeDedicatedAllocationBufferCreateInfoNV-1000026001]
+	_ = x[StructureTypeDedicatedAllocationImageCreateInfoNV-1000026000]
+	_ = x[StructureTypeDedicatedAllocationMemoryAllocateInfoNV-1000026002]
+	_ = x[StructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXT-1000138003]
+	_ = x[StructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXT-1000161000]
+	_ = x[StructureTypeDescriptorSetLayoutSupport-1000168001]
+	_ = x[StructureTypeDescriptorSetLayoutSupportKHR-1000168001]
+	_ = x[StructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExt-1000161003]
+	_ = x[StructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXT-1000161004]
+	_ = x[StructureTypeDescriptorUpdateTemplateCreateINFO-1000085000]
+	_ = x[StructureTypeDescriptorUpdateTemplateCreateInfoKHR-1000085000]
+	_ = x[StructureTypeDeviceEventInfoEXT-1000091001]
+	_ = x[StructureTypeDeviceGroupBindSparseInfoKHR-1000060006]
+	_ = x[StructureTypeDeviceGroupCommandBufferBeginInfoKHR-1000060004]
+	_ = x[StructureTypeDeviceGroupDeviceCreateInfoKHR-1000070001]
+	_ = x[StructureTypeDeviceGroupPresentCapabilitiesKHR-1000060007]
+	_ = x[StructureTypeDeviceGroupPresentInfoKHR-1000060011]
+	_ = x[StructureTypeDeviceGroupRenderPassBeginInfoKHR-1000060003]
+	_ = x[StructureTypeDeviceGroupSubmitInfoKHR-1000060005]
+	_ = x[StructureTypeDeviceGroupSwapchainCreateInfoKHR-1000060012]
+	_ = x[StructureTypeDeviceQueueGlobalPriorityCreateInfoEXT-1000174000]
+	_ = x[StructureTypeDeviceQueueInfo2-1000145003]
+	_ = x[StructureTypeDisplayEventInfoEXT-1000091002]
+	_ = x[StructureTypeDisplayModeCreateInfoKHR-1000002000]
+	_ = x[StructureTypeDisplayModeProperties2KHR-1000121002]
+	_ = x[StructureTypeDisplayPlaneCapabilities2KHR-1000121004]
+	_ = x[StructureTypeDisplayPlaneInfo2KHR-1000121003]
+	_ = x[StructureTypeDisplayPlaneProperties2KHR-1000121001]
+	_ = x[StructureTypeDisplayPowerInfoEXT-1000091000]
+	_ = x[StructureTypeDisplayPresentInfoKHR-1000003000]
+	_ = x[StructureTypeDisplayProperties2KHR-1000121000]
+	_ = x[StructureTypeDisplaySurfaceCreateInfoKHR-1000002001]
+	_ = x[StructureTypeDescriptorPoolCreateInfo-33]
+	_ = x[StructureTypeDescriptorSetAllocateInfo-34]
+	_ = x[StructureTypeDescriptorSetLayoutCreateInfo-32]
+	_ = x[StructureTypeDeviceCreateInfo-3]
+	_ = x[StructureTypeDeviceGroupBindSparseInfo-1000060006]
+	_ = x[StructureTypeDeviceGroupCommandBufferBeginInfo-1000060004]
+	_ = x[StructureTypeDeviceGroupDeviceCreateInfo-1000070001]
+	_ = x[StructureTypeDeviceGroupRenderPassBeginInfo-1000060003]
+	_ = x[StructureTypeDeviceGroupSubmitInfo-1000060005]
+	_ = x[StructureTypeDeviceQueueCreateInfo-2]
+	_ = x[StructureTypeExportFenceCreateInfo-1000113000]
+	_ = x[StructureTypeExportFenceCreateInfoKHR-1000113000]
+	_ = x[StructureTypeExportFenceWin32HandleInfoKHR-1000114001]
+	_ = x[StructureTypeExportMemoryAllocateInfo-1000072002]
+	_ = x[StructureTypeExportMemoryAllocateInfoKHR-1000072002]
+	_ = x[StructureTypeExportMemoryAllocateInfoNV-1000056001]
+	_ = x[StructureTypeExportMemoryWin32HandleInfoKHR-1000073001]
+	_ = x[StructureTypeExportMemoryWin32HandleInfoNV-1000057001]
+	_ = x[StructureTypeExportSemaphoreCreateInfo-1000077000]
+	_ = x[StructureTypeExportSemaphoreCreateInfoKHR-1000077000]
+	_ = x[StructureTypeExportSemaphoreWin32HandleInfoKHR-1000078001]
+	_ = x[StructureTypeExternalBufferProperties-1000071003]
+	_ = x[StructureTypeExternalBufferPropertiesKHR-1000071003]
+	_ = x[StructureTypeExternalFenceProperties-1000112001]
+	_ = x[StructureTypeExternalFencePropertiesKHR-1000112001]
+	_ = x[StructureTypeExternalFormatAndroid-1000129005]
+	_ = x[StructureTypeExternalImageFormatProperties-1000071001]
+	_ = x[StructureTypeExternalImageFormatPropertiesKHR-1000071001]
+	_ = x[StructureTypeExternalMemoryBufferCreateInfo-1000072000]
+	_ = x[StructureTypeExternalMemoryBufferCreateInfoKHR-1000072000]
+	_ = x[StructureTypeExternalMemoryImageCreateInfo-1000072001]
+	_ = x[StructureTypeExternalMemoryImageCreateInfoKHR-1000072001]
+	_ = x[StructureTypeExternalMemoryImageCreateInfoNV-1000056000]
+	_ = x[StructureTypeExternalSemaphoreProperties-1000076001]
+	_ = x[StructureTypeExternalSemaphorePropertiesKHR-1000076001]
+	_ = x[StructureTypeEventCreateInfo-10]
+	_ = x[StructureTypeFenceGetFdInfoKHR-1000115001]
+	_ = x[StructureTypeFenceGetWin32HandleInfoKHR-1000114002]
+	_ = x[StructureTypeFormatProperties2-1000059002]
+	_ = x[StructureTypeFormatProperties2KHR-1000059002]
+	_ = x[StructureTypeFenceCreateInfo-8]
+	_ = x[StructureTypeFramebufferCreateInfo-37]
+	_ = x[StructureTypeGraphicsPipelineCreateInfo-28]
+	_ = x[StructureTypeHdrMetadataEXT-1000105000]
+	_ = x[StructureTypeImageFormatListCreateInfoKHR-1000147000]
+	_ = x[StructureTypeImageFormatProperties2-1000059003]
+	_ = x[StructureTypeImageFormatProperties2KHR-1000059003]
+	_ = x[StructureTypeImageMemoryRequirementsInfo2-1000146001]
+	_ = x[StructureTypeImageMemoryRequirementsInfo2KHR-1000146001]
+	_ = x[StructureTypeImagePlaneMemoryRequirementsInfo-1000156003]
+	_ = x[StructureTypeImagePlaneMemoryRequirementsInfoKHR-1000156003]
+	_ = x[StructureTypeImageSparseMemoryRequirementsInfo2-1000146002]
+	_ = x[StructureTypeImageSparseMemoryRequirementsInfo2KHR-1000146002]
+	_ = x[StructureTypeImageSwapchainCreateInfoKHR-1000060008]
+	_ = x[StructureTypeImageViewAstcDecodeModeEXT-1000067000]
+	_ = x[StructureTypeImageViewUsageCreateInfo-1000117002]
+	_ = x[StructureTypeImageViewUsageCreateInfoKHR-1000117002]
+	_ = x[StructureTypeImportAndroidHardwareBufferInfoAndroid-1000129003]
+	_ = x[StructureTypeImportFenceFdInfoKHR-1000115000]
+	_ = x[StructureTypeImportFenceWin32HandleInfoKHR-1000114000]
+	_ = x[StructureTypeImportMemoryFdInfoKHR-1000074000]
+	_ = x[StructureTypeImportMemoryHostPointerInfoEXT-1000178000]
+	_ = x[StructureTypeImportMemoryWin32HandleInfoKHR-1000073000]
+	_ = x[StructureTypeImportMemoryWin32HandleInfoNV-1000057000]
+	_ = x[StructureTypeImportSemaphoreFdInfoKHR-1000079000]
+	_ = x[StructureTypeImportSemaphoreWin32HandleInfoKHR-1000078000]
+	_ = x[StructureTypeIosSurfaceCreateInfoMVK-1000122000]
+	_ = x[StructureTypeImageCreateInfo-14]
+	_ = x[StructureTypeImageMemoryBarrier-45]
+	_ = x[StructureTypeImageViewCreateInfo-15]
+	_ = x[StructureTypeInstanceCreateInfo-1]
+	_ = x[StructureTypeLoaderDeviceCreateInfo-48]
+	_ = x[StructureTypeLoaderInstanceCreateInfo-47]
+	_ = x[StructureTypeMacosSurfaceCreateInfoMVK-1000123000]
+	_ = x[StructureTypeMemoryAllocateFlagsInfoKHR-1000060000]
+	_ = x[StructureTypeMemoryDedicatedAllocateInfoKHR-1000127001]
+	_ = x[StructureTypeMemoryDedicatedRequirementsKHR-1000127000]
+	_ = x[StructureTypeMemoryFdPropertiesKHR-1000074001]
+	_ = x[StructureTypeMemoryGetAndroidHardwareBufferInfoAndroid-1000129004]
+	_ = x[StructureTypeMemoryGetFdInfoKHR-1000074002]
+	_ = x[StructureTypeMemoryGetWin32HandleInfoKHR-1000073003]
+	_ = x[StructureTypeMemoryHostPointerPropertiesEXT-1000178001]
+	_ = x[StructureTypeMemoryRequirements2-1000146003]
+	_ = x[StructureTypeMemoryRequirements2KHR-1000146003]
+	_ = x[StructureTypeMemoryWin32HandlePropertiesKHR-1000073002]
+	_ = x[StructureTypeMirSurfaceCreateInfoKHR-1000007000]
+	_ = x[StructureTypeMultisamplePropertiesEXT-1000143004]
+	_ = x[StructureTypeMappedMemoryRange-6]
+	_ = x[StructureTypeMemoryAllocateFlagsInfo-1000060000]
+	_ = x[StructureTypeMemoryAllocateInfo-5]
+	_ = x[StructureTypeMemoryBarrier-46]
+	_ = x[StructureTypeMemoryDedicatedAllocateInfo-1000127001]
+	_ = x[StructureTypeMemoryDedicatedRequirements-1000127000]
+	_ = x[StructureTypePhysicalDevice16BitStorageFeaturesKHR-1000083000]
+	_ = x[StructureTypePhysicalDevice8BitStorageFeaturesKHR-1000177000]
+	_ = x[StructureTypePhysicalDeviceAstcDecodeFeaturesEXT-1000067001]
+	_ = x[StructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXT-1000148000]
+	_ = x[StructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXT-1000148001]
+	_ = x[StructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NV-1000201000]
+	_ = x[StructureTypePhysicalDeviceConditionalRenderingFeaturesEXT-1000081001]
+	_ = x[StructureTypePhysicalDeviceConservativeRasterizationPropertiesEXT-1000101000]
+	_ = x[StructureTypePhysicalDeviceCornerSampledImageFeaturesNV-1000050000]
+	_ = x[StructureTypePhysicalDeviceDescriptorIndexingFeaturesEXT-1000161001]
+	_ = x[StructureTypePhysicalDeviceDescriptorIndexingPropertiesEXT-1000161002]
+	_ = x[StructureTypePhysicalDeviceDiscardRectanglePropertiesEXT-1000099000]
+	_ = x[StructureTypePhysicalDeviceExclusiveScissorFeaturesNV-1000205002]
+	_ = x[StructureTypePhysicalDeviceExternalBufferInfo-1000071002]
+	_ = x[StructureTypePhysicalDeviceExternalBufferInfoKHR-1000071002]
+	_ = x[StructureTypePhysicalDeviceExternalFenceInfo-1000112000]
+	_ = x[StructureTypePhysicalDeviceExternalFenceInfoKHR-1000112000]
+	_ = x[StructureTypePhysicalDeviceExternalImageFormatInfo-1000071000]
+	_ = x[StructureTypePhysicalDeviceExternalImageFormatInfoKHR-1000071000]
+	_ = x[StructureTypePhysicalDeviceExternalMemoryHostPropertiesEXT-1000178002]
+	_ = x[StructureTypePhysicalDeviceExternalSemaphoreInfo-1000076000]
+	_ = x[StructureTypePhysicalDeviceExternalSemaphoreInfoKHR-1000076000]
+	_ = x[StructureTypePhysicalDeviceFeatures2-1000059000]
+	_ = x[StructureTypePhysicalDeviceFeatures2KHR-1000059000]
+	_ = x[StructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNV-1000203000]
+	_ = x[StructureTypePhysicalDeviceGroupPropertiesKHR-1000070000]
+	_ = x[StructureTypePhysicalDeviceIdProperties-1000071004]
+	_ = x[StructureTypePhysicalDeviceIdPropertiesKHR-1000071004]
+	_ = x[StructureTypePhysicalDeviceImageFormatInfo2-1000059004]
+	_ = x[StructureTypePhysicalDeviceImageFormatInfo2KHR-1000059004]
+	_ = x[StructureTypePhysicalDeviceInlineUniformBlockFeaturesEXT-1000138000]
+	_ = x[StructureTypePhysicalDeviceInlineUniformBlockPropertiesEXT-1000138001]
+	_ = x[StructureTypePhysicalDeviceMaintenance3Properties-1000168000]
+	_ = x[StructureTypePhysicalDeviceMaintenance3PropertiesKHR-1000168000]
+	_ = x[StructureTypePhysicalDeviceMemoryProperties2-1000059006]
+	_ = x[StructureTypePhysicalDeviceMemoryProperties2KHR-1000059006]
+	_ = x[StructureTypePhysicalDeviceMeshShaderFeaturesNV-1000202000]
+	_ = x[StructureTypePhysicalDeviceMeshShaderPropertiesNV-1000202001]
+	_ = x[StructureTypePhysicalDeviceMultiviewFeatures-1000053001]
+	_ = x[StructureTypePhysicalDeviceMultiviewFeaturesKHR-1000053001]
+	_ = x[StructureTypePhysicalDeviceMultiviewProperties-1000053002]
+	_ = x[StructureTypePhysicalDeviceMultiviewPropertiesKHR-1000053002]
+	_ = x[StructureTypePhysicalDevicePointClippingProperties-1000117000]
+	_ = x[StructureTypePhysicalDevicePointClippingPropertiesKHR-1000117000]
+	_ = x[StructureTypePhysicalDeviceProperties2-1000059001]
+	_ = x[StructureTypePhysicalDeviceProperties2KHR-1000059001]
+	_ = x[StructureTypePhysicalDeviceProtectedMemoryFeatures-1000145001]
+	_ = x[StructureTypePhysicalDeviceProtectedMemoryProperties-1000145002]
+	_ = x[StructureTypePhysicalDevicePushDescriptorPropertiesKHR-1000080000]
+	_ = x[StructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNV-1000166000]
+	_ = x[StructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXT-1000130000]
+	_ = x[StructureTypePhysicalDeviceSamplerYCbCrConversionFeatures-1000156004]
+	_ = x[StructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesKHR-1000156004]
+	_ = x[StructureTypePhysicalDeviceSampleLocationsPropertiesEXT-1000143003]
+	_ = x[StructureTypePhysicalDeviceShaderCorePropertiesAMD-1000185000]
+	_ = x[StructureTypePhysicalDeviceShaderDrawParameterFeatures-1000063000]
+	_ = x[StructureTypePhysicalDeviceShaderImageFootprintFeaturesNV-1000204000]
+	_ = x[StructureTypePhysicalDeviceShadingRateImageFeaturesNV-1000164001]
+	_ = x[StructureTypePhysicalDeviceShadingRateImagePropertiesNV-1000164002]
+	_ = x[StructureTypePhysicalDeviceSparseImageFormatInfo2-1000059008]
+	_ = x[StructureTypePhysicalDeviceSparseImageFormatInfo2KHR-1000059008]
+	_ = x[StructureTypePhysicalDeviceSurfaceInfo2KHR-1000119000]
+	_ = x[StructureTypePhysicalDeviceVariablePointerFeatures-1000120000]
+	_ = x[StructureTypePhysicalDeviceVariablePointerFeaturesKHR-1000120000]
+	_ = x[StructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXT-1000190002]
+	_ = x[StructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXT-1000190000]
+	_ = x[StructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR-1000211000]
+	_ = x[StructureTypePipelineColorBlendAdvancedStateCreateInfoEXT-1000148002]
+	_ = x[StructureTypePipelineCoverageModulationStateCreateInfoNV-1000152000]
+	_ = x[StructureTypePipelineCoverageToColorStateCreateInfoNV-1000149000]
+	_ = x[StructureTypePipelineDiscardRectangleStateCreateInfoEXT-1000099001]
+	_ = x[StructureTypePipelineRasterizationConservativeStateCreateInfoEXT-1000101001]
+	_ = x[StructureTypePipelineRasterizationStateRasterizationOrderAMD-1000018000]
+	_ = x[StructureTypePipelineRepresentativeFragmentTestStateCreateInfoNV-1000166001]
+	_ = x[StructureTypePipelineSampleLocationsStateCreateInfoEXT-1000143002]
+	_ = x[StructureTypePipelineTessellationDomainOriginStateCreateInfo-1000117003]
+	_ = x[StructureTypePipelineTessellationDomainOriginStateCreateInfoKHR-1000117003]
+	_ = x[StructureTypePipelineVertexInputDivisorStateCreateInfoEXT-1000190001]
+	_ = x[StructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNV-1000164005]
+	_ = x[StructureTypePipelineViewportExclusiveScissorStateCreateInfoNV-1000205000]
+	_ = x[StructureTypePipelineViewportShadingRateImageStateCreateInfoNV-1000164000]
+	_ = x[StructureTypePipelineViewportSwizzleStateCreateInfoNV-1000098000]
+	_ = x[StructureTypePipelineViewportWScalingStateCreateInfoNV-1000087000]
+	_ = x[StructureTypePresentInfoKHR-1000001001]
+	_ = x[StructureTypePresentRegionsKHR-1000084000]
+	_ = x[StructureTypePresentTimesInfoGoogle-1000092000]
+	_ = x[StructureTypeProtectedSubmitInfo-1000145000]
+	_ = x[StructureTypePhysicalDevice16ItStorageFeatures-1000083000]
+	_ = x[StructureTypePhysicalDeviceGroupProperties-1000070000]
+	_ = x[StructureTypePhysicalDeviceSubgroupProperties-1000094000]
+	_ = x[StructureTypePipelineCacheCreateInfo-17]
+	_ = x[StructureTypePipelineColorBlendStateCreateInfo-26]
+	_ = x[StructureTypePipelineDepthStencilStateCreateInfo-25]
+	_ = x[StructureTypePipelineDynamicStateCreateInfo-27]
+	_ = x[StructureTypePipelineInputAssemblyStateCreateInfo-20]
+	_ = x[StructureTypePipelineLayoutCreateInfo-30]
+	_ = x[StructureTypePipelineMultisampleStateCreateInfo-24]
+	_ = x[StructureTypePipelineRasterizationStateCreateInfo-23]
+	_ = x[StructureTypePipelineShaderStageCreateInfo-18]
+	_ = x[StructureTypePipelineTessellationStateCreateInfo-21]
+	_ = x[StructureTypePipelineVertexInputStateCreateInfo-19]
+	_ = x[StructureTypePipelineViewportStateCreateInfo-22]
+	_ = x[StructureTypeQueueFamilyCheckpointPropertiesNV-1000206001]
+	_ = x[StructureTypeQueueFamilyProperties2-1000059005]
+	_ = x[StructureTypeQueueFamilyProperties2KHR-1000059005]
+	_ = x[StructureTypeQueryPoolCreateInfo-11]
+	_ = x[StructureTypeRenderPassCreateInfo2KHR-1000109004]
+	_ = x[StructureTypeRenderPassInputAttachmentAspectCreateInfo-1000117001]
+	_ = x[StructureTypeRenderPassInputAttachmentAspectCreateInfoKHR-1000117001]
+	_ = x[StructureTypeRenderPassMultiviewCreateInfo-1000053000]
+	_ = x[StructureTypeRenderPassMultiviewCreateInfoKHR-1000053000]
+	_ = x[StructureTypeRenderPassSampleLocationsBeginInfoEXT-1000143001]
+	_ = x[StructureTypeRenderPassBeginInfo-43]
+	_ = x[StructureTypeRenderPassCreateInfo-38]
+	_ = x[StructureTypeSamplerReductionModeCreateInfoEXT-1000130001]
+	_ = x[StructureTypeSamplerYCbCrConversionCreateInfo-1000156000]
+	_ = x[StructureTypeSamplerYCbCrConversionCreateInfoKHR-1000156000]
+	_ = x[StructureTypeSamplerYCbCrConversionImageFormatProperties-1000156005]
+	_ = x[StructureTypeSamplerYCbCrConversionImageFormatPropertiesKHR-1000156005]
+	_ = x[StructureTypeSamplerYCbCrConversionINFO-1000156001]
+	_ = x[StructureTypeSamplerYCbCrConversionINFO_KHR-1000156001]
+	_ = x[StructureTypeSampleLocationsInfoEXT-1000143000]
+	_ = x[StructureTypeSemaphoreGetFdInfoKHR-1000079001]
+	_ = x[StructureTypeSemaphoreGetWin32HandleInfoKHR-1000078003]
+	_ = x[StructureTypeShaderModuleValidationCacheCreateInfoEXT-1000160001]
+	_ = x[StructureTypeSharedPresentSurfaceCapabilitiesKHR-1000111000]
+	_ = x[StructureTypeSparseImageFormatProperties2-1000059007]
+	_ = x[StructureTypeSparseImageFormatProperties2KHR-1000059007]
+	_ = x[StructureTypeSparseImageMemoryRequirements2-1000146004]
+	_ = x[StructureTypeSparseImageMemoryRequirements2KHR-1000146004]
+	_ = x[StructureTypeSubpassBeginInfoKHR-1000109005]
+	_ = x[StructureTypeSubpassDependency2KHR-1000109003]
+	_ = x[StructureTypeSubpassDescription2KHR-1000109002]
+	_ = x[StructureTypeSubpassEndInfoKHR-1000109006]
+	_ = x[StructureTypeSurfaceCapabilities2EXT-1000090000]
+	_ = x[StructureTypeSurfaceCapabilities2KHR-1000119001]
+	_ = x[StructureTypeSurfaceFormat2KHR-1000119002]
+	_ = x[StructureTypeSwapchainCounterCreateInfoEXT-1000091003]
+	_ = x[StructureTypeSwapchainCreateInfoKHR-1000001000]
+	_ = x[StructureTypeSamplerCreateInfo-31]
+	_ = x[StructureTypeSemaphoreCreateInfo-9]
+	_ = x[StructureTypeShaderModuleCreateInfo-16]
+	_ = x[StructureTypeSubmitInfo-4]
+	_ = x[StructureTypeTextureLodGatherFormatPropertiesAMD-1000041000]
+	_ = x[StructureTypeValidationCacheCreateInfoEXT-1000160000]
+	_ = x[StructureTypeValidationFlagsEXT-1000061000]
+	_ = x[StructureTypeViSurfaceCreateInfoNN-1000062000]
+	_ = x[StructureTypeWaylandSurfaceCreateInfoKHR-1000006000]
+	_ = x[StructureTypeWin32KeyedMutexAcquireReleaseInfoKHR-1000075000]
+	_ = x[StructureTypeWin32KeyedMutexAcquireReleaseInfoNV-1000058000]
+	_ = x[StructureTypeWin32SurfaceCreateInfoKHR-1000009000]
+	_ = x[StructureTypeWriteDescriptorSetInlineUniformBlockEXT-1000138002]
+	_ = x[StructureTypeWriteDescriptorSet-35]
+	_ = x[StructureTypeXcbSurfaceCreateInfoKHR-1000005000]
+	_ = x[StructureTypeXlibSurfaceCreateInfoKHR-1000004000]
+}
 
-const _StructureType_name = "StructureTypeApplicationInfoStructureTypeInstanceCreateInfoStructureTypeDeviceQueueCreateInfoStructureTypeDeviceCreateInfoStructureTypeSubmitInfoStructureTypeMemoryAllocateInfoStructureTypeMappedMemoryRangeStructureTypeBindSparseInfoStructureTypeFenceCreateInfoStructureTypeSemaphoreCreateInfoStructureTypeEventCreateInfoStructureTypeQueryPoolCreateInfoStructureTypeBufferCreateInfoStructureTypeBufferViewCreateInfoStructureTypeImageCreateInfoStructureTypeImageViewCreateInfoStructureTypeShaderModuleCreateInfoStructureTypePipelineCacheCreateInfoStructureTypePipelineShaderStageCreateInfoStructureTypePipelineVertexInputStateCreateInfoStructureTypePipelineInputAssemblyStateCreateInfoStructureTypePipelineTessellationStateCreateInfoStructureTypePipelineViewportStateCreateInfoStructureTypePipelineRasterizationStateCreateInfoStructureTypePipelineMultisampleStateCreateInfoStructureTypePipelineDepthStencilStateCreateInfoStructureTypePipelineColorBlendStateCreateInfoStructureTypePipelineDynamicStateCreateInfoStructureTypeGraphicsPipelineCreateInfoStructureTypeComputePipelineCreateInfoStructureTypePipelineLayoutCreateInfoStructureTypeSamplerCreateInfoStructureTypeDescriptorSetLayoutCreateInfoStructureTypeDescriptorPoolCreateInfoStructureTypeDescriptorSetAllocateInfoStructureTypeWriteDescriptorSetStructureTypeCopyDescriptorSetStructureTypeFramebufferCreateInfoStructureTypeRenderPassCreateInfoStructureTypeCommandPoolCreateInfoStructureTypeCommandBufferAllocateInfoStructureTypeCommandBufferInheritanceInfoStructureTypeCommandBufferBeginInfoStructureTypeRenderPassBeginInfoStructureTypeBufferMemoryBarrierStructureTypeImageMemoryBarrierStructureTypeMemoryBarrierStructureTypeLoaderInstanceCreateInfoStructureTypeLoaderDeviceCreateInfoStructureTypeSwapchainCreateInfoKHRStructureTypePresentInfoKHRStructureTypeDisplayModeCreateInfoKHRStructureTypeDisplaySurfaceCreateInfoKHRStructureTypeDisplayPresentInfoKHRStructureTypeXlibSurfaceCreateInfoKHRStructureTypeXcbSurfaceCreateInfoKHRStructureTypeWaylandSurfaceCreateInfoKHRStructureTypeMirSurfaceCreateInfoKHRStructureTypeAndroidSurfaceCreateInfoKHRStructureTypeWin32SurfaceCreateInfoKHRStructureTypeDebugReportCallbackCreateInfoEXTStructureTypePipelineRasterizationStateRasterizationOrderAMDStructureTypeDebugMarkerObjectNameInfoEXTStructureTypeDebugMarkerObjectTagInfoEXTStructureTypeDebugMarkerMarkerInfoEXTStructureTypeDedicatedAllocationImageCreateInfoNVStructureTypeDedicatedAllocationBufferCreateInfoNVStructureTypeDedicatedAllocationMemoryAllocateInfoNVStructureTypeTextureLodGatherFormatPropertiesAMDStructureTypePhysicalDeviceCornerSampledImageFeaturesNVStructureTypeRenderPassMultiviewCreateInfoStructureTypePhysicalDeviceMultiviewFeaturesStructureTypePhysicalDeviceMultiviewPropertiesStructureTypeExternalMemoryImageCreateInfoNVStructureTypeExportMemoryAllocateInfoNVStructureTypeImportMemoryWin32HandleInfoNVStructureTypeExportMemoryWin32HandleInfoNVStructureTypeWin32KeyedMutexAcquireReleaseInfoNVStructureTypePhysicalDeviceFeatures2StructureTypePhysicalDeviceProperties2StructureTypeFormatProperties2StructureTypeImageFormatProperties2StructureTypePhysicalDeviceImageFormatInfo2StructureTypeQueueFamilyProperties2StructureTypePhysicalDeviceMemoryProperties2StructureTypeSparseImageFormatProperties2StructureTypePhysicalDeviceSparseImageFormatInfo2StructureTypeMemoryAllocateFlagsInfoKHRStructureTypeDeviceGroupRenderPassBeginInfoKHRStructureTypeDeviceGroupCommandBufferBeginInfoKHRStructureTypeDeviceGroupSubmitInfoKHRStructureTypeDeviceGroupBindSparseInfoKHRStructureTypeDeviceGroupPresentCapabilitiesKHRStructureTypeImageSwapchainCreateInfoKHRStructureTypeBindImageMemorySwapchainInfoKHRStructureTypeAcquireNextImageInfoKHRStructureTypeDeviceGroupPresentInfoKHRStructureTypeDeviceGroupSwapchainCreateInfoKHRStructureTypeBindBufferMemoryDeviceGroupInfoKHRStructureTypeBindImageMemoryDeviceGroupInfoKHRStructureTypeValidationFlagsEXTStructureTypeViSurfaceCreateInfoNNStructureTypePhysicalDeviceShaderDrawParameterFeaturesStructureTypeImageViewAstcDecodeModeEXTStructureTypePhysicalDeviceAstcDecodeFeaturesEXTStructureTypePhysicalDeviceGroupPropertiesKHRStructureTypeDeviceGroupDeviceCreateInfoKHRStructureTypePhysicalDeviceExternalImageFormatInfoStructureTypeExternalImageFormatPropertiesStructureTypePhysicalDeviceExternalBufferInfoStructureTypeExternalBufferPropertiesStructureTypePhysicalDeviceIdPropertiesStructureTypeExternalMemoryBufferCreateInfoStructureTypeExternalMemoryImageCreateInfoStructureTypeExportMemoryAllocateInfoStructureTypeImportMemoryWin32HandleInfoKHRStructureTypeExportMemoryWin32HandleInfoKHRStructureTypeMemoryWin32HandlePropertiesKHRStructureTypeMemoryGetWin32HandleInfoKHRStructureTypeImportMemoryFdInfoKHRStructureTypeMemoryFdPropertiesKHRStructureTypeMemoryGetFdInfoKHRStructureTypeWin32KeyedMutexAcquireReleaseInfoKHRStructureTypePhysicalDeviceExternalSemaphoreInfoStructureTypeExternalSemaphorePropertiesStructureTypeExportSemaphoreCreateInfoStructureTypeImportSemaphoreWin32HandleInfoKHRStructureTypeExportSemaphoreWin32HandleInfoKHRStructureTypeD3D12FenceSubmitInfoKHRStructureTypeSemaphoreGetWin32HandleInfoKHRStructureTypeImportSemaphoreFdInfoKHRStructureTypeSemaphoreGetFdInfoKHRStructureTypePhysicalDevicePushDescriptorPropertiesKHRStructureTypeCommandBufferInheritanceConditionalRenderingInfoEXTStructureTypePhysicalDeviceConditionalRenderingFeaturesEXTStructureTypeConditionalRenderingBeginInfoEXTStructureTypePhysicalDevice16BitStorageFeaturesKHRStructureTypePresentRegionsKHRStructureTypeDescriptorUpdateTemplateCreateINFOStructureTypeObjectTableCreateInfoNVXStructureTypeIndirectCommandsLayoutCreateInfoNVXStructureTypeCmdProcessCommandsInfoNVXStructureTypeCmdReserveSpaceForCommandsInfoNVXStructureTypeDeviceGeneratedCommandsLimitsNVXStructureTypeDeviceGeneratedCommandsFeaturesNVXStructureTypePipelineViewportWScalingStateCreateInfoNVStructureTypeSurfaceCapabilities2EXTStructureTypeDisplayPowerInfoEXTStructureTypeDeviceEventInfoEXTStructureTypeDisplayEventInfoEXTStructureTypeSwapchainCounterCreateInfoEXTStructureTypePresentTimesInfoGoogleStructureTypePhysicalDeviceSubgroupPropertiesStructureTypePhysicalDeviceMultiviewPerViewAttributesPropertiesNVXStructureTypePipelineViewportSwizzleStateCreateInfoNVStructureTypePhysicalDeviceDiscardRectanglePropertiesEXTStructureTypePipelineDiscardRectangleStateCreateInfoEXTStructureTypePhysicalDeviceConservativeRasterizationPropertiesEXTStructureTypePipelineRasterizationConservativeStateCreateInfoEXTStructureTypeHdrMetadataEXTStructureTypeAttachmentDescription2KHRStructureTypeAttachmentReference2KHRStructureTypeSubpassDescription2KHRStructureTypeSubpassDependency2KHRStructureTypeRenderPassCreateInfo2KHRStructureTypeSubpassBeginInfoKHRStructureTypeSubpassEndInfoKHRStructureTypeSharedPresentSurfaceCapabilitiesKHRStructureTypePhysicalDeviceExternalFenceInfoStructureTypeExternalFencePropertiesStructureTypeExportFenceCreateInfoStructureTypeImportFenceWin32HandleInfoKHRStructureTypeExportFenceWin32HandleInfoKHRStructureTypeFenceGetWin32HandleInfoKHRStructureTypeImportFenceFdInfoKHRStructureTypeFenceGetFdInfoKHRStructureTypePhysicalDevicePointClippingPropertiesStructureTypeRenderPassInputAttachmentAspectCreateInfoStructureTypeImageViewUsageCreateInfoStructureTypePipelineTessellationDomainOriginStateCreateInfoStructureTypePhysicalDeviceSurfaceInfo2KHRStructureTypeSurfaceCapabilities2KHRStructureTypeSurfaceFormat2KHRStructureTypePhysicalDeviceVariablePointerFeaturesStructureTypeDisplayProperties2KHRStructureTypeDisplayPlaneProperties2KHRStructureTypeDisplayModeProperties2KHRStructureTypeDisplayPlaneInfo2KHRStructureTypeDisplayPlaneCapabilities2KHRStructureTypeIosSurfaceCreateInfoMVKStructureTypeMacosSurfaceCreateInfoMVKStructureTypeMemoryDedicatedRequirementsKHRStructureTypeMemoryDedicatedAllocateInfoKHRStructureTypeDebugUtilsObjectNameInfoEXTStructureTypeDebugUtilsObjectTagInfoEXTStructureTypeDebugUtilsLabelEXTStructureTypeDebugUtilsMessengerCallbackDataEXTStructureTypeDebugUtilsMessengerCreateInfoEXTStructureTypeAndroidHardwareBufferUsageAndroidStructureTypeAndroidHardwareBufferPropertiesAndroidStructureTypeAndroidHardwareBufferFormatPropertiesAndroidStructureTypeImportAndroidHardwareBufferInfoAndroidStructureTypeMemoryGetAndroidHardwareBufferInfoAndroidStructureTypeExternalFormatAndroidStructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXTStructureTypeSamplerReductionModeCreateInfoEXTStructureTypePhysicalDeviceInlineUniformBlockFeaturesEXTStructureTypePhysicalDeviceInlineUniformBlockPropertiesEXTStructureTypeWriteDescriptorSetInlineUniformBlockEXTStructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXTStructureTypeSampleLocationsInfoEXTStructureTypeRenderPassSampleLocationsBeginInfoEXTStructureTypePipelineSampleLocationsStateCreateInfoEXTStructureTypePhysicalDeviceSampleLocationsPropertiesEXTStructureTypeMultisamplePropertiesEXTStructureTypeProtectedSubmitInfoStructureTypePhysicalDeviceProtectedMemoryFeaturesStructureTypePhysicalDeviceProtectedMemoryPropertiesStructureTypeDeviceQueueInfo2StructureTypeBufferMemoryRequirementsInfo2StructureTypeImageMemoryRequirementsInfo2StructureTypeImageSparseMemoryRequirementsInfo2StructureTypeMemoryRequirements2StructureTypeSparseImageMemoryRequirements2StructureTypeImageFormatListCreateInfoKHRStructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXTStructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXTStructureTypePipelineColorBlendAdvancedStateCreateInfoEXTStructureTypePipelineCoverageToColorStateCreateInfoNVStructureTypePipelineCoverageModulationStateCreateInfoNVStructureTypeSamplerYCbCrConversionCreateInfoStructureTypeSamplerYCbCrConversionINFOStructureTypeBindImagePlaneMemoryINFOStructureTypeImagePlaneMemoryRequirementsInfoStructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesStructureTypeSamplerYCbCrConversionImageFormatPropertiesStructureTypeBindBufferMemoryInfoKHRStructureTypeBindImageMemoryInfoKHRStructureTypeValidationCacheCreateInfoEXTStructureTypeShaderModuleValidationCacheCreateInfoEXTStructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXTStructureTypePhysicalDeviceDescriptorIndexingFeaturesEXTStructureTypePhysicalDeviceDescriptorIndexingPropertiesEXTStructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExtStructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXTStructureTypePipelineViewportShadingRateImageStateCreateInfoNVStructureTypePhysicalDeviceShadingRateImageFeaturesNVStructureTypePhysicalDeviceShadingRateImagePropertiesNVStructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNVStructureTypeRaytracingPipelineCreateInfoNVXStructureTypeAccelerationStructureCreateInfoNVXStructureTypeGeometryInstanceNVXStructureTypeGeometryNVXStructureTypeGeometryTrianglesNVXStructureTypeGeometryAABB_NVXStructureTypeBindAccelerationStructureMemoryInfoNVXStructureTypeDescriptorAccelerationStructureInfoNVXStructureTypeAccelerationStructureMemoryRequirementsInfoNVXStructureTypePhysicalDeviceRaytracingPropertiesNVXStructureTypeHitShaderModuleCreateInfoNVXStructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNVStructureTypePipelineRepresentativeFragmentTestStateCreateInfoNVStructureTypePhysicalDeviceMaintenance3PropertiesStructureTypeDescriptorSetLayoutSupportStructureTypeDeviceQueueGlobalPriorityCreateInfoEXTStructureTypePhysicalDevice8BitStorageFeaturesKHRStructureTypeImportMemoryHostPointerInfoEXTStructureTypeMemoryHostPointerPropertiesEXTStructureTypePhysicalDeviceExternalMemoryHostPropertiesEXTStructureTypePhysicalDeviceShaderCorePropertiesAMDStructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXTStructureTypePipelineVertexInputDivisorStateCreateInfoEXTStructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXTStructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NVStructureTypePhysicalDeviceMeshShaderFeaturesNVStructureTypePhysicalDeviceMeshShaderPropertiesNVStructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNVStructureTypePhysicalDeviceShaderImageFootprintFeaturesNVStructureTypePipelineViewportExclusiveScissorStateCreateInfoNVStructureTypePhysicalDeviceExclusiveScissorFeaturesNVStructureTypeCheckpointDataNVStructureTypeQueueFamilyCheckpointPropertiesNVStructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR"
+const _StructureType_name = "StructureTypeApplicationInfoStructureTypeInstanceCreateInfoStructureTypeDeviceQueueCreateInfoStructureTypeDeviceCreateInfoStructureTypeSubmitInfoStructureTypeMemoryAllocateInfoStructureTypeMappedMemoryRangeStructureTypeBindSparseInfoStructureTypeFenceCreateInfoStructureTypeSemaphoreCreateInfoStructureTypeEventCreateInfoStructureTypeQueryPoolCreateInfoStructureTypeBufferCreateInfoStructureTypeBufferViewCreateInfoStructureTypeImageCreateInfoStructureTypeImageViewCreateInfoStructureTypeShaderModuleCreateInfoStructureTypePipelineCacheCreateInfoStructureTypePipelineShaderStageCreateInfoStructureTypePipelineVertexInputStateCreateInfoStructureTypePipelineInputAssemblyStateCreateInfoStructureTypePipelineTessellationStateCreateInfoStructureTypePipelineViewportStateCreateInfoStructureTypePipelineRasterizationStateCreateInfoStructureTypePipelineMultisampleStateCreateInfoStructureTypePipelineDepthStencilStateCreateInfoStructureTypePipelineColorBlendStateCreateInfoStructureTypePipelineDynamicStateCreateInfoStructureTypeGraphicsPipelineCreateInfoStructureTypeComputePipelineCreateInfoStructureTypePipelineLayoutCreateInfoStructureTypeSamplerCreateInfoStructureTypeDescriptorSetLayoutCreateInfoStructureTypeDescriptorPoolCreateInfoStructureTypeDescriptorSetAllocateInfoStructureTypeWriteDescriptorSetStructureTypeCopyDescriptorSetStructureTypeFramebufferCreateInfoStructureTypeRenderPassCreateInfoStructureTypeCommandPoolCreateInfoStructureTypeCommandBufferAllocateInfoStructureTypeCommandBufferInheritanceInfoStructureTypeCommandBufferBeginInfoStructureTypeRenderPassBeginInfoStructureTypeBufferMemoryBarrierStructureTypeImageMemoryBarrierStructureTypeMemoryBarrierStructureTypeLoaderInstanceCreateInfoStructureTypeLoaderDeviceCreateInfoStructureTypeSwapchainCreateInfoKHRStructureTypePresentInfoKHRStructureTypeDisplayModeCreateInfoKHRStructureTypeDisplaySurfaceCreateInfoKHRStructureTypeDisplayPresentInfoKHRStructureTypeXlibSurfaceCreateInfoKHRStructureTypeXcbSurfaceCreateInfoKHRStructureTypeWaylandSurfaceCreateInfoKHRStructureTypeMirSurfaceCreateInfoKHRStructureTypeAndroidSurfaceCreateInfoKHRStructureTypeWin32SurfaceCreateInfoKHRStructureTypeDebugReportCallbackCreateInfoEXTStructureTypePipelineRasterizationStateRasterizationOrderAMDStructureTypeDebugMarkerObjectNameInfoEXTStructureTypeDebugMarkerObjectTagInfoEXTStructureTypeDebugMarkerMarkerInfoEXTStructureTypeDedicatedAllocationImageCreateInfoNVStructureTypeDedicatedAllocationBufferCreateInfoNVStructureTypeDedicatedAllocationMemoryAllocateInfoNVStructureTypeTextureLodGatherFormatPropertiesAMDStructureTypePhysicalDeviceCornerSampledImageFeaturesNVStructureTypeRenderPassMultiviewCreateInfoStructureTypePhysicalDeviceMultiviewFeaturesStructureTypePhysicalDeviceMultiviewPropertiesStructureTypeExternalMemoryImageCreateInfoNVStructureTypeExportMemoryAllocateInfoNVStructureTypeImportMemoryWin32HandleInfoNVStructureTypeExportMemoryWin32HandleInfoNVStructureTypeWin32KeyedMutexAcquireReleaseInfoNVStructureTypePhysicalDeviceFeatures2StructureTypePhysicalDeviceProperties2StructureTypeFormatProperties2StructureTypeImageFormatProperties2StructureTypePhysicalDeviceImageFormatInfo2StructureTypeQueueFamilyProperties2StructureTypePhysicalDeviceMemoryProperties2StructureTypeSparseImageFormatProperties2StructureTypePhysicalDeviceSparseImageFormatInfo2StructureTypeMemoryAllocateFlagsInfoKHRStructureTypeDeviceGroupRenderPassBeginInfoKHRStructureTypeDeviceGroupCommandBufferBeginInfoKHRStructureTypeDeviceGroupSubmitInfoKHRStructureTypeDeviceGroupBindSparseInfoKHRStructureTypeDeviceGroupPresentCapabilitiesKHRStructureTypeImageSwapchainCreateInfoKHRStructureTypeBindImageMemorySwapchainInfoKHRStructureTypeAcquireNextImageInfoKHRStructureTypeDeviceGroupPresentInfoKHRStructureTypeDeviceGroupSwapchainCreateInfoKHRStructureTypeBindBufferMemoryDeviceGroupInfoKHRStructureTypeBindImageMemoryDeviceGroupInfoKHRStructureTypeValidationFlagsEXTStructureTypeViSurfaceCreateInfoNNStructureTypePhysicalDeviceShaderDrawParameterFeaturesStructureTypeImageViewAstcDecodeModeEXTStructureTypePhysicalDeviceAstcDecodeFeaturesEXTStructureTypePhysicalDeviceGroupPropertiesKHRStructureTypeDeviceGroupDeviceCreateInfoKHRStructureTypePhysicalDeviceExternalImageFormatInfoStructureTypeExternalImageFormatPropertiesStructureTypePhysicalDeviceExternalBufferInfoStructureTypeExternalBufferPropertiesStructureTypePhysicalDeviceIdPropertiesStructureTypeExternalMemoryBufferCreateInfoStructureTypeExternalMemoryImageCreateInfoStructureTypeExportMemoryAllocateInfoStructureTypeImportMemoryWin32HandleInfoKHRStructureTypeExportMemoryWin32HandleInfoKHRStructureTypeMemoryWin32HandlePropertiesKHRStructureTypeMemoryGetWin32HandleInfoKHRStructureTypeImportMemoryFdInfoKHRStructureTypeMemoryFdPropertiesKHRStructureTypeMemoryGetFdInfoKHRStructureTypeWin32KeyedMutexAcquireReleaseInfoKHRStructureTypePhysicalDeviceExternalSemaphoreInfoStructureTypeExternalSemaphorePropertiesStructureTypeExportSemaphoreCreateInfoStructureTypeImportSemaphoreWin32HandleInfoKHRStructureTypeExportSemaphoreWin32HandleInfoKHRStructureTypeD3D12FenceSubmitInfoKHRStructureTypeSemaphoreGetWin32HandleInfoKHRStructureTypeImportSemaphoreFdInfoKHRStructureTypeSemaphoreGetFdInfoKHRStructureTypePhysicalDevicePushDescriptorPropertiesKHRStructureTypeCommandBufferInheritanceConditionalRenderingInfoEXTStructureTypePhysicalDeviceConditionalRenderingFeaturesEXTStructureTypeConditionalRenderingBeginInfoEXTStructureTypePhysicalDevice16BitStorageFeaturesKHRStructureTypePresentRegionsKHRStructureTypeDescriptorUpdateTemplateCreateINFOStructureTypePipelineViewportWScalingStateCreateInfoNVStructureTypeSurfaceCapabilities2EXTStructureTypeDisplayPowerInfoEXTStructureTypeDeviceEventInfoEXTStructureTypeDisplayEventInfoEXTStructureTypeSwapchainCounterCreateInfoEXTStructureTypePresentTimesInfoGoogleStructureTypePhysicalDeviceSubgroupPropertiesStructureTypePipelineViewportSwizzleStateCreateInfoNVStructureTypePhysicalDeviceDiscardRectanglePropertiesEXTStructureTypePipelineDiscardRectangleStateCreateInfoEXTStructureTypePhysicalDeviceConservativeRasterizationPropertiesEXTStructureTypePipelineRasterizationConservativeStateCreateInfoEXTStructureTypeHdrMetadataEXTStructureTypeAttachmentDescription2KHRStructureTypeAttachmentReference2KHRStructureTypeSubpassDescription2KHRStructureTypeSubpassDependency2KHRStructureTypeRenderPassCreateInfo2KHRStructureTypeSubpassBeginInfoKHRStructureTypeSubpassEndInfoKHRStructureTypeSharedPresentSurfaceCapabilitiesKHRStructureTypePhysicalDeviceExternalFenceInfoStructureTypeExternalFencePropertiesStructureTypeExportFenceCreateInfoStructureTypeImportFenceWin32HandleInfoKHRStructureTypeExportFenceWin32HandleInfoKHRStructureTypeFenceGetWin32HandleInfoKHRStructureTypeImportFenceFdInfoKHRStructureTypeFenceGetFdInfoKHRStructureTypePhysicalDevicePointClippingPropertiesStructureTypeRenderPassInputAttachmentAspectCreateInfoStructureTypeImageViewUsageCreateInfoStructureTypePipelineTessellationDomainOriginStateCreateInfoStructureTypePhysicalDeviceSurfaceInfo2KHRStructureTypeSurfaceCapabilities2KHRStructureTypeSurfaceFormat2KHRStructureTypePhysicalDeviceVariablePointerFeaturesStructureTypeDisplayProperties2KHRStructureTypeDisplayPlaneProperties2KHRStructureTypeDisplayModeProperties2KHRStructureTypeDisplayPlaneInfo2KHRStructureTypeDisplayPlaneCapabilities2KHRStructureTypeIosSurfaceCreateInfoMVKStructureTypeMacosSurfaceCreateInfoMVKStructureTypeMemoryDedicatedRequirementsKHRStructureTypeMemoryDedicatedAllocateInfoKHRStructureTypeDebugUtilsObjectNameInfoEXTStructureTypeDebugUtilsObjectTagInfoEXTStructureTypeDebugUtilsLabelEXTStructureTypeDebugUtilsMessengerCallbackDataEXTStructureTypeDebugUtilsMessengerCreateInfoEXTStructureTypeAndroidHardwareBufferUsageAndroidStructureTypeAndroidHardwareBufferPropertiesAndroidStructureTypeAndroidHardwareBufferFormatPropertiesAndroidStructureTypeImportAndroidHardwareBufferInfoAndroidStructureTypeMemoryGetAndroidHardwareBufferInfoAndroidStructureTypeExternalFormatAndroidStructureTypePhysicalDeviceSamplerFilterMinmaxPropertiesEXTStructureTypeSamplerReductionModeCreateInfoEXTStructureTypePhysicalDeviceInlineUniformBlockFeaturesEXTStructureTypePhysicalDeviceInlineUniformBlockPropertiesEXTStructureTypeWriteDescriptorSetInlineUniformBlockEXTStructureTypeDescriptorPoolInlineUniformBlockCreateInfoEXTStructureTypeSampleLocationsInfoEXTStructureTypeRenderPassSampleLocationsBeginInfoEXTStructureTypePipelineSampleLocationsStateCreateInfoEXTStructureTypePhysicalDeviceSampleLocationsPropertiesEXTStructureTypeMultisamplePropertiesEXTStructureTypeProtectedSubmitInfoStructureTypePhysicalDeviceProtectedMemoryFeaturesStructureTypePhysicalDeviceProtectedMemoryPropertiesStructureTypeDeviceQueueInfo2StructureTypeBufferMemoryRequirementsInfo2StructureTypeImageMemoryRequirementsInfo2StructureTypeImageSparseMemoryRequirementsInfo2StructureTypeMemoryRequirements2StructureTypeSparseImageMemoryRequirements2StructureTypeImageFormatListCreateInfoKHRStructureTypePhysicalDeviceBlendOperationAdvancedFeaturesEXTStructureTypePhysicalDeviceBlendOperationAdvancedPropertiesEXTStructureTypePipelineColorBlendAdvancedStateCreateInfoEXTStructureTypePipelineCoverageToColorStateCreateInfoNVStructureTypePipelineCoverageModulationStateCreateInfoNVStructureTypeSamplerYCbCrConversionCreateInfoStructureTypeSamplerYCbCrConversionINFOStructureTypeBindImagePlaneMemoryINFOStructureTypeImagePlaneMemoryRequirementsInfoStructureTypePhysicalDeviceSamplerYCbCrConversionFeaturesStructureTypeSamplerYCbCrConversionImageFormatPropertiesStructureTypeBindBufferMemoryInfoKHRStructureTypeBindImageMemoryInfoKHRStructureTypeValidationCacheCreateInfoEXTStructureTypeShaderModuleValidationCacheCreateInfoEXTStructureTypeDescriptorSetLayoutBindingFlagsCreateInfoEXTStructureTypePhysicalDeviceDescriptorIndexingFeaturesEXTStructureTypePhysicalDeviceDescriptorIndexingPropertiesEXTStructureTypeDescriptorSetVariableDescriptorCountAllocateInfoExtStructureTypeDescriptorSetVariableDescriptorCountLayoutSupportEXTStructureTypePipelineViewportShadingRateImageStateCreateInfoNVStructureTypePhysicalDeviceShadingRateImageFeaturesNVStructureTypePhysicalDeviceShadingRateImagePropertiesNVStructureTypePipelineViewportCoarseSampleOrderStateCreateInfoNVStructureTypePhysicalDeviceRepresentativeFragmentTestFeaturesNVStructureTypePipelineRepresentativeFragmentTestStateCreateInfoNVStructureTypePhysicalDeviceMaintenance3PropertiesStructureTypeDescriptorSetLayoutSupportStructureTypeDeviceQueueGlobalPriorityCreateInfoEXTStructureTypePhysicalDevice8BitStorageFeaturesKHRStructureTypeImportMemoryHostPointerInfoEXTStructureTypeMemoryHostPointerPropertiesEXTStructureTypePhysicalDeviceExternalMemoryHostPropertiesEXTStructureTypePhysicalDeviceShaderCorePropertiesAMDStructureTypePhysicalDeviceVertexAttributeDivisorPropertiesEXTStructureTypePipelineVertexInputDivisorStateCreateInfoEXTStructureTypePhysicalDeviceVertexAttributeDivisorFeaturesEXTStructureTypePhysicalDeviceComputeShaderDerivativesFeatures_NVStructureTypePhysicalDeviceMeshShaderFeaturesNVStructureTypePhysicalDeviceMeshShaderPropertiesNVStructureTypePhysicalDeviceFragmentShaderBarycentricFeaturesNVStructureTypePhysicalDeviceShaderImageFootprintFeaturesNVStructureTypePipelineViewportExclusiveScissorStateCreateInfoNVStructureTypePhysicalDeviceExclusiveScissorFeaturesNVStructureTypeCheckpointDataNVStructureTypeQueueFamilyCheckpointPropertiesNVStructureTypePhysicalDeviceVulkanMemoryModelFeaturesKHR"
 
 var _StructureType_map = map[StructureType]string{
 	0:          _StructureType_name[0:28],
@@ -201,150 +746,132 @@ var _StructureType_map = map[StructureType]string{
 	1000083000: _StructureType_name[5404:5454],
 	1000084000: _StructureType_name[5454:5484],
 	1000085000: _StructureType_name[5484:5531],
-	1000086000: _StructureType_name[5531:5568],
-	1000086001: _StructureType_name[5568:5616],
-	1000086002: _StructureType_name[5616:5654],
-	1000086003: _StructureType_name[5654:5700],
-	1000086004: _StructureType_name[5700:5745],
-	1000086005: _StructureType_name[5745:5792],
-	1000087000: _StructureType_name[5792:5846],
-	1000090000: _StructureType_name[5846:5882],
-	1000091000: _StructureType_name[5882:5914],
-	1000091001: _StructureType_name[5914:5945],
-	1000091002: _StructureType_name[5945:5977],
-	1000091003: _StructureType_name[5977:6019],
-	1000092000: _StructureType_name[6019:6054],
-	1000094000: _StructureType_name[6054:6099],
-	1000097000: _StructureType_name[6099:6165],
-	1000098000: _StructureType_name[6165:6218],
-	1000099000: _StructureType_name[6218:6274],
-	1000099001: _StructureType_name[6274:6329],
-	1000101000: _StructureType_name[6329:6394],
-	1000101001: _StructureType_name[6394:6458],
-	1000105000: _StructureType_name[6458:6485],
-	1000109000: _StructureType_name[6485:6523],
-	1000109001: _StructureType_name[6523:6559],
-	1000109002: _StructureType_name[6559:6594],
-	1000109003: _StructureType_name[6594:6628],
-	1000109004: _StructureType_name[6628:6665],
-	1000109005: _StructureType_name[6665:6697],
-	1000109006: _StructureType_name[6697:6727],
-	1000111000: _StructureType_name[6727:6775],
-	1000112000: _StructureType_name[6775:6819],
-	1000112001: _StructureType_name[6819:6855],
-	1000113000: _StructureType_name[6855:6889],
-	1000114000: _StructureType_name[6889:6931],
-	1000114001: _StructureType_name[6931:6973],
-	1000114002: _StructureType_name[6973:7012],
-	1000115000: _StructureType_name[7012:7045],
-	1000115001: _StructureType_name[7045:7075],
-	1000117000: _StructureType_name[7075:7125],
-	1000117001: _StructureType_name[7125:7179],
-	1000117002: _StructureType_name[7179:7216],
-	1000117003: _StructureType_name[7216:7276],
-	1000119000: _StructureType_name[7276:7318],
-	1000119001: _StructureType_name[7318:7354],
-	1000119002: _StructureType_name[7354:7384],
-	1000120000: _StructureType_name[7384:7434],
-	1000121000: _StructureType_name[7434:7468],
-	1000121001: _StructureType_name[7468:7507],
-	1000121002: _StructureType_name[7507:7545],
-	1000121003: _StructureType_name[7545:7578],
-	1000121004: _StructureType_name[7578:7619],
-	1000122000: _StructureType_name[7619:7655],
-	1000123000: _StructureType_name[7655:7693],
-	1000127000: _StructureType_name[7693:7736],
-	1000127001: _StructureType_name[7736:7779],
-	1000128000: _StructureType_name[7779:7819],
-	1000128001: _StructureType_name[7819:7858],
-	1000128002: _StructureType_name[7858:7889],
-	1000128003: _StructureType_name[7889:7936],
-	1000128004: _StructureType_name[7936:7981],
-	1000129000: _StructureType_name[7981:8027],
-	1000129001: _StructureType_name[8027:8078],
-	1000129002: _StructureType_name[8078:8135],
-	1000129003: _StructureType_name[8135:8186],
-	1000129004: _StructureType_name[8186:8240],
-	1000129005: _StructureType_name[8240:8274],
-	1000130000: _StructureType_name[8274:8333],
-	1000130001: _StructureType_name[8333:8379],
-	1000138000: _StructureType_name[8379:8435],
-	1000138001: _StructureType_name[8435:8493],
-	1000138002: _StructureType_name[8493:8545],
-	1000138003: _StructureType_name[8545:8603],
-	1000143000: _StructureType_name[8603:8638],
-	1000143001: _StructureType_name[8638:8688],
-	1000143002: _StructureType_name[8688:8742],
-	1000143003: _StructureType_name[8742:8797],
-	1000143004: _StructureType_name[8797:8834],
-	1000145000: _StructureType_name[8834:8866],
-	1000145001: _StructureType_name[8866:8916],
-	1000145002: _StructureType_name[8916:8968],
-	1000145003: _StructureType_name[8968:8997],
-	1000146000: _StructureType_name[8997:9039],
-	1000146001: _StructureType_name[9039:9080],
-	1000146002: _StructureType_name[9080:9127],
-	1000146003: _StructureType_name[9127:9159],
-	1000146004: _StructureType_name[9159:9202],
-	1000147000: _StructureType_name[9202:9243],
-	1000148000: _StructureType_name[9243:9303],
-	1000148001: _StructureType_name[9303:9365],
-	1000148002: _StructureType_name[9365:9422],
-	1000149000: _StructureType_name[9422:9475],
-	1000152000: _StructureType_name[9475:9531],
-	1000156000: _StructureType_name[9531:9576],
-	1000156001: _StructureType_name[9576:9615],
-	1000156002: _StructureType_name[9615:9652],
-	1000156003: _StructureType_name[9652:9697],
-	1000156004: _StructureType_name[9697:9754],
-	1000156005: _StructureType_name[9754:9810],
-	1000157000: _StructureType_name[9810:9846],
-	1000157001: _StructureType_name[9846:9881],
-	1000160000: _StructureType_name[9881:9922],
-	1000160001: _StructureType_name[9922:9975],
-	1000161000: _StructureType_name[9975:10032],
-	1000161001: _StructureType_name[10032:10088],
-	1000161002: _StructureType_name[10088:10146],
-	1000161003: _StructureType_name[10146:10210],
-	1000161004: _StructureType_name[10210:10275],
-	1000164000: _StructureType_name[10275:10337],
-	1000164001: _StructureType_name[10337:10390],
-	1000164002: _StructureType_name[10390:10445],
-	1000164005: _StructureType_name[10445:10508],
-	1000165000: _StructureType_name[10508:10552],
-	1000165001: _StructureType_name[10552:10599],
-	1000165002: _StructureType_name[10599:10631],
-	1000165003: _StructureType_name[10631:10655],
-	1000165004: _StructureType_name[10655:10688],
-	1000165005: _StructureType_name[10688:10717],
-	1000165006: _StructureType_name[10717:10768],
-	1000165007: _StructureType_name[10768:10819],
-	1000165008: _StructureType_name[10819:10878],
-	1000165009: _StructureType_name[10878:10928],
-	1000165010: _StructureType_name[10928:10969],
-	1000166000: _StructureType_name[10969:11032],
-	1000166001: _StructureType_name[11032:11096],
-	1000168000: _StructureType_name[11096:11145],
-	1000168001: _StructureType_name[11145:11184],
-	1000174000: _StructureType_name[11184:11235],
-	1000177000: _StructureType_name[11235:11284],
-	1000178000: _StructureType_name[11284:11327],
-	1000178001: _StructureType_name[11327:11370],
-	1000178002: _StructureType_name[11370:11428],
-	1000185000: _StructureType_name[11428:11478],
-	1000190000: _StructureType_name[11478:11540],
-	1000190001: _StructureType_name[11540:11597],
-	1000190002: _StructureType_name[11597:11657],
-	1000201000: _StructureType_name[11657:11719],
-	1000202000: _StructureType_name[11719:11766],
-	1000202001: _StructureType_name[11766:11815],
-	1000203000: _StructureType_name[11815:11877],
-	1000204000: _StructureType_name[11877:11934],
-	1000205000: _StructureType_name[11934:11996],
-	1000205002: _StructureType_name[11996:12049],
-	1000206000: _StructureType_name[12049:12078],
-	1000206001: _StructureType_name[12078:12124],
-	1000211000: _StructureType_name[12124:12179],
+	1000087000: _StructureType_name[5531:5585],
+	1000090000: _StructureType_name[5585:5621],
+	1000091000: _StructureType_name[5621:5653],
+	1000091001: _StructureType_name[5653:5684],
+	1000091002: _StructureType_name[5684:5716],
+	1000091003: _StructureType_name[5716:5758],
+	1000092000: _StructureType_name[5758:5793],
+	1000094000: _StructureType_name[5793:5838],
+	1000098000: _StructureType_name[5838:5891],
+	1000099000: _StructureType_name[5891:5947],
+	1000099001: _StructureType_name[5947:6002],
+	1000101000: _StructureType_name[6002:6067],
+	1000101001: _StructureType_name[6067:6131],
+	1000105000: _StructureType_name[6131:6158],
+	1000109000: _StructureType_name[6158:6196],
+	1000109001: _StructureType_name[6196:6232],
+	1000109002: _StructureType_name[6232:6267],
+	1000109003: _StructureType_name[6267:6301],
+	1000109004: _StructureType_name[6301:6338],
+	1000109005: _StructureType_name[6338:6370],
+	1000109006: _StructureType_name[6370:6400],
+	1000111000: _StructureType_name[6400:6448],
+	1000112000: _StructureType_name[6448:6492],
+	1000112001: _StructureType_name[6492:6528],
+	1000113000: _StructureType_name[6528:6562],
+	1000114000: _StructureType_name[6562:6604],
+	1000114001: _StructureType_name[6604:6646],
+	1000114002: _StructureType_name[6646:6685],
+	1000115000: _StructureType_name[6685:6718],
+	1000115001: _StructureType_name[6718:6748],
+	1000117000: _StructureType_name[6748:6798],
+	1000117001: _StructureType_name[6798:6852],
+	1000117002: _StructureType_name[6852:6889],
+	1000117003: _StructureType_name[6889:6949],
+	1000119000: _StructureType_name[6949:6991],
+	1000119001: _StructureType_name[6991:7027],
+	1000119002: _StructureType_name[7027:7057],
+	1000120000: _StructureType_name[7057:7107],
+	1000121000: _StructureType_name[7107:7141],
+	1000121001: _StructureType_name[7141:7180],
+	1000121002: _StructureType_name[7180:7218],
+	1000121003: _StructureType_name[7218:7251],
+	1000121004: _StructureType_name[7251:7292],
+	1000122000: _StructureType_name[7292:7328],
+	1000123000: _StructureType_name[7328:7366],
+	1000127000: _StructureType_name[7366:7409],
+	1000127001: _StructureType_name[7409:7452],
+	1000128000: _StructureType_name[7452:7492],
+	1000128001: _StructureType_name[7492:7531],
+	1000128002: _StructureType_name[7531:7562],
+	1000128003: _StructureType_name[7562:7609],
+	1000128004: _StructureType_name[7609:7654],
+	1000129000: _StructureType_name[7654:7700],
+	1000129001: _StructureType_name[7700:7751],
+	1000129002: _StructureType_name[7751:7808],
+	1000129003: _StructureType_name[7808:7859],
+	1000129004: _StructureType_name[7859:7913],
+	1000129005: _StructureType_name[7913:7947],
+	1000130000: _StructureType_name[7947:8006],
+	1000130001: _StructureType_name[8006:8052],
+	1000138000: _StructureType_name[8052:8108],
+	1000138001: _StructureType_name[8108:8166],
+	1000138002: _StructureType_name[8166:8218],
+	1000138003: _StructureType_name[8218:8276],
+	1000143000: _StructureType_name[8276:8311],
+	1000143001: _StructureType_name[8311:8361],
+	1000143002: _StructureType_name[8361:8415],
+	1000143003: _StructureType_name[8415:8470],
+	1000143004: _StructureType_name[8470:8507],
+	1000145000: _StructureType_name[8507:8539],
+	1000145001: _StructureType_name[8539:8589],
+	1000145002: _StructureType_name[8589:8641],
+	1000145003: _StructureType_name[8641:8670],
+	1000146000: _StructureType_name[8670:8712],
+	1000146001: _StructureType_name[8712:8753],
+	1000146002: _StructureType_name[8753:8800],
+	1000146003: _StructureType_name[8800:8832],
+	1000146004: _StructureType_name[8832:8875],
+	1000147000: _StructureType_name[8875:8916],
+	1000148000: _StructureType_name[8916:8976],
+	1000148001: _StructureType_name[8976:9038],
+	1000148002: _StructureType_name[9038:9095],
+	1000149000: _StructureType_name[9095:9148],
+	1000152000: _StructureType_name[9148:9204],
+	1000156000: _StructureType_name[9204:9249],
+	1000156001: _StructureType_name[9249:9288],
+	1000156002: _StructureType_name[9288:9325],
+	1000156003: _StructureType_name[9325:9370],
+	1000156004: _StructureType_name[9370:9427],
+	1000156005: _StructureType_name[9427:9483],
+	1000157000: _StructureType_name[9483:9519],
+	1000157001: _StructureType_name[9519:9554],
+	1000160000: _StructureType_name[9554:9595],
+	1000160001: _StructureType_name[9595:9648],
+	1000161000: _StructureType_name[9648:9705],
+	1000161001: _StructureType_name[9705:9761],
+	1000161002: _StructureType_name[9761:9819],
+	1000161003: _StructureType_name[9819:9883],
+	1000161004: _StructureType_name[9883:9948],
+	1000164000: _StructureType_name[9948:10010],
+	1000164001: _StructureType_name[10010:10063],
+	1000164002: _StructureType_name[10063:10118],
+	1000164005: _StructureType_name[10118:10181],
+	1000166000: _StructureType_name[10181:10244],
+	1000166001: _StructureType_name[10244:10308],
+	1000168000: _StructureType_name[10308:10357],
+	1000168001: _StructureType_name[10357:10396],
+	1000174000: _StructureType_name[10396:10447],
+	1000177000: _StructureType_name[10447:10496],
+	1000178000: _StructureType_name[10496:10539],
+	1000178001: _StructureType_name[10539:10582],
+	1000178002: _StructureType_name[10582:10640],
+	1000185000: _StructureType_name[10640:10690],
+	1000190000: _StructureType_name[10690:10752],
+	1000190001: _StructureType_name[10752:10809],
+	1000190002: _StructureType_name[10809:10869],
+	1000201000: _StructureType_name[10869:10931],
+	1000202000: _StructureType_name[10931:10978],
+	1000202001: _StructureType_name[10978:11027],
+	1000203000: _StructureType_name[11027:11089],
+	1000204000: _StructureType_name[11089:11146],
+	1000205000: _StructureType_name[11146:11208],
+	1000205002: _StructureType_name[11208:11261],
+	1000206000: _StructureType_name[11261:11290],
+	1000206001: _StructureType_name[11290:11336],
+	1000211000: _StructureType_name[11336:11391],
 }
 
 func (i StructureType) String() string {
@@ -352,6 +879,42 @@ func (i StructureType) String() string {
 		return str
 	}
 	return "StructureType(" + strconv.FormatInt(int64(i), 10) + ")"
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[Success-0]
+	_ = x[NotReady-1]
+	_ = x[Timeout-2]
+	_ = x[EventSet-3]
+	_ = x[EventReset-4]
+	_ = x[Incomplete-5]
+	_ = x[SuboptimalKHR-1000001003]
+	_ = x[ErrOutOfHostMemory - -1]
+	_ = x[ErrOutOfDeviceMemory - -2]
+	_ = x[ErrInitializationFailed - -3]
+	_ = x[ErrDeviceLost - -4]
+	_ = x[ErrMemoryMapFailed - -5]
+	_ = x[ErrLayerNotPresent - -6]
+	_ = x[ErrExtensionNotPresent - -7]
+	_ = x[ErrFeatureNotPresent - -8]
+	_ = x[ErrIncompatibleDriver - -9]
+	_ = x[ErrTooManyObjects - -10]
+	_ = x[ErrFormatNotSupported - -11]
+	_ = x[ErrFragmentedPool - -12]
+	_ = x[ErrSurfaceLostKHR - -1000000000]
+	_ = x[ErrNativeWindowInUseKHR - -1000000001]
+	_ = x[ErrOutOfDateKHR - -1000001004]
+	_ = x[ErrIncompatibleDisplayKHR - -1000003001]
+	_ = x[ErrOutOfPoolMemory - -1000069000]
+	_ = x[ErrInvalidExternalHandle - -1000072003]
+	_ = x[ErrValidationFailedEXT - -1000011001]
+	_ = x[ErrInvalidShaderNV - -1000012000]
+	_ = x[ErrFragmentationEXT - -1000161000]
+	_ = x[ErrNotPermittedEXT - -1000174001]
+	_ = x[ErrOutOfPoolMemoryKHR - -1000069000]
+	_ = x[ErrInvalidExternalHandleKHR - -1000072003]
 }
 
 const _Result_name = "ErrNotPermittedEXTErrFragmentationEXTErrInvalidExternalHandleErrOutOfPoolMemoryErrInvalidShaderNVErrValidationFailedEXTErrIncompatibleDisplayKHRErrOutOfDateKHRErrNativeWindowInUseKHRErrSurfaceLostKHRErrFragmentedPoolErrFormatNotSupportedErrTooManyObjectsErrIncompatibleDriverErrFeatureNotPresentErrExtensionNotPresentErrLayerNotPresentErrMemoryMapFailedErrDeviceLostErrInitializationFailedErrOutOfDeviceMemoryErrOutOfHostMemorySuccessNotReadyTimeoutEventSetEventResetIncompleteSuboptimalKHR"
@@ -394,6 +957,16 @@ func (i Result) String() string {
 	}
 	return "Result(" + strconv.FormatInt(int64(i), 10) + ")"
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[PhysicalDeviceTypeOther-0]
+	_ = x[PhysicalDeviceTypeIntegratedGPU-1]
+	_ = x[PhysicalDeviceTypeDiscreteGPU-2]
+	_ = x[PhysicalDeviceTypeVirtualGPU-3]
+	_ = x[PhysicalDeviceTypeCPU-4]
+}
 
 const _PhysicalDeviceType_name = "PhysicalDeviceTypeOtherPhysicalDeviceTypeIntegratedGPUPhysicalDeviceTypeDiscreteGPUPhysicalDeviceTypeVirtualGPUPhysicalDeviceTypeCPU"
 
@@ -404,6 +977,13 @@ func (i PhysicalDeviceType) String() string {
 		return "PhysicalDeviceType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _PhysicalDeviceType_name[_PhysicalDeviceType_index[i]:_PhysicalDeviceType_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[SharingModeExclusive-0]
+	_ = x[SharingModeConcurrent-1]
 }
 
 const _SharingMode_name = "SharingModeExclusiveSharingModeConcurrent"
@@ -416,6 +996,18 @@ func (i SharingMode) String() string {
 	}
 	return _SharingMode_name[_SharingMode_index[i]:_SharingMode_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[ImageViewType1D-0]
+	_ = x[ImageViewType2D-1]
+	_ = x[ImageViewType3D-2]
+	_ = x[ImageViewTypeCube-3]
+	_ = x[ImageViewType1DArray-4]
+	_ = x[ImageViewType2DArray-5]
+	_ = x[ImageViewTypeCubeArray-6]
+}
 
 const _ImageViewType_name = "ImageViewType1DImageViewType2DImageViewType3DImageViewTypeCubeImageViewType1DArrayImageViewType2DArrayImageViewTypeCubeArray"
 
@@ -426,6 +1018,18 @@ func (i ImageViewType) String() string {
 		return "ImageViewType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _ImageViewType_name[_ImageViewType_index[i]:_ImageViewType_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[ComponentSwizzleIdentity-0]
+	_ = x[ComponentSwizzleZero-1]
+	_ = x[ComponentSwizzleOne-2]
+	_ = x[ComponentSwizzleR-3]
+	_ = x[ComponentSwizzleG-4]
+	_ = x[ComponentSwizzleB-5]
+	_ = x[ComponentSwizzleA-6]
 }
 
 const _ComponentSwizzle_name = "ComponentSwizzleIdentityComponentSwizzleZeroComponentSwizzleOneComponentSwizzleRComponentSwizzleGComponentSwizzleBComponentSwizzleA"
@@ -438,6 +1042,13 @@ func (i ComponentSwizzle) String() string {
 	}
 	return _ComponentSwizzle_name[_ComponentSwizzle_index[i]:_ComponentSwizzle_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[VertexInputRateVertex-0]
+	_ = x[VertexInputRateInstance-1]
+}
 
 const _VertexInputRate_name = "VertexInputRateVertexVertexInputRateInstance"
 
@@ -449,6 +1060,22 @@ func (i VertexInputRate) String() string {
 	}
 	return _VertexInputRate_name[_VertexInputRate_index[i]:_VertexInputRate_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[PrimitiveTopologyPointList-0]
+	_ = x[PrimitiveTopologyLineList-1]
+	_ = x[PrimitiveTopologyLineStrip-2]
+	_ = x[PrimitiveTopologyTriangleList-3]
+	_ = x[PrimitiveTopologyTriangleStrip-4]
+	_ = x[PrimitiveTopologyTriangleFan-5]
+	_ = x[PrimitiveTopologyLineListWithAdjacency-6]
+	_ = x[PrimitiveTopologyLineStripWithAdjacency-7]
+	_ = x[PrimitiveTopologyTriangleListWithAdjacency-8]
+	_ = x[PrimitiveTopologyTriangleStripWithAdjacency-9]
+	_ = x[PrimitiveTopologyPatchList-10]
+}
 
 const _PrimitiveTopology_name = "PrimitiveTopologyPointListPrimitiveTopologyLineListPrimitiveTopologyLineStripPrimitiveTopologyTriangleListPrimitiveTopologyTriangleStripPrimitiveTopologyTriangleFanPrimitiveTopologyLineListWithAdjacencyPrimitiveTopologyLineStripWithAdjacencyPrimitiveTopologyTriangleListWithAdjacencyPrimitiveTopologyTriangleStripWithAdjacencyPrimitiveTopologyPatchList"
 
@@ -459,6 +1086,15 @@ func (i PrimitiveTopology) String() string {
 		return "PrimitiveTopology(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _PrimitiveTopology_name[_PrimitiveTopology_index[i]:_PrimitiveTopology_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[PolygonModeFill-0]
+	_ = x[PolygonModeLine-1]
+	_ = x[PolygonModePoint-2]
+	_ = x[PolygonModeFillRectangleNV-1000153000]
 }
 
 const (
@@ -472,13 +1108,20 @@ var (
 
 func (i PolygonMode) String() string {
 	switch {
-	case 0 <= i && i <= 2:
+	case i <= 2:
 		return _PolygonMode_name_0[_PolygonMode_index_0[i]:_PolygonMode_index_0[i+1]]
 	case i == 1000153000:
 		return _PolygonMode_name_1
 	default:
 		return "PolygonMode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[FrontFaceCounterClockwise-0]
+	_ = x[FrontFaceClockwise-1]
 }
 
 const _FrontFace_name = "FrontFaceCounterClockwiseFrontFaceClockwise"
@@ -491,6 +1134,30 @@ func (i FrontFace) String() string {
 	}
 	return _FrontFace_name[_FrontFace_index[i]:_FrontFace_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[BlendFactorZero-0]
+	_ = x[BlendFactorOne-1]
+	_ = x[BlendFactorSrcColor-2]
+	_ = x[BlendFactorOneMinusSrcColor-3]
+	_ = x[BlendFactorDstColor-4]
+	_ = x[BlendFactorOneMinusDstColor-5]
+	_ = x[BlendFactorSrcAlpha-6]
+	_ = x[BlendFactorOneMinusSrcAlpha-7]
+	_ = x[BlendFactorDstAlpha-8]
+	_ = x[BlendFactorOneMinusDstAlpha-9]
+	_ = x[BlendFactorConstantColor-10]
+	_ = x[BlendFactorOneMinusConstantColor-11]
+	_ = x[BlendFactorConstantAlpha-12]
+	_ = x[BlendFactorOneMinusConstantAlpha-13]
+	_ = x[BlendFactorSrcAlphaSaturate-14]
+	_ = x[BlendFactorSrc1Color-15]
+	_ = x[BlendFactorOneMinusSrc1Color-16]
+	_ = x[BlendFactorSrc1Alpha-17]
+	_ = x[BlendFactorOneMinusSrc1Alpha-18]
+}
 
 const _BlendFactor_name = "BlendFactorZeroBlendFactorOneBlendFactorSrcColorBlendFactorOneMinusSrcColorBlendFactorDstColorBlendFactorOneMinusDstColorBlendFactorSrcAlphaBlendFactorOneMinusSrcAlphaBlendFactorDstAlphaBlendFactorOneMinusDstAlphaBlendFactorConstantColorBlendFactorOneMinusConstantColorBlendFactorConstantAlphaBlendFactorOneMinusConstantAlphaBlendFactorSrcAlphaSaturateBlendFactorSrc1ColorBlendFactorOneMinusSrc1ColorBlendFactorSrc1AlphaBlendFactorOneMinusSrc1Alpha"
 
@@ -501,6 +1168,62 @@ func (i BlendFactor) String() string {
 		return "BlendFactor(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _BlendFactor_name[_BlendFactor_index[i]:_BlendFactor_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[BlendOpAdd-0]
+	_ = x[BlendOpSubtract-1]
+	_ = x[BlendOpReverseSubtract-2]
+	_ = x[BlendOpMin-3]
+	_ = x[BlendOpMax-4]
+	_ = x[BlendOpZeroEXT-1000148000]
+	_ = x[BlendOpSrcEXT-1000148001]
+	_ = x[BlendOpDstEXT-1000148002]
+	_ = x[BlendOpSrcOverEXT-1000148003]
+	_ = x[BlendOpDstOverEXT-1000148004]
+	_ = x[BlendOpSrcInEXT-1000148005]
+	_ = x[BlendOpDstInEXT-1000148006]
+	_ = x[BlendOpSrcOutEXT-1000148007]
+	_ = x[BlendOpDstOutEXT-1000148008]
+	_ = x[BlendOpSrcAtopEXT-1000148009]
+	_ = x[BlendOpDstAtopEXT-1000148010]
+	_ = x[BlendOpXorEXT-1000148011]
+	_ = x[BlendOpMultiplyEXT-1000148012]
+	_ = x[BlendOpScreenEXT-1000148013]
+	_ = x[BlendOpOverlayEXT-1000148014]
+	_ = x[BlendOpDarkenEXT-1000148015]
+	_ = x[BlendOpLightenEXT-1000148016]
+	_ = x[BlendOpColordodgeEXT-1000148017]
+	_ = x[BlendOpColorburnEXT-1000148018]
+	_ = x[BlendOpHardlightEXT-1000148019]
+	_ = x[BlendOpSoftlightEXT-1000148020]
+	_ = x[BlendOpDifferenceEXT-1000148021]
+	_ = x[BlendOpExclusionEXT-1000148022]
+	_ = x[BlendOpInvertEXT-1000148023]
+	_ = x[BlendOpInvertRGB_EXT-1000148024]
+	_ = x[BlendOpLineardodgeEXT-1000148025]
+	_ = x[BlendOpLinearburnEXT-1000148026]
+	_ = x[BlendOpVividlightEXT-1000148027]
+	_ = x[BlendOpLinearlightEXT-1000148028]
+	_ = x[BlendOpPinlightEXT-1000148029]
+	_ = x[BlendOpHardmixEXT-1000148030]
+	_ = x[BlendOpHSLHueEXT-1000148031]
+	_ = x[BlendOpHSLSaturationEXT-1000148032]
+	_ = x[BlendOpHSLColorEXT-1000148033]
+	_ = x[BlendOpHSLLuminosityEXT-1000148034]
+	_ = x[BlendOpPlusEXT-1000148035]
+	_ = x[BlendOpPlusClampedEXT-1000148036]
+	_ = x[BlendOpPlusClampedAlphaEXT-1000148037]
+	_ = x[BlendOpPlusDarkerEXT-1000148038]
+	_ = x[BlendOpMinusEXT-1000148039]
+	_ = x[BlendOpMinusClampedEXT-1000148040]
+	_ = x[BlendOpContrastEXT-1000148041]
+	_ = x[BlendOpInvertOVG_EXT-1000148042]
+	_ = x[BlendOpRedEXT-1000148043]
+	_ = x[BlendOpGreenEXT-1000148044]
+	_ = x[BlendOpBlueEXT-1000148045]
 }
 
 const (
@@ -515,7 +1238,7 @@ var (
 
 func (i BlendOp) String() string {
 	switch {
-	case 0 <= i && i <= 4:
+	case i <= 4:
 		return _BlendOp_name_0[_BlendOp_index_0[i]:_BlendOp_index_0[i+1]]
 	case 1000148000 <= i && i <= 1000148045:
 		i -= 1000148000
@@ -523,6 +1246,27 @@ func (i BlendOp) String() string {
 	default:
 		return "BlendOp(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[LogicOpClear-0]
+	_ = x[LogicOpAnd-1]
+	_ = x[LogicOpAndReverse-2]
+	_ = x[LogicOpCopy-3]
+	_ = x[LogicOpAndInverted-4]
+	_ = x[LogicOpNoOp-5]
+	_ = x[LogicOpXor-6]
+	_ = x[LogicOpOr-7]
+	_ = x[LogicOpNor-8]
+	_ = x[LogicOpEquivalent-9]
+	_ = x[LogicOpInvert-10]
+	_ = x[LogicOpOrReverse-11]
+	_ = x[LogicOpCopyInverted-12]
+	_ = x[LogicOpOrInverted-13]
+	_ = x[LogicOpNand-14]
+	_ = x[LogicOpSet-15]
 }
 
 const _LogicOp_name = "LogicOpClearLogicOpAndLogicOpAndReverseLogicOpCopyLogicOpAndInvertedLogicOpNoOpLogicOpXorLogicOpOrLogicOpNorLogicOpEquivalentLogicOpInvertLogicOpOrReverseLogicOpCopyInvertedLogicOpOrInvertedLogicOpNandLogicOpSet"
@@ -534,6 +1278,26 @@ func (i LogicOp) String() string {
 		return "LogicOp(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _LogicOp_name[_LogicOp_index[i]:_LogicOp_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[DynamicStateViewport-0]
+	_ = x[DynamicStateScissor-1]
+	_ = x[DynamicStateLineWidth-2]
+	_ = x[DynamicStateDepthBias-3]
+	_ = x[DynamicStateBlendConstants-4]
+	_ = x[DynamicStateDepthBounds-5]
+	_ = x[DynamicStateStencilCompareMask-6]
+	_ = x[DynamicStateStencilWriteMask-7]
+	_ = x[DynamicStateStencilReference-8]
+	_ = x[DynamicStateViewportWScalingNV-1000087000]
+	_ = x[DynamicStateDiscardRectangleEXT-1000099000]
+	_ = x[DynamicStateSampleLocationsEXT-1000143000]
+	_ = x[DynamicStateViewportShadingRatePaletteNV-1000164004]
+	_ = x[DynamicStateViewportCoarseSampleOrderNV-1000164006]
+	_ = x[DynamicStateExclusiveScissorNV-1000205001]
 }
 
 const (
@@ -552,7 +1316,7 @@ var (
 
 func (i DynamicState) String() string {
 	switch {
-	case 0 <= i && i <= 8:
+	case i <= 8:
 		return _DynamicState_name_0[_DynamicState_index_0[i]:_DynamicState_index_0[i+1]]
 	case i == 1000087000:
 		return _DynamicState_name_1
@@ -570,6 +1334,19 @@ func (i DynamicState) String() string {
 		return "DynamicState(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[CompareOpNever-0]
+	_ = x[CompareOpLess-1]
+	_ = x[CompareOpEqual-2]
+	_ = x[CompareOpLessOrEqual-3]
+	_ = x[CompareOpGreater-4]
+	_ = x[CompareOpNotEqual-5]
+	_ = x[CompareOpGreaterOrEqual-6]
+	_ = x[CompareOpAlways-7]
+}
 
 const _CompareOp_name = "CompareOpNeverCompareOpLessCompareOpEqualCompareOpLessOrEqualCompareOpGreaterCompareOpNotEqualCompareOpGreaterOrEqualCompareOpAlways"
 
@@ -580,6 +1357,19 @@ func (i CompareOp) String() string {
 		return "CompareOp(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _CompareOp_name[_CompareOp_index[i]:_CompareOp_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[StencilOpKeep-0]
+	_ = x[StencilOpZero-1]
+	_ = x[StencilOpReplace-2]
+	_ = x[StencilOpIncrementAndClamp-3]
+	_ = x[StencilOpDecrementAndClamp-4]
+	_ = x[StencilOpInvert-5]
+	_ = x[StencilOpIncrementAndWrap-6]
+	_ = x[StencilOpDecrementAndWrap-7]
 }
 
 const _StencilOp_name = "StencilOpKeepStencilOpZeroStencilOpReplaceStencilOpIncrementAndClampStencilOpDecrementAndClampStencilOpInvertStencilOpIncrementAndWrapStencilOpDecrementAndWrap"
@@ -592,6 +1382,14 @@ func (i StencilOp) String() string {
 	}
 	return _StencilOp_name[_StencilOp_index[i]:_StencilOp_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[AttachmentLoadOpLoad-0]
+	_ = x[AttachmentLoadOpClear-1]
+	_ = x[AttachmentLoadOpDontCare-2]
+}
 
 const _AttachmentLoadOp_name = "AttachmentLoadOpLoadAttachmentLoadOpClearAttachmentLoadOpDontCare"
 
@@ -603,6 +1401,13 @@ func (i AttachmentLoadOp) String() string {
 	}
 	return _AttachmentLoadOp_name[_AttachmentLoadOp_index[i]:_AttachmentLoadOp_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[AttachmentStoreOpStore-0]
+	_ = x[AttachmentStoreOpDontCare-1]
+}
 
 const _AttachmentStoreOp_name = "AttachmentStoreOpStoreAttachmentStoreOpDontCare"
 
@@ -613,6 +1418,27 @@ func (i AttachmentStoreOp) String() string {
 		return "AttachmentStoreOp(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _AttachmentStoreOp_name[_AttachmentStoreOp_index[i]:_AttachmentStoreOp_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[ImageLayoutUndefined-0]
+	_ = x[ImageLayoutGeneral-1]
+	_ = x[ImageLayoutColorAttachmentOptimal-2]
+	_ = x[ImageLayoutDepthStencilAttachmentOptimal-3]
+	_ = x[ImageLayoutDepthStencilReadOnlyOptimal-4]
+	_ = x[ImageLayoutShaderReadOnlyOptimal-5]
+	_ = x[ImageLayoutTransferSrcOptimal-6]
+	_ = x[ImageLayoutTransferDstOptimal-7]
+	_ = x[ImageLayoutPreinitialized-8]
+	_ = x[ImageLayoutDepthReadOnlyStencilAttachmentOptimal-1000117000]
+	_ = x[ImageLayoutDepthAttachmentStencilReadOnlyOptimal-1000117001]
+	_ = x[ImageLayoutPresentSrcKHR-1000001002]
+	_ = x[ImageLayoutSharedPresentKHR-1000111000]
+	_ = x[ImageLayoutShadingRateOptimalNV-1000164003]
+	_ = x[ImageLayoutDepthReadOnlyStencilAttachmentOptimalKHR-1000117000]
+	_ = x[ImageLayoutDepthAttachmentStencilReadOnlyOptimalKHR-1000117001]
 }
 
 const (
@@ -630,7 +1456,7 @@ var (
 
 func (i ImageLayout) String() string {
 	switch {
-	case 0 <= i && i <= 8:
+	case i <= 8:
 		return _ImageLayout_name_0[_ImageLayout_index_0[i]:_ImageLayout_index_0[i+1]]
 	case i == 1000001002:
 		return _ImageLayout_name_1
@@ -645,25 +1471,30 @@ func (i ImageLayout) String() string {
 		return "ImageLayout(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[PipelineBindPointGraphics-0]
+	_ = x[PipelineBindPointCompute-1]
+}
 
-const (
-	_PipelineBindPoint_name_0 = "PipelineBindPointGraphicsPipelineBindPointCompute"
-	_PipelineBindPoint_name_1 = "PipelineBindPointRaytracingNVX"
-)
+const _PipelineBindPoint_name = "PipelineBindPointGraphicsPipelineBindPointCompute"
 
-var (
-	_PipelineBindPoint_index_0 = [...]uint8{0, 25, 49}
-)
+var _PipelineBindPoint_index = [...]uint8{0, 25, 49}
 
 func (i PipelineBindPoint) String() string {
-	switch {
-	case 0 <= i && i <= 1:
-		return _PipelineBindPoint_name_0[_PipelineBindPoint_index_0[i]:_PipelineBindPoint_index_0[i+1]]
-	case i == 1000165000:
-		return _PipelineBindPoint_name_1
-	default:
+	if i >= PipelineBindPoint(len(_PipelineBindPoint_index)-1) {
 		return "PipelineBindPoint(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+	return _PipelineBindPoint_name[_PipelineBindPoint_index[i]:_PipelineBindPoint_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[SubpassContentsInline-0]
+	_ = x[SubpassContentsSecondaryCommandBuffers-1]
 }
 
 const _SubpassContents_name = "SubpassContentsInlineSubpassContentsSecondaryCommandBuffers"
@@ -675,6 +1506,14 @@ func (i SubpassContents) String() string {
 		return "SubpassContents(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _SubpassContents_name[_SubpassContents_index[i]:_SubpassContents_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[ImageTilingOptimal-0]
+	_ = x[ImageTilingLinear-1]
+	_ = x[ImageTilingDrmFormatModifierEXT-1000158000]
 }
 
 const (
@@ -688,13 +1527,21 @@ var (
 
 func (i ImageTiling) String() string {
 	switch {
-	case 0 <= i && i <= 1:
+	case i <= 1:
 		return _ImageTiling_name_0[_ImageTiling_index_0[i]:_ImageTiling_index_0[i+1]]
 	case i == 1000158000:
 		return _ImageTiling_name_1
 	default:
 		return "ImageTiling(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[ImageType1D-0]
+	_ = x[ImageType2D-1]
+	_ = x[ImageType3D-2]
 }
 
 const _ImageType_name = "ImageType1DImageType2DImageType3D"
@@ -707,6 +1554,13 @@ func (i ImageType) String() string {
 	}
 	return _ImageType_name[_ImageType_index[i]:_ImageType_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[IndexTypeUint16-0]
+	_ = x[IndexTypeUint32-1]
+}
 
 const _IndexType_name = "IndexTypeUint16IndexTypeUint32"
 
@@ -718,11 +1572,19 @@ func (i IndexType) String() string {
 	}
 	return _IndexType_name[_IndexType_index[i]:_IndexType_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[QueryTypeOcclusion-0]
+	_ = x[QueryTypePipelineStatistics-1]
+	_ = x[QueryTypeTimestamp-2]
+	_ = x[QueryTypeTransformFeedbackStreamEXT-1000028004]
+}
 
 const (
 	_QueryType_name_0 = "QueryTypeOcclusionQueryTypePipelineStatisticsQueryTypeTimestamp"
 	_QueryType_name_1 = "QueryTypeTransformFeedbackStreamEXT"
-	_QueryType_name_2 = "QueryTypeCompactedSizeNVX"
 )
 
 var (
@@ -731,15 +1593,21 @@ var (
 
 func (i QueryType) String() string {
 	switch {
-	case 0 <= i && i <= 2:
+	case i <= 2:
 		return _QueryType_name_0[_QueryType_index_0[i]:_QueryType_index_0[i+1]]
 	case i == 1000028004:
 		return _QueryType_name_1
-	case i == 1000165000:
-		return _QueryType_name_2
 	default:
 		return "QueryType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[FilterNearest-0]
+	_ = x[FilterLinear-1]
+	_ = x[FilterCubicIMG-1000015000]
 }
 
 const (
@@ -753,13 +1621,23 @@ var (
 
 func (i Filter) String() string {
 	switch {
-	case 0 <= i && i <= 1:
+	case i <= 1:
 		return _Filter_name_0[_Filter_index_0[i]:_Filter_index_0[i+1]]
 	case i == 1000015000:
 		return _Filter_name_1
 	default:
 		return "Filter(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[SamplerAddressModeRepeat-0]
+	_ = x[SamplerAddressModeMirroredRepeat-1]
+	_ = x[SamplerAddressModeClampToEdge-2]
+	_ = x[SamplerAddressModeClampToBorder-3]
+	_ = x[SamplerAddressModeMirrorClampToEdge-4]
 }
 
 const _SamplerAddressMode_name = "SamplerAddressModeRepeatSamplerAddressModeMirroredRepeatSamplerAddressModeClampToEdgeSamplerAddressModeClampToBorderSamplerAddressModeMirrorClampToEdge"
@@ -772,6 +1650,13 @@ func (i SamplerAddressMode) String() string {
 	}
 	return _SamplerAddressMode_name[_SamplerAddressMode_index[i]:_SamplerAddressMode_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[SamplerMipmapModeNearest-0]
+	_ = x[SamplerMipmapModeLinear-1]
+}
 
 const _SamplerMipmapMode_name = "SamplerMipmapModeNearestSamplerMipmapModeLinear"
 
@@ -782,6 +1667,17 @@ func (i SamplerMipmapMode) String() string {
 		return "SamplerMipmapMode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _SamplerMipmapMode_name[_SamplerMipmapMode_index[i]:_SamplerMipmapMode_index[i+1]]
+}
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[BorderColorFloatTransparentBlack-0]
+	_ = x[BorderColorIntTransparentBlack-1]
+	_ = x[BorderColorFloatOpaqueBlack-2]
+	_ = x[BorderColorIntOpaqueBlack-3]
+	_ = x[BorderColorFloatOpaqueWhite-4]
+	_ = x[BorderColorIntOpaqueWhite-5]
 }
 
 const _BorderColor_name = "BorderColorFloatTransparentBlackBorderColorIntTransparentBlackBorderColorFloatOpaqueBlackBorderColorIntOpaqueBlackBorderColorFloatOpaqueWhiteBorderColorIntOpaqueWhite"
@@ -794,11 +1690,27 @@ func (i BorderColor) String() string {
 	}
 	return _BorderColor_name[_BorderColor_index[i]:_BorderColor_index[i+1]]
 }
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[DescriptorTypeSampler-0]
+	_ = x[DescriptorTypeCombinedImageSampler-1]
+	_ = x[DescriptorTypeSampledImage-2]
+	_ = x[DescriptorTypeStorageImage-3]
+	_ = x[DescriptorTypeUniformTexelBuffer-4]
+	_ = x[DescriptorTypeStorageTexelBuffer-5]
+	_ = x[DescriptorTypeUniformBuffer-6]
+	_ = x[DescriptorTypeStorageBuffer-7]
+	_ = x[DescriptorTypeUniformBufferDynamic-8]
+	_ = x[DescriptorTypeStorageBufferDynamic-9]
+	_ = x[DescriptorTypeInputAttachment-10]
+	_ = x[DescriptorTypeInlineUniformBlockEXT-1000138000]
+}
 
 const (
 	_DescriptorType_name_0 = "DescriptorTypeSamplerDescriptorTypeCombinedImageSamplerDescriptorTypeSampledImageDescriptorTypeStorageImageDescriptorTypeUniformTexelBufferDescriptorTypeStorageTexelBufferDescriptorTypeUniformBufferDescriptorTypeStorageBufferDescriptorTypeUniformBufferDynamicDescriptorTypeStorageBufferDynamicDescriptorTypeInputAttachment"
 	_DescriptorType_name_1 = "DescriptorTypeInlineUniformBlockEXT"
-	_DescriptorType_name_2 = "DescriptorTypeAccelerationStructureNVX"
 )
 
 var (
@@ -807,12 +1719,10 @@ var (
 
 func (i DescriptorType) String() string {
 	switch {
-	case 0 <= i && i <= 10:
+	case i <= 10:
 		return _DescriptorType_name_0[_DescriptorType_index_0[i]:_DescriptorType_index_0[i+1]]
 	case i == 1000138000:
 		return _DescriptorType_name_1
-	case i == 1000165000:
-		return _DescriptorType_name_2
 	default:
 		return "DescriptorType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}

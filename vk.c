@@ -436,20 +436,11 @@ VkResult domVkAcquireNextImage2KHR(PFN_vkAcquireNextImage2KHR fp, VkDevice devic
 VkResult domVkAcquireNextImageKHR(PFN_vkAcquireNextImageKHR fp, VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t* pImageIndex) {
 	return (*fp)(device, swapchain, timeout, semaphore, fence, pImageIndex);
 }
-VkResult domVkBindAccelerationStructureMemoryNVX(PFN_vkBindAccelerationStructureMemoryNVX fp, VkDevice device, uint32_t bindInfoCount, const VkBindAccelerationStructureMemoryInfoNVX* pBindInfos) {
-	return (*fp)(device, bindInfoCount, pBindInfos);
-}
 VkResult domVkBindBufferMemory2KHR(PFN_vkBindBufferMemory2KHR fp, VkDevice device, uint32_t bindInfoCount, const VkBindBufferMemoryInfo* pBindInfos) {
 	return (*fp)(device, bindInfoCount, pBindInfos);
 }
 VkResult domVkBindImageMemory2KHR(PFN_vkBindImageMemory2KHR fp, VkDevice device, uint32_t bindInfoCount, const VkBindImageMemoryInfo* pBindInfos) {
 	return (*fp)(device, bindInfoCount, pBindInfos);
-}
-VkResult domVkCompileDeferredNVX(PFN_vkCompileDeferredNVX fp, VkDevice device, VkPipeline pipeline, uint32_t shader) {
-	return (*fp)(device, pipeline, shader);
-}
-VkResult domVkCreateAccelerationStructureNVX(PFN_vkCreateAccelerationStructureNVX fp, VkDevice device, const VkAccelerationStructureCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkAccelerationStructureNVX* pAccelerationStructure) {
-	return (*fp)(device, pCreateInfo, pAllocator, pAccelerationStructure);
 }
 VkResult domVkCreateDebugReportCallbackEXT(PFN_vkCreateDebugReportCallbackEXT fp, VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback) {
 	return (*fp)(instance, pCreateInfo, pAllocator, pCallback);
@@ -465,15 +456,6 @@ VkResult domVkCreateDisplayModeKHR(PFN_vkCreateDisplayModeKHR fp, VkPhysicalDevi
 }
 VkResult domVkCreateDisplayPlaneSurfaceKHR(PFN_vkCreateDisplayPlaneSurfaceKHR fp, VkInstance instance, const VkDisplaySurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface) {
 	return (*fp)(instance, pCreateInfo, pAllocator, pSurface);
-}
-VkResult domVkCreateIndirectCommandsLayoutNVX(PFN_vkCreateIndirectCommandsLayoutNVX fp, VkDevice device, const VkIndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkIndirectCommandsLayoutNVX* pIndirectCommandsLayout) {
-	return (*fp)(device, pCreateInfo, pAllocator, pIndirectCommandsLayout);
-}
-VkResult domVkCreateObjectTableNVX(PFN_vkCreateObjectTableNVX fp, VkDevice device, const VkObjectTableCreateInfoNVX* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkObjectTableNVX* pObjectTable) {
-	return (*fp)(device, pCreateInfo, pAllocator, pObjectTable);
-}
-VkResult domVkCreateRaytracingPipelinesNVX(PFN_vkCreateRaytracingPipelinesNVX fp, VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkRaytracingPipelineCreateInfoNVX* pCreateInfos, const VkAllocationCallbacks* pAllocator, VkPipeline* pPipelines) {
-	return (*fp)(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
 }
 VkResult domVkCreateRenderPass2KHR(PFN_vkCreateRenderPass2KHR fp, VkDevice device, const VkRenderPassCreateInfo2KHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkRenderPass* pRenderPass) {
 	return (*fp)(device, pCreateInfo, pAllocator, pRenderPass);
@@ -501,9 +483,6 @@ VkResult domVkDisplayPowerControlEXT(PFN_vkDisplayPowerControlEXT fp, VkDevice d
 }
 VkResult domVkEnumeratePhysicalDeviceGroupsKHR(PFN_vkEnumeratePhysicalDeviceGroupsKHR fp, VkInstance instance, uint32_t* pPhysicalDeviceGroupCount, VkPhysicalDeviceGroupProperties* pPhysicalDeviceGroupProperties) {
 	return (*fp)(instance, pPhysicalDeviceGroupCount, pPhysicalDeviceGroupProperties);
-}
-VkResult domVkGetAccelerationStructureHandleNVX(PFN_vkGetAccelerationStructureHandleNVX fp, VkDevice device, VkAccelerationStructureNVX accelerationStructure, size_t dataSize, void* pData) {
-	return (*fp)(device, accelerationStructure, dataSize, pData);
 }
 VkResult domVkGetCalibratedTimestampsEXT(PFN_vkGetCalibratedTimestampsEXT fp, VkDevice device, uint32_t timestampCount, const VkCalibratedTimestampInfoEXT* pTimestampInfos, uint64_t* pTimestamps, uint64_t* pMaxDeviation) {
 	return (*fp)(device, timestampCount, pTimestampInfos, pTimestamps, pMaxDeviation);
@@ -592,9 +571,6 @@ VkResult domVkGetPhysicalDeviceSurfacePresentModesKHR(PFN_vkGetPhysicalDeviceSur
 VkResult domVkGetPhysicalDeviceSurfaceSupportKHR(PFN_vkGetPhysicalDeviceSurfaceSupportKHR fp, VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, VkSurfaceKHR surface, VkBool32* pSupported) {
 	return (*fp)(physicalDevice, queueFamilyIndex, surface, pSupported);
 }
-VkResult domVkGetRaytracingShaderHandlesNVX(PFN_vkGetRaytracingShaderHandlesNVX fp, VkDevice device, VkPipeline pipeline, uint32_t firstGroup, uint32_t groupCount, size_t dataSize, void* pData) {
-	return (*fp)(device, pipeline, firstGroup, groupCount, dataSize, pData);
-}
 VkResult domVkGetRefreshCycleDurationGOOGLE(PFN_vkGetRefreshCycleDurationGOOGLE fp, VkDevice device, VkSwapchainKHR swapchain, VkRefreshCycleDurationGOOGLE* pDisplayTimingProperties) {
 	return (*fp)(device, swapchain, pDisplayTimingProperties);
 }
@@ -634,9 +610,6 @@ VkResult domVkRegisterDeviceEventEXT(PFN_vkRegisterDeviceEventEXT fp, VkDevice d
 VkResult domVkRegisterDisplayEventEXT(PFN_vkRegisterDisplayEventEXT fp, VkDevice device, VkDisplayKHR display, const VkDisplayEventInfoEXT* pDisplayEventInfo, const VkAllocationCallbacks* pAllocator, VkFence* pFence) {
 	return (*fp)(device, display, pDisplayEventInfo, pAllocator, pFence);
 }
-VkResult domVkRegisterObjectsNVX(PFN_vkRegisterObjectsNVX fp, VkDevice device, VkObjectTableNVX objectTable, uint32_t objectCount, const VkObjectTableEntryNVX* const*    ppObjectTableEntries, const uint32_t* pObjectIndices) {
-	return (*fp)(device, objectTable, objectCount, ppObjectTableEntries, pObjectIndices);
-}
 VkResult domVkReleaseDisplayEXT(PFN_vkReleaseDisplayEXT fp, VkPhysicalDevice physicalDevice, VkDisplayKHR display) {
 	return (*fp)(physicalDevice, display);
 }
@@ -645,9 +618,6 @@ VkResult domVkSetDebugUtilsObjectNameEXT(PFN_vkSetDebugUtilsObjectNameEXT fp, Vk
 }
 VkResult domVkSetDebugUtilsObjectTagEXT(PFN_vkSetDebugUtilsObjectTagEXT fp, VkDevice device, const VkDebugUtilsObjectTagInfoEXT* pTagInfo) {
 	return (*fp)(device, pTagInfo);
-}
-VkResult domVkUnregisterObjectsNVX(PFN_vkUnregisterObjectsNVX fp, VkDevice device, VkObjectTableNVX objectTable, uint32_t objectCount, const VkObjectEntryTypeNVX* pObjectEntryTypes, const uint32_t* pObjectIndices) {
-	return (*fp)(device, objectTable, objectCount, pObjectEntryTypes, pObjectIndices);
 }
 void domVkCmdBeginConditionalRenderingEXT(PFN_vkCmdBeginConditionalRenderingEXT fp, VkCommandBuffer commandBuffer, const VkConditionalRenderingBeginInfoEXT* pConditionalRenderingBegin) {
 	(*fp)(commandBuffer, pConditionalRenderingBegin);
@@ -669,12 +639,6 @@ void domVkCmdBindShadingRateImageNV(PFN_vkCmdBindShadingRateImageNV fp, VkComman
 }
 void domVkCmdBindTransformFeedbackBuffersEXT(PFN_vkCmdBindTransformFeedbackBuffersEXT fp, VkCommandBuffer commandBuffer, uint32_t firstBinding, uint32_t bindingCount, const VkBuffer* pBuffers, const VkDeviceSize* pOffsets, const VkDeviceSize* pSizes) {
 	(*fp)(commandBuffer, firstBinding, bindingCount, pBuffers, pOffsets, pSizes);
-}
-void domVkCmdBuildAccelerationStructureNVX(PFN_vkCmdBuildAccelerationStructureNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureTypeNVX type, uint32_t instanceCount, VkBuffer instanceData, VkDeviceSize instanceOffset, uint32_t geometryCount, const VkGeometryNVX* pGeometries, VkBuildAccelerationStructureFlagsNVX flags, VkBool32 update, VkAccelerationStructureNVX dst, VkAccelerationStructureNVX src, VkBuffer scratch, VkDeviceSize scratchOffset) {
-	(*fp)(commandBuffer, type, instanceCount, instanceData, instanceOffset, geometryCount, pGeometries, flags, update, dst, src, scratch, scratchOffset);
-}
-void domVkCmdCopyAccelerationStructureNVX(PFN_vkCmdCopyAccelerationStructureNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureNVX dst, VkAccelerationStructureNVX src, VkCopyAccelerationStructureModeNVX mode) {
-	(*fp)(commandBuffer, dst, src, mode);
 }
 void domVkCmdDebugMarkerBeginEXT(PFN_vkCmdDebugMarkerBeginEXT fp, VkCommandBuffer commandBuffer, const VkDebugMarkerMarkerInfoEXT* pMarkerInfo) {
 	(*fp)(commandBuffer, pMarkerInfo);
@@ -733,17 +697,11 @@ void domVkCmdInsertDebugUtilsLabelEXT(PFN_vkCmdInsertDebugUtilsLabelEXT fp, VkCo
 void domVkCmdNextSubpass2KHR(PFN_vkCmdNextSubpass2KHR fp, VkCommandBuffer commandBuffer, const VkSubpassBeginInfoKHR*      pSubpassBeginInfo, const VkSubpassEndInfoKHR*        pSubpassEndInfo) {
 	(*fp)(commandBuffer, pSubpassBeginInfo, pSubpassEndInfo);
 }
-void domVkCmdProcessCommandsNVX(PFN_vkCmdProcessCommandsNVX fp, VkCommandBuffer commandBuffer, const VkCmdProcessCommandsInfoNVX* pProcessCommandsInfo) {
-	(*fp)(commandBuffer, pProcessCommandsInfo);
-}
 void domVkCmdPushDescriptorSetKHR(PFN_vkCmdPushDescriptorSetKHR fp, VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint, VkPipelineLayout layout, uint32_t set, uint32_t descriptorWriteCount, const VkWriteDescriptorSet* pDescriptorWrites) {
 	(*fp)(commandBuffer, pipelineBindPoint, layout, set, descriptorWriteCount, pDescriptorWrites);
 }
 void domVkCmdPushDescriptorSetWithTemplateKHR(PFN_vkCmdPushDescriptorSetWithTemplateKHR fp, VkCommandBuffer commandBuffer, VkDescriptorUpdateTemplate descriptorUpdateTemplate, VkPipelineLayout layout, uint32_t set, const void* pData) {
 	(*fp)(commandBuffer, descriptorUpdateTemplate, layout, set, pData);
-}
-void domVkCmdReserveSpaceForCommandsNVX(PFN_vkCmdReserveSpaceForCommandsNVX fp, VkCommandBuffer commandBuffer, const VkCmdReserveSpaceForCommandsInfoNVX* pReserveSpaceInfo) {
-	(*fp)(commandBuffer, pReserveSpaceInfo);
 }
 void domVkCmdSetCheckpointNV(PFN_vkCmdSetCheckpointNV fp, VkCommandBuffer commandBuffer, const void* pCheckpointMarker) {
 	(*fp)(commandBuffer, pCheckpointMarker);
@@ -769,20 +727,11 @@ void domVkCmdSetViewportShadingRatePaletteNV(PFN_vkCmdSetViewportShadingRatePale
 void domVkCmdSetViewportWScalingNV(PFN_vkCmdSetViewportWScalingNV fp, VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewportWScalingNV* pViewportWScalings) {
 	(*fp)(commandBuffer, firstViewport, viewportCount, pViewportWScalings);
 }
-void domVkCmdTraceRaysNVX(PFN_vkCmdTraceRaysNVX fp, VkCommandBuffer commandBuffer, VkBuffer raygenShaderBindingTableBuffer, VkDeviceSize raygenShaderBindingOffset, VkBuffer missShaderBindingTableBuffer, VkDeviceSize missShaderBindingOffset, VkDeviceSize missShaderBindingStride, VkBuffer hitShaderBindingTableBuffer, VkDeviceSize hitShaderBindingOffset, VkDeviceSize hitShaderBindingStride, uint32_t width, uint32_t height) {
-	(*fp)(commandBuffer, raygenShaderBindingTableBuffer, raygenShaderBindingOffset, missShaderBindingTableBuffer, missShaderBindingOffset, missShaderBindingStride, hitShaderBindingTableBuffer, hitShaderBindingOffset, hitShaderBindingStride, width, height);
-}
-void domVkCmdWriteAccelerationStructurePropertiesNVX(PFN_vkCmdWriteAccelerationStructurePropertiesNVX fp, VkCommandBuffer commandBuffer, VkAccelerationStructureNVX accelerationStructure, VkQueryType queryType, VkQueryPool queryPool, uint32_t query) {
-	(*fp)(commandBuffer, accelerationStructure, queryType, queryPool, query);
-}
 void domVkCmdWriteBufferMarkerAMD(PFN_vkCmdWriteBufferMarkerAMD fp, VkCommandBuffer commandBuffer, VkPipelineStageFlagBits pipelineStage, VkBuffer dstBuffer, VkDeviceSize dstOffset, uint32_t marker) {
 	(*fp)(commandBuffer, pipelineStage, dstBuffer, dstOffset, marker);
 }
 void domVkDebugReportMessageEXT(PFN_vkDebugReportMessageEXT fp, VkInstance instance, VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage) {
 	(*fp)(instance, flags, objectType, object, location, messageCode, pLayerPrefix, pMessage);
-}
-void domVkDestroyAccelerationStructureNVX(PFN_vkDestroyAccelerationStructureNVX fp, VkDevice device, VkAccelerationStructureNVX accelerationStructure, const VkAllocationCallbacks* pAllocator) {
-	(*fp)(device, accelerationStructure, pAllocator);
 }
 void domVkDestroyDebugReportCallbackEXT(PFN_vkDestroyDebugReportCallbackEXT fp, VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator) {
 	(*fp)(instance, callback, pAllocator);
@@ -792,12 +741,6 @@ void domVkDestroyDebugUtilsMessengerEXT(PFN_vkDestroyDebugUtilsMessengerEXT fp, 
 }
 void domVkDestroyDescriptorUpdateTemplateKHR(PFN_vkDestroyDescriptorUpdateTemplateKHR fp, VkDevice device, VkDescriptorUpdateTemplate descriptorUpdateTemplate, const VkAllocationCallbacks* pAllocator) {
 	(*fp)(device, descriptorUpdateTemplate, pAllocator);
-}
-void domVkDestroyIndirectCommandsLayoutNVX(PFN_vkDestroyIndirectCommandsLayoutNVX fp, VkDevice device, VkIndirectCommandsLayoutNVX indirectCommandsLayout, const VkAllocationCallbacks* pAllocator) {
-	(*fp)(device, indirectCommandsLayout, pAllocator);
-}
-void domVkDestroyObjectTableNVX(PFN_vkDestroyObjectTableNVX fp, VkDevice device, VkObjectTableNVX objectTable, const VkAllocationCallbacks* pAllocator) {
-	(*fp)(device, objectTable, pAllocator);
 }
 void domVkDestroySamplerYcbcrConversionKHR(PFN_vkDestroySamplerYcbcrConversionKHR fp, VkDevice device, VkSamplerYcbcrConversion ycbcrConversion, const VkAllocationCallbacks* pAllocator) {
 	(*fp)(device, ycbcrConversion, pAllocator);
@@ -810,12 +753,6 @@ void domVkDestroySwapchainKHR(PFN_vkDestroySwapchainKHR fp, VkDevice device, VkS
 }
 void domVkDestroyValidationCacheEXT(PFN_vkDestroyValidationCacheEXT fp, VkDevice device, VkValidationCacheEXT validationCache, const VkAllocationCallbacks* pAllocator) {
 	(*fp)(device, validationCache, pAllocator);
-}
-void domVkGetAccelerationStructureMemoryRequirementsNVX(PFN_vkGetAccelerationStructureMemoryRequirementsNVX fp, VkDevice device, const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo, VkMemoryRequirements2KHR* pMemoryRequirements) {
-	(*fp)(device, pInfo, pMemoryRequirements);
-}
-void domVkGetAccelerationStructureScratchMemoryRequirementsNVX(PFN_vkGetAccelerationStructureScratchMemoryRequirementsNVX fp, VkDevice device, const VkAccelerationStructureMemoryRequirementsInfoNVX* pInfo, VkMemoryRequirements2KHR* pMemoryRequirements) {
-	(*fp)(device, pInfo, pMemoryRequirements);
 }
 void domVkGetBufferMemoryRequirements2KHR(PFN_vkGetBufferMemoryRequirements2KHR fp, VkDevice device, const VkBufferMemoryRequirementsInfo2* pInfo, VkMemoryRequirements2* pMemoryRequirements) {
 	(*fp)(device, pInfo, pMemoryRequirements);
@@ -846,9 +783,6 @@ void domVkGetPhysicalDeviceFeatures2KHR(PFN_vkGetPhysicalDeviceFeatures2KHR fp, 
 }
 void domVkGetPhysicalDeviceFormatProperties2KHR(PFN_vkGetPhysicalDeviceFormatProperties2KHR fp, VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties2* pFormatProperties) {
 	(*fp)(physicalDevice, format, pFormatProperties);
-}
-void domVkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(PFN_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX fp, VkPhysicalDevice physicalDevice, VkDeviceGeneratedCommandsFeaturesNVX* pFeatures, VkDeviceGeneratedCommandsLimitsNVX* pLimits) {
-	(*fp)(physicalDevice, pFeatures, pLimits);
 }
 void domVkGetPhysicalDeviceMemoryProperties2KHR(PFN_vkGetPhysicalDeviceMemoryProperties2KHR fp, VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties2* pMemoryProperties) {
 	(*fp)(physicalDevice, pMemoryProperties);

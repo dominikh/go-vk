@@ -40,7 +40,6 @@ const (
 	vkGetPhysicalDeviceFeatures2
 	vkGetPhysicalDeviceFormatProperties
 	vkGetPhysicalDeviceFormatProperties2
-	vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX
 	vkGetPhysicalDeviceImageFormatProperties
 	vkGetPhysicalDeviceImageFormatProperties2
 	vkGetPhysicalDeviceMemoryProperties
@@ -78,7 +77,6 @@ const (
 	vkAllocateDescriptorSets
 	vkAllocateMemory
 	vkBeginCommandBuffer
-	vkBindAccelerationStructureMemoryNVX
 	vkBindBufferMemory
 	vkBindBufferMemory2
 	vkBindImageMemory
@@ -97,11 +95,9 @@ const (
 	vkCmdBindTransformFeedbackBuffersEXT
 	vkCmdBindVertexBuffers
 	vkCmdBlitImage
-	vkCmdBuildAccelerationStructureNVX
 	vkCmdClearAttachments
 	vkCmdClearColorImage
 	vkCmdClearDepthStencilImage
-	vkCmdCopyAccelerationStructureNVX
 	vkCmdCopyBuffer
 	vkCmdCopyBufferToImage
 	vkCmdCopyImage
@@ -138,11 +134,9 @@ const (
 	vkCmdNextSubpass
 	vkCmdNextSubpass2KHR
 	vkCmdPipelineBarrier
-	vkCmdProcessCommandsNVX
 	vkCmdPushConstants
 	vkCmdPushDescriptorSetKHR
 	vkCmdPushDescriptorSetWithTemplateKHR
-	vkCmdReserveSpaceForCommandsNVX
 	vkCmdResetEvent
 	vkCmdResetQueryPool
 	vkCmdResolveImage
@@ -164,14 +158,10 @@ const (
 	vkCmdSetViewport
 	vkCmdSetViewportShadingRatePaletteNV
 	vkCmdSetViewportWScalingNV
-	vkCmdTraceRaysNVX
 	vkCmdUpdateBuffer
 	vkCmdWaitEvents
-	vkCmdWriteAccelerationStructurePropertiesNVX
 	vkCmdWriteBufferMarkerAMD
 	vkCmdWriteTimestamp
-	vkCompileDeferredNVX
-	vkCreateAccelerationStructureNVX
 	vkCreateBuffer
 	vkCreateBufferView
 	vkCreateCommandPool
@@ -185,12 +175,9 @@ const (
 	vkCreateGraphicsPipelines
 	vkCreateImage
 	vkCreateImageView
-	vkCreateIndirectCommandsLayoutNVX
-	vkCreateObjectTableNVX
 	vkCreatePipelineCache
 	vkCreatePipelineLayout
 	vkCreateQueryPool
-	vkCreateRaytracingPipelinesNVX
 	vkCreateRenderPass
 	vkCreateRenderPass2KHR
 	vkCreateSampler
@@ -203,7 +190,6 @@ const (
 	vkDebugMarkerSetObjectNameEXT
 	vkDebugMarkerSetObjectTagEXT
 	vkDebugReportMessageEXT
-	vkDestroyAccelerationStructureNVX
 	vkDestroyBuffer
 	vkDestroyBufferView
 	vkDestroyCommandPool
@@ -216,8 +202,6 @@ const (
 	vkDestroyFramebuffer
 	vkDestroyImage
 	vkDestroyImageView
-	vkDestroyIndirectCommandsLayoutNVX
-	vkDestroyObjectTableNVX
 	vkDestroyPipeline
 	vkDestroyPipelineCache
 	vkDestroyPipelineLayout
@@ -236,9 +220,6 @@ const (
 	vkFreeCommandBuffers
 	vkFreeDescriptorSets
 	vkFreeMemory
-	vkGetAccelerationStructureHandleNVX
-	vkGetAccelerationStructureMemoryRequirementsNVX
-	vkGetAccelerationStructureScratchMemoryRequirementsNVX
 	vkGetAndroidHardwareBufferPropertiesANDROID
 	vkGetBufferMemoryRequirements
 	vkGetBufferMemoryRequirements2
@@ -277,7 +258,6 @@ const (
 	vkGetQueryPoolResults
 	vkGetQueueCheckpointDataNV
 	vkGetRandROutputDisplayEXT
-	vkGetRaytracingShaderHandlesNVX
 	vkGetRefreshCycleDurationGOOGLE
 	vkGetRenderAreaGranularity
 	vkGetSemaphoreFdKHR
@@ -306,7 +286,6 @@ const (
 	vkQueueWaitIdle
 	vkRegisterDeviceEventEXT
 	vkRegisterDisplayEventEXT
-	vkRegisterObjectsNVX
 	vkReleaseDisplayEXT
 	vkResetCommandBuffer
 	vkResetCommandPool
@@ -320,7 +299,6 @@ const (
 	vkSubmitDebugUtilsMessageEXT
 	vkTrimCommandPool
 	vkUnmapMemory
-	vkUnregisterObjectsNVX
 	vkUpdateDescriptorSetWithTemplate
 	vkUpdateDescriptorSets
 	vkWaitForFences
@@ -366,7 +344,6 @@ var instanceFpNames = [...]string{
 	vkGetPhysicalDeviceFeatures2:                       "vkGetPhysicalDeviceFeatures2",
 	vkGetPhysicalDeviceFormatProperties:                "vkGetPhysicalDeviceFormatProperties",
 	vkGetPhysicalDeviceFormatProperties2:               "vkGetPhysicalDeviceFormatProperties2",
-	vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX:  "vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX",
 	vkGetPhysicalDeviceImageFormatProperties:           "vkGetPhysicalDeviceImageFormatProperties",
 	vkGetPhysicalDeviceImageFormatProperties2:          "vkGetPhysicalDeviceImageFormatProperties2",
 	vkGetPhysicalDeviceMemoryProperties:                "vkGetPhysicalDeviceMemoryProperties",
@@ -402,7 +379,6 @@ var deviceFpNames = [...]string{
 	vkAllocateDescriptorSets:                               "vkAllocateDescriptorSets",
 	vkAllocateMemory:                                       "vkAllocateMemory",
 	vkBeginCommandBuffer:                                   "vkBeginCommandBuffer",
-	vkBindAccelerationStructureMemoryNVX:                   "vkBindAccelerationStructureMemoryNVX",
 	vkBindBufferMemory:                                     "vkBindBufferMemory",
 	vkBindBufferMemory2:                                    "vkBindBufferMemory2",
 	vkBindImageMemory:                                      "vkBindImageMemory",
@@ -421,11 +397,9 @@ var deviceFpNames = [...]string{
 	vkCmdBindTransformFeedbackBuffersEXT:                   "vkCmdBindTransformFeedbackBuffersEXT",
 	vkCmdBindVertexBuffers:                                 "vkCmdBindVertexBuffers",
 	vkCmdBlitImage:                                         "vkCmdBlitImage",
-	vkCmdBuildAccelerationStructureNVX:                     "vkCmdBuildAccelerationStructureNVX",
 	vkCmdClearAttachments:                                  "vkCmdClearAttachments",
 	vkCmdClearColorImage:                                   "vkCmdClearColorImage",
 	vkCmdClearDepthStencilImage:                            "vkCmdClearDepthStencilImage",
-	vkCmdCopyAccelerationStructureNVX:                      "vkCmdCopyAccelerationStructureNVX",
 	vkCmdCopyBuffer:                                        "vkCmdCopyBuffer",
 	vkCmdCopyBufferToImage:                                 "vkCmdCopyBufferToImage",
 	vkCmdCopyImage:                                         "vkCmdCopyImage",
@@ -462,11 +436,9 @@ var deviceFpNames = [...]string{
 	vkCmdNextSubpass:                                       "vkCmdNextSubpass",
 	vkCmdNextSubpass2KHR:                                   "vkCmdNextSubpass2KHR",
 	vkCmdPipelineBarrier:                                   "vkCmdPipelineBarrier",
-	vkCmdProcessCommandsNVX:                                "vkCmdProcessCommandsNVX",
 	vkCmdPushConstants:                                     "vkCmdPushConstants",
 	vkCmdPushDescriptorSetKHR:                              "vkCmdPushDescriptorSetKHR",
 	vkCmdPushDescriptorSetWithTemplateKHR:                  "vkCmdPushDescriptorSetWithTemplateKHR",
-	vkCmdReserveSpaceForCommandsNVX:                        "vkCmdReserveSpaceForCommandsNVX",
 	vkCmdResetEvent:                                        "vkCmdResetEvent",
 	vkCmdResetQueryPool:                                    "vkCmdResetQueryPool",
 	vkCmdResolveImage:                                      "vkCmdResolveImage",
@@ -488,14 +460,10 @@ var deviceFpNames = [...]string{
 	vkCmdSetViewport:                                       "vkCmdSetViewport",
 	vkCmdSetViewportShadingRatePaletteNV:                   "vkCmdSetViewportShadingRatePaletteNV",
 	vkCmdSetViewportWScalingNV:                             "vkCmdSetViewportWScalingNV",
-	vkCmdTraceRaysNVX:                                      "vkCmdTraceRaysNVX",
 	vkCmdUpdateBuffer:                                      "vkCmdUpdateBuffer",
 	vkCmdWaitEvents:                                        "vkCmdWaitEvents",
-	vkCmdWriteAccelerationStructurePropertiesNVX:           "vkCmdWriteAccelerationStructurePropertiesNVX",
 	vkCmdWriteBufferMarkerAMD:                              "vkCmdWriteBufferMarkerAMD",
 	vkCmdWriteTimestamp:                                    "vkCmdWriteTimestamp",
-	vkCompileDeferredNVX:                                   "vkCompileDeferredNVX",
-	vkCreateAccelerationStructureNVX:                       "vkCreateAccelerationStructureNVX",
 	vkCreateBuffer:                                         "vkCreateBuffer",
 	vkCreateBufferView:                                     "vkCreateBufferView",
 	vkCreateCommandPool:                                    "vkCreateCommandPool",
@@ -509,12 +477,9 @@ var deviceFpNames = [...]string{
 	vkCreateGraphicsPipelines:                              "vkCreateGraphicsPipelines",
 	vkCreateImage:                                          "vkCreateImage",
 	vkCreateImageView:                                      "vkCreateImageView",
-	vkCreateIndirectCommandsLayoutNVX:                      "vkCreateIndirectCommandsLayoutNVX",
-	vkCreateObjectTableNVX:                                 "vkCreateObjectTableNVX",
 	vkCreatePipelineCache:                                  "vkCreatePipelineCache",
 	vkCreatePipelineLayout:                                 "vkCreatePipelineLayout",
 	vkCreateQueryPool:                                      "vkCreateQueryPool",
-	vkCreateRaytracingPipelinesNVX:                         "vkCreateRaytracingPipelinesNVX",
 	vkCreateRenderPass:                                     "vkCreateRenderPass",
 	vkCreateRenderPass2KHR:                                 "vkCreateRenderPass2KHR",
 	vkCreateSampler:                                        "vkCreateSampler",
@@ -527,7 +492,6 @@ var deviceFpNames = [...]string{
 	vkDebugMarkerSetObjectNameEXT:                          "vkDebugMarkerSetObjectNameEXT",
 	vkDebugMarkerSetObjectTagEXT:                           "vkDebugMarkerSetObjectTagEXT",
 	vkDebugReportMessageEXT:                                "vkDebugReportMessageEXT",
-	vkDestroyAccelerationStructureNVX:                      "vkDestroyAccelerationStructureNVX",
 	vkDestroyBuffer:                                        "vkDestroyBuffer",
 	vkDestroyBufferView:                                    "vkDestroyBufferView",
 	vkDestroyCommandPool:                                   "vkDestroyCommandPool",
@@ -540,8 +504,6 @@ var deviceFpNames = [...]string{
 	vkDestroyFramebuffer:                                   "vkDestroyFramebuffer",
 	vkDestroyImage:                                         "vkDestroyImage",
 	vkDestroyImageView:                                     "vkDestroyImageView",
-	vkDestroyIndirectCommandsLayoutNVX:                     "vkDestroyIndirectCommandsLayoutNVX",
-	vkDestroyObjectTableNVX:                                "vkDestroyObjectTableNVX",
 	vkDestroyPipeline:                                      "vkDestroyPipeline",
 	vkDestroyPipelineCache:                                 "vkDestroyPipelineCache",
 	vkDestroyPipelineLayout:                                "vkDestroyPipelineLayout",
@@ -560,9 +522,6 @@ var deviceFpNames = [...]string{
 	vkFreeCommandBuffers:                                   "vkFreeCommandBuffers",
 	vkFreeDescriptorSets:                                   "vkFreeDescriptorSets",
 	vkFreeMemory:                                           "vkFreeMemory",
-	vkGetAccelerationStructureHandleNVX:                    "vkGetAccelerationStructureHandleNVX",
-	vkGetAccelerationStructureMemoryRequirementsNVX:        "vkGetAccelerationStructureMemoryRequirementsNVX",
-	vkGetAccelerationStructureScratchMemoryRequirementsNVX: "vkGetAccelerationStructureScratchMemoryRequirementsNVX",
 	vkGetAndroidHardwareBufferPropertiesANDROID:            "vkGetAndroidHardwareBufferPropertiesANDROID",
 	vkGetBufferMemoryRequirements:                          "vkGetBufferMemoryRequirements",
 	vkGetBufferMemoryRequirements2:                         "vkGetBufferMemoryRequirements2",
@@ -601,7 +560,6 @@ var deviceFpNames = [...]string{
 	vkGetQueryPoolResults:                                  "vkGetQueryPoolResults",
 	vkGetQueueCheckpointDataNV:                             "vkGetQueueCheckpointDataNV",
 	vkGetRandROutputDisplayEXT:                             "vkGetRandROutputDisplayEXT",
-	vkGetRaytracingShaderHandlesNVX:                        "vkGetRaytracingShaderHandlesNVX",
 	vkGetRefreshCycleDurationGOOGLE:                        "vkGetRefreshCycleDurationGOOGLE",
 	vkGetRenderAreaGranularity:                             "vkGetRenderAreaGranularity",
 	vkGetSemaphoreFdKHR:                                    "vkGetSemaphoreFdKHR",
@@ -630,7 +588,6 @@ var deviceFpNames = [...]string{
 	vkQueueWaitIdle:                                        "vkQueueWaitIdle",
 	vkRegisterDeviceEventEXT:                               "vkRegisterDeviceEventEXT",
 	vkRegisterDisplayEventEXT:                              "vkRegisterDisplayEventEXT",
-	vkRegisterObjectsNVX:                                   "vkRegisterObjectsNVX",
 	vkReleaseDisplayEXT:                                    "vkReleaseDisplayEXT",
 	vkResetCommandBuffer:                                   "vkResetCommandBuffer",
 	vkResetCommandPool:                                     "vkResetCommandPool",
@@ -644,7 +601,6 @@ var deviceFpNames = [...]string{
 	vkSubmitDebugUtilsMessageEXT:                           "vkSubmitDebugUtilsMessageEXT",
 	vkTrimCommandPool:                                      "vkTrimCommandPool",
 	vkUnmapMemory:                                          "vkUnmapMemory",
-	vkUnregisterObjectsNVX:                                 "vkUnregisterObjectsNVX",
 	vkUpdateDescriptorSetWithTemplate:                      "vkUpdateDescriptorSetWithTemplate",
 	vkUpdateDescriptorSets:                                 "vkUpdateDescriptorSets",
 	vkWaitForFences:                                        "vkWaitForFences",
