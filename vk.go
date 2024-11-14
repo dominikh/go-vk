@@ -127,7 +127,7 @@ func InstanceLayerProperties() ([]LayerProperties, error) {
 			return nil, res
 		}
 		cprops := make([]C.VkLayerProperties, count)
-		res = Result(C.domVkEnumerateInstanceLayerProperties(vkEnumerateInstanceLayerProperties, &count, (*C.VkLayerProperties)(slice2ptr(unsafe.Pointer(&cprops)))))
+		res = Result(C.domVkEnumerateInstanceLayerProperties(vkEnumerateInstanceLayerProperties, &count, unsafe.SliceData(cprops)))
 		if res == Success {
 			out := make([]LayerProperties, count)
 			cprops = cprops[:count]
@@ -162,7 +162,7 @@ func InstanceExtensionProperties(layerName string) ([]ExtensionProperties, error
 			return nil, res
 		}
 		cprops := make([]C.VkExtensionProperties, count)
-		res = Result(C.domVkEnumerateInstanceExtensionProperties(vkEnumerateInstanceExtensionProperties, cname, &count, (*C.VkExtensionProperties)(slice2ptr(unsafe.Pointer(&cprops)))))
+		res = Result(C.domVkEnumerateInstanceExtensionProperties(vkEnumerateInstanceExtensionProperties, cname, &count, unsafe.SliceData(cprops)))
 		if res == Success {
 			out := make([]ExtensionProperties, count)
 			cprops = cprops[:count]
@@ -1196,7 +1196,7 @@ func (dev *PhysicalDevice) ExtensionProperties(layer string) ([]ExtensionPropert
 		dev.hnd,
 		cLayer,
 		&count,
-		(*C.VkExtensionProperties)(slice2ptr(unsafe.Pointer(&properties)))))
+		unsafe.SliceData(properties)))
 	if res != Success {
 		return nil, res
 	}
@@ -1791,7 +1791,7 @@ func (buf *CommandBuffer) PushConstants(layout PipelineLayout, stageFlags Shader
 		C.VkShaderStageFlags(stageFlags),
 		C.uint32_t(offset),
 		C.uint32_t(len(data)),
-		slice2ptr(unsafe.Pointer(&data)))
+		unsafe.Pointer(unsafe.SliceData(data)))
 }
 
 func (buf *CommandBuffer) FillBuffer(dstBuffer Buffer, dstOffset DeviceSize, size DeviceSize, data uint32) {
@@ -2044,7 +2044,7 @@ func (buf *CommandBuffer) UpdateBuffer(dstBuffer Buffer, dstOffset DeviceSize, d
 		dstBuffer.hnd,
 		C.VkDeviceSize(dstOffset),
 		C.VkDeviceSize(len(data)),
-		slice2ptr(unsafe.Pointer(&data)))
+		unsafe.Pointer(unsafe.SliceData(data)))
 }
 
 func (buf *CommandBuffer) BeginQuery(queryPool QueryPool, query uint32, flags QueryControlFlags) {
@@ -2292,7 +2292,7 @@ func (buf *CommandBuffer) ExecuteCommands(buffers []CommandBuffer) {
 	for i, cmd := range buffers {
 		arr[i] = cmd.hnd
 	}
-	C.domVkCmdExecuteCommands(buf.fps[vkCmdExecuteCommands], buf.hnd, C.uint32_t(len(buffers)), (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&arr))))
+	C.domVkCmdExecuteCommands(buf.fps[vkCmdExecuteCommands], buf.hnd, C.uint32_t(len(buffers)), unsafe.SliceData(arr))
 	buf.bufs = arr
 }
 
@@ -2481,7 +2481,7 @@ func (dev *Device) AllocateCommandBuffers(pool CommandPool, info *CommandBufferA
 	ptr.level = C.VkCommandBufferLevel(info.Level)
 	ptr.commandBufferCount = C.uint32_t(info.CommandBufferCount)
 	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
-	res := Result(C.domVkAllocateCommandBuffers(dev.fps[vkAllocateCommandBuffers], dev.hnd, ptr, (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&bufs)))))
+	res := Result(C.domVkAllocateCommandBuffers(dev.fps[vkAllocateCommandBuffers], dev.hnd, ptr, unsafe.SliceData(bufs)))
 	internalizeChain(info.Extensions, ptr.pNext)
 	C.free(unsafe.Pointer(ptr))
 	if res != Success {
@@ -2508,7 +2508,7 @@ func (dev *Device) FreeCommandBuffers(pool CommandPool, bufs []*CommandBuffer) {
 	for i, buf := range bufs {
 		ptrs[i] = buf.hnd
 	}
-	C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, C.uint32_t(len(bufs)), (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&ptrs))))
+	C.domVkFreeCommandBuffers(dev.fps[vkFreeCommandBuffers], dev.hnd, pool.hnd, C.uint32_t(len(bufs)), unsafe.SliceData(ptrs))
 }
 
 func (dev *Device) WaitIdle() error {
@@ -4092,7 +4092,7 @@ func (info *PipelineCacheCreateInfo) c() *C.VkPipelineCacheCreateInfo {
 		pNext:           buildChain(info.Extensions),
 		flags:           0,
 		initialDataSize: C.size_t(len(info.InitialData)),
-		pInitialData:    slice2ptr(unsafe.Pointer(&info.InitialData)),
+		pInitialData:    unsafe.Pointer(unsafe.SliceData(info.InitialData)),
 	}
 	return cinfo
 }
@@ -4131,7 +4131,7 @@ func (dev *Device) PipelineCacheData(cache PipelineCache) ([]byte, error) {
 			return nil, res
 		}
 		data = make([]byte, size)
-		res = Result(C.domVkGetPipelineCacheData(dev.fps[vkGetPipelineCacheData], dev.hnd, cache.hnd, &size, slice2ptr(unsafe.Pointer(&data))))
+		res = Result(C.domVkGetPipelineCacheData(dev.fps[vkGetPipelineCacheData], dev.hnd, cache.hnd, &size, unsafe.Pointer(unsafe.SliceData(data))))
 		if res == Success {
 			return data[:size], nil
 		}
@@ -4422,7 +4422,7 @@ func (dev *Device) QueryPoolResults(
 		C.uint32_t(firstQuery),
 		C.uint32_t(queryCount),
 		C.size_t(len(data)),
-		slice2ptr(unsafe.Pointer(&data)),
+		unsafe.Pointer(unsafe.SliceData(data)),
 		C.VkDeviceSize(stride),
 		C.VkQueryResultFlags(flags)))
 	return result2error(res)
@@ -4578,7 +4578,7 @@ func (dev *Device) FlushMappedMemoryRanges(ranges []MappedMemoryRange) error {
 	for i := range cranges {
 		ranges[i].c(&cranges[i])
 	}
-	res := Result(C.domVkFlushMappedMemoryRanges(dev.fps[vkFlushMappedMemoryRanges], dev.hnd, C.uint32_t(len(cranges)), (*C.VkMappedMemoryRange)(slice2ptr(unsafe.Pointer(&cranges)))))
+	res := Result(C.domVkFlushMappedMemoryRanges(dev.fps[vkFlushMappedMemoryRanges], dev.hnd, C.uint32_t(len(cranges)), unsafe.SliceData(cranges)))
 	for i := range cranges {
 		internalizeChain(ranges[i].Extensions, cranges[i].pNext)
 	}
