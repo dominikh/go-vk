@@ -11,20 +11,18 @@ import (
 	"unsafe"
 )
 
-type uptr = unsafe.Pointer
-
-func alloc(size C.size_t) uptr {
+func alloc(size C.size_t) unsafe.Pointer {
 	return C.calloc(1, size)
 }
 
-func allocn(nmemb int, size C.size_t) uptr {
+func allocn(nmemb int, size C.size_t) unsafe.Pointer {
 	if nmemb == 0 {
 		return nil
 	}
 	return C.calloc(C.size_t(nmemb), size)
 }
 
-func free(ptr uptr) {
+func free(ptr unsafe.Pointer) {
 	C.free(ptr)
 }
 
@@ -36,20 +34,20 @@ func align(p uintptr) uintptr {
 
 // ucopy copies data from src to dst,
 // where dst must be a C pointer and src must be a pointer to a Go slice.
-func ucopy(dst, src uptr, size uintptr) {
+func ucopy(dst, src unsafe.Pointer, size uintptr) {
 	elems := (*reflect.SliceHeader)(src).Len
 	if elems == 0 {
 		return
 	}
 	// Access the slice's underlying data
-	src = uptr((*reflect.SliceHeader)(src).Data)
+	src = unsafe.Pointer((*reflect.SliceHeader)(src).Data)
 	copy(
 		(*[math.MaxInt32]byte)(dst)[:uintptr(elems)*size],
 		(*[math.MaxInt32]byte)(src)[:uintptr(elems)*size],
 	)
 }
 
-func ucopy1(dst, src uptr, size uintptr) {
+func ucopy1(dst, src unsafe.Pointer, size uintptr) {
 	copy(
 		(*[math.MaxInt32]byte)(dst)[:size],
 		(*[math.MaxInt32]byte)(src)[:size],
@@ -65,12 +63,12 @@ func externStrings(ss []string) **C.char {
 	size1 = align(size1)
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
-	arr := (*[math.MaxInt32]uptr)(mem)[:len(ss)]
-	data := uptr(uintptr(mem) + size0)
+	arr := (*[math.MaxInt32]unsafe.Pointer)(mem)[:len(ss)]
+	data := unsafe.Pointer(uintptr(mem) + size0)
 	for i, s := range ss {
 		arr[i] = data
 		ucopy(data, unsafe.Pointer(&s), 1)
-		data = uptr(uintptr(data) + uintptr(len(s)) + 1)
+		data = unsafe.Pointer(uintptr(data) + uintptr(len(s)) + 1)
 	}
 	return (**C.char)(mem)
 }
@@ -79,7 +77,7 @@ func externFloat32(vs []float32) *C.float {
 	if len(vs) == 0 {
 		return nil
 	}
-	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(uptr(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
+	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
 }
 
 func result2error(res Result) error {
@@ -89,8 +87,8 @@ func result2error(res Result) error {
 	return res
 }
 
-func slice2ptr(slice uptr) uptr {
-	return uptr((*reflect.SliceHeader)(slice).Data)
+func slice2ptr(slice unsafe.Pointer) unsafe.Pointer {
+	return unsafe.Pointer((*reflect.SliceHeader)(slice).Data)
 }
 
 func vkBool(b bool) C.VkBool32 {
@@ -101,7 +99,7 @@ func vkBool(b bool) C.VkBool32 {
 }
 
 func str(x []C.char) string {
-	v := *(*[]byte)(uptr(&x))
+	v := *(*[]byte)(unsafe.Pointer(&x))
 	idx := bytes.IndexByte(v, 0)
 	return string(v[:idx])
 }

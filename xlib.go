@@ -16,7 +16,7 @@ type XlibWindow = C.Window
 type XlibVisualID = C.VisualID
 
 type XlibSurfaceCreateInfoKHR struct {
-	Next   uptr
+	Next   unsafe.Pointer
 	Dpy    *XlibDisplay
 	Window XlibWindow
 }
@@ -30,7 +30,7 @@ func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (Surfa
 	cInfo.window = info.Window
 	var out SurfaceKHR
 	res := Result(C.domVkCreateXlibSurfaceKHR(ins.fps[vkCreateXlibSurfaceKHR], ins.hnd, cInfo, nil, &out.hnd))
-	free(uptr(cInfo))
+	free(unsafe.Pointer(cInfo))
 	return out, result2error(res)
 }
 

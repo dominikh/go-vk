@@ -2,23 +2,24 @@ package vk
 
 // #include "vk.h"
 import "C"
+import "unsafe"
 
 type Extension interface {
 	isExtension()
-	externalize() uptr
-	internalize(uptr)
+	externalize() unsafe.Pointer
+	internalize(unsafe.Pointer)
 }
 
 type structHeader struct {
 	Type StructureType
-	Next uptr
+	Next unsafe.Pointer
 }
 
-func buildChain(exs []Extension) uptr {
+func buildChain(exs []Extension) unsafe.Pointer {
 	if len(exs) == 0 {
 		return nil
 	}
-	out := make([]uptr, len(exs))
+	out := make([]unsafe.Pointer, len(exs))
 	for i, ex := range exs {
 		out[i] = ex.externalize()
 	}
@@ -28,7 +29,7 @@ func buildChain(exs []Extension) uptr {
 	return out[0]
 }
 
-func internalizeChain(exs []Extension, chain uptr) {
+func internalizeChain(exs []Extension, chain unsafe.Pointer) {
 	if chain == nil {
 		return
 	}
@@ -51,17 +52,17 @@ type PhysicalDeviceIDProperties struct {
 
 func (*PhysicalDeviceIDProperties) isExtension() {}
 
-func (prop *PhysicalDeviceIDProperties) externalize() uptr {
+func (prop *PhysicalDeviceIDProperties) externalize() unsafe.Pointer {
 	cprop := (*C.VkPhysicalDeviceIDProperties)(alloc(C.sizeof_VkPhysicalDeviceIDProperties))
 	cprop.sType = C.VkStructureType(StructureTypePhysicalDeviceIdProperties)
-	return uptr(cprop)
+	return unsafe.Pointer(cprop)
 }
 
-func (prop *PhysicalDeviceIDProperties) internalize(ptr uptr) {
+func (prop *PhysicalDeviceIDProperties) internalize(ptr unsafe.Pointer) {
 	cprop := (*C.VkPhysicalDeviceIDProperties)(ptr)
-	copy(prop.DeviceUUID[:], (*[C.VK_UUID_SIZE]byte)(uptr(&cprop.deviceUUID))[:])
-	copy(prop.DriverUUID[:], (*[C.VK_UUID_SIZE]byte)(uptr(&cprop.driverUUID))[:])
-	copy(prop.DeviceLUID[:], (*[C.VK_UUID_SIZE]byte)(uptr(&cprop.deviceLUID))[:])
+	copy(prop.DeviceUUID[:], (*[C.VK_UUID_SIZE]byte)(unsafe.Pointer(&cprop.deviceUUID))[:])
+	copy(prop.DriverUUID[:], (*[C.VK_UUID_SIZE]byte)(unsafe.Pointer(&cprop.driverUUID))[:])
+	copy(prop.DeviceLUID[:], (*[C.VK_UUID_SIZE]byte)(unsafe.Pointer(&cprop.deviceLUID))[:])
 	prop.DeviceNodeMask = uint32(cprop.deviceNodeMask)
 	prop.DeviceLUIDValid = cprop.deviceLUIDValid == C.VK_TRUE
 }
