@@ -49,38 +49,38 @@ var vkEnumerateInstanceExtensionProperties C.PFN_vkEnumerateInstanceExtensionPro
 var vkEnumerateInstanceLayerProperties C.PFN_vkEnumerateInstanceLayerProperties
 var vkCreateInstance C.PFN_vkCreateInstance
 
-func init() {
-	assertSameSize(unsafe.Sizeof(AttachmentDescription{}), C.sizeof_VkAttachmentDescription)
-	assertSameSize(unsafe.Sizeof(AttachmentReference{}), C.sizeof_VkAttachmentReference)
-	assertSameSize(unsafe.Sizeof(DescriptorSetLayout{}), C.sizeof_VkDescriptorSetLayout)
-	assertSameSize(unsafe.Sizeof(Fence{}), C.sizeof_VkFence)
-	assertSameSize(unsafe.Sizeof(ImageView{}), C.sizeof_VkImageView)
-	assertSameSize(unsafe.Sizeof(MemoryHeap{}), C.sizeof_VkMemoryHeap)
-	assertSameSize(unsafe.Sizeof(MemoryRequirements{}), C.sizeof_VkMemoryRequirements)
-	assertSameSize(unsafe.Sizeof(MemoryType{}), C.sizeof_VkMemoryType)
-	assertSameSize(unsafe.Sizeof(PushConstantRange{}), C.sizeof_VkPushConstantRange)
-	assertSameSize(unsafe.Sizeof(Rect2D{}), C.sizeof_VkRect2D)
-	assertSameSize(unsafe.Sizeof(Semaphore{}), C.sizeof_VkSemaphore)
-	assertSameSize(unsafe.Sizeof(SubpassDependency{}), C.sizeof_VkSubpassDependency)
-	assertSameSize(unsafe.Sizeof(VertexInputAttributeDescription{}), C.sizeof_VkVertexInputAttributeDescription)
-	assertSameSize(unsafe.Sizeof(VertexInputBindingDescription{}), C.sizeof_VkVertexInputBindingDescription)
-	assertSameSize(unsafe.Sizeof(Viewport{}), C.sizeof_VkViewport)
-	assertSameSize(unsafe.Sizeof(ComponentMapping{}), C.sizeof_VkComponentMapping)
-	assertSameSize(unsafe.Sizeof(ImageSubresourceRange{}), C.sizeof_VkImageSubresourceRange)
-	assertSameSize(unsafe.Sizeof(ClearDepthStencilValue{}), C.sizeof_VkClearDepthStencilValue)
-	assertSameSize(unsafe.Sizeof(BufferCopy{}), C.sizeof_VkBufferCopy)
-	assertSameSize(unsafe.Sizeof(BufferImageCopy{}), C.sizeof_VkBufferImageCopy)
-	assertSameSize(unsafe.Sizeof(ImageSubresourceLayers{}), C.sizeof_VkImageSubresourceLayers)
-	assertSameSize(unsafe.Sizeof(ImageCopy{}), C.sizeof_VkImageCopy)
-	assertSameSize(unsafe.Sizeof(ImageBlit{}), C.sizeof_VkImageBlit)
-	assertSameSize(unsafe.Sizeof(Event{}), C.sizeof_VkEvent)
-	assertSameSize(unsafe.Sizeof(ImageResolve{}), C.sizeof_VkImageResolve)
-	assertSameSize(unsafe.Sizeof(DescriptorPoolSize{}), C.sizeof_VkDescriptorPoolSize)
-	assertSameSize(unsafe.Sizeof(DescriptorSet{}), C.sizeof_VkDescriptorSet)
-	assertSameSize(unsafe.Sizeof(DescriptorBufferInfo{}), C.sizeof_VkDescriptorBufferInfo)
-	assertSameSize(unsafe.Sizeof(DescriptorImageInfo{}), C.sizeof_VkDescriptorImageInfo)
-	assertSameSize(unsafe.Sizeof(FormatProperties{}), C.sizeof_VkFormatProperties)
+var _ = "_"[unsafe.Sizeof(AttachmentDescription{})-C.sizeof_VkAttachmentDescription]
+var _ = "_"[unsafe.Sizeof(AttachmentReference{})-C.sizeof_VkAttachmentReference]
+var _ = "_"[unsafe.Sizeof(DescriptorSetLayout{})-C.sizeof_VkDescriptorSetLayout]
+var _ = "_"[unsafe.Sizeof(Fence{})-C.sizeof_VkFence]
+var _ = "_"[unsafe.Sizeof(ImageView{})-C.sizeof_VkImageView]
+var _ = "_"[unsafe.Sizeof(MemoryHeap{})-C.sizeof_VkMemoryHeap]
+var _ = "_"[unsafe.Sizeof(MemoryRequirements{})-C.sizeof_VkMemoryRequirements]
+var _ = "_"[unsafe.Sizeof(MemoryType{})-C.sizeof_VkMemoryType]
+var _ = "_"[unsafe.Sizeof(PushConstantRange{})-C.sizeof_VkPushConstantRange]
+var _ = "_"[unsafe.Sizeof(Rect2D{})-C.sizeof_VkRect2D]
+var _ = "_"[unsafe.Sizeof(Semaphore{})-C.sizeof_VkSemaphore]
+var _ = "_"[unsafe.Sizeof(SubpassDependency{})-C.sizeof_VkSubpassDependency]
+var _ = "_"[unsafe.Sizeof(VertexInputAttributeDescription{})-C.sizeof_VkVertexInputAttributeDescription]
+var _ = "_"[unsafe.Sizeof(VertexInputBindingDescription{})-C.sizeof_VkVertexInputBindingDescription]
+var _ = "_"[unsafe.Sizeof(Viewport{})-C.sizeof_VkViewport]
+var _ = "_"[unsafe.Sizeof(ComponentMapping{})-C.sizeof_VkComponentMapping]
+var _ = "_"[unsafe.Sizeof(ImageSubresourceRange{})-C.sizeof_VkImageSubresourceRange]
+var _ = "_"[unsafe.Sizeof(ClearDepthStencilValue{})-C.sizeof_VkClearDepthStencilValue]
+var _ = "_"[unsafe.Sizeof(BufferCopy{})-C.sizeof_VkBufferCopy]
+var _ = "_"[unsafe.Sizeof(BufferImageCopy{})-C.sizeof_VkBufferImageCopy]
+var _ = "_"[unsafe.Sizeof(ImageSubresourceLayers{})-C.sizeof_VkImageSubresourceLayers]
+var _ = "_"[unsafe.Sizeof(ImageCopy{})-C.sizeof_VkImageCopy]
+var _ = "_"[unsafe.Sizeof(ImageBlit{})-C.sizeof_VkImageBlit]
+var _ = "_"[unsafe.Sizeof(Event{})-C.sizeof_VkEvent]
+var _ = "_"[unsafe.Sizeof(ImageResolve{})-C.sizeof_VkImageResolve]
+var _ = "_"[unsafe.Sizeof(DescriptorPoolSize{})-C.sizeof_VkDescriptorPoolSize]
+var _ = "_"[unsafe.Sizeof(DescriptorSet{})-C.sizeof_VkDescriptorSet]
+var _ = "_"[unsafe.Sizeof(DescriptorBufferInfo{})-C.sizeof_VkDescriptorBufferInfo]
+var _ = "_"[unsafe.Sizeof(DescriptorImageInfo{})-C.sizeof_VkDescriptorImageInfo]
+var _ = "_"[unsafe.Sizeof(FormatProperties{})-C.sizeof_VkFormatProperties]
 
+func init() {
 	vkEnumerateInstanceVersion =
 		C.PFN_vkEnumerateInstanceVersion(mustVkGetInstanceProcAddr(nil, "vkEnumerateInstanceVersion"))
 	vkEnumerateInstanceExtensionProperties =

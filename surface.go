@@ -11,10 +11,8 @@ import (
 	"unsafe"
 )
 
-func init() {
-	assertSameSize(unsafe.Sizeof(SurfaceCapabilities{}), unsafe.Sizeof(C.VkSurfaceCapabilitiesKHR{}))
-	assertSameSize(unsafe.Sizeof(SurfaceFormatKHR{}), unsafe.Sizeof(C.VkSurfaceFormatKHR{}))
-}
+var _ = "_"[unsafe.Sizeof(SurfaceCapabilities{})-unsafe.Sizeof(C.VkSurfaceCapabilitiesKHR{})]
+var _ = "_"[unsafe.Sizeof(SurfaceFormatKHR{})-unsafe.Sizeof(C.VkSurfaceFormatKHR{})]
 
 type SurfaceKHR struct {
 	// VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSurfaceKHR)
