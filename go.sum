@@ -1,0 +1,6 @@
+github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 h1:yixxcjnhBmY0nkL253HFVIm0JsFHwrHdT3Yh6szTnfY=
+golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8/go.mod h1:jj3sYF3dwk5D+ghuXyeI3r5MFf+NT2An6/9dOA95KSI=
+honnef.co/go/safeish v0.0.0-20241114181457-67c0a2c357ad h1:6/Sl5Rx44C28ylGrKNEejIzrS2MbtLCdPsp47T6J3kg=
+honnef.co/go/safeish v0.0.0-20241114181457-67c0a2c357ad/go.mod h1:6TmSwH8eepkcwN0dPPAkTpxwjEJzgJq5Bv2HD3HHAP8=

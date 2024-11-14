@@ -83,10 +83,6 @@ func result2error(res Result) error {
 	return res
 }
 
-func slice2ptr(slice unsafe.Pointer) unsafe.Pointer {
-	return unsafe.Pointer((*reflect.SliceHeader)(slice).Data)
-}
-
 func vkBool(b bool) C.VkBool32 {
 	if b {
 		return C.VK_TRUE

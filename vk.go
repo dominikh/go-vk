@@ -16,6 +16,8 @@ import (
 	"structs"
 	"time"
 	"unsafe"
+
+	"honnef.co/go/safeish"
 )
 
 // OPT(dh): if we wrote our own memory allocator, we could avoid the
@@ -1442,7 +1444,7 @@ func (dev *PhysicalDevice) QueueFamilyProperties() []QueueFamilyProperties {
 		dev.instance.fps[vkGetPhysicalDeviceQueueFamilyProperties],
 		dev.hnd,
 		&count,
-		(*C.VkQueueFamilyProperties)(slice2ptr(unsafe.Pointer(&props))))
+		safeish.SliceCastPtr[*C.VkQueueFamilyProperties](props))
 	return props
 }
 
@@ -1763,7 +1765,7 @@ func (buf *CommandBuffer) SetViewport(firstViewport uint32, viewports []Viewport
 		buf.hnd,
 		C.uint32_t(firstViewport),
 		C.uint32_t(len(viewports)),
-		(*C.VkViewport)(slice2ptr(unsafe.Pointer(&viewports))))
+		safeish.SliceCastPtr[*C.VkViewport](viewports))
 }
 
 func (buf *CommandBuffer) SetScissor(firstScissor uint32, scissors []Rect2D) {
@@ -1772,7 +1774,7 @@ func (buf *CommandBuffer) SetScissor(firstScissor uint32, scissors []Rect2D) {
 		buf.hnd,
 		C.uint32_t(firstScissor),
 		C.uint32_t(len(scissors)),
-		(*C.VkRect2D)(slice2ptr(unsafe.Pointer(&scissors))))
+		safeish.SliceCastPtr[*C.VkRect2D](scissors))
 }
 
 func (buf *CommandBuffer) SetDeviceMask(deviceMask uint32) {
@@ -1848,7 +1850,7 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 		C.uint32_t(len(attachments)),
 		(*C.VkClearAttachment)(mem),
 		C.uint32_t(len(rects)),
-		(*C.VkClearRect)(slice2ptr(unsafe.Pointer(&rects))))
+		safeish.SliceCastPtr[*C.VkClearRect](rects))
 	C.free(unsafe.Pointer(mem))
 }
 
@@ -1871,7 +1873,7 @@ func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, 
 		C.VkImageLayout(imageLayout),
 		cColor,
 		C.uint32_t(len(ranges)),
-		(*C.VkImageSubresourceRange)(slice2ptr(unsafe.Pointer(&ranges))))
+		safeish.SliceCastPtr[*C.VkImageSubresourceRange](ranges))
 	C.free(unsafe.Pointer(cColor))
 }
 
@@ -1888,7 +1890,7 @@ func (buf *CommandBuffer) ClearDepthStencilImage(
 		C.VkImageLayout(imageLayout),
 		(*C.VkClearDepthStencilValue)(unsafe.Pointer(&depthStencil)),
 		C.uint32_t(len(ranges)),
-		(*C.VkImageSubresourceRange)(slice2ptr(unsafe.Pointer(&ranges))))
+		safeish.SliceCastPtr[*C.VkImageSubresourceRange](ranges))
 }
 
 func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
@@ -1959,7 +1961,7 @@ func (buf *CommandBuffer) CopyBuffer(srcBuffer, dstBuffer Buffer, regions []Buff
 		srcBuffer.hnd,
 		dstBuffer.hnd,
 		C.uint32_t(len(regions)),
-		(*C.VkBufferCopy)(slice2ptr(unsafe.Pointer(&regions))))
+		safeish.SliceCastPtr[*C.VkBufferCopy](regions))
 }
 
 type BufferImageCopy struct {
@@ -1992,7 +1994,7 @@ func (buf *CommandBuffer) CopyBufferToImage(srcBuffer Buffer, dstImage Image, ds
 		dstImage.hnd,
 		C.VkImageLayout(dstImageLayout),
 		C.uint32_t(len(regions)),
-		(*C.VkBufferImageCopy)(slice2ptr(unsafe.Pointer(&regions))))
+		safeish.SliceCastPtr[*C.VkBufferImageCopy](regions))
 }
 
 type ImageCopy struct {
@@ -2015,7 +2017,7 @@ func (buf *CommandBuffer) CopyImage(srcImage Image, srcImageLayout ImageLayout, 
 		dstImage.hnd,
 		C.VkImageLayout(dstImageLayout),
 		C.uint32_t(len(regions)),
-		(*C.VkImageCopy)(slice2ptr(unsafe.Pointer(&regions))))
+		safeish.SliceCastPtr[*C.VkImageCopy](regions))
 }
 
 func (buf *CommandBuffer) CopyImageToBuffer(srcImage Image, srcImageLayout ImageLayout, dstBuffer Buffer, regions []BufferImageCopy) {
@@ -2026,7 +2028,7 @@ func (buf *CommandBuffer) CopyImageToBuffer(srcImage Image, srcImageLayout Image
 		C.VkImageLayout(srcImageLayout),
 		dstBuffer.hnd,
 		C.uint32_t(len(regions)),
-		(*C.VkBufferImageCopy)(slice2ptr(unsafe.Pointer(&regions))))
+		safeish.SliceCastPtr[*C.VkBufferImageCopy](regions))
 }
 
 func (buf *CommandBuffer) ResetEvent(event Event, stageMask PipelineStageFlags) {
@@ -2099,7 +2101,7 @@ func (buf *CommandBuffer) BlitImage(
 		dstImage.hnd,
 		C.VkImageLayout(dstImageLayout),
 		C.uint32_t(len(regions)),
-		(*C.VkImageBlit)(slice2ptr(unsafe.Pointer(&regions))),
+		safeish.SliceCastPtr[*C.VkImageBlit](regions),
 		C.VkFilter(filter))
 }
 
@@ -2234,7 +2236,7 @@ func (buf *CommandBuffer) WaitEvents(
 		buf.fps[vkCmdWaitEvents],
 		buf.hnd,
 		C.uint32_t(len(events)),
-		(*C.VkEvent)(slice2ptr(unsafe.Pointer(&events))),
+		safeish.SliceCastPtr[*C.VkEvent](events),
 		C.VkPipelineStageFlags(srcStageMask),
 		C.VkPipelineStageFlags(dstStageMask),
 		C.uint32_t(len(memoryBarriers)),
@@ -2274,8 +2276,8 @@ func (buf *CommandBuffer) BindVertexBuffers(firstBinding uint32, buffers []Buffe
 		buf.hnd,
 		C.uint32_t(firstBinding),
 		C.uint32_t(len(buffers)),
-		(*C.VkBuffer)(slice2ptr(unsafe.Pointer(&buffers))),
-		(*C.VkDeviceSize)(slice2ptr(unsafe.Pointer(&offsets))))
+		safeish.SliceCastPtr[*C.VkBuffer](buffers),
+		safeish.SliceCastPtr[*C.VkDeviceSize](offsets))
 }
 
 func (buf *CommandBuffer) ExecuteCommands(buffers []CommandBuffer) {
@@ -2400,7 +2402,7 @@ func (buf *CommandBuffer) ResolveImage(srcImage Image, srcImageLayout ImageLayou
 		dstImage.hnd,
 		C.VkImageLayout(dstImageLayout),
 		C.uint32_t(len(regions)),
-		(*C.VkImageResolve)(slice2ptr(unsafe.Pointer(&regions))))
+		safeish.SliceCastPtr[*C.VkImageResolve](regions))
 }
 
 func (buf *CommandBuffer) BindDescriptorSets(
@@ -2417,9 +2419,9 @@ func (buf *CommandBuffer) BindDescriptorSets(
 		layout.hnd,
 		C.uint32_t(firstSet),
 		C.uint32_t(len(descriptorSets)),
-		(*C.VkDescriptorSet)(slice2ptr(unsafe.Pointer(&descriptorSets))),
+		safeish.SliceCastPtr[*C.VkDescriptorSet](descriptorSets),
 		C.uint32_t(len(dynamicOffsets)),
-		(*C.uint32_t)(slice2ptr(unsafe.Pointer(&dynamicOffsets))),
+		safeish.SliceCastPtr[*C.uint32_t](dynamicOffsets),
 	)
 }
 
@@ -3181,7 +3183,7 @@ func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []Graphic
 		C.uint32_t(len(infos)),
 		ptrs,
 		nil,
-		(*C.VkPipeline)(slice2ptr(unsafe.Pointer(&hnds)))))
+		safeish.SliceCastPtr[*C.VkPipeline](hnds)))
 	if res != Success {
 		return nil, res
 	}
@@ -3588,14 +3590,14 @@ func (dev *Device) WaitForFences(fences []Fence, waitAll bool, timeout time.Dura
 		dev.fps[vkWaitForFences],
 		dev.hnd,
 		C.uint32_t(len(fences)),
-		(*C.VkFence)(slice2ptr(unsafe.Pointer(&fences))),
+		safeish.SliceCastPtr[*C.VkFence](fences),
 		vkBool(waitAll),
 		C.uint64_t(timeout)))
 	return result2error(res)
 }
 
 func (dev *Device) ResetFences(fences []Fence) error {
-	res := Result(C.domVkResetFences(dev.fps[vkResetFences], dev.hnd, C.uint32_t(len(fences)), (*C.VkFence)(slice2ptr(unsafe.Pointer(&fences)))))
+	res := Result(C.domVkResetFences(dev.fps[vkResetFences], dev.hnd, C.uint32_t(len(fences)), safeish.SliceCastPtr[*C.VkFence](fences)))
 	return result2error(res)
 }
 
@@ -4118,7 +4120,7 @@ func (dev *Device) MergePipelineCaches(dstCache PipelineCache, srcCaches []Pipel
 		dev.hnd,
 		dstCache.hnd,
 		C.uint32_t(len(srcCaches)),
-		(*C.VkPipelineCache)(slice2ptr(unsafe.Pointer(&srcCaches)))))
+		safeish.SliceCastPtr[*C.VkPipelineCache](srcCaches)))
 	return result2error(res)
 }
 
@@ -4396,14 +4398,14 @@ type DescriptorSet struct {
 func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]DescriptorSet, error) {
 	cinfo := info.c()
 	out := make([]DescriptorSet, len(info.Layouts))
-	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, (*C.VkDescriptorSet)(slice2ptr(unsafe.Pointer(&out)))))
+	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, safeish.SliceCastPtr[*C.VkDescriptorSet](out)))
 	internalizeChain(info.Extensions, cinfo.pNext)
 	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
 func (dev *Device) FreeDescriptorSets(pool DescriptorPool, sets []DescriptorSet) error {
-	res := Result(C.domVkFreeDescriptorSets(dev.fps[vkFreeDescriptorSets], dev.hnd, pool.hnd, C.uint32_t(len(sets)), (*C.VkDescriptorSet)(slice2ptr(unsafe.Pointer(&sets)))))
+	res := Result(C.domVkFreeDescriptorSets(dev.fps[vkFreeDescriptorSets], dev.hnd, pool.hnd, C.uint32_t(len(sets)), safeish.SliceCastPtr[*C.VkDescriptorSet](sets)))
 	return result2error(res)
 }
 
@@ -4544,9 +4546,9 @@ func (dev *Device) UpdateDescriptorSets(writes []WriteDescriptorSet, copies []Co
 		dev.fps[vkUpdateDescriptorSets],
 		dev.hnd,
 		C.uint32_t(len(cwrites)),
-		(*C.VkWriteDescriptorSet)(slice2ptr(unsafe.Pointer(&cwrites))),
+		safeish.SliceCastPtr[*C.VkWriteDescriptorSet](cwrites),
 		C.uint32_t(len(ccopies)),
-		(*C.VkCopyDescriptorSet)(slice2ptr(unsafe.Pointer(&ccopies))))
+		safeish.SliceCastPtr[*C.VkCopyDescriptorSet](ccopies))
 	for i := range cwrites {
 		internalizeChain(writes[i].Extensions, cwrites[i].pNext)
 		C.free(unsafe.Pointer(cwrites[i].pImageInfo))
