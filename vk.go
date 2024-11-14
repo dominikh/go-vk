@@ -1666,10 +1666,10 @@ func (info *DeviceQueueInfo2) c() *C.VkDeviceQueueInfo2 {
 
 func (dev *Device) Queue2(info *DeviceQueueInfo2) *Queue {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	out := &Queue{fps: &dev.fps}
 	C.domVkGetDeviceQueue2(dev.fps[vkGetDeviceQueue2], dev.hnd, cinfo, &out.hnd)
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out
 }
 
@@ -1859,6 +1859,7 @@ type ClearRect struct {
 
 func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects []ClearRect) {
 	mem := allocn[C.VkClearAttachment](len(attachments))
+	defer C.free(unsafe.Pointer(mem))
 	arr := unsafe.Slice(mem, len(attachments))
 	for i := range arr {
 		arr[i] = C.VkClearAttachment{
@@ -1885,7 +1886,6 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 		(*C.VkClearAttachment)(mem),
 		C.uint32_t(len(rects)),
 		safeish.SliceCastPtr[*C.VkClearRect](rects))
-	C.free(unsafe.Pointer(mem))
 }
 
 func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, color ClearColorValue, ranges []ImageSubresourceRange) {
@@ -1961,9 +1961,9 @@ func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 
 func (buf *CommandBuffer) BeginRenderPass(info *RenderPassBeginInfo, contents SubpassContents) {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	C.domVkCmdBeginRenderPass(buf.fps[vkCmdBeginRenderPass], buf.hnd, cinfo, C.VkSubpassContents(contents))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 }
 
 func (buf *CommandBuffer) EndRenderPass() {
@@ -2265,6 +2265,7 @@ func (buf *CommandBuffer) WaitEvents(
 	imageMemoryBarriers []ImageMemoryBarrier,
 ) {
 	cmem, cbuf, cimg := barriers(memoryBarriers, bufferMemoryBarriers, imageMemoryBarriers)
+	defer C.free(unsafe.Pointer(cmem))
 	C.domVkCmdWaitEvents(
 		buf.fps[vkCmdWaitEvents],
 		buf.hnd,
@@ -2278,7 +2279,6 @@ func (buf *CommandBuffer) WaitEvents(
 		cbuf,
 		C.uint32_t(len(imageMemoryBarriers)),
 		cimg)
-	C.free(unsafe.Pointer(cmem))
 }
 
 func (buf *CommandBuffer) NextSubpass(contents SubpassContents) {
@@ -2385,6 +2385,7 @@ func (buf *CommandBuffer) PipelineBarrier(
 	imageMemoryBarriers []ImageMemoryBarrier,
 ) {
 	cmem, cbuf, cimg := barriers(memoryBarriers, bufferMemoryBarriers, imageMemoryBarriers)
+	defer C.free(unsafe.Pointer(cmem))
 	C.domVkCmdPipelineBarrier(
 		buf.fps[vkCmdPipelineBarrier],
 		buf.hnd,
@@ -2397,7 +2398,6 @@ func (buf *CommandBuffer) PipelineBarrier(
 		cbuf,
 		C.uint32_t(len(imageMemoryBarriers)),
 		cimg)
-	C.free(unsafe.Pointer(cmem))
 }
 
 type ImageResolve struct {
@@ -2996,10 +2996,10 @@ func (info *PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (PipelineLayout, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out PipelineLayout
 	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -3376,10 +3376,10 @@ func (info *FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
 func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var fb Framebuffer
 	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, cinfo, nil, &fb.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return fb, result2error(res)
 }
 
@@ -3466,10 +3466,10 @@ func (info *SemaphoreCreateInfo) c() *C.VkSemaphoreCreateInfo {
 func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var sem Semaphore
 	res := Result(C.domVkCreateSemaphore(dev.fps[vkCreateSemaphore], dev.hnd, cinfo, nil, &sem.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return sem, result2error(res)
 }
 
@@ -3672,10 +3672,10 @@ func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
 func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var buf Buffer
 	res := Result(C.domVkCreateBuffer(dev.fps[vkCreateBuffer], dev.hnd, cinfo, nil, &buf.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return buf, result2error(res)
 }
 
@@ -3716,6 +3716,7 @@ func (info *BufferMemoryRequirementsInfo2) c() *C.VkBufferMemoryRequirementsInfo
 
 func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	creqs := C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(reqs.Extensions),
@@ -3724,7 +3725,6 @@ func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2
 	internalizeChain(info.Extensions, cinfo.pNext)
 	internalizeChain(reqs.Extensions, creqs.pNext)
 	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
-	C.free(unsafe.Pointer(cinfo))
 }
 
 type MemoryAllocateInfo struct {
@@ -3753,10 +3753,10 @@ type DeviceMemory struct {
 func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var mem DeviceMemory
 	res := Result(C.domVkAllocateMemory(dev.fps[vkAllocateMemory], dev.hnd, cinfo, nil, &mem.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return mem, result2error(res)
 }
 
@@ -3858,10 +3858,10 @@ func (info *ImageCreateInfo) c() *C.VkImageCreateInfo {
 func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var img Image
 	res := Result(C.domVkCreateImage(dev.fps[vkCreateImage], dev.hnd, cinfo, nil, &img.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return img, result2error(res)
 }
 
@@ -3904,10 +3904,10 @@ func (info *EventCreateInfo) c() *C.VkEventCreateInfo {
 func (dev *Device) CreateEvent(info *EventCreateInfo) (Event, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var ev Event
 	res := Result(C.domVkCreateEvent(dev.fps[vkCreateEvent], dev.hnd, cinfo, nil, &ev.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return ev, result2error(res)
 }
 
@@ -3965,10 +3965,10 @@ func (info *QueryPoolCreateInfo) c() *C.VkQueryPoolCreateInfo {
 func (dev *Device) CreateQueryPool(info *QueryPoolCreateInfo) (QueryPool, error) {
 	// TODO(dh(): support custom allocator
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out QueryPool
 	res := Result(C.domVkCreateQueryPool(dev.fps[vkCreateQueryPool], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4034,10 +4034,10 @@ func (info *SamplerCreateInfo) c() *C.VkSamplerCreateInfo {
 func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out Sampler
 	res := Result(C.domVkCreateSampler(dev.fps[vkCreateSampler], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4081,10 +4081,10 @@ func (info *BufferViewCreateInfo) c() *C.VkBufferViewCreateInfo {
 func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var view BufferView
 	res := Result(C.domVkCreateBufferView(dev.fps[vkCreateBufferView], dev.hnd, cinfo, nil, &view.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return view, result2error(res)
 }
 
@@ -4127,10 +4127,10 @@ func (info *PipelineCacheCreateInfo) c() *C.VkPipelineCacheCreateInfo {
 func (dev *Device) CreatePipelineCache(info *PipelineCacheCreateInfo) (PipelineCache, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out PipelineCache
 	res := Result(C.domVkCreatePipelineCache(dev.fps[vkCreatePipelineCache], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4213,10 +4213,10 @@ type DescriptorPool struct {
 func (dev *Device) CreateDescriptorPool(info *DescriptorPoolCreateInfo) (DescriptorPool, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out DescriptorPool
 	res := Result(C.domVkCreateDescriptorPool(dev.fps[vkCreateDescriptorPool], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4282,10 +4282,10 @@ func (info *DescriptorSetLayoutCreateInfo) c() *C.VkDescriptorSetLayoutCreateInf
 func (dev *Device) CreateDescriptorSetLayout(info *DescriptorSetLayoutCreateInfo) (DescriptorSetLayout, error) {
 	// TODO(dh): support custom allocators
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	var out DescriptorSetLayout
 	res := Result(C.domVkCreateDescriptorSetLayout(dev.fps[vkCreateDescriptorSetLayout], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4300,7 +4300,9 @@ type DescriptorSetLayoutSupport struct {
 }
 
 func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo, support *DescriptorSetLayoutSupport) bool {
+	// XXX audit this function, it seems to be missing an actual call
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	csupport := alloc[C.VkDescriptorSetLayoutSupport]()
 	csupport.sType = C.VkStructureType(StructureTypeDescriptorSetLayoutSupport)
 	if support != nil {
@@ -4312,7 +4314,6 @@ func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo
 		C.free(unsafe.Pointer(csupport))
 	}
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return csupport.supported == C.VK_TRUE
 }
 
@@ -4330,6 +4331,7 @@ type BindImageMemoryInfo struct {
 
 func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
 	mem := C.calloc(1, C.size_t(C.sizeof_VkBindImageMemoryInfo*uintptr(len(infos))))
+	defer C.free(mem)
 	arr := (*[math.MaxInt32]C.VkBindImageMemoryInfo)(mem)[:len(infos)]
 	for i := range arr {
 		arr[i] = C.VkBindImageMemoryInfo{
@@ -4344,7 +4346,6 @@ func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
 	for i := range arr {
 		internalizeChain(infos[i].Extensions, arr[i].pNext)
 	}
-	C.free(mem)
 	return result2error(res)
 }
 
@@ -4376,6 +4377,7 @@ type MemoryRequirements2 struct {
 
 func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	creqs := C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(reqs.Extensions),
@@ -4384,7 +4386,6 @@ func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, 
 	internalizeChain(info.Extensions, cinfo.pNext)
 	internalizeChain(reqs.Extensions, creqs.pNext)
 	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
-	C.free(unsafe.Pointer(cinfo))
 }
 
 type DescriptorSetAllocateInfo struct {
@@ -4420,10 +4421,10 @@ type DescriptorSet struct {
 
 func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]DescriptorSet, error) {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	out := make([]DescriptorSet, len(info.Layouts))
 	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, safeish.SliceCastPtr[*C.VkDescriptorSet](out)))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4701,6 +4702,7 @@ type ImageFormatProperties2 struct {
 
 func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageFormatInfo2, props *ImageFormatProperties2) error {
 	cinfo := info.c()
+	defer C.free(unsafe.Pointer(cinfo))
 	cprops := C.VkImageFormatProperties2{
 		sType: C.VkStructureType(StructureTypeImageFormatProperties2),
 		pNext: buildChain(props.Extensions),
@@ -4709,7 +4711,6 @@ func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageForma
 	ucopy1(unsafe.Pointer(&props.ImageFormatProperties), unsafe.Pointer(&cprops.imageFormatProperties), C.sizeof_VkImageFormatProperties)
 	internalizeChain(props.Extensions, cprops.pNext)
 	internalizeChain(info.Extensions, cinfo.pNext)
-	C.free(unsafe.Pointer(cinfo))
 	return result2error(res)
 }
 
@@ -4717,11 +4718,11 @@ func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunct
 	// TODO(dh): return a mock function pointer that panics with a nice message
 
 	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
 	fp := C.vkGetInstanceProcAddr(instance, cName)
 	if debug {
 		fmt.Fprintf(os.Stderr, "%s = %p\n", name, fp)
 	}
-	C.free(unsafe.Pointer(cName))
 	return fp
 }
 
