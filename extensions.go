@@ -54,7 +54,7 @@ type PhysicalDeviceIDProperties struct {
 func (*PhysicalDeviceIDProperties) isExtension() {}
 
 func (prop *PhysicalDeviceIDProperties) externalize() unsafe.Pointer {
-	cprop := (*C.VkPhysicalDeviceIDProperties)(alloc(C.sizeof_VkPhysicalDeviceIDProperties))
+	cprop := alloc[C.VkPhysicalDeviceIDProperties]()
 	cprop.sType = C.VkStructureType(StructureTypePhysicalDeviceIdProperties)
 	return unsafe.Pointer(cprop)
 }

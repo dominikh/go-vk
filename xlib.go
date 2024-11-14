@@ -24,7 +24,7 @@ type XlibSurfaceCreateInfoKHR struct {
 
 func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (SurfaceKHR, error) {
 	// TODO(dh): support custom allocator
-	cInfo := (*C.VkXlibSurfaceCreateInfoKHR)(alloc(C.sizeof_VkXlibSurfaceCreateInfoKHR))
+	cInfo := alloc[C.VkXlibSurfaceCreateInfoKHR]()
 	cInfo.sType = C.VkStructureType(StructureTypeXlibSurfaceCreateInfoKHR)
 	cInfo.pNext = info.Next
 	cInfo.dpy = info.Dpy

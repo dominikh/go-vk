@@ -218,7 +218,7 @@ type Instance struct {
 
 func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	// TODO(dh): support a custom allocator
-	ptr := (*C.VkInstanceCreateInfo)(alloc(C.sizeof_VkInstanceCreateInfo))
+	ptr := alloc[C.VkInstanceCreateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeInstanceCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
@@ -230,7 +230,7 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	defer C.free(unsafe.Pointer(ptr.ppEnabledLayerNames))
 	defer C.free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
 	if info.ApplicationInfo != nil {
-		ptr.pApplicationInfo = (*C.VkApplicationInfo)(alloc(C.sizeof_VkApplicationInfo))
+		ptr.pApplicationInfo = (alloc[C.VkApplicationInfo]())
 		ptr.pApplicationInfo.sType = C.VkStructureType(StructureTypeApplicationInfo)
 		ptr.pApplicationInfo.pNext = buildChain(info.ApplicationInfo.Extensions)
 		ptr.pApplicationInfo.pApplicationName = C.CString(info.ApplicationInfo.ApplicationName)
@@ -271,7 +271,7 @@ func (ins *Instance) PhysicalDevices() ([]*PhysicalDevice, error) {
 	count := C.uint32_t(1)
 	var devs *C.VkPhysicalDevice
 	for {
-		devs = (*C.VkPhysicalDevice)(allocn(int(count), C.sizeof_VkPhysicalDevice))
+		devs = allocn[C.VkPhysicalDevice](int(count))
 		defer C.free(unsafe.Pointer(devs))
 		res := Result(C.domVkEnumeratePhysicalDevices(ins.fps[vkEnumeratePhysicalDevices], ins.hnd, &count, devs))
 		if res != Success && res != Incomplete {
@@ -1106,7 +1106,7 @@ func (props *PhysicalDeviceProperties) internalize(cprops *C.VkPhysicalDevicePro
 }
 
 func (dev *PhysicalDevice) Properties2(extensions []Extension) *PhysicalDeviceProperties {
-	cprops := (*C.VkPhysicalDeviceProperties2)(alloc(C.sizeof_VkPhysicalDeviceProperties2))
+	cprops := alloc[C.VkPhysicalDeviceProperties2]()
 	cprops.sType = C.VkStructureType(StructureTypePhysicalDeviceProperties2)
 	cprops.pNext = buildChain(extensions)
 	C.domVkGetPhysicalDeviceProperties2(dev.instance.fps[vkGetPhysicalDeviceProperties2], dev.hnd, cprops)
@@ -1162,7 +1162,7 @@ type PhysicalDeviceMemoryProperties2 struct {
 }
 
 func (dev *PhysicalDevice) MemoryProperties2(props PhysicalDeviceMemoryProperties2) {
-	cprops := (*C.VkPhysicalDeviceMemoryProperties2)(alloc(C.sizeof_VkPhysicalDeviceMemoryProperties2))
+	cprops := alloc[C.VkPhysicalDeviceMemoryProperties2]()
 	*cprops = C.VkPhysicalDeviceMemoryProperties2{
 		sType: C.VkStructureType(StructureTypePhysicalDeviceMemoryProperties2),
 		pNext: buildChain(props.Extensions),
@@ -1342,7 +1342,7 @@ type PhysicalDeviceFeatures2 struct {
 }
 
 func (dev *PhysicalDevice) Features2(features *PhysicalDeviceFeatures2) {
-	cfeatures := (*C.VkPhysicalDeviceFeatures2)(alloc(C.sizeof_VkPhysicalDeviceFeatures2))
+	cfeatures := alloc[C.VkPhysicalDeviceFeatures2]()
 	C.domVkGetPhysicalDeviceFeatures2(dev.instance.fps[vkGetPhysicalDeviceFeatures2], dev.hnd, cfeatures)
 	features.Features = PhysicalDeviceFeatures{
 		RobustBufferAccess:                      cfeatures.features.robustBufferAccess == C.VK_TRUE,
@@ -1473,12 +1473,12 @@ type Device struct {
 
 func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error) {
 	// TODO(dh): support custom allocators
-	ptr := (*C.VkDeviceCreateInfo)(alloc(C.sizeof_VkDeviceCreateInfo))
+	ptr := alloc[C.VkDeviceCreateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeDeviceCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
-	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(allocn(len(info.QueueCreateInfos), C.sizeof_VkDeviceQueueCreateInfo))
+	ptr.pQueueCreateInfos = allocn[C.VkDeviceQueueCreateInfo](len(info.QueueCreateInfos))
 	defer C.free(unsafe.Pointer(ptr.pQueueCreateInfos))
 	arr := (*[math.MaxInt32]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
@@ -1497,7 +1497,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 	ptr.ppEnabledExtensionNames = externStrings(info.EnabledExtensionNames)
 	defer C.free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
 	if info.EnabledFeatures != nil {
-		ptr.pEnabledFeatures = (*C.VkPhysicalDeviceFeatures)(alloc(C.sizeof_VkPhysicalDeviceFeatures))
+		ptr.pEnabledFeatures = alloc[C.VkPhysicalDeviceFeatures]()
 		ptr.pEnabledFeatures.robustBufferAccess = vkBool(info.EnabledFeatures.RobustBufferAccess)
 		ptr.pEnabledFeatures.fullDrawIndexUint32 = vkBool(info.EnabledFeatures.FullDrawIndexUint32)
 		ptr.pEnabledFeatures.imageCubeArray = vkBool(info.EnabledFeatures.ImageCubeArray)
@@ -1618,7 +1618,7 @@ type DeviceQueueInfo2 struct {
 }
 
 func (info *DeviceQueueInfo2) c() *C.VkDeviceQueueInfo2 {
-	cinfo := (*C.VkDeviceQueueInfo2)(alloc(C.sizeof_VkDeviceQueueInfo2))
+	cinfo := alloc[C.VkDeviceQueueInfo2]()
 	*cinfo = C.VkDeviceQueueInfo2{
 		sType:            C.VkStructureType(StructureTypeDeviceQueueInfo2),
 		pNext:            buildChain(info.Extensions),
@@ -1687,14 +1687,14 @@ type CommandBufferInheritanceInfo struct {
 
 // Begin starts recording a command buffer.
 func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
-	ptr := (*C.VkCommandBufferBeginInfo)(alloc(C.sizeof_VkCommandBufferBeginInfo))
+	ptr := alloc[C.VkCommandBufferBeginInfo]()
 	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferBeginInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
 	ptr.flags = C.VkCommandBufferUsageFlags(info.Flags)
 	if info.InheritanceInfo != nil {
-		ptr.pInheritanceInfo = (*C.VkCommandBufferInheritanceInfo)(alloc(C.sizeof_VkCommandBufferInheritanceInfo))
+		ptr.pInheritanceInfo = alloc[C.VkCommandBufferInheritanceInfo]()
 		defer C.free(unsafe.Pointer(ptr.pInheritanceInfo))
 		ptr.pInheritanceInfo.sType = C.VkStructureType(StructureTypeCommandBufferInheritanceInfo)
 		ptr.pInheritanceInfo.pNext = buildChain(info.InheritanceInfo.Extensions)
@@ -1824,8 +1824,8 @@ type ClearRect struct {
 }
 
 func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects []ClearRect) {
-	mem := allocn(len(attachments), C.sizeof_VkClearAttachment)
-	arr := (*[math.MaxInt32]C.VkClearAttachment)(mem)[:len(attachments)]
+	mem := allocn[C.VkClearAttachment](len(attachments))
+	arr := unsafe.Slice(mem, len(attachments))
 	for i := range arr {
 		arr[i] = C.VkClearAttachment{
 			aspectMask:      C.VkImageAspectFlags(attachments[i].AspectMask),
@@ -1855,7 +1855,7 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 }
 
 func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, color ClearColorValue, ranges []ImageSubresourceRange) {
-	cColor := (*C.VkClearColorValue)(alloc(C.sizeof_VkClearColorValue))
+	cColor := alloc[C.VkClearColorValue]()
 	switch v := color.(type) {
 	case ClearColorValueFloat32s:
 		copy(cColor[:], (*[16]byte)(unsafe.Pointer(&v))[:])
@@ -1897,7 +1897,7 @@ func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 	size0 := align(C.sizeof_VkRenderPassBeginInfo)
 	size1 := align(C.sizeof_VkClearValue * uintptr(len(info.ClearValues)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkRenderPassBeginInfo)(mem)
 	*cinfo = C.VkRenderPassBeginInfo{
 		sType:           C.VkStructureType(StructureTypeRenderPassBeginInfo),
@@ -2168,7 +2168,7 @@ func barriers(
 	size1 := align(C.sizeof_VkBufferMemoryBarrier * uintptr(len(bufferMemoryBarriers)))
 	size2 := align(C.sizeof_VkImageMemoryBarrier * uintptr(len(imageMemoryBarriers)))
 	size := size0 + size1 + size2
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 
 	cmem := mem
 	cbuf := unsafe.Add(mem, size0)
@@ -2443,7 +2443,7 @@ type CommandPool struct {
 
 func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (CommandPool, error) {
 	// TODO(dh): support callbacks
-	ptr := (*C.VkCommandPoolCreateInfo)(alloc(C.sizeof_VkCommandPoolCreateInfo))
+	ptr := alloc[C.VkCommandPoolCreateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeCommandPoolCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.flags = C.VkCommandPoolCreateFlags(info.Flags)
@@ -2476,7 +2476,7 @@ type CommandBufferAllocateInfo struct {
 }
 
 func (dev *Device) AllocateCommandBuffers(pool CommandPool, info *CommandBufferAllocateInfo) ([]*CommandBuffer, error) {
-	ptr := (*C.VkCommandBufferAllocateInfo)(alloc(C.sizeof_VkCommandBufferAllocateInfo))
+	ptr := alloc[C.VkCommandBufferAllocateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferAllocateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.commandPool = pool.hnd
@@ -2571,7 +2571,7 @@ type ImageSubresourceRange struct {
 
 func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error) {
 	// TODO(dh): support custom allocator
-	ptr := (*C.VkImageViewCreateInfo)(alloc(C.sizeof_VkImageViewCreateInfo))
+	ptr := alloc[C.VkImageViewCreateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeImageViewCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.image = info.Image.hnd
@@ -2608,7 +2608,7 @@ type ShaderModuleCreateInfo struct {
 
 func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (ShaderModule, error) {
 	// TODO(dh): support custom allocator
-	ptr := (*C.VkShaderModuleCreateInfo)(alloc(C.sizeof_VkShaderModuleCreateInfo))
+	ptr := alloc[C.VkShaderModuleCreateInfo]()
 	ptr.sType = C.VkStructureType(StructureTypeShaderModuleCreateInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.codeSize = C.size_t(len(info.Code))
@@ -2646,7 +2646,7 @@ func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStat
 	size2 := align(uintptr(len(info.VertexAttributeDescriptions)) * C.sizeof_VkVertexInputAttributeDescription)
 	size := size0 + size1 + size2
 
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineVertexInputStateCreateInfo)(mem)
 	bindings := (*C.VkVertexInputBindingDescription)(unsafe.Add(mem, size0))
 	attribs := (*C.VkVertexInputAttributeDescription)(unsafe.Add(mem, size0+size1))
@@ -2690,7 +2690,7 @@ type PipelineInputAssemblyStateCreateInfo struct {
 }
 
 func (info *PipelineInputAssemblyStateCreateInfo) c() *C.VkPipelineInputAssemblyStateCreateInfo {
-	cinfo := (*C.VkPipelineInputAssemblyStateCreateInfo)(alloc(C.sizeof_VkPipelineInputAssemblyStateCreateInfo))
+	cinfo := alloc[C.VkPipelineInputAssemblyStateCreateInfo]()
 	*cinfo = C.VkPipelineInputAssemblyStateCreateInfo{
 		sType:                  C.VkStructureType(StructureTypePipelineInputAssemblyStateCreateInfo),
 		pNext:                  buildChain(info.Extensions),
@@ -2749,7 +2749,7 @@ func (info *PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreat
 	size1 := align(uintptr(len(info.Viewports)) * C.sizeof_VkViewport)
 	size2 := align(uintptr(len(info.Scissors)) * C.sizeof_VkRect2D)
 	size := size0 + size1 + size2
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineViewportStateCreateInfo)(mem)
 	viewports := (*C.VkViewport)(unsafe.Add(mem, size0))
 	scissors := (*C.VkRect2D)(unsafe.Add(mem, size0+size1))
@@ -2782,7 +2782,7 @@ type PipelineRasterizationStateCreateInfo struct {
 }
 
 func (info *PipelineRasterizationStateCreateInfo) c() *C.VkPipelineRasterizationStateCreateInfo {
-	cinfo := (*C.VkPipelineRasterizationStateCreateInfo)(alloc(C.sizeof_VkPipelineRasterizationStateCreateInfo))
+	cinfo := alloc[C.VkPipelineRasterizationStateCreateInfo]()
 	*cinfo = C.VkPipelineRasterizationStateCreateInfo{
 		sType:                   C.VkStructureType(StructureTypePipelineRasterizationStateCreateInfo),
 		pNext:                   buildChain(info.Extensions),
@@ -2820,7 +2820,7 @@ func (info *PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStat
 	size0 := align(C.sizeof_VkPipelineMultisampleStateCreateInfo)
 	size1 := align(uintptr(len(info.SampleMask)) * C.sizeof_VkSampleMask)
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineMultisampleStateCreateInfo)(mem)
 	var sampleMask *C.VkSampleMask
 	if info.SampleMask != nil {
@@ -2867,7 +2867,7 @@ func (info *PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateC
 	size0 := align(C.sizeof_VkPipelineColorBlendStateCreateInfo)
 	size1 := align(C.sizeof_VkPipelineColorBlendAttachmentState * uintptr(len(info.Attachments)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineColorBlendStateCreateInfo)(mem)
 	attachments := (*C.VkPipelineColorBlendAttachmentState)(unsafe.Add(mem, size0))
 	*cinfo = C.VkPipelineColorBlendStateCreateInfo{
@@ -2910,7 +2910,7 @@ func (info *PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateI
 	size0 := align(C.sizeof_VkPipelineDynamicStateCreateInfo)
 	size1 := align(C.sizeof_VkDynamicState * uintptr(len(info.DynamicStates)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineDynamicStateCreateInfo)(mem)
 	dynamicStates := (*C.VkDynamicState)(unsafe.Add(mem, size0))
 	*cinfo = C.VkPipelineDynamicStateCreateInfo{
@@ -2946,7 +2946,7 @@ func (info *PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 	size1 := align(C.sizeof_VkDescriptorSetLayout * uintptr(len(info.SetLayouts)))
 	size2 := align(C.sizeof_VkPushConstantRange * uintptr(len(info.PushConstantRanges)))
 	size := size0 + size1 + size2
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkPipelineLayoutCreateInfo)(mem)
 	setLayouts := (*C.VkDescriptorSetLayout)(unsafe.Add(mem, size0))
 	push := (*C.VkPushConstantRange)(unsafe.Add(mem, size0+size1))
@@ -3008,7 +3008,7 @@ type PipelineTessellationStateCreateInfo struct {
 }
 
 func (info *PipelineTessellationStateCreateInfo) c() *C.VkPipelineTessellationStateCreateInfo {
-	cinfo := (*C.VkPipelineTessellationStateCreateInfo)(alloc(C.sizeof_VkPipelineTessellationStateCreateInfo))
+	cinfo := alloc[C.VkPipelineTessellationStateCreateInfo]()
 	*cinfo = C.VkPipelineTessellationStateCreateInfo{
 		sType:              C.VkStructureType(StructureTypePipelineTessellationStateCreateInfo),
 		pNext:              buildChain(info.Extensions),
@@ -3032,7 +3032,7 @@ type PipelineDepthStencilStateCreateInfo struct {
 }
 
 func (info *PipelineDepthStencilStateCreateInfo) c() *C.VkPipelineDepthStencilStateCreateInfo {
-	cinfo := (*C.VkPipelineDepthStencilStateCreateInfo)(alloc(C.sizeof_VkPipelineDepthStencilStateCreateInfo))
+	cinfo := alloc[C.VkPipelineDepthStencilStateCreateInfo]()
 	*cinfo = C.VkPipelineDepthStencilStateCreateInfo{
 		sType:                 C.VkStructureType(StructureTypePipelineDepthStencilStateCreateInfo),
 		pNext:                 buildChain(info.Extensions),
@@ -3088,7 +3088,7 @@ type GraphicsPipelineCreateInfo struct {
 
 func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []GraphicsPipelineCreateInfo) ([]Pipeline, error) {
 	// TODO(dh): support custom allocators
-	ptrs := (*C.VkGraphicsPipelineCreateInfo)(allocn(len(infos), C.sizeof_VkGraphicsPipelineCreateInfo))
+	ptrs := allocn[C.VkGraphicsPipelineCreateInfo](len(infos))
 	defer C.free(unsafe.Pointer(ptrs))
 
 	ptrsArr := (*[math.MaxInt32]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))[:len(infos)]
@@ -3102,7 +3102,7 @@ func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []Graphic
 		ptr.flags = C.VkPipelineCreateFlags(info.Flags)
 		ptr.stageCount = C.uint32_t(len(info.Stages))
 
-		ptr.pStages = (*C.VkPipelineShaderStageCreateInfo)(allocn(len(info.Stages), C.sizeof_VkPipelineShaderStageCreateInfo))
+		ptr.pStages = allocn[C.VkPipelineShaderStageCreateInfo](len(info.Stages))
 		defer C.free(unsafe.Pointer(ptr.pStages))
 		arr := (*[math.MaxInt32]C.VkPipelineShaderStageCreateInfo)(unsafe.Pointer(ptr.pStages))[:len(info.Stages)]
 		for i := range arr {
@@ -3257,7 +3257,7 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 	size2 := align(C.sizeof_VkSubpassDescription * uintptr(len(info.Subpasses)))
 	size3 := align(C.sizeof_VkSubpassDependency * uintptr(len(info.Dependencies)))
 	size := size0 + size1 + size2 + size3
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	defer C.free(mem)
 	cinfo := (*C.VkRenderPassCreateInfo)(mem)
 	attachments := (*C.VkAttachmentDescription)(unsafe.Add(mem, size0))
@@ -3286,19 +3286,19 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 			inputAttachmentCount:    C.uint32_t(len(subpass.InputAttachments)),
 			colorAttachmentCount:    C.uint32_t(len(subpass.ColorAttachments)),
 			preserveAttachmentCount: C.uint32_t(len(subpass.PreserveAttachments)),
-			pInputAttachments:       (*C.VkAttachmentReference)(allocn(len(subpass.InputAttachments), C.sizeof_VkAttachmentReference)),
-			pColorAttachments:       (*C.VkAttachmentReference)(allocn(len(subpass.ColorAttachments), C.sizeof_VkAttachmentReference)),
-			pPreserveAttachments:    (*C.uint32_t)(allocn(len(subpass.PreserveAttachments), C.sizeof_uint32_t)),
+			pInputAttachments:       allocn[C.VkAttachmentReference](len(subpass.InputAttachments)),
+			pColorAttachments:       allocn[C.VkAttachmentReference](len(subpass.ColorAttachments)),
+			pPreserveAttachments:    allocn[C.uint32_t](len(subpass.PreserveAttachments)),
 		}
 		ucopy(unsafe.Pointer(csubpass.pInputAttachments), unsafe.Pointer(&subpass.InputAttachments), C.sizeof_VkAttachmentReference)
 		ucopy(unsafe.Pointer(csubpass.pColorAttachments), unsafe.Pointer(&subpass.ColorAttachments), C.sizeof_VkAttachmentReference)
 		if len(subpass.ResolveAttachments) > 0 {
-			csubpass.pResolveAttachments = (*C.VkAttachmentReference)(allocn(len(subpass.ResolveAttachments), C.sizeof_VkAttachmentReference))
+			csubpass.pResolveAttachments = allocn[C.VkAttachmentReference](len(subpass.ResolveAttachments))
 			defer C.free(unsafe.Pointer(csubpass.pResolveAttachments))
 			ucopy(unsafe.Pointer(csubpass.pResolveAttachments), unsafe.Pointer(&subpass.ResolveAttachments), C.sizeof_VkAttachmentReference)
 		}
 		if subpass.DepthStencilAttachment != nil {
-			csubpass.pDepthStencilAttachment = (*C.VkAttachmentReference)(alloc(C.sizeof_VkAttachmentReference))
+			csubpass.pDepthStencilAttachment = alloc[C.VkAttachmentReference]()
 			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
 		}
 		ucopy(unsafe.Pointer(csubpass.pPreserveAttachments), unsafe.Pointer(&subpass.PreserveAttachments), C.sizeof_uint32_t)
@@ -3327,7 +3327,7 @@ func (info *FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
 	size0 := align(C.sizeof_VkFramebufferCreateInfo)
 	size1 := align(uintptr(C.sizeof_VkImageView) * uintptr(len(info.Attachments)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkFramebufferCreateInfo)(mem)
 	*cinfo = C.VkFramebufferCreateInfo{
 		sType:           C.VkStructureType(StructureTypeFramebufferCreateInfo),
@@ -3426,7 +3426,7 @@ type SemaphoreCreateInfo struct {
 }
 
 func (info *SemaphoreCreateInfo) c() *C.VkSemaphoreCreateInfo {
-	cinfo := (*C.VkSemaphoreCreateInfo)(alloc(C.sizeof_VkSemaphoreCreateInfo))
+	cinfo := alloc[C.VkSemaphoreCreateInfo]()
 	*cinfo = C.VkSemaphoreCreateInfo{
 		sType: C.VkStructureType(StructureTypeSemaphoreCreateInfo),
 		pNext: buildChain(info.Extensions),
@@ -3474,7 +3474,7 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 	size3 := align(C.sizeof_VkCommandBuffer * commandBufferCount)
 	size4 := align(C.sizeof_VkSemaphore * signalSemaphoreCount)
 	size := size0 + size1 + size2 + size3 + size4
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	defer C.free(mem)
 
 	cinfos := mem
@@ -3557,7 +3557,7 @@ type FenceCreateInfo struct {
 
 func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
 	// TODO(dh): support custom allocators
-	cinfo := (*C.VkFenceCreateInfo)(alloc(C.sizeof_VkFenceCreateInfo))
+	cinfo := alloc[C.VkFenceCreateInfo]()
 	*cinfo = C.VkFenceCreateInfo{
 		sType: C.VkStructureType(StructureTypeFenceCreateInfo),
 		pNext: buildChain(info.Extensions),
@@ -3626,7 +3626,7 @@ func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
 	size0 := align(C.sizeof_VkBufferCreateInfo)
 	size1 := align(C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkBufferCreateInfo)(mem)
 	*cinfo = C.VkBufferCreateInfo{
 		sType:                 C.VkStructureType(StructureTypeBufferCreateInfo),
@@ -3678,7 +3678,7 @@ type BufferMemoryRequirementsInfo2 struct {
 }
 
 func (info *BufferMemoryRequirementsInfo2) c() *C.VkBufferMemoryRequirementsInfo2 {
-	cinfo := (*C.VkBufferMemoryRequirementsInfo2)(alloc(C.sizeof_VkBufferMemoryRequirementsInfo2))
+	cinfo := alloc[C.VkBufferMemoryRequirementsInfo2]()
 	*cinfo = C.VkBufferMemoryRequirementsInfo2{
 		sType:  C.VkStructureType(StructureTypeBufferMemoryRequirementsInfo2),
 		pNext:  buildChain(info.Extensions),
@@ -3689,7 +3689,7 @@ func (info *BufferMemoryRequirementsInfo2) c() *C.VkBufferMemoryRequirementsInfo
 
 func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
 	cinfo := info.c()
-	creqs := (*C.VkMemoryRequirements2)(alloc(C.sizeof_VkMemoryRequirements2))
+	creqs := alloc[C.VkMemoryRequirements2]()
 	*creqs = C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(reqs.Extensions),
@@ -3709,7 +3709,7 @@ type MemoryAllocateInfo struct {
 }
 
 func (info *MemoryAllocateInfo) c() *C.VkMemoryAllocateInfo {
-	cinfo := (*C.VkMemoryAllocateInfo)(alloc(C.sizeof_VkMemoryAllocateInfo))
+	cinfo := alloc[C.VkMemoryAllocateInfo]()
 	*cinfo = C.VkMemoryAllocateInfo{
 		sType:           C.VkStructureType(StructureTypeMemoryAllocateInfo),
 		pNext:           buildChain(info.Extensions),
@@ -3753,9 +3753,9 @@ type BindBufferMemoryInfo struct {
 }
 
 func (dev *Device) BindBufferMemory2(infos []BindBufferMemoryInfo) error {
-	mem := allocn(len(infos), C.sizeof_VkBindBufferMemoryInfo)
-	defer C.free(mem)
-	cinfos := (*[1 << 31]C.VkBindBufferMemoryInfo)(mem)[:len(infos)]
+	mem := allocn[C.VkBindBufferMemoryInfo](len(infos))
+	defer C.free(unsafe.Pointer(mem))
+	cinfos := unsafe.Slice(mem, len(infos))
 	for i, info := range infos {
 		cinfos[i] = C.VkBindBufferMemoryInfo{
 			sType:        C.VkStructureType(StructureTypeBindBufferMemoryInfo),
@@ -3807,7 +3807,7 @@ func (info *ImageCreateInfo) c() *C.VkImageCreateInfo {
 	size0 := align(C.sizeof_VkImageCreateInfo)
 	size1 := align(C.sizeof_uint32_t * uintptr(len(info.QueueFamilyIndices)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkImageCreateInfo)(mem)
 	*cinfo = C.VkImageCreateInfo{
 		sType:                 C.VkStructureType(StructureTypeImageCreateInfo),
@@ -3867,7 +3867,7 @@ type EventCreateInfo struct {
 }
 
 func (info *EventCreateInfo) c() *C.VkEventCreateInfo {
-	cinfo := (*C.VkEventCreateInfo)(alloc(C.sizeof_VkEventCreateInfo))
+	cinfo := alloc[C.VkEventCreateInfo]()
 	*cinfo = C.VkEventCreateInfo{
 		sType: C.VkStructureType(StructureTypeEventCreateInfo),
 		pNext: buildChain(info.Extensions),
@@ -3926,7 +3926,7 @@ type QueryPoolCreateInfo struct {
 }
 
 func (info *QueryPoolCreateInfo) c() *C.VkQueryPoolCreateInfo {
-	cinfo := (*C.VkQueryPoolCreateInfo)(alloc(C.sizeof_VkQueryPoolCreateInfo))
+	cinfo := alloc[C.VkQueryPoolCreateInfo]()
 	*cinfo = C.VkQueryPoolCreateInfo{
 		sType:              C.VkStructureType(StructureTypeQueryPoolCreateInfo),
 		pNext:              buildChain(info.Extensions),
@@ -3983,7 +3983,7 @@ type SamplerCreateInfo struct {
 }
 
 func (info *SamplerCreateInfo) c() *C.VkSamplerCreateInfo {
-	cinfo := (*C.VkSamplerCreateInfo)(alloc(C.sizeof_VkSamplerCreateInfo))
+	cinfo := alloc[C.VkSamplerCreateInfo]()
 	*cinfo = C.VkSamplerCreateInfo{
 		sType:                   C.VkStructureType(StructureTypeSamplerCreateInfo),
 		pNext:                   buildChain(info.Extensions),
@@ -4040,7 +4040,7 @@ type BufferViewCreateInfo struct {
 }
 
 func (info *BufferViewCreateInfo) c() *C.VkBufferViewCreateInfo {
-	cinfo := (*C.VkBufferViewCreateInfo)(alloc(C.sizeof_VkBufferViewCreateInfo))
+	cinfo := alloc[C.VkBufferViewCreateInfo]()
 	*cinfo = C.VkBufferViewCreateInfo{
 		sType:  C.VkStructureType(StructureTypeBufferViewCreateInfo),
 		pNext:  buildChain(info.Extensions),
@@ -4088,7 +4088,7 @@ type PipelineCacheCreateInfo struct {
 }
 
 func (info *PipelineCacheCreateInfo) c() *C.VkPipelineCacheCreateInfo {
-	cinfo := (*C.VkPipelineCacheCreateInfo)(alloc(C.sizeof_VkPipelineCacheCreateInfo))
+	cinfo := alloc[C.VkPipelineCacheCreateInfo]()
 	*cinfo = C.VkPipelineCacheCreateInfo{
 		sType:           C.VkStructureType(StructureTypePipelineCacheCreateInfo),
 		pNext:           buildChain(info.Extensions),
@@ -4163,7 +4163,7 @@ func (info *DescriptorPoolCreateInfo) c() *C.VkDescriptorPoolCreateInfo {
 	size0 := align(uintptr(C.sizeof_VkDescriptorPoolCreateInfo))
 	size1 := align(C.sizeof_VkDescriptorPoolSize * uintptr(len(info.PoolSizes)))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkDescriptorPoolCreateInfo)(mem)
 	*cinfo = C.VkDescriptorPoolCreateInfo{
 		sType:         C.VkStructureType(StructureTypeDescriptorPoolCreateInfo),
@@ -4229,7 +4229,7 @@ func (info *DescriptorSetLayoutCreateInfo) c() *C.VkDescriptorSetLayoutCreateInf
 	size2 = align(size2)
 	size := size0 + size1 + size2
 
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkDescriptorSetLayoutCreateInfo)(mem)
 	*cinfo = C.VkDescriptorSetLayoutCreateInfo{
 		sType:        C.VkStructureType(StructureTypeDescriptorSetLayoutCreateInfo),
@@ -4276,7 +4276,7 @@ type DescriptorSetLayoutSupport struct {
 
 func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo, support *DescriptorSetLayoutSupport) bool {
 	cinfo := info.c()
-	csupport := (*C.VkDescriptorSetLayoutSupport)(alloc(C.sizeof_VkDescriptorSetLayoutSupport))
+	csupport := alloc[C.VkDescriptorSetLayoutSupport]()
 	csupport.sType = C.VkStructureType(StructureTypeDescriptorSetLayoutSupport)
 	if support != nil {
 		csupport.pNext = buildChain(support.Extensions)
@@ -4304,7 +4304,7 @@ type BindImageMemoryInfo struct {
 }
 
 func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
-	mem := alloc(C.size_t(C.sizeof_VkBindImageMemoryInfo * uintptr(len(infos))))
+	mem := C.calloc(1, C.size_t(C.sizeof_VkBindImageMemoryInfo*uintptr(len(infos))))
 	arr := (*[math.MaxInt32]C.VkBindImageMemoryInfo)(mem)[:len(infos)]
 	for i := range arr {
 		arr[i] = C.VkBindImageMemoryInfo{
@@ -4335,7 +4335,7 @@ type ImageMemoryRequirementsInfo2 struct {
 }
 
 func (info *ImageMemoryRequirementsInfo2) c() *C.VkImageMemoryRequirementsInfo2 {
-	cinfo := (*C.VkImageMemoryRequirementsInfo2)(alloc(C.sizeof_VkImageMemoryRequirementsInfo2))
+	cinfo := alloc[C.VkImageMemoryRequirementsInfo2]()
 	*cinfo = C.VkImageMemoryRequirementsInfo2{
 		sType: C.VkStructureType(StructureTypeImageMemoryRequirementsInfo2),
 		pNext: buildChain(info.Extensions),
@@ -4351,7 +4351,7 @@ type MemoryRequirements2 struct {
 
 func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
 	cinfo := info.c()
-	creqs := (*C.VkMemoryRequirements2)(alloc(C.sizeof_VkMemoryRequirements2))
+	creqs := alloc[C.VkMemoryRequirements2]()
 	*creqs = C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(reqs.Extensions),
@@ -4374,7 +4374,7 @@ func (info *DescriptorSetAllocateInfo) c() *C.VkDescriptorSetAllocateInfo {
 	size0 := uintptr(C.sizeof_VkDescriptorSetAllocateInfo)
 	size1 := C.sizeof_VkDescriptorSetLayout * uintptr(len(info.Layouts))
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	cinfo := (*C.VkDescriptorSetAllocateInfo)(mem)
 	*cinfo = C.VkDescriptorSetAllocateInfo{
 		sType:              C.VkStructureType(StructureTypeDescriptorSetAllocateInfo),
@@ -4472,7 +4472,7 @@ func (set *WriteDescriptorSet) c(cset *C.VkWriteDescriptorSet) {
 	size2 := C.sizeof_VkBufferView * uintptr(len(set.TexelBufferView))
 	size := size0 + size1 + size2
 
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	*cset = C.VkWriteDescriptorSet{
 		sType:            C.VkStructureType(StructureTypeWriteDescriptorSet),
 		pNext:            buildChain(set.Extensions),
@@ -4608,7 +4608,7 @@ type FormatProperties2 struct {
 }
 
 func (dev *PhysicalDevice) FormatProperties2(format Format, props *FormatProperties2) {
-	cprops := (*C.VkFormatProperties2)(alloc(C.sizeof_VkFormatProperties2))
+	cprops := alloc[C.VkFormatProperties2]()
 	*cprops = C.VkFormatProperties2{
 		sType: C.VkStructureType(StructureTypeFormatProperties2),
 		pNext: buildChain(props.Extensions),
@@ -4660,7 +4660,7 @@ type PhysicalDeviceImageFormatInfo2 struct {
 }
 
 func (info *PhysicalDeviceImageFormatInfo2) c() *C.VkPhysicalDeviceImageFormatInfo2 {
-	cinfo := (*C.VkPhysicalDeviceImageFormatInfo2)(alloc(C.sizeof_VkPhysicalDeviceImageFormatInfo2))
+	cinfo := alloc[C.VkPhysicalDeviceImageFormatInfo2]()
 	*cinfo = C.VkPhysicalDeviceImageFormatInfo2{
 		sType:  C.VkStructureType(StructureTypePhysicalDeviceImageFormatInfo2),
 		pNext:  buildChain(info.Extensions),
@@ -4680,7 +4680,7 @@ type ImageFormatProperties2 struct {
 
 func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageFormatInfo2, props *ImageFormatProperties2) error {
 	cinfo := info.c()
-	cprops := (*C.VkImageFormatProperties2)(alloc(C.sizeof_VkImageFormatProperties2))
+	cprops := alloc[C.VkImageFormatProperties2]()
 	*cprops = C.VkImageFormatProperties2{
 		sType: C.VkStructureType(StructureTypeImageFormatProperties2),
 		pNext: buildChain(props.Extensions),

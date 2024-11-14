@@ -11,15 +11,15 @@ import (
 	"unsafe"
 )
 
-func alloc(size C.size_t) unsafe.Pointer {
-	return C.calloc(1, size)
+func alloc[T any]() *T {
+	return (*T)(C.calloc(1, C.size_t(unsafe.Sizeof(*new(T)))))
 }
 
-func allocn(nmemb int, size C.size_t) unsafe.Pointer {
+func allocn[T any](nmemb int) *T {
 	if nmemb == 0 {
 		return nil
 	}
-	return C.calloc(C.size_t(nmemb), size)
+	return (*T)(C.calloc(C.size_t(nmemb), C.size_t(unsafe.Sizeof(*new(T)))))
 }
 
 const alignment = 8
@@ -58,7 +58,7 @@ func externStrings(ss []string) **C.char {
 	}
 	size1 = align(size1)
 	size := size0 + size1
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	arr := (*[math.MaxInt32]unsafe.Pointer)(mem)[:len(ss)]
 	data := unsafe.Add(mem, size0)
 	for i, s := range ss {

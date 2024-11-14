@@ -39,7 +39,7 @@ type SwapchainKHR struct {
 
 func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (SwapchainKHR, error) {
 	// TODO(dh): support custom allocator
-	ptr := (*C.VkSwapchainCreateInfoKHR)(alloc(C.sizeof_VkSwapchainCreateInfoKHR))
+	ptr := alloc[C.VkSwapchainCreateInfoKHR]()
 	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeSwapchainCreateInfoKHR)
 	ptr.pNext = info.Next
@@ -123,7 +123,7 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 	size3 := C.sizeof_uint32_t * uintptr(len(info.ImageIndices))
 	size4 := C.sizeof_VkResult * uintptr(len(info.Swapchains))
 	size := size0 + size1 + size2 + size3 + size4
-	mem := alloc(C.size_t(size))
+	mem := C.calloc(1, C.size_t(size))
 	defer C.free(mem)
 	cinfo := (*C.VkPresentInfoKHR)(mem)
 	*cinfo = C.VkPresentInfoKHR{
