@@ -130,13 +130,13 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
 		pNext:              info.Next,
 		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
-		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(uintptr(mem) + size0)),
+		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Add(mem, size0)),
 		swapchainCount:     C.uint32_t(len(info.Swapchains)),
-		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Pointer(uintptr(mem) + size0 + size1)),
-		pImageIndices:      (*C.uint32_t)(unsafe.Pointer(uintptr(mem) + size0 + size1 + size2)),
+		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Add(mem, size0+size1)),
+		pImageIndices:      (*C.uint32_t)(unsafe.Add(mem, size0+size1+size2)),
 	}
 	if len(results) != 0 {
-		cinfo.pResults = (*C.VkResult)(unsafe.Pointer(uintptr(mem) + size0 + size1 + size2 + size3))
+		cinfo.pResults = (*C.VkResult)(unsafe.Add(mem, size0+size1+size2+size3))
 	}
 	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
 	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)

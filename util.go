@@ -60,11 +60,11 @@ func externStrings(ss []string) **C.char {
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	arr := (*[math.MaxInt32]unsafe.Pointer)(mem)[:len(ss)]
-	data := unsafe.Pointer(uintptr(mem) + size0)
+	data := unsafe.Add(mem, size0)
 	for i, s := range ss {
 		arr[i] = data
 		ucopy(data, unsafe.Pointer(&s), 1)
-		data = unsafe.Pointer(uintptr(data) + uintptr(len(s)) + 1)
+		data = unsafe.Add(data, len(s)+1)
 	}
 	return (**C.char)(mem)
 }

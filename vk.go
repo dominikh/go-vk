@@ -1903,7 +1903,7 @@ func (info *RenderPassBeginInfo) c() *C.VkRenderPassBeginInfo {
 		renderPass:      info.RenderPass.hnd,
 		framebuffer:     info.Framebuffer.hnd,
 		clearValueCount: C.uint32_t(len(info.ClearValues)),
-		pClearValues:    (*C.VkClearValue)(unsafe.Pointer(uintptr(mem) + size0)),
+		pClearValues:    (*C.VkClearValue)(unsafe.Add(mem, size0)),
 	}
 	ucopy1(unsafe.Pointer(&cinfo.renderArea), unsafe.Pointer(&info.RenderArea), C.sizeof_VkRect2D)
 	arr := (*[math.MaxInt32]C.VkClearValue)(unsafe.Pointer(cinfo.pClearValues))[:len(info.ClearValues)]
@@ -2169,8 +2169,8 @@ func barriers(
 	mem := alloc(C.size_t(size))
 
 	cmem := mem
-	cbuf := unsafe.Pointer(uintptr(mem) + size0)
-	cimg := unsafe.Pointer(uintptr(mem) + size0 + size1)
+	cbuf := unsafe.Add(mem, size0)
+	cimg := unsafe.Add(mem, size0+size1)
 
 	memArr := (*[math.MaxInt32]C.VkMemoryBarrier)(cmem)[:len(memoryBarriers)]
 	bufArr := (*[math.MaxInt32]C.VkBufferMemoryBarrier)(cbuf)[:len(bufferMemoryBarriers)]
@@ -2646,8 +2646,8 @@ func (info *PipelineVertexInputStateCreateInfo) c() *C.VkPipelineVertexInputStat
 
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineVertexInputStateCreateInfo)(mem)
-	bindings := (*C.VkVertexInputBindingDescription)(unsafe.Pointer(uintptr(mem) + size0))
-	attribs := (*C.VkVertexInputAttributeDescription)(unsafe.Pointer(uintptr(mem) + size0 + size1))
+	bindings := (*C.VkVertexInputBindingDescription)(unsafe.Add(mem, size0))
+	attribs := (*C.VkVertexInputAttributeDescription)(unsafe.Add(mem, size0+size1))
 	*cinfo = C.VkPipelineVertexInputStateCreateInfo{
 		sType:                           C.VkStructureType(StructureType(StructureTypePipelineVertexInputStateCreateInfo)),
 		pNext:                           buildChain(info.Extensions),
@@ -2749,8 +2749,8 @@ func (info *PipelineViewportStateCreateInfo) c() *C.VkPipelineViewportStateCreat
 	size := size0 + size1 + size2
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineViewportStateCreateInfo)(mem)
-	viewports := (*C.VkViewport)(unsafe.Pointer(uintptr(mem) + size0))
-	scissors := (*C.VkRect2D)(unsafe.Pointer(uintptr(mem) + size0 + size1))
+	viewports := (*C.VkViewport)(unsafe.Add(mem, size0))
+	scissors := (*C.VkRect2D)(unsafe.Add(mem, size0+size1))
 	*cinfo = C.VkPipelineViewportStateCreateInfo{
 		sType:         C.VkStructureType(StructureTypePipelineViewportStateCreateInfo),
 		pNext:         buildChain(info.Extensions),
@@ -2822,7 +2822,7 @@ func (info *PipelineMultisampleStateCreateInfo) c() *C.VkPipelineMultisampleStat
 	cinfo := (*C.VkPipelineMultisampleStateCreateInfo)(mem)
 	var sampleMask *C.VkSampleMask
 	if info.SampleMask != nil {
-		sampleMask = (*C.VkSampleMask)(unsafe.Pointer(uintptr(mem) + size0))
+		sampleMask = (*C.VkSampleMask)(unsafe.Add(mem, size0))
 		ucopy(unsafe.Pointer(sampleMask), unsafe.Pointer(&info.SampleMask), C.sizeof_VkSampleMask)
 	}
 
@@ -2867,7 +2867,7 @@ func (info *PipelineColorBlendStateCreateInfo) c() *C.VkPipelineColorBlendStateC
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineColorBlendStateCreateInfo)(mem)
-	attachments := (*C.VkPipelineColorBlendAttachmentState)(unsafe.Pointer(uintptr(mem) + size0))
+	attachments := (*C.VkPipelineColorBlendAttachmentState)(unsafe.Add(mem, size0))
 	*cinfo = C.VkPipelineColorBlendStateCreateInfo{
 		sType:           C.VkStructureType(StructureTypePipelineColorBlendStateCreateInfo),
 		pNext:           buildChain(info.Extensions),
@@ -2910,7 +2910,7 @@ func (info *PipelineDynamicStateCreateInfo) c() *C.VkPipelineDynamicStateCreateI
 	size := size0 + size1
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineDynamicStateCreateInfo)(mem)
-	dynamicStates := (*C.VkDynamicState)(unsafe.Pointer(uintptr(mem) + size0))
+	dynamicStates := (*C.VkDynamicState)(unsafe.Add(mem, size0))
 	*cinfo = C.VkPipelineDynamicStateCreateInfo{
 		sType:             C.VkStructureType(StructureTypePipelineDynamicStateCreateInfo),
 		pNext:             buildChain(info.Extensions),
@@ -2946,8 +2946,8 @@ func (info *PipelineLayoutCreateInfo) c() *C.VkPipelineLayoutCreateInfo {
 	size := size0 + size1 + size2
 	mem := alloc(C.size_t(size))
 	cinfo := (*C.VkPipelineLayoutCreateInfo)(mem)
-	setLayouts := (*C.VkDescriptorSetLayout)(unsafe.Pointer(uintptr(mem) + size0))
-	push := (*C.VkPushConstantRange)(unsafe.Pointer(uintptr(mem) + size0 + size1))
+	setLayouts := (*C.VkDescriptorSetLayout)(unsafe.Add(mem, size0))
+	push := (*C.VkPushConstantRange)(unsafe.Add(mem, size0+size1))
 	*cinfo = C.VkPipelineLayoutCreateInfo{
 		sType:                  C.VkStructureType(StructureTypePipelineLayoutCreateInfo),
 		pNext:                  buildChain(info.Extensions),
@@ -3258,9 +3258,9 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 	mem := alloc(C.size_t(size))
 	defer C.free(mem)
 	cinfo := (*C.VkRenderPassCreateInfo)(mem)
-	attachments := (*C.VkAttachmentDescription)(unsafe.Pointer(uintptr(mem) + size0))
-	subpasses := (*C.VkSubpassDescription)(unsafe.Pointer(uintptr(mem) + size0 + size1))
-	dependencies := (*C.VkSubpassDependency)(unsafe.Pointer(uintptr(mem) + size0 + size1 + size2))
+	attachments := (*C.VkAttachmentDescription)(unsafe.Add(mem, size0))
+	subpasses := (*C.VkSubpassDescription)(unsafe.Add(mem, size0+size1))
+	dependencies := (*C.VkSubpassDependency)(unsafe.Add(mem, size0+size1+size2))
 	*cinfo = C.VkRenderPassCreateInfo{
 		sType:           C.VkStructureType(StructureTypeRenderPassCreateInfo),
 		pNext:           buildChain(info.Extensions),
@@ -3333,7 +3333,7 @@ func (info *FramebufferCreateInfo) c() *C.VkFramebufferCreateInfo {
 		flags:           0,
 		renderPass:      info.RenderPass.hnd,
 		attachmentCount: C.uint32_t(len(info.Attachments)),
-		pAttachments:    (*C.VkImageView)(unsafe.Pointer(uintptr(mem) + size0)),
+		pAttachments:    (*C.VkImageView)(unsafe.Add(mem, size0)),
 		width:           C.uint32_t(info.Width),
 		height:          C.uint32_t(info.Height),
 		layers:          C.uint32_t(info.Layers),
@@ -3472,14 +3472,14 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 	size3 := align(C.sizeof_VkCommandBuffer * commandBufferCount)
 	size4 := align(C.sizeof_VkSemaphore * signalSemaphoreCount)
 	size := size0 + size1 + size2 + size3 + size4
-	mem := uintptr(alloc(C.size_t(size)))
-	defer C.free(unsafe.Pointer(mem))
+	mem := alloc(C.size_t(size))
+	defer C.free(mem)
 
 	cinfos := mem
-	waitSemaphores := mem + size0
-	waitDstStageMask := mem + size0 + size1
-	commandBuffers := mem + size0 + size1 + size2
-	signalSemaphores := mem + size0 + size1 + size2 + size3
+	waitSemaphores := unsafe.Add(mem, size0)
+	waitDstStageMask := unsafe.Add(mem, size0+size1)
+	commandBuffers := unsafe.Add(mem, size0+size1+size2)
+	signalSemaphores := unsafe.Add(mem, size0+size1+size2+size3)
 
 	for _, info := range infos {
 		if safe && len(info.WaitSemaphores) != len(info.WaitDstStageMask) {
@@ -3505,11 +3505,11 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 			arr[i] = info.CommandBuffers[i].hnd
 		}
 
-		cinfos += C.sizeof_VkSubmitInfo
-		waitSemaphores += C.sizeof_VkSemaphore * uintptr(len(info.WaitSemaphores))
-		waitDstStageMask += C.sizeof_VkPipelineStageFlags * uintptr(len(info.WaitSemaphores))
-		commandBuffers += C.sizeof_VkCommandBuffer * uintptr(len(info.CommandBuffers))
-		signalSemaphores += C.sizeof_VkSemaphore * uintptr(len(info.SignalSemaphores))
+		cinfos = unsafe.Add(cinfos, C.sizeof_VkSubmitInfo)
+		waitSemaphores = unsafe.Add(waitSemaphores, C.sizeof_VkSemaphore*uintptr(len(info.WaitSemaphores)))
+		waitDstStageMask = unsafe.Add(waitDstStageMask, C.sizeof_VkPipelineStageFlags*uintptr(len(info.WaitSemaphores)))
+		commandBuffers = unsafe.Add(commandBuffers, C.sizeof_VkCommandBuffer*uintptr(len(info.CommandBuffers)))
+		signalSemaphores = unsafe.Add(signalSemaphores, C.sizeof_VkSemaphore*uintptr(len(info.SignalSemaphores)))
 	}
 
 	var fenceHnd C.VkFence
@@ -3634,7 +3634,7 @@ func (info *BufferCreateInfo) c() *C.VkBufferCreateInfo {
 		usage:                 C.VkBufferUsageFlags(info.Usage),
 		sharingMode:           C.VkSharingMode(info.SharingMode),
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
-		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Pointer(uintptr(mem) + size0)),
+		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Add(mem, size0)),
 	}
 	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
 	return cinfo
@@ -3820,7 +3820,7 @@ func (info *ImageCreateInfo) c() *C.VkImageCreateInfo {
 		usage:                 C.VkImageUsageFlags(info.Usage),
 		sharingMode:           C.VkSharingMode(info.SharingMode),
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
-		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Pointer(uintptr(mem) + size0)),
+		pQueueFamilyIndices:   (*C.uint32_t)(unsafe.Add(mem, size0)),
 		initialLayout:         C.VkImageLayout(info.InitialLayout),
 	}
 	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
@@ -4169,7 +4169,7 @@ func (info *DescriptorPoolCreateInfo) c() *C.VkDescriptorPoolCreateInfo {
 		flags:         C.VkDescriptorPoolCreateFlags(info.Flags),
 		maxSets:       C.uint32_t(info.MaxSets),
 		poolSizeCount: C.uint32_t(len(info.PoolSizes)),
-		pPoolSizes:    (*C.VkDescriptorPoolSize)(unsafe.Pointer(uintptr(mem) + size0)),
+		pPoolSizes:    (*C.VkDescriptorPoolSize)(unsafe.Add(mem, size0)),
 	}
 	ucopy(unsafe.Pointer(cinfo.pPoolSizes), unsafe.Pointer(&info.PoolSizes), C.sizeof_VkDescriptorPoolSize)
 	return cinfo
@@ -4234,9 +4234,9 @@ func (info *DescriptorSetLayoutCreateInfo) c() *C.VkDescriptorSetLayoutCreateInf
 		pNext:        buildChain(info.Extensions),
 		flags:        C.VkDescriptorSetLayoutCreateFlags(info.Flags),
 		bindingCount: C.uint32_t(len(info.Bindings)),
-		pBindings:    (*C.VkDescriptorSetLayoutBinding)(unsafe.Pointer(uintptr(mem) + size0)),
+		pBindings:    (*C.VkDescriptorSetLayoutBinding)(unsafe.Add(mem, size0)),
 	}
-	samplers := uintptr(mem) + size0 + size1
+	samplers := unsafe.Add(mem, size0+size1)
 	arr := (*[math.MaxInt32]C.VkDescriptorSetLayoutBinding)(unsafe.Pointer(cinfo.pBindings))[:len(info.Bindings)]
 	for i := range arr {
 		arr[i] = C.VkDescriptorSetLayoutBinding{
@@ -4244,10 +4244,10 @@ func (info *DescriptorSetLayoutCreateInfo) c() *C.VkDescriptorSetLayoutCreateInf
 			descriptorType:     C.VkDescriptorType(info.Bindings[i].DescriptorType),
 			descriptorCount:    C.uint32_t(info.Bindings[i].DescriptorCount),
 			stageFlags:         C.VkShaderStageFlags(info.Bindings[i].StageFlags),
-			pImmutableSamplers: (*C.VkSampler)(unsafe.Pointer(samplers)),
+			pImmutableSamplers: (*C.VkSampler)(samplers),
 		}
 		ucopy(unsafe.Pointer(samplers), unsafe.Pointer(&info.Bindings[i].ImmutableSamplers), C.sizeof_VkSampler)
-		samplers += C.sizeof_VkSampler * uintptr(len(info.Bindings[i].ImmutableSamplers))
+		samplers = unsafe.Add(samplers, C.sizeof_VkSampler*uintptr(len(info.Bindings[i].ImmutableSamplers)))
 	}
 	return cinfo
 }
@@ -4379,7 +4379,7 @@ func (info *DescriptorSetAllocateInfo) c() *C.VkDescriptorSetAllocateInfo {
 		pNext:              buildChain(info.Extensions),
 		descriptorPool:     info.DescriptorPool.hnd,
 		descriptorSetCount: C.uint32_t(len(info.Layouts)),
-		pSetLayouts:        (*C.VkDescriptorSetLayout)(unsafe.Pointer(uintptr(mem) + size0)),
+		pSetLayouts:        (*C.VkDescriptorSetLayout)(unsafe.Add(mem, size0)),
 	}
 	ucopy(unsafe.Pointer(cinfo.pSetLayouts), unsafe.Pointer(&info.Layouts), C.sizeof_VkDescriptorSetLayout)
 	return cinfo
@@ -4479,9 +4479,9 @@ func (set *WriteDescriptorSet) c(cset *C.VkWriteDescriptorSet) {
 		dstArrayElement:  C.uint32_t(set.DstArrayElement),
 		descriptorCount:  C.uint32_t(len(set.ImageInfo) + len(set.BufferInfo) + len(set.TexelBufferView)),
 		descriptorType:   C.VkDescriptorType(set.DescriptorType),
-		pImageInfo:       (*C.VkDescriptorImageInfo)(unsafe.Pointer(uintptr(mem))),
-		pBufferInfo:      (*C.VkDescriptorBufferInfo)(unsafe.Pointer(uintptr(mem) + size0)),
-		pTexelBufferView: (*C.VkBufferView)(unsafe.Pointer(uintptr(mem) + size0 + size1)),
+		pImageInfo:       (*C.VkDescriptorImageInfo)(mem),
+		pBufferInfo:      (*C.VkDescriptorBufferInfo)(unsafe.Add(mem, size0)),
+		pTexelBufferView: (*C.VkBufferView)(unsafe.Add(mem, size0+size1)),
 	}
 	ucopy(unsafe.Pointer(cset.pImageInfo), unsafe.Pointer(&set.ImageInfo), C.sizeof_VkDescriptorImageInfo)
 	ucopy(unsafe.Pointer(cset.pBufferInfo), unsafe.Pointer(&set.BufferInfo), C.sizeof_VkDescriptorBufferInfo)
