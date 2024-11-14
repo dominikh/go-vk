@@ -1,6 +1,7 @@
 package vk
 
 // #include "vk.h"
+// #include <stdlib.h>
 import "C"
 import "unsafe"
 
@@ -37,7 +38,7 @@ func internalizeChain(exs []Extension, chain unsafe.Pointer) {
 	for _, ex := range exs {
 		ex.internalize(chain)
 		next := (*structHeader)(chain).Next
-		free(chain)
+		C.free(chain)
 		chain = next
 	}
 }

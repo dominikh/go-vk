@@ -22,10 +22,6 @@ func allocn(nmemb int, size C.size_t) unsafe.Pointer {
 	return C.calloc(C.size_t(nmemb), size)
 }
 
-func free(ptr unsafe.Pointer) {
-	C.free(ptr)
-}
-
 const alignment = 8
 
 func align(p uintptr) uintptr {

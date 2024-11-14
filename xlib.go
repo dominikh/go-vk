@@ -10,6 +10,7 @@ package vk
 // #include "vk.h"
 // #include "xlib.h"
 import "C"
+import "unsafe"
 
 type XlibDisplay = C.Display
 type XlibWindow = C.Window
@@ -30,7 +31,7 @@ func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (Surfa
 	cInfo.window = info.Window
 	var out SurfaceKHR
 	res := Result(C.domVkCreateXlibSurfaceKHR(ins.fps[vkCreateXlibSurfaceKHR], ins.hnd, cInfo, nil, &out.hnd))
-	free(unsafe.Pointer(cInfo))
+	C.free(unsafe.Pointer(cInfo))
 	return out, result2error(res)
 }
 

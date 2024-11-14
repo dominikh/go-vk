@@ -152,7 +152,7 @@ func InstanceExtensionProperties(layerName string) ([]ExtensionProperties, error
 	var cname *C.char
 	if layerName != "" {
 		cname = C.CString(layerName)
-		defer free(unsafe.Pointer(cname))
+		defer C.free(unsafe.Pointer(cname))
 	}
 
 	for {
@@ -224,9 +224,9 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
 	ptr.ppEnabledLayerNames = externStrings(info.EnabledLayerNames)
 	ptr.ppEnabledExtensionNames = externStrings(info.EnabledExtensionNames)
-	defer free(unsafe.Pointer(ptr))
-	defer free(unsafe.Pointer(ptr.ppEnabledLayerNames))
-	defer free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
+	defer C.free(unsafe.Pointer(ptr))
+	defer C.free(unsafe.Pointer(ptr.ppEnabledLayerNames))
+	defer C.free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
 	if info.ApplicationInfo != nil {
 		ptr.pApplicationInfo = (*C.VkApplicationInfo)(alloc(C.sizeof_VkApplicationInfo))
 		ptr.pApplicationInfo.sType = C.VkStructureType(StructureTypeApplicationInfo)
@@ -236,9 +236,9 @@ func CreateInstance(info *InstanceCreateInfo) (*Instance, error) {
 		ptr.pApplicationInfo.pEngineName = C.CString(info.ApplicationInfo.EngineName)
 		ptr.pApplicationInfo.engineVersion = C.uint32_t(info.ApplicationInfo.EngineVersion)
 		ptr.pApplicationInfo.apiVersion = C.uint32_t(info.ApplicationInfo.APIVersion)
-		defer free(unsafe.Pointer(ptr.pApplicationInfo))
-		defer free(unsafe.Pointer(ptr.pApplicationInfo.pApplicationName))
-		defer free(unsafe.Pointer(ptr.pApplicationInfo.pEngineName))
+		defer C.free(unsafe.Pointer(ptr.pApplicationInfo))
+		defer C.free(unsafe.Pointer(ptr.pApplicationInfo.pApplicationName))
+		defer C.free(unsafe.Pointer(ptr.pApplicationInfo.pEngineName))
 		defer internalizeChain(info.ApplicationInfo.Extensions, ptr.pApplicationInfo.pNext)
 	}
 
@@ -270,7 +270,7 @@ func (ins *Instance) PhysicalDevices() ([]*PhysicalDevice, error) {
 	var devs *C.VkPhysicalDevice
 	for {
 		devs = (*C.VkPhysicalDevice)(allocn(int(count), C.sizeof_VkPhysicalDevice))
-		defer free(unsafe.Pointer(devs))
+		defer C.free(unsafe.Pointer(devs))
 		res := Result(C.domVkEnumeratePhysicalDevices(ins.fps[vkEnumeratePhysicalDevices], ins.hnd, &count, devs))
 		if res != Success && res != Incomplete {
 			return nil, res
@@ -1171,7 +1171,7 @@ func (dev *PhysicalDevice) MemoryProperties2(props PhysicalDeviceMemoryPropertie
 		Heaps: (*[C.VK_MAX_MEMORY_TYPES]MemoryHeap)(unsafe.Pointer(&cprops.memoryProperties.memoryHeaps))[:cprops.memoryProperties.memoryHeapCount],
 	}
 	internalizeChain(props.Extensions, cprops.pNext)
-	free(unsafe.Pointer(cprops))
+	C.free(unsafe.Pointer(cprops))
 }
 
 type ExtensionProperties struct {
@@ -1184,7 +1184,7 @@ func (dev *PhysicalDevice) ExtensionProperties(layer string) ([]ExtensionPropert
 	var cLayer *C.char
 	if layer != "" {
 		cLayer := C.CString(layer)
-		defer free(unsafe.Pointer(cLayer))
+		defer C.free(unsafe.Pointer(cLayer))
 	}
 	res := Result(C.domVkEnumerateDeviceExtensionProperties(dev.instance.fps[vkEnumerateDeviceExtensionProperties], dev.hnd, cLayer, &count, nil))
 	if res != Success {
@@ -1400,7 +1400,7 @@ func (dev *PhysicalDevice) Features2(features *PhysicalDeviceFeatures2) {
 		InheritedQueries:                        cfeatures.features.inheritedQueries == C.VK_TRUE,
 	}
 	internalizeChain(features.Extensions, cfeatures.pNext)
-	free(unsafe.Pointer(cfeatures))
+	C.free(unsafe.Pointer(cfeatures))
 }
 
 type QueueFamilyProperties struct {
@@ -1477,7 +1477,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 	defer internalizeChain(info.Extensions, ptr.pNext)
 	ptr.queueCreateInfoCount = C.uint32_t(len(info.QueueCreateInfos))
 	ptr.pQueueCreateInfos = (*C.VkDeviceQueueCreateInfo)(allocn(len(info.QueueCreateInfos), C.sizeof_VkDeviceQueueCreateInfo))
-	defer free(unsafe.Pointer(ptr.pQueueCreateInfos))
+	defer C.free(unsafe.Pointer(ptr.pQueueCreateInfos))
 	arr := (*[math.MaxInt32]C.VkDeviceQueueCreateInfo)(unsafe.Pointer(ptr.pQueueCreateInfos))[:len(info.QueueCreateInfos)]
 	for i, obj := range info.QueueCreateInfos {
 		arr[i] = C.VkDeviceQueueCreateInfo{
@@ -1488,12 +1488,12 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 			queueCount:       C.uint32_t(len(obj.QueuePriorities)),
 			pQueuePriorities: externFloat32(obj.QueuePriorities),
 		}
-		defer free(unsafe.Pointer(arr[i].pQueuePriorities))
+		defer C.free(unsafe.Pointer(arr[i].pQueuePriorities))
 		defer internalizeChain(obj.Extensions, arr[i].pNext)
 	}
 	ptr.enabledExtensionCount = C.uint32_t(len(info.EnabledExtensionNames))
 	ptr.ppEnabledExtensionNames = externStrings(info.EnabledExtensionNames)
-	defer free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
+	defer C.free(unsafe.Pointer(ptr.ppEnabledExtensionNames))
 	if info.EnabledFeatures != nil {
 		ptr.pEnabledFeatures = (*C.VkPhysicalDeviceFeatures)(alloc(C.sizeof_VkPhysicalDeviceFeatures))
 		ptr.pEnabledFeatures.robustBufferAccess = vkBool(info.EnabledFeatures.RobustBufferAccess)
@@ -1551,7 +1551,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 		ptr.pEnabledFeatures.sparseResidencyAliased = vkBool(info.EnabledFeatures.SparseResidencyAliased)
 		ptr.pEnabledFeatures.variableMultisampleRate = vkBool(info.EnabledFeatures.VariableMultisampleRate)
 		ptr.pEnabledFeatures.inheritedQueries = vkBool(info.EnabledFeatures.InheritedQueries)
-		defer free(unsafe.Pointer(ptr.pEnabledFeatures))
+		defer C.free(unsafe.Pointer(ptr.pEnabledFeatures))
 	}
 	var out C.VkDevice
 	res := Result(C.domVkCreateDevice(dev.instance.fps[vkCreateDevice], dev.hnd, ptr, nil, &out))
@@ -1580,7 +1580,7 @@ func (dev *Device) init() {
 
 func (dev *Device) getDeviceProcAddr(name string) C.PFN_vkVoidFunction {
 	cName := C.CString(name)
-	defer free(unsafe.Pointer(cName))
+	defer C.free(unsafe.Pointer(cName))
 	fp := C.domVkGetDeviceProcAddr(dev.vkGetDeviceProcAddr, dev.hnd, cName)
 	if debug {
 		fmt.Fprintf(os.Stderr, "%s = %p\n", name, fp)
@@ -1632,7 +1632,7 @@ func (dev *Device) Queue2(info *DeviceQueueInfo2) *Queue {
 	out := &Queue{fps: &dev.fps}
 	C.domVkGetDeviceQueue2(dev.fps[vkGetDeviceQueue2], dev.hnd, cinfo, &out.hnd)
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out
 }
 
@@ -1686,14 +1686,14 @@ type CommandBufferInheritanceInfo struct {
 // Begin starts recording a command buffer.
 func (buf *CommandBuffer) Begin(info *CommandBufferBeginInfo) error {
 	ptr := (*C.VkCommandBufferBeginInfo)(alloc(C.sizeof_VkCommandBufferBeginInfo))
-	defer free(unsafe.Pointer(ptr))
+	defer C.free(unsafe.Pointer(ptr))
 	ptr.sType = C.VkStructureType(StructureTypeCommandBufferBeginInfo)
 	ptr.pNext = buildChain(info.Extensions)
 	defer internalizeChain(info.Extensions, ptr.pNext)
 	ptr.flags = C.VkCommandBufferUsageFlags(info.Flags)
 	if info.InheritanceInfo != nil {
 		ptr.pInheritanceInfo = (*C.VkCommandBufferInheritanceInfo)(alloc(C.sizeof_VkCommandBufferInheritanceInfo))
-		defer free(unsafe.Pointer(ptr.pInheritanceInfo))
+		defer C.free(unsafe.Pointer(ptr.pInheritanceInfo))
 		ptr.pInheritanceInfo.sType = C.VkStructureType(StructureTypeCommandBufferInheritanceInfo)
 		ptr.pInheritanceInfo.pNext = buildChain(info.InheritanceInfo.Extensions)
 		defer internalizeChain(info.InheritanceInfo.Extensions, ptr.pInheritanceInfo.pNext)
@@ -1849,7 +1849,7 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 		(*C.VkClearAttachment)(mem),
 		C.uint32_t(len(rects)),
 		(*C.VkClearRect)(slice2ptr(unsafe.Pointer(&rects))))
-	free(unsafe.Pointer(mem))
+	C.free(unsafe.Pointer(mem))
 }
 
 func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, color ClearColorValue, ranges []ImageSubresourceRange) {
@@ -1872,7 +1872,7 @@ func (buf *CommandBuffer) ClearColorImage(image Image, imageLayout ImageLayout, 
 		cColor,
 		C.uint32_t(len(ranges)),
 		(*C.VkImageSubresourceRange)(slice2ptr(unsafe.Pointer(&ranges))))
-	free(unsafe.Pointer(cColor))
+	C.free(unsafe.Pointer(cColor))
 }
 
 func (buf *CommandBuffer) ClearDepthStencilImage(
@@ -1928,7 +1928,7 @@ func (buf *CommandBuffer) BeginRenderPass(info *RenderPassBeginInfo, contents Su
 	cinfo := info.c()
 	C.domVkCmdBeginRenderPass(buf.fps[vkCmdBeginRenderPass], buf.hnd, cinfo, C.VkSubpassContents(contents))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 }
 
 func (buf *CommandBuffer) EndRenderPass() {
@@ -2243,7 +2243,7 @@ func (buf *CommandBuffer) WaitEvents(
 		cbuf,
 		C.uint32_t(len(imageMemoryBarriers)),
 		cimg)
-	free(unsafe.Pointer(cmem))
+	C.free(unsafe.Pointer(cmem))
 }
 
 func (buf *CommandBuffer) NextSubpass(contents SubpassContents) {
@@ -2362,7 +2362,7 @@ func (buf *CommandBuffer) PipelineBarrier(
 		cbuf,
 		C.uint32_t(len(imageMemoryBarriers)),
 		cimg)
-	free(unsafe.Pointer(cmem))
+	C.free(unsafe.Pointer(cmem))
 }
 
 type ImageResolve struct {
@@ -2449,7 +2449,7 @@ func (dev *Device) CreateCommandPool(info *CommandPoolCreateInfo) (CommandPool, 
 	var pool CommandPool
 	res := Result(C.domVkCreateCommandPool(dev.fps[vkCreateCommandPool], dev.hnd, ptr, nil, &pool.hnd))
 	internalizeChain(info.Extensions, ptr.pNext)
-	free(unsafe.Pointer(ptr))
+	C.free(unsafe.Pointer(ptr))
 	return pool, result2error(res)
 }
 
@@ -2483,7 +2483,7 @@ func (dev *Device) AllocateCommandBuffers(pool CommandPool, info *CommandBufferA
 	bufs := make([]C.VkCommandBuffer, info.CommandBufferCount)
 	res := Result(C.domVkAllocateCommandBuffers(dev.fps[vkAllocateCommandBuffers], dev.hnd, ptr, (*C.VkCommandBuffer)(slice2ptr(unsafe.Pointer(&bufs)))))
 	internalizeChain(info.Extensions, ptr.pNext)
-	free(unsafe.Pointer(ptr))
+	C.free(unsafe.Pointer(ptr))
 	if res != Success {
 		return nil, res
 	}
@@ -2581,7 +2581,7 @@ func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error)
 	var out ImageView
 	res := Result(C.domVkCreateImageView(dev.fps[vkCreateImageView], dev.hnd, ptr, nil, &out.hnd))
 	internalizeChain(info.Extensions, ptr.pNext)
-	free(unsafe.Pointer(ptr))
+	C.free(unsafe.Pointer(ptr))
 	return out, result2error(res)
 }
 
@@ -2611,11 +2611,11 @@ func (dev *Device) CreateShaderModule(info *ShaderModuleCreateInfo) (ShaderModul
 	ptr.pNext = buildChain(info.Extensions)
 	ptr.codeSize = C.size_t(len(info.Code))
 	ptr.pCode = (*C.uint32_t)(C.CBytes(info.Code))
-	defer free(unsafe.Pointer(ptr.pCode))
+	defer C.free(unsafe.Pointer(ptr.pCode))
 	var out ShaderModule
 	res := Result(C.domVkCreateShaderModule(dev.fps[vkCreateShaderModule], dev.hnd, ptr, nil, &out.hnd))
 	internalizeChain(info.Extensions, ptr.pNext)
-	free(unsafe.Pointer(ptr))
+	C.free(unsafe.Pointer(ptr))
 	return out, result2error(res)
 }
 
@@ -2968,7 +2968,7 @@ func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (Pipelin
 	var out PipelineLayout
 	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -3087,7 +3087,7 @@ type GraphicsPipelineCreateInfo struct {
 func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []GraphicsPipelineCreateInfo) ([]Pipeline, error) {
 	// TODO(dh): support custom allocators
 	ptrs := (*C.VkGraphicsPipelineCreateInfo)(allocn(len(infos), C.sizeof_VkGraphicsPipelineCreateInfo))
-	defer free(unsafe.Pointer(ptrs))
+	defer C.free(unsafe.Pointer(ptrs))
 
 	ptrsArr := (*[math.MaxInt32]C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(ptrs))[:len(infos)]
 	for i := range ptrsArr {
@@ -3101,7 +3101,7 @@ func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []Graphic
 		ptr.stageCount = C.uint32_t(len(info.Stages))
 
 		ptr.pStages = (*C.VkPipelineShaderStageCreateInfo)(allocn(len(info.Stages), C.sizeof_VkPipelineShaderStageCreateInfo))
-		defer free(unsafe.Pointer(ptr.pStages))
+		defer C.free(unsafe.Pointer(ptr.pStages))
 		arr := (*[math.MaxInt32]C.VkPipelineShaderStageCreateInfo)(unsafe.Pointer(ptr.pStages))[:len(info.Stages)]
 		for i := range arr {
 			arr[i] = C.VkPipelineShaderStageCreateInfo{
@@ -3111,53 +3111,53 @@ func (dev *Device) CreateGraphicsPipelines(cache *PipelineCache, infos []Graphic
 				module: info.Stages[i].Module.hnd,
 				pName:  C.CString(info.Stages[i].Name),
 			}
-			defer free(unsafe.Pointer(arr[i].pName))
+			defer C.free(unsafe.Pointer(arr[i].pName))
 			defer internalizeChain(info.Stages[i].Extensions, arr[i].pNext)
 		}
 
 		if info.VertexInputState != nil {
 			ptr.pVertexInputState = info.VertexInputState.c()
-			defer free(unsafe.Pointer(ptr.pVertexInputState))
+			defer C.free(unsafe.Pointer(ptr.pVertexInputState))
 			defer internalizeChain(info.VertexInputState.Extensions, ptr.pVertexInputState.pNext)
 		}
 		if info.InputAssemblyState != nil {
 			ptr.pInputAssemblyState = info.InputAssemblyState.c()
-			defer free(unsafe.Pointer(ptr.pInputAssemblyState))
+			defer C.free(unsafe.Pointer(ptr.pInputAssemblyState))
 			defer internalizeChain(info.InputAssemblyState.Extensions, ptr.pInputAssemblyState.pNext)
 		}
 		if info.TessellationState != nil {
 			ptr.pTessellationState = info.TessellationState.c()
-			defer free(unsafe.Pointer(ptr.pTessellationState))
+			defer C.free(unsafe.Pointer(ptr.pTessellationState))
 			defer internalizeChain(info.TessellationState.Extensions, ptr.pTessellationState.pNext)
 		}
 		if info.ViewportState != nil {
 			ptr.pViewportState = info.ViewportState.c()
-			defer free(unsafe.Pointer(ptr.pViewportState))
+			defer C.free(unsafe.Pointer(ptr.pViewportState))
 			defer internalizeChain(info.ViewportState.Extensions, ptr.pViewportState.pNext)
 		}
 		if info.RasterizationState != nil {
 			ptr.pRasterizationState = info.RasterizationState.c()
-			defer free(unsafe.Pointer(ptr.pRasterizationState))
+			defer C.free(unsafe.Pointer(ptr.pRasterizationState))
 			defer internalizeChain(info.RasterizationState.Extensions, ptr.pRasterizationState.pNext)
 		}
 		if info.MultisampleState != nil {
 			ptr.pMultisampleState = info.MultisampleState.c()
-			defer free(unsafe.Pointer(ptr.pMultisampleState))
+			defer C.free(unsafe.Pointer(ptr.pMultisampleState))
 			defer internalizeChain(info.MultisampleState.Extensions, ptr.pMultisampleState.pNext)
 		}
 		if info.DepthStencilState != nil {
 			ptr.pDepthStencilState = info.DepthStencilState.c()
-			defer free(unsafe.Pointer(ptr.pDepthStencilState))
+			defer C.free(unsafe.Pointer(ptr.pDepthStencilState))
 			defer internalizeChain(info.DepthStencilState.Extensions, ptr.pDepthStencilState.pNext)
 		}
 		if info.ColorBlendState != nil {
 			ptr.pColorBlendState = info.ColorBlendState.c()
-			defer free(unsafe.Pointer(ptr.pColorBlendState))
+			defer C.free(unsafe.Pointer(ptr.pColorBlendState))
 			defer internalizeChain(info.ColorBlendState.Extensions, ptr.pColorBlendState.pNext)
 		}
 		if info.DynamicState != nil {
 			ptr.pDynamicState = info.DynamicState.c()
-			defer free(unsafe.Pointer(ptr.pDynamicState))
+			defer C.free(unsafe.Pointer(ptr.pDynamicState))
 			defer internalizeChain(info.DynamicState.Extensions, ptr.pDynamicState.pNext)
 		}
 		ptr.layout = info.Layout.hnd
@@ -3256,7 +3256,7 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 	size3 := align(C.sizeof_VkSubpassDependency * uintptr(len(info.Dependencies)))
 	size := size0 + size1 + size2 + size3
 	mem := alloc(C.size_t(size))
-	defer free(mem)
+	defer C.free(mem)
 	cinfo := (*C.VkRenderPassCreateInfo)(mem)
 	attachments := (*C.VkAttachmentDescription)(unsafe.Pointer(uintptr(mem) + size0))
 	subpasses := (*C.VkSubpassDescription)(unsafe.Pointer(uintptr(mem) + size0 + size1))
@@ -3292,7 +3292,7 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 		ucopy(unsafe.Pointer(csubpass.pColorAttachments), unsafe.Pointer(&subpass.ColorAttachments), C.sizeof_VkAttachmentReference)
 		if len(subpass.ResolveAttachments) > 0 {
 			csubpass.pResolveAttachments = (*C.VkAttachmentReference)(allocn(len(subpass.ResolveAttachments), C.sizeof_VkAttachmentReference))
-			defer free(unsafe.Pointer(csubpass.pResolveAttachments))
+			defer C.free(unsafe.Pointer(csubpass.pResolveAttachments))
 			ucopy(unsafe.Pointer(csubpass.pResolveAttachments), unsafe.Pointer(&subpass.ResolveAttachments), C.sizeof_VkAttachmentReference)
 		}
 		if subpass.DepthStencilAttachment != nil {
@@ -3348,7 +3348,7 @@ func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, 
 	var fb Framebuffer
 	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, cinfo, nil, &fb.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return fb, result2error(res)
 }
 
@@ -3438,7 +3438,7 @@ func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error)
 	var sem Semaphore
 	res := Result(C.domVkCreateSemaphore(dev.fps[vkCreateSemaphore], dev.hnd, cinfo, nil, &sem.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return sem, result2error(res)
 }
 
@@ -3473,7 +3473,7 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 	size4 := align(C.sizeof_VkSemaphore * signalSemaphoreCount)
 	size := size0 + size1 + size2 + size3 + size4
 	mem := uintptr(alloc(C.size_t(size)))
-	defer free(unsafe.Pointer(mem))
+	defer C.free(unsafe.Pointer(mem))
 
 	cinfos := mem
 	waitSemaphores := mem + size0
@@ -3564,7 +3564,7 @@ func (dev *Device) CreateFence(info *FenceCreateInfo) (Fence, error) {
 	var fence Fence
 	res := Result(C.domVkCreateFence(dev.fps[vkCreateFence], dev.hnd, cinfo, nil, &fence.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return fence, result2error(res)
 }
 
@@ -3646,7 +3646,7 @@ func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
 	var buf Buffer
 	res := Result(C.domVkCreateBuffer(dev.fps[vkCreateBuffer], dev.hnd, cinfo, nil, &buf.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return buf, result2error(res)
 }
 
@@ -3696,8 +3696,8 @@ func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2
 	internalizeChain(info.Extensions, cinfo.pNext)
 	internalizeChain(reqs.Extensions, creqs.pNext)
 	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
-	free(unsafe.Pointer(creqs))
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(creqs))
+	C.free(unsafe.Pointer(cinfo))
 }
 
 type MemoryAllocateInfo struct {
@@ -3729,7 +3729,7 @@ func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error
 	var mem DeviceMemory
 	res := Result(C.domVkAllocateMemory(dev.fps[vkAllocateMemory], dev.hnd, cinfo, nil, &mem.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return mem, result2error(res)
 }
 
@@ -3752,7 +3752,7 @@ type BindBufferMemoryInfo struct {
 
 func (dev *Device) BindBufferMemory2(infos []BindBufferMemoryInfo) error {
 	mem := allocn(len(infos), C.sizeof_VkBindBufferMemoryInfo)
-	defer free(mem)
+	defer C.free(mem)
 	cinfos := (*[1 << 31]C.VkBindBufferMemoryInfo)(mem)[:len(infos)]
 	for i, info := range infos {
 		cinfos[i] = C.VkBindBufferMemoryInfo{
@@ -3834,7 +3834,7 @@ func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
 	var img Image
 	res := Result(C.domVkCreateImage(dev.fps[vkCreateImage], dev.hnd, cinfo, nil, &img.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return img, result2error(res)
 }
 
@@ -3880,7 +3880,7 @@ func (dev *Device) CreateEvent(info *EventCreateInfo) (Event, error) {
 	var ev Event
 	res := Result(C.domVkCreateEvent(dev.fps[vkCreateEvent], dev.hnd, cinfo, nil, &ev.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return ev, result2error(res)
 }
 
@@ -3941,7 +3941,7 @@ func (dev *Device) CreateQueryPool(info *QueryPoolCreateInfo) (QueryPool, error)
 	var out QueryPool
 	res := Result(C.domVkCreateQueryPool(dev.fps[vkCreateQueryPool], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4010,7 +4010,7 @@ func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
 	var out Sampler
 	res := Result(C.domVkCreateSampler(dev.fps[vkCreateSampler], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4057,7 +4057,7 @@ func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, err
 	var view BufferView
 	res := Result(C.domVkCreateBufferView(dev.fps[vkCreateBufferView], dev.hnd, cinfo, nil, &view.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return view, result2error(res)
 }
 
@@ -4103,7 +4103,7 @@ func (dev *Device) CreatePipelineCache(info *PipelineCacheCreateInfo) (PipelineC
 	var out PipelineCache
 	res := Result(C.domVkCreatePipelineCache(dev.fps[vkCreatePipelineCache], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4189,7 +4189,7 @@ func (dev *Device) CreateDescriptorPool(info *DescriptorPoolCreateInfo) (Descrip
 	var out DescriptorPool
 	res := Result(C.domVkCreateDescriptorPool(dev.fps[vkCreateDescriptorPool], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4258,7 +4258,7 @@ func (dev *Device) CreateDescriptorSetLayout(info *DescriptorSetLayoutCreateInfo
 	var out DescriptorSetLayout
 	res := Result(C.domVkCreateDescriptorSetLayout(dev.fps[vkCreateDescriptorSetLayout], dev.hnd, cinfo, nil, &out.hnd))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4282,10 +4282,10 @@ func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo
 	if support != nil {
 		support.Supported = csupport.supported == C.VK_TRUE
 		internalizeChain(support.Extensions, csupport.pNext)
-		free(unsafe.Pointer(csupport))
+		C.free(unsafe.Pointer(csupport))
 	}
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return csupport.supported == C.VK_TRUE
 }
 
@@ -4317,7 +4317,7 @@ func (dev *Device) BindImageMemory2(infos []BindImageMemoryInfo) error {
 	for i := range arr {
 		internalizeChain(infos[i].Extensions, arr[i].pNext)
 	}
-	free(mem)
+	C.free(mem)
 	return result2error(res)
 }
 
@@ -4358,8 +4358,8 @@ func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, 
 	internalizeChain(info.Extensions, cinfo.pNext)
 	internalizeChain(reqs.Extensions, creqs.pNext)
 	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
-	free(unsafe.Pointer(creqs))
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(creqs))
+	C.free(unsafe.Pointer(cinfo))
 }
 
 type DescriptorSetAllocateInfo struct {
@@ -4398,7 +4398,7 @@ func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]Des
 	out := make([]DescriptorSet, len(info.Layouts))
 	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, (*C.VkDescriptorSet)(slice2ptr(unsafe.Pointer(&out)))))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return out, result2error(res)
 }
 
@@ -4549,7 +4549,7 @@ func (dev *Device) UpdateDescriptorSets(writes []WriteDescriptorSet, copies []Co
 		(*C.VkCopyDescriptorSet)(slice2ptr(unsafe.Pointer(&ccopies))))
 	for i := range cwrites {
 		internalizeChain(writes[i].Extensions, cwrites[i].pNext)
-		free(unsafe.Pointer(cwrites[i].pImageInfo))
+		C.free(unsafe.Pointer(cwrites[i].pImageInfo))
 	}
 	for i := range ccopies {
 		internalizeChain(copies[i].Extensions, ccopies[i].pNext)
@@ -4614,7 +4614,7 @@ func (dev *PhysicalDevice) FormatProperties2(format Format, props *FormatPropert
 	C.domVkGetPhysicalDeviceFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceFormatProperties2], dev.hnd, C.VkFormat(format), cprops)
 	ucopy1(unsafe.Pointer(&props.FormatProperties), unsafe.Pointer(&cprops.formatProperties), C.sizeof_VkFormatProperties)
 	internalizeChain(props.Extensions, cprops.pNext)
-	free(unsafe.Pointer(cprops))
+	C.free(unsafe.Pointer(cprops))
 }
 
 type ImageFormatProperties struct {
@@ -4686,9 +4686,9 @@ func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageForma
 	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties2], dev.hnd, cinfo, cprops))
 	ucopy1(unsafe.Pointer(&props.ImageFormatProperties), unsafe.Pointer(&cprops.imageFormatProperties), C.sizeof_VkImageFormatProperties)
 	internalizeChain(props.Extensions, cprops.pNext)
-	free(unsafe.Pointer(cprops))
+	C.free(unsafe.Pointer(cprops))
 	internalizeChain(info.Extensions, cinfo.pNext)
-	free(unsafe.Pointer(cinfo))
+	C.free(unsafe.Pointer(cinfo))
 	return result2error(res)
 }
 
@@ -4700,7 +4700,7 @@ func vkGetInstanceProcAddr(instance C.VkInstance, name string) C.PFN_vkVoidFunct
 	if debug {
 		fmt.Fprintf(os.Stderr, "%s = %p\n", name, fp)
 	}
-	free(unsafe.Pointer(cName))
+	C.free(unsafe.Pointer(cName))
 	return fp
 }
 
