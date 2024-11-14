@@ -4274,8 +4274,7 @@ type DescriptorSetLayoutSupport struct {
 
 func (dev *Device) DescriptorSetLayoutSupport(info DescriptorSetLayoutCreateInfo, support *DescriptorSetLayoutSupport) bool {
 	cinfo := info.c()
-	var csupport *C.VkDescriptorSetLayoutSupport
-	csupport = (*C.VkDescriptorSetLayoutSupport)(alloc(C.sizeof_VkDescriptorSetLayoutSupport))
+	csupport := (*C.VkDescriptorSetLayoutSupport)(alloc(C.sizeof_VkDescriptorSetLayoutSupport))
 	csupport.sType = C.VkStructureType(StructureTypeDescriptorSetLayoutSupport)
 	if support != nil {
 		csupport.pNext = buildChain(support.Extensions)
