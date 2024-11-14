@@ -7,6 +7,8 @@
 package vk
 
 // #cgo pkg-config: x11
+// #cgo noescape domVkCreateXlibSurfaceKHR
+// #cgo nocallback domVkCreateXlibSurfaceKHR
 // #include "vk.h"
 // #include "xlib.h"
 import "C"
@@ -24,14 +26,13 @@ type XlibSurfaceCreateInfoKHR struct {
 
 func (ins *Instance) CreateXlibSurfaceKHR(info *XlibSurfaceCreateInfoKHR) (SurfaceKHR, error) {
 	// TODO(dh): support custom allocator
-	cInfo := alloc[C.VkXlibSurfaceCreateInfoKHR]()
+	var cInfo C.VkXlibSurfaceCreateInfoKHR
 	cInfo.sType = C.VkStructureType(StructureTypeXlibSurfaceCreateInfoKHR)
 	cInfo.pNext = info.Next
 	cInfo.dpy = info.Dpy
 	cInfo.window = info.Window
 	var out SurfaceKHR
-	res := Result(C.domVkCreateXlibSurfaceKHR(ins.fps[vkCreateXlibSurfaceKHR], ins.hnd, cInfo, nil, &out.hnd))
-	C.free(unsafe.Pointer(cInfo))
+	res := Result(C.domVkCreateXlibSurfaceKHR(ins.fps[vkCreateXlibSurfaceKHR], ins.hnd, &cInfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 

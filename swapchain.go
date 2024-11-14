@@ -39,8 +39,7 @@ type SwapchainKHR struct {
 
 func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (SwapchainKHR, error) {
 	// TODO(dh): support custom allocator
-	ptr := alloc[C.VkSwapchainCreateInfoKHR]()
-	defer C.free(unsafe.Pointer(ptr))
+	var ptr C.VkSwapchainCreateInfoKHR
 	ptr.sType = C.VkStructureType(StructureTypeSwapchainCreateInfoKHR)
 	ptr.pNext = info.Next
 	ptr.surface = info.Surface.hnd
@@ -67,7 +66,7 @@ func (dev *Device) CreateSwapchainKHR(info *SwapchainCreateInfoKHR) (SwapchainKH
 	}
 
 	var out C.VkSwapchainKHR
-	res := Result(C.domVkCreateSwapchainKHR(dev.fps[vkCreateSwapchainKHR], dev.hnd, ptr, nil, &out))
+	res := Result(C.domVkCreateSwapchainKHR(dev.fps[vkCreateSwapchainKHR], dev.hnd, &ptr, nil, &out))
 	if res != Success {
 		return SwapchainKHR{}, res
 	}

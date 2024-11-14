@@ -17,6 +17,9 @@ type structHeader struct {
 }
 
 func buildChain(exs []Extension) unsafe.Pointer {
+	// XXX audit uses of buildChain, I think we're storing Go pointers in memory
+	// passed to C
+
 	if len(exs) == 0 {
 		return nil
 	}
