@@ -1737,7 +1737,7 @@ func (buf *CommandBuffer) SetDepthBias(constantFactor, clamp, slopeFactor float3
 
 // SetBlendConstants sets the values of blend constants.
 func (buf *CommandBuffer) SetBlendConstants(blendConstants [4]float32) {
-	C.domVkCmdSetBlendConstants(buf.fps[vkCmdSetBlendConstants], buf.hnd, (*C.float)(slice2ptr(unsafe.Pointer(&blendConstants))))
+	C.domVkCmdSetBlendConstants(buf.fps[vkCmdSetBlendConstants], buf.hnd, (*C.float)(&blendConstants[0]))
 }
 
 // Draw draws primitives.
