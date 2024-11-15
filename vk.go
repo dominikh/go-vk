@@ -1555,7 +1555,7 @@ func (dev *PhysicalDevice) CreateDevice(info *DeviceCreateInfo) (*Device, error)
 			flags:            C.VkDeviceQueueCreateFlags(obj.Flags),
 			queueFamilyIndex: C.uint32_t(obj.QueueFamilyIndex),
 			queueCount:       C.uint32_t(len(obj.QueuePriorities)),
-			pQueuePriorities: externFloat32(a, obj.QueuePriorities),
+			pQueuePriorities: pinSliceAsCastedPtr[*C.float](a, obj.QueuePriorities),
 		}
 		defer internalizeChain(obj.Extensions, arr[i].pNext)
 	}

@@ -7,8 +7,6 @@ import "C"
 import (
 	"bytes"
 	"unsafe"
-
-	"honnef.co/go/safeish"
 )
 
 func externString(a *allocator, s string) *C.char {
@@ -23,16 +21,6 @@ func externStrings(a *allocator, ss []string) **C.char {
 		cstrings[i] = externString(a, s)
 	}
 	return pinSlice(a, cstrings)
-}
-
-func externFloat32(a *allocator, vs []float32) *C.float {
-	if len(vs) == 0 {
-		return nil
-	}
-	ptr := allocn[C.float](a, len(vs))
-	s := unsafe.Slice(ptr, len(vs))
-	copy(s, safeish.SliceCast[[]C.float](vs))
-	return ptr
 }
 
 func result2error(res Result) error {
