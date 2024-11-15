@@ -17,20 +17,13 @@ type structHeader struct {
 }
 
 func buildChain(exs []Extension) unsafe.Pointer {
-	// XXX audit uses of buildChain, I think we're storing Go pointers in memory
-	// passed to C
-
-	if len(exs) == 0 {
-		return nil
+	var next unsafe.Pointer
+	for i := len(exs) - 1; i >= 0; i-- {
+		cex := exs[i].externalize()
+		(*structHeader)(cex).Next = next
+		next = cex
 	}
-	out := make([]unsafe.Pointer, len(exs))
-	for i, ex := range exs {
-		out[i] = ex.externalize()
-	}
-	for i, ptr := range out[:len(out)-1] {
-		(*structHeader)(ptr).Next = out[i+1]
-	}
-	return out[0]
+	return next
 }
 
 func internalizeChain(exs []Extension, chain unsafe.Pointer) {
