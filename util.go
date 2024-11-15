@@ -9,18 +9,9 @@ import (
 	"math"
 	"reflect"
 	"unsafe"
+
+	"honnef.co/go/safeish"
 )
-
-func alloc[T any]() *T {
-	return (*T)(C.calloc(1, C.size_t(unsafe.Sizeof(*new(T)))))
-}
-
-func allocn[T any](nmemb int) *T {
-	if nmemb == 0 {
-		return nil
-	}
-	return (*T)(C.calloc(C.size_t(nmemb), C.size_t(unsafe.Sizeof(*new(T)))))
-}
 
 const alignment = 8
 
@@ -50,7 +41,13 @@ func ucopy1(dst, src unsafe.Pointer, size uintptr) {
 	)
 }
 
-func externStrings(ss []string) **C.char {
+func externString(a *allocator, s string) *C.char {
+	m := C.CString(s)
+	a.allocs = append(a.allocs, unsafe.Pointer(m))
+	return m
+}
+
+func externStrings(a *allocator, ss []string) **C.char {
 	size0 := C.sizeof_uintptr_t * uintptr(len(ss))
 	var size1 uintptr
 	for _, s := range ss {
@@ -58,7 +55,7 @@ func externStrings(ss []string) **C.char {
 	}
 	size1 = align(size1)
 	size := size0 + size1
-	mem := C.calloc(1, C.size_t(size))
+	mem := allocRaw(a, size)
 	arr := (*[math.MaxInt32]unsafe.Pointer)(mem)[:len(ss)]
 	data := unsafe.Add(mem, size0)
 	for i, s := range ss {
@@ -69,11 +66,14 @@ func externStrings(ss []string) **C.char {
 	return (**C.char)(mem)
 }
 
-func externFloat32(vs []float32) *C.float {
+func externFloat32(a *allocator, vs []float32) *C.float {
 	if len(vs) == 0 {
 		return nil
 	}
-	return (*C.float)(C.CBytes((*[math.MaxInt32]byte)(unsafe.Pointer(&vs[0]))[:uintptr(len(vs))*unsafe.Sizeof(float32(0))]))
+	ptr := allocn[C.float](a, len(vs))
+	s := unsafe.Slice(ptr, len(vs))
+	copy(s, safeish.SliceCast[[]C.float](vs))
+	return ptr
 }
 
 func result2error(res Result) error {

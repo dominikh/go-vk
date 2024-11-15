@@ -116,14 +116,16 @@ type PresentInfoKHR struct {
 }
 
 func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
+	a := new(allocator)
+	defer a.free()
+
 	size0 := uintptr(C.sizeof_VkPresentInfoKHR)
 	size1 := C.sizeof_VkSemaphore * uintptr(len(info.WaitSemaphores))
 	size2 := C.sizeof_VkSwapchainKHR * uintptr(len(info.Swapchains))
 	size3 := C.sizeof_uint32_t * uintptr(len(info.ImageIndices))
 	size4 := C.sizeof_VkResult * uintptr(len(info.Swapchains))
 	size := size0 + size1 + size2 + size3 + size4
-	mem := C.calloc(1, C.size_t(size))
-	defer C.free(mem)
+	mem := allocRaw(a, size)
 	cinfo := (*C.VkPresentInfoKHR)(mem)
 	*cinfo = C.VkPresentInfoKHR{
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),

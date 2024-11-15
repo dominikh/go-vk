@@ -7,7 +7,7 @@ import "unsafe"
 
 type Extension interface {
 	isExtension()
-	externalize() unsafe.Pointer
+	externalize(a *allocator) unsafe.Pointer
 	internalize(unsafe.Pointer)
 }
 
@@ -16,10 +16,10 @@ type structHeader struct {
 	Next unsafe.Pointer
 }
 
-func buildChain(exs []Extension) unsafe.Pointer {
+func buildChain(a *allocator, exs []Extension) unsafe.Pointer {
 	var next unsafe.Pointer
 	for i := len(exs) - 1; i >= 0; i-- {
-		cex := exs[i].externalize()
+		cex := exs[i].externalize(a)
 		(*structHeader)(cex).Next = next
 		next = cex
 	}
@@ -34,7 +34,6 @@ func internalizeChain(exs []Extension, chain unsafe.Pointer) {
 	for _, ex := range exs {
 		ex.internalize(chain)
 		next := (*structHeader)(chain).Next
-		C.free(chain)
 		chain = next
 	}
 }
@@ -49,8 +48,8 @@ type PhysicalDeviceIDProperties struct {
 
 func (*PhysicalDeviceIDProperties) isExtension() {}
 
-func (prop *PhysicalDeviceIDProperties) externalize() unsafe.Pointer {
-	cprop := alloc[C.VkPhysicalDeviceIDProperties]()
+func (prop *PhysicalDeviceIDProperties) externalize(a *allocator) unsafe.Pointer {
+	cprop := alloc[C.VkPhysicalDeviceIDProperties](a)
 	cprop.sType = C.VkStructureType(StructureTypePhysicalDeviceIdProperties)
 	return unsafe.Pointer(cprop)
 }
