@@ -55,7 +55,8 @@ func externStrings(a *allocator, ss []string) **C.char {
 	}
 	size1 = align(size1)
 	size := size0 + size1
-	mem := allocRaw(a, size)
+	mem := C.calloc(1, C.size_t(size))
+	a.allocs = append(a.allocs, mem)
 	arr := (*[math.MaxInt32]unsafe.Pointer)(mem)[:len(ss)]
 	data := unsafe.Add(mem, size0)
 	for i, s := range ss {

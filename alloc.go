@@ -15,12 +15,6 @@ func (a *allocator) free() {
 	a.allocs = nil
 }
 
-func allocRaw(a *allocator, size uintptr) unsafe.Pointer {
-	m := C.calloc(1, C.size_t(size))
-	a.allocs = append(a.allocs, m)
-	return m
-}
-
 func alloc[T any](a *allocator) *T {
 	return allocn[T](a, 1)
 }

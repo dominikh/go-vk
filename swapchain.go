@@ -119,25 +119,18 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 	a := new(allocator)
 	defer a.free()
 
-	size0 := uintptr(C.sizeof_VkPresentInfoKHR)
-	size1 := C.sizeof_VkSemaphore * uintptr(len(info.WaitSemaphores))
-	size2 := C.sizeof_VkSwapchainKHR * uintptr(len(info.Swapchains))
-	size3 := C.sizeof_uint32_t * uintptr(len(info.ImageIndices))
-	size4 := C.sizeof_VkResult * uintptr(len(info.Swapchains))
-	size := size0 + size1 + size2 + size3 + size4
-	mem := allocRaw(a, size)
-	cinfo := (*C.VkPresentInfoKHR)(mem)
+	cinfo := alloc[C.VkPresentInfoKHR](a)
 	*cinfo = C.VkPresentInfoKHR{
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
 		pNext:              info.Next,
 		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
-		pWaitSemaphores:    (*C.VkSemaphore)(unsafe.Add(mem, size0)),
+		pWaitSemaphores:    allocn[C.VkSemaphore](a, len(info.WaitSemaphores)),
 		swapchainCount:     C.uint32_t(len(info.Swapchains)),
-		pSwapchains:        (*C.VkSwapchainKHR)(unsafe.Add(mem, size0+size1)),
-		pImageIndices:      (*C.uint32_t)(unsafe.Add(mem, size0+size1+size2)),
+		pSwapchains:        allocn[C.VkSwapchainKHR](a, len(info.Swapchains)),
+		pImageIndices:      allocn[C.uint32_t](a, len(info.ImageIndices)),
 	}
 	if len(results) != 0 {
-		cinfo.pResults = (*C.VkResult)(unsafe.Add(mem, size0+size1+size2+size3))
+		cinfo.pResults = allocn[C.VkResult](a, len(info.Swapchains))
 	}
 	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
 	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)
