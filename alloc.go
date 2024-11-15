@@ -28,6 +28,15 @@ func pinAsCastedPtr[Dst ~*DstE, Src ~*SrcE, DstE, SrcE any](a *allocator, s Src)
 	return ptr
 }
 
+func pinSlice[Src ~[]SrcE, SrcE any](a *allocator, s Src) *SrcE {
+	if cap(s) == 0 {
+		return nil
+	}
+	ptr := unsafe.SliceData(s)
+	a.pinner.Pin(ptr)
+	return ptr
+}
+
 func pinSliceAsCastedPtr[Dst ~*DstE, Src ~[]SrcE, DstE, SrcE any](a *allocator, s Src) Dst {
 	ptr := safeish.SliceCastPtr[Dst](s)
 	a.pinner.Pin(ptr)
