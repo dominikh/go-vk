@@ -1881,7 +1881,7 @@ func (buf *CommandBuffer) ClearAttachments(attachments []ClearAttachment, rects 
 		case ClearColorValueUint32s:
 			copy(arr[i].clearValue[:], (*[16]byte)(unsafe.Pointer(&v))[:])
 		case ClearDepthStencilValue:
-			ucopy1(unsafe.Pointer(&arr[i].clearValue), unsafe.Pointer(&v), C.sizeof_VkClearDepthStencilValue)
+			copy(arr[i].clearValue[:], safeish.AsBytes(&v))
 		default:
 			panic(fmt.Sprintf("unreachable: %T", v))
 		}
@@ -1942,8 +1942,8 @@ func (info *RenderPassBeginInfo) c(a *allocator) *C.VkRenderPassBeginInfo {
 		framebuffer:     info.Framebuffer.hnd,
 		clearValueCount: C.uint32_t(len(info.ClearValues)),
 		pClearValues:    allocn[C.VkClearValue](a, len(info.ClearValues)),
+		renderArea:      safeish.Cast[C.VkRect2D](info.RenderArea),
 	}
-	ucopy1(unsafe.Pointer(&cinfo.renderArea), unsafe.Pointer(&info.RenderArea), C.sizeof_VkRect2D)
 	arr := (*[math.MaxInt32]C.VkClearValue)(unsafe.Pointer(cinfo.pClearValues))[:len(info.ClearValues)]
 	for i := range arr {
 		switch v := info.ClearValues[i].(type) {
@@ -1954,7 +1954,7 @@ func (info *RenderPassBeginInfo) c(a *allocator) *C.VkRenderPassBeginInfo {
 		case ClearColorValueUint32s:
 			copy(arr[i][:], (*[16]byte)(unsafe.Pointer(&v))[:])
 		case ClearDepthStencilValue:
-			ucopy1(unsafe.Pointer(&arr[i]), unsafe.Pointer(&v), C.sizeof_VkClearDepthStencilValue)
+			copy(arr[i][:], safeish.AsBytes(&v))
 		default:
 			panic(fmt.Sprintf("unreachable: %T", v))
 		}
@@ -2249,7 +2249,7 @@ func barriers(
 			dstQueueFamilyIndex: C.uint32_t(imageMemoryBarriers[i].DstQueueFamilyIndex),
 			image:               imageMemoryBarriers[i].Image.hnd,
 		}
-		ucopy1(unsafe.Pointer(&imgArr[i].subresourceRange), unsafe.Pointer(&imageMemoryBarriers[i].SubresourceRange), C.sizeof_VkImageSubresourceRange)
+		imgArr[i].subresourceRange = safeish.Cast[C.VkImageSubresourceRange](imageMemoryBarriers[i].SubresourceRange)
 		// XXX this defer is probably wrong and needs to be in the caller of barriers
 		defer internalizeChain(imageMemoryBarriers[i].Extensions, imgArr[i].pNext)
 	}
@@ -2624,8 +2624,8 @@ func (dev *Device) CreateImageView(info *ImageViewCreateInfo) (ImageView, error)
 	ptr.image = info.Image.hnd
 	ptr.viewType = C.VkImageViewType(info.ViewType)
 	ptr.format = C.VkFormat(info.Format)
-	ucopy1(unsafe.Pointer(&ptr.components), unsafe.Pointer(&info.Components), C.sizeof_VkComponentMapping)
-	ucopy1(unsafe.Pointer(&ptr.subresourceRange), unsafe.Pointer(&info.SubresourceRange), C.sizeof_VkImageSubresourceRange)
+	ptr.components = safeish.Cast[C.VkComponentMapping](info.Components)
+	ptr.subresourceRange = safeish.Cast[C.VkImageSubresourceRange](info.SubresourceRange)
 
 	var out ImageView
 	res := Result(C.domVkCreateImageView(dev.fps[vkCreateImageView], dev.hnd, &ptr, nil, &out.hnd))
@@ -3271,10 +3271,7 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 			pColorAttachments:       pinSliceAsCastedPtr[*C.VkAttachmentReference](a, subpass.ColorAttachments),
 			pPreserveAttachments:    pinSliceAsCastedPtr[*C.uint32_t](a, subpass.PreserveAttachments),
 			pResolveAttachments:     pinSliceAsCastedPtr[*C.VkAttachmentReference](a, subpass.ResolveAttachments),
-		}
-		if subpass.DepthStencilAttachment != nil {
-			csubpass.pDepthStencilAttachment = alloc[C.VkAttachmentReference](a)
-			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
+			pDepthStencilAttachment: pinAsCastedPtr[*C.VkAttachmentReference](a, subpass.DepthStencilAttachment),
 		}
 	}
 	var out RenderPass
@@ -3638,7 +3635,8 @@ func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2
 	}
 	defer internalizeChain(reqs.Extensions, creqs.pNext)
 	C.domVkGetBufferMemoryRequirements2(dev.fps[vkGetBufferMemoryRequirements2], dev.hnd, cinfo, &creqs)
-	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
+
+	reqs.MemoryRequirements = safeish.Cast[MemoryRequirements](creqs.memoryRequirements)
 }
 
 type MemoryAllocateInfo struct {
@@ -3762,8 +3760,8 @@ func (info *ImageCreateInfo) c(a *allocator) *C.VkImageCreateInfo {
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
 		pQueueFamilyIndices:   pinSliceAsCastedPtr[*C.uint32_t](a, info.QueueFamilyIndices),
 		initialLayout:         C.VkImageLayout(info.InitialLayout),
+		extent:                safeish.Cast[C.VkExtent3D](info.Extent),
 	}
-	ucopy1(unsafe.Pointer(&cinfo.extent), unsafe.Pointer(&info.Extent), C.sizeof_VkExtent3D)
 	return cinfo
 }
 
@@ -4292,7 +4290,7 @@ func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, 
 	}
 	defer internalizeChain(reqs.Extensions, creqs.pNext)
 	C.domVkGetImageMemoryRequirements2(dev.fps[vkGetImageMemoryRequirements2], dev.hnd, cinfo, &creqs)
-	ucopy1(unsafe.Pointer(&reqs.MemoryRequirements), unsafe.Pointer(&creqs.memoryRequirements), C.sizeof_VkMemoryRequirements)
+	reqs.MemoryRequirements = safeish.Cast[MemoryRequirements](creqs.memoryRequirements)
 }
 
 type DescriptorSetAllocateInfo struct {
@@ -4522,7 +4520,7 @@ func (dev *PhysicalDevice) FormatProperties2(format Format, props *FormatPropert
 	}
 	defer internalizeChain(props.Extensions, cprops.pNext)
 	C.domVkGetPhysicalDeviceFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceFormatProperties2], dev.hnd, C.VkFormat(format), &cprops)
-	ucopy1(unsafe.Pointer(&props.FormatProperties), unsafe.Pointer(&cprops.formatProperties), C.sizeof_VkFormatProperties)
+	props.FormatProperties = safeish.Cast[FormatProperties](cprops.formatProperties)
 }
 
 type ImageFormatProperties struct {
@@ -4596,7 +4594,7 @@ func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageForma
 	}
 	defer internalizeChain(props.Extensions, cprops.pNext)
 	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties2], dev.hnd, cinfo, &cprops))
-	ucopy1(unsafe.Pointer(&props.ImageFormatProperties), unsafe.Pointer(&cprops.imageFormatProperties), C.sizeof_VkImageFormatProperties)
+	props.ImageFormatProperties = safeish.Cast[ImageFormatProperties](cprops.imageFormatProperties)
 	return result2error(res)
 }
 

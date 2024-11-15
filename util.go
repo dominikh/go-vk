@@ -34,13 +34,6 @@ func ucopy(dst, src unsafe.Pointer, size uintptr) {
 	)
 }
 
-func ucopy1(dst, src unsafe.Pointer, size uintptr) {
-	copy(
-		(*[math.MaxInt32]byte)(dst)[:size],
-		(*[math.MaxInt32]byte)(src)[:size],
-	)
-}
-
 func externString(a *allocator, s string) *C.char {
 	m := C.CString(s)
 	a.allocs = append(a.allocs, unsafe.Pointer(m))
