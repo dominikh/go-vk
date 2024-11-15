@@ -2,10 +2,16 @@ package vk
 
 // #include <stdlib.h>
 import "C"
-import "unsafe"
+import (
+	"runtime"
+	"unsafe"
+
+	"honnef.co/go/safeish"
+)
 
 type allocator struct {
 	allocs []unsafe.Pointer
+	pinner runtime.Pinner
 }
 
 func (a *allocator) free() {
@@ -13,6 +19,13 @@ func (a *allocator) free() {
 		C.free(alloc)
 	}
 	a.allocs = nil
+	a.pinner.Unpin()
+}
+
+func pinSliceAsCastedPtr[Dst ~*DstE, Src ~[]SrcE, DstE, SrcE any](a *allocator, s Src) Dst {
+	ptr := safeish.SliceCastPtr[Dst](s)
+	a.pinner.Pin(ptr)
+	return ptr
 }
 
 func alloc[T any](a *allocator) *T {

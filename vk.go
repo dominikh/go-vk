@@ -2688,19 +2688,15 @@ type PipelineVertexInputStateCreateInfo struct {
 
 func (info *PipelineVertexInputStateCreateInfo) c(a *allocator) *C.VkPipelineVertexInputStateCreateInfo {
 	cinfo := alloc[C.VkPipelineVertexInputStateCreateInfo](a)
-	bindings := allocn[C.VkVertexInputBindingDescription](a, len(info.VertexBindingDescriptions))
-	attribs := allocn[C.VkVertexInputAttributeDescription](a, len(info.VertexAttributeDescriptions))
 	*cinfo = C.VkPipelineVertexInputStateCreateInfo{
 		sType:                           C.VkStructureType(StructureType(StructureTypePipelineVertexInputStateCreateInfo)),
 		pNext:                           buildChain(a, info.Extensions),
 		flags:                           0,
 		vertexBindingDescriptionCount:   C.uint32_t(len(info.VertexBindingDescriptions)),
-		pVertexBindingDescriptions:      bindings,
+		pVertexBindingDescriptions:      pinSliceAsCastedPtr[*C.VkVertexInputBindingDescription](a, info.VertexBindingDescriptions),
 		vertexAttributeDescriptionCount: C.uint32_t(len(info.VertexAttributeDescriptions)),
-		pVertexAttributeDescriptions:    attribs,
+		pVertexAttributeDescriptions:    pinSliceAsCastedPtr[*C.VkVertexInputAttributeDescription](a, info.VertexAttributeDescriptions),
 	}
-	ucopy(unsafe.Pointer(bindings), unsafe.Pointer(&info.VertexBindingDescriptions), C.sizeof_VkVertexInputBindingDescription)
-	ucopy(unsafe.Pointer(attribs), unsafe.Pointer(&info.VertexAttributeDescriptions), C.sizeof_VkVertexInputAttributeDescription)
 	return cinfo
 }
 
@@ -2786,19 +2782,15 @@ type PipelineViewportStateCreateInfo struct {
 
 func (info *PipelineViewportStateCreateInfo) c(a *allocator) *C.VkPipelineViewportStateCreateInfo {
 	cinfo := alloc[C.VkPipelineViewportStateCreateInfo](a)
-	viewports := allocn[C.VkViewport](a, len(info.Viewports))
-	scissors := allocn[C.VkRect2D](a, len(info.Scissors))
 	*cinfo = C.VkPipelineViewportStateCreateInfo{
 		sType:         C.VkStructureType(StructureTypePipelineViewportStateCreateInfo),
 		pNext:         buildChain(a, info.Extensions),
 		flags:         0,
 		viewportCount: C.uint32_t(len(info.Viewports)),
-		pViewports:    viewports,
+		pViewports:    pinSliceAsCastedPtr[*C.VkViewport](a, info.Viewports),
 		scissorCount:  C.uint32_t(len(info.Scissors)),
-		pScissors:     scissors,
+		pScissors:     pinSliceAsCastedPtr[*C.VkRect2D](a, info.Scissors),
 	}
-	ucopy(unsafe.Pointer(viewports), unsafe.Pointer(&info.Viewports), C.sizeof_VkViewport)
-	ucopy(unsafe.Pointer(scissors), unsafe.Pointer(&info.Scissors), C.sizeof_VkRect2D)
 	return cinfo
 }
 
@@ -2853,12 +2845,6 @@ func (info *PipelineMultisampleStateCreateInfo) c(a *allocator) *C.VkPipelineMul
 		}
 	}
 	cinfo := alloc[C.VkPipelineMultisampleStateCreateInfo](a)
-	var sampleMask *C.VkSampleMask
-	if info.SampleMask != nil {
-		sampleMask = allocn[C.VkSampleMask](a, len(info.SampleMask))
-		ucopy(unsafe.Pointer(sampleMask), unsafe.Pointer(&info.SampleMask), C.sizeof_VkSampleMask)
-	}
-
 	*cinfo = C.VkPipelineMultisampleStateCreateInfo{
 		sType:                 C.VkStructureType(StructureTypePipelineMultisampleStateCreateInfo),
 		pNext:                 buildChain(a, info.Extensions),
@@ -2866,7 +2852,7 @@ func (info *PipelineMultisampleStateCreateInfo) c(a *allocator) *C.VkPipelineMul
 		rasterizationSamples:  C.VkSampleCountFlagBits(info.RasterizationSamples),
 		sampleShadingEnable:   vkBool(info.SampleShadingEnable),
 		minSampleShading:      C.float(info.MinSampleShading),
-		pSampleMask:           sampleMask,
+		pSampleMask:           pinSliceAsCastedPtr[*C.VkSampleMask](a, info.SampleMask),
 		alphaToCoverageEnable: vkBool(info.AlphaToCoverageEnable),
 		alphaToOneEnable:      vkBool(info.AlphaToOneEnable),
 	}
@@ -2935,15 +2921,13 @@ type PipelineDynamicStateCreateInfo struct {
 
 func (info *PipelineDynamicStateCreateInfo) c(a *allocator) *C.VkPipelineDynamicStateCreateInfo {
 	cinfo := alloc[C.VkPipelineDynamicStateCreateInfo](a)
-	dynamicStates := allocn[C.VkDynamicState](a, len(info.DynamicStates))
 	*cinfo = C.VkPipelineDynamicStateCreateInfo{
 		sType:             C.VkStructureType(StructureTypePipelineDynamicStateCreateInfo),
 		pNext:             buildChain(a, info.Extensions),
 		flags:             0,
 		dynamicStateCount: C.uint32_t(len(info.DynamicStates)),
-		pDynamicStates:    dynamicStates,
+		pDynamicStates:    pinSliceAsCastedPtr[*C.VkDynamicState](a, info.DynamicStates),
 	}
-	ucopy(unsafe.Pointer(dynamicStates), unsafe.Pointer(&info.DynamicStates), C.sizeof_VkDynamicState)
 	return cinfo
 }
 
@@ -2966,19 +2950,15 @@ type PipelineLayoutCreateInfo struct {
 
 func (info *PipelineLayoutCreateInfo) c(a *allocator) *C.VkPipelineLayoutCreateInfo {
 	cinfo := alloc[C.VkPipelineLayoutCreateInfo](a)
-	setLayouts := allocn[C.VkDescriptorSetLayout](a, len(info.SetLayouts))
-	push := allocn[C.VkPushConstantRange](a, len(info.PushConstantRanges))
 	*cinfo = C.VkPipelineLayoutCreateInfo{
 		sType:                  C.VkStructureType(StructureTypePipelineLayoutCreateInfo),
 		pNext:                  buildChain(a, info.Extensions),
 		flags:                  0,
 		setLayoutCount:         C.uint32_t(len(info.SetLayouts)),
-		pSetLayouts:            setLayouts,
+		pSetLayouts:            pinSliceAsCastedPtr[*C.VkDescriptorSetLayout](a, info.SetLayouts),
 		pushConstantRangeCount: C.uint32_t(len(info.PushConstantRanges)),
-		pPushConstantRanges:    push,
+		pPushConstantRanges:    pinSliceAsCastedPtr[*C.VkPushConstantRange](a, info.PushConstantRanges),
 	}
-	ucopy(unsafe.Pointer(setLayouts), unsafe.Pointer(&info.SetLayouts), C.sizeof_VkDescriptorSetLayout)
-	ucopy(unsafe.Pointer(push), unsafe.Pointer(&info.PushConstantRanges), C.sizeof_VkPushConstantRange)
 	return cinfo
 }
 
@@ -3264,22 +3244,19 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 	defer a.free()
 
 	cinfo := alloc[C.VkRenderPassCreateInfo](a)
-	attachments := allocn[C.VkAttachmentDescription](a, len(info.Attachments))
 	subpasses := allocn[C.VkSubpassDescription](a, len(info.Subpasses))
-	dependencies := allocn[C.VkSubpassDependency](a, len(info.Dependencies))
 	*cinfo = C.VkRenderPassCreateInfo{
 		sType:           C.VkStructureType(StructureTypeRenderPassCreateInfo),
 		pNext:           buildChain(a, info.Extensions),
 		flags:           0,
 		attachmentCount: C.uint32_t(len(info.Attachments)),
-		pAttachments:    attachments,
+		pAttachments:    pinSliceAsCastedPtr[*C.VkAttachmentDescription](a, info.Attachments),
 		subpassCount:    C.uint32_t(len(info.Subpasses)),
 		pSubpasses:      subpasses,
 		dependencyCount: C.uint32_t(len(info.Dependencies)),
-		pDependencies:   dependencies,
+		pDependencies:   pinSliceAsCastedPtr[*C.VkSubpassDependency](a, info.Dependencies),
 	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
-	ucopy(unsafe.Pointer(attachments), unsafe.Pointer(&info.Attachments), C.sizeof_VkAttachmentDescription)
 	subpassesArr := (*[math.MaxInt32]C.VkSubpassDescription)(unsafe.Pointer(subpasses))[:len(info.Subpasses)]
 	for i := range subpassesArr {
 		subpass := &info.Subpasses[i]
@@ -3290,23 +3267,16 @@ func (dev *Device) CreateRenderPass(info *RenderPassCreateInfo) (RenderPass, err
 			inputAttachmentCount:    C.uint32_t(len(subpass.InputAttachments)),
 			colorAttachmentCount:    C.uint32_t(len(subpass.ColorAttachments)),
 			preserveAttachmentCount: C.uint32_t(len(subpass.PreserveAttachments)),
-			pInputAttachments:       allocn[C.VkAttachmentReference](a, len(subpass.InputAttachments)),
-			pColorAttachments:       allocn[C.VkAttachmentReference](a, len(subpass.ColorAttachments)),
-			pPreserveAttachments:    allocn[C.uint32_t](a, len(subpass.PreserveAttachments)),
-		}
-		ucopy(unsafe.Pointer(csubpass.pInputAttachments), unsafe.Pointer(&subpass.InputAttachments), C.sizeof_VkAttachmentReference)
-		ucopy(unsafe.Pointer(csubpass.pColorAttachments), unsafe.Pointer(&subpass.ColorAttachments), C.sizeof_VkAttachmentReference)
-		if len(subpass.ResolveAttachments) > 0 {
-			csubpass.pResolveAttachments = allocn[C.VkAttachmentReference](a, len(subpass.ResolveAttachments))
-			ucopy(unsafe.Pointer(csubpass.pResolveAttachments), unsafe.Pointer(&subpass.ResolveAttachments), C.sizeof_VkAttachmentReference)
+			pInputAttachments:       pinSliceAsCastedPtr[*C.VkAttachmentReference](a, subpass.InputAttachments),
+			pColorAttachments:       pinSliceAsCastedPtr[*C.VkAttachmentReference](a, subpass.ColorAttachments),
+			pPreserveAttachments:    pinSliceAsCastedPtr[*C.uint32_t](a, subpass.PreserveAttachments),
+			pResolveAttachments:     pinSliceAsCastedPtr[*C.VkAttachmentReference](a, subpass.ResolveAttachments),
 		}
 		if subpass.DepthStencilAttachment != nil {
 			csubpass.pDepthStencilAttachment = alloc[C.VkAttachmentReference](a)
 			ucopy1(unsafe.Pointer(csubpass.pDepthStencilAttachment), unsafe.Pointer(subpass.DepthStencilAttachment), C.sizeof_VkAttachmentReference)
 		}
-		ucopy(unsafe.Pointer(csubpass.pPreserveAttachments), unsafe.Pointer(&subpass.PreserveAttachments), C.sizeof_uint32_t)
 	}
-	ucopy(unsafe.Pointer(dependencies), unsafe.Pointer(&info.Dependencies), C.sizeof_VkSubpassDependency)
 	var out RenderPass
 	res := Result(C.domVkCreateRenderPass(dev.fps[vkCreateRenderPass], dev.hnd, cinfo, nil, &out.hnd))
 	return out, result2error(res)
@@ -3334,12 +3304,11 @@ func (info *FramebufferCreateInfo) c(a *allocator) *C.VkFramebufferCreateInfo {
 		flags:           0,
 		renderPass:      info.RenderPass.hnd,
 		attachmentCount: C.uint32_t(len(info.Attachments)),
-		pAttachments:    allocn[C.VkImageView](a, len(info.Attachments)),
+		pAttachments:    pinSliceAsCastedPtr[*C.VkImageView](a, info.Attachments),
 		width:           C.uint32_t(info.Width),
 		height:          C.uint32_t(info.Height),
 		layers:          C.uint32_t(info.Layers),
 	}
-	ucopy(unsafe.Pointer(cinfo.pAttachments), unsafe.Pointer(&info.Attachments), C.sizeof_VkImageView)
 	return cinfo
 }
 
@@ -3469,25 +3438,19 @@ func (queue *Queue) Submit(infos []SubmitInfo, fence *Fence) error {
 		if safe && len(info.WaitSemaphores) != len(info.WaitDstStageMask) {
 			panic("WaitSemaphores and WaitDstStageMask must have same length")
 		}
-		waitSemaphores := allocn[C.VkSemaphore](a, len(info.WaitSemaphores))
-		waitDstStageMask := allocn[C.VkPipelineStageFlags](a, len(info.WaitDstStageMask))
 		commandBuffers := allocn[C.VkCommandBuffer](a, len(info.CommandBuffers))
-		signalSemaphores := allocn[C.VkSemaphore](a, len(info.SignalSemaphores))
 		cinfosArr[i] = C.VkSubmitInfo{
 			sType:                C.VkStructureType(StructureTypeSubmitInfo),
 			pNext:                buildChain(a, info.Extensions),
 			waitSemaphoreCount:   C.uint32_t(len(info.WaitSemaphores)),
-			pWaitSemaphores:      (*C.VkSemaphore)(unsafe.Pointer(waitSemaphores)),
-			pWaitDstStageMask:    (*C.VkPipelineStageFlags)(unsafe.Pointer(waitDstStageMask)),
+			pWaitSemaphores:      pinSliceAsCastedPtr[*C.VkSemaphore](a, info.WaitSemaphores),
+			pWaitDstStageMask:    pinSliceAsCastedPtr[*C.VkPipelineStageFlags](a, info.WaitDstStageMask),
 			commandBufferCount:   C.uint32_t(len(info.CommandBuffers)),
 			pCommandBuffers:      (*C.VkCommandBuffer)(unsafe.Pointer(commandBuffers)),
 			signalSemaphoreCount: C.uint32_t(len(info.SignalSemaphores)),
-			pSignalSemaphores:    (*C.VkSemaphore)(unsafe.Pointer(signalSemaphores)),
+			pSignalSemaphores:    pinSliceAsCastedPtr[*C.VkSemaphore](a, info.SignalSemaphores),
 		}
 		defer internalizeChain(info.Extensions, cinfosArr[i].pNext)
-		ucopy(unsafe.Pointer(waitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
-		ucopy(unsafe.Pointer(waitDstStageMask), unsafe.Pointer(&info.WaitDstStageMask), C.sizeof_VkPipelineStageFlags)
-		ucopy(unsafe.Pointer(signalSemaphores), unsafe.Pointer(&info.SignalSemaphores), C.sizeof_VkSemaphore)
 		arr := unsafe.Slice(commandBuffers, len(info.CommandBuffers))
 		for i := range arr {
 			arr[i] = info.CommandBuffers[i].hnd
@@ -3612,9 +3575,8 @@ func (info *BufferCreateInfo) c(a *allocator) *C.VkBufferCreateInfo {
 		usage:                 C.VkBufferUsageFlags(info.Usage),
 		sharingMode:           C.VkSharingMode(info.SharingMode),
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
-		pQueueFamilyIndices:   allocn[C.uint32_t](a, len(info.QueueFamilyIndices)),
+		pQueueFamilyIndices:   pinSliceAsCastedPtr[*C.uint32_t](a, info.QueueFamilyIndices),
 	}
-	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
 	return cinfo
 }
 
@@ -3798,10 +3760,9 @@ func (info *ImageCreateInfo) c(a *allocator) *C.VkImageCreateInfo {
 		usage:                 C.VkImageUsageFlags(info.Usage),
 		sharingMode:           C.VkSharingMode(info.SharingMode),
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
-		pQueueFamilyIndices:   allocn[C.uint32_t](a, len(info.QueueFamilyIndices)),
+		pQueueFamilyIndices:   pinSliceAsCastedPtr[*C.uint32_t](a, info.QueueFamilyIndices),
 		initialLayout:         C.VkImageLayout(info.InitialLayout),
 	}
-	ucopy(unsafe.Pointer(cinfo.pQueueFamilyIndices), unsafe.Pointer(&info.QueueFamilyIndices), C.sizeof_uint32_t)
 	ucopy1(unsafe.Pointer(&cinfo.extent), unsafe.Pointer(&info.Extent), C.sizeof_VkExtent3D)
 	return cinfo
 }
@@ -4149,9 +4110,8 @@ func (info *DescriptorPoolCreateInfo) c(a *allocator) *C.VkDescriptorPoolCreateI
 		flags:         C.VkDescriptorPoolCreateFlags(info.Flags),
 		maxSets:       C.uint32_t(info.MaxSets),
 		poolSizeCount: C.uint32_t(len(info.PoolSizes)),
-		pPoolSizes:    allocn[C.VkDescriptorPoolSize](a, len(info.PoolSizes)),
+		pPoolSizes:    pinSliceAsCastedPtr[*C.VkDescriptorPoolSize](a, info.PoolSizes),
 	}
-	ucopy(unsafe.Pointer(cinfo.pPoolSizes), unsafe.Pointer(&info.PoolSizes), C.sizeof_VkDescriptorPoolSize)
 	return cinfo
 }
 
@@ -4209,15 +4169,13 @@ func (info *DescriptorSetLayoutCreateInfo) c(a *allocator) *C.VkDescriptorSetLay
 	}
 	arr := unsafe.Slice(cinfo.pBindings, len(info.Bindings))
 	for i := range arr {
-		samplers := allocn[C.VkSampler](a, len(info.Bindings[i].ImmutableSamplers))
 		arr[i] = C.VkDescriptorSetLayoutBinding{
 			binding:            C.uint32_t(info.Bindings[i].Binding),
 			descriptorType:     C.VkDescriptorType(info.Bindings[i].DescriptorType),
 			descriptorCount:    C.uint32_t(info.Bindings[i].DescriptorCount),
 			stageFlags:         C.VkShaderStageFlags(info.Bindings[i].StageFlags),
-			pImmutableSamplers: (*C.VkSampler)(samplers),
+			pImmutableSamplers: pinSliceAsCastedPtr[*C.VkSampler](a, info.Bindings[i].ImmutableSamplers),
 		}
-		ucopy(unsafe.Pointer(samplers), unsafe.Pointer(&info.Bindings[i].ImmutableSamplers), C.sizeof_VkSampler)
 	}
 	return cinfo
 }
@@ -4350,9 +4308,8 @@ func (info *DescriptorSetAllocateInfo) c(a *allocator) *C.VkDescriptorSetAllocat
 		pNext:              buildChain(a, info.Extensions),
 		descriptorPool:     info.DescriptorPool.hnd,
 		descriptorSetCount: C.uint32_t(len(info.Layouts)),
-		pSetLayouts:        allocn[C.VkDescriptorSetLayout](a, len(info.Layouts)),
+		pSetLayouts:        pinSliceAsCastedPtr[*C.VkDescriptorSetLayout](a, info.Layouts),
 	}
-	ucopy(unsafe.Pointer(cinfo.pSetLayouts), unsafe.Pointer(&info.Layouts), C.sizeof_VkDescriptorSetLayout)
 	return cinfo
 }
 
@@ -4419,26 +4376,6 @@ type WriteDescriptorSet struct {
 }
 
 func (set *WriteDescriptorSet) c(a *allocator, cset *C.VkWriteDescriptorSet) {
-	if safe {
-		n := 0
-		if set.ImageInfo != nil {
-			n++
-		}
-		if set.BufferInfo != nil {
-			n++
-		}
-		if set.TexelBufferView != nil {
-			n++
-		}
-		if n > 1 {
-			panic("only one of ImageInfo, BufferInfo, or TexelBufferView must be provided")
-		}
-	}
-
-	// We trust the user that only one of ImageInfo, BufferInfo, or
-	// TexelBufferView has been provided. If that invariant is broken,
-	// and safety checks are disable, invalid memory may be read.
-
 	*cset = C.VkWriteDescriptorSet{
 		sType:            C.VkStructureType(StructureTypeWriteDescriptorSet),
 		pNext:            buildChain(a, set.Extensions),
@@ -4447,13 +4384,10 @@ func (set *WriteDescriptorSet) c(a *allocator, cset *C.VkWriteDescriptorSet) {
 		dstArrayElement:  C.uint32_t(set.DstArrayElement),
 		descriptorCount:  C.uint32_t(len(set.ImageInfo) + len(set.BufferInfo) + len(set.TexelBufferView)),
 		descriptorType:   C.VkDescriptorType(set.DescriptorType),
-		pImageInfo:       allocn[C.VkDescriptorImageInfo](a, len(set.ImageInfo)),
-		pBufferInfo:      allocn[C.VkDescriptorBufferInfo](a, len(set.BufferInfo)),
-		pTexelBufferView: allocn[C.VkBufferView](a, len(set.TexelBufferView)),
+		pImageInfo:       pinSliceAsCastedPtr[*C.VkDescriptorImageInfo](a, set.ImageInfo),
+		pBufferInfo:      pinSliceAsCastedPtr[*C.VkDescriptorBufferInfo](a, set.BufferInfo),
+		pTexelBufferView: pinSliceAsCastedPtr[*C.VkBufferView](a, set.TexelBufferView),
 	}
-	ucopy(unsafe.Pointer(cset.pImageInfo), unsafe.Pointer(&set.ImageInfo), C.sizeof_VkDescriptorImageInfo)
-	ucopy(unsafe.Pointer(cset.pBufferInfo), unsafe.Pointer(&set.BufferInfo), C.sizeof_VkDescriptorBufferInfo)
-	ucopy(unsafe.Pointer(cset.pTexelBufferView), unsafe.Pointer(&set.TexelBufferView), C.sizeof_VkBufferView)
 }
 
 type DescriptorBufferInfo struct {

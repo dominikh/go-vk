@@ -124,22 +124,21 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
 		pNext:              info.Next,
 		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
-		pWaitSemaphores:    allocn[C.VkSemaphore](a, len(info.WaitSemaphores)),
+		pWaitSemaphores:    pinSliceAsCastedPtr[*C.VkSemaphore](a, info.WaitSemaphores),
 		swapchainCount:     C.uint32_t(len(info.Swapchains)),
 		pSwapchains:        allocn[C.VkSwapchainKHR](a, len(info.Swapchains)),
-		pImageIndices:      allocn[C.uint32_t](a, len(info.ImageIndices)),
+		pImageIndices:      pinSliceAsCastedPtr[*C.uint32_t](a, info.ImageIndices),
 	}
 	if len(results) != 0 {
 		cinfo.pResults = allocn[C.VkResult](a, len(info.Swapchains))
 	}
-	ucopy(unsafe.Pointer(cinfo.pWaitSemaphores), unsafe.Pointer(&info.WaitSemaphores), C.sizeof_VkSemaphore)
-	ucopy(unsafe.Pointer(cinfo.pImageIndices), unsafe.Pointer(&info.ImageIndices), C.sizeof_uint32_t)
 	arr := (*[math.MaxInt32]C.VkSwapchainKHR)(unsafe.Pointer(cinfo.pSwapchains))[:len(info.Swapchains)]
 	for i := range arr {
 		arr[i] = info.Swapchains[i].hnd
 	}
 
 	res := Result(C.domVkQueuePresentKHR(queue.fps[vkQueuePresentKHR], queue.hnd, cinfo))
+	// OPT we can avoid this copy, but we have to ensure that len(results) == len(info.Swapchains)
 	if len(results) != 0 {
 		copy(results, (*[math.MaxInt32]Result)(unsafe.Pointer(cinfo.pResults))[:len(info.Swapchains)])
 	}
