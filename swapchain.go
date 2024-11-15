@@ -3,6 +3,8 @@
 
 package vk
 
+// #cgo noescape domVkQueuePresentKHR
+// #cgo nocallback domVkQueuePresentKHR
 // #include <stdlib.h>
 // #include "vk.h"
 import "C"
@@ -119,8 +121,7 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := alloc[C.VkPresentInfoKHR](a)
-	*cinfo = C.VkPresentInfoKHR{
+	cinfo := C.VkPresentInfoKHR{
 		sType:              C.VkStructureType(StructureTypePresentInfoKHR),
 		pNext:              info.Next,
 		waitSemaphoreCount: C.uint32_t(len(info.WaitSemaphores)),
@@ -137,7 +138,7 @@ func (queue *Queue) Present(info *PresentInfoKHR, results []Result) error {
 		arr[i] = info.Swapchains[i].hnd
 	}
 
-	res := Result(C.domVkQueuePresentKHR(queue.fps[vkQueuePresentKHR], queue.hnd, cinfo))
+	res := Result(C.domVkQueuePresentKHR(queue.fps[vkQueuePresentKHR], queue.hnd, &cinfo))
 	// OPT we can avoid this copy, but we have to ensure that len(results) == len(info.Swapchains)
 	if len(results) != 0 {
 		copy(results, (*[math.MaxInt32]Result)(unsafe.Pointer(cinfo.pResults))[:len(info.Swapchains)])

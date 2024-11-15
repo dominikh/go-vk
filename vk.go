@@ -5,45 +5,73 @@ package vk
 
 // #cgo pkg-config: vulkan
 //
-// #cgo noescape domVkCreateInstance
-// #cgo noescape domVkEnumeratePhysicalDevices
-// #cgo noescape domVkGetPhysicalDeviceProperties2
-// #cgo noescape domVkGetPhysicalDeviceMemoryProperties2
-// #cgo noescape domVkGetPhysicalDeviceFeatures
-// #cgo noescape domVkCreateDevice
-// #cgo noescape domVkGetDeviceQueue2
-// #cgo noescape domVkBeginCommandBuffer
-// #cgo noescape domVkCmdClearColorImage
-// #cgo noescape domVkCreateCommandPool
 // #cgo noescape domVkAllocateCommandBuffers
-// #cgo noescape domVkCreateImageView
-// #cgo noescape domVkCreateShaderModule
+// #cgo noescape domVkAllocateDescriptorSets
+// #cgo noescape domVkAllocateMemory
+// #cgo noescape domVkBeginCommandBuffer
+// #cgo noescape domVkCmdBeginRenderPass
+// #cgo noescape domVkCmdClearColorImage
+// #cgo noescape domVkCreateBuffer
+// #cgo noescape domVkCreateBufferView
+// #cgo noescape domVkCreateCommandPool
+// #cgo noescape domVkCreateDescriptorPool
+// #cgo noescape domVkCreateDevice
+// #cgo noescape domVkCreateEvent
 // #cgo noescape domVkCreateFence
+// #cgo noescape domVkCreateFramebuffer
+// #cgo noescape domVkCreateImage
+// #cgo noescape domVkCreateImageView
+// #cgo noescape domVkCreateInstance
+// #cgo noescape domVkCreatePipelineCache
+// #cgo noescape domVkCreatePipelineLayout
+// #cgo noescape domVkCreateQueryPool
+// #cgo noescape domVkCreateSampler
+// #cgo noescape domVkCreateSemaphore
+// #cgo noescape domVkCreateShaderModule
+// #cgo noescape domVkCreateSwapchainKHR
+// #cgo noescape domVkEnumeratePhysicalDevices
 // #cgo noescape domVkGetBufferMemoryRequirements2
+// #cgo noescape domVkGetDeviceQueue2
 // #cgo noescape domVkGetImageMemoryRequirements2
+// #cgo noescape domVkGetPhysicalDeviceFeatures
 // #cgo noescape domVkGetPhysicalDeviceFormatProperties2
 // #cgo noescape domVkGetPhysicalDeviceImageFormatProperties2
-// #cgo noescape domVkCreateSwapchainKHR
+// #cgo noescape domVkGetPhysicalDeviceMemoryProperties2
+// #cgo noescape domVkGetPhysicalDeviceProperties2
 //
-// #cgo nocallback domVkCreateInstance
-// #cgo nocallback domVkEnumeratePhysicalDevices
-// #cgo nocallback domVkGetPhysicalDeviceProperties2
-// #cgo nocallback domVkGetPhysicalDeviceMemoryProperties2
-// #cgo nocallback domVkGetPhysicalDeviceFeatures
-// #cgo nocallback domVkCreateDevice
-// #cgo nocallback domVkGetDeviceQueue2
-// #cgo nocallback domVkBeginCommandBuffer
-// #cgo nocallback domVkCmdClearColorImage
-// #cgo nocallback domVkCreateCommandPool
 // #cgo nocallback domVkAllocateCommandBuffers
-// #cgo nocallback domVkCreateImageView
-// #cgo nocallback domVkCreateShaderModule
+// #cgo nocallback domVkAllocateDescriptorSets
+// #cgo nocallback domVkAllocateMemory
+// #cgo nocallback domVkBeginCommandBuffer
+// #cgo nocallback domVkCmdBeginRenderPass
+// #cgo nocallback domVkCmdClearColorImage
+// #cgo nocallback domVkCreateBuffer
+// #cgo nocallback domVkCreateBufferView
+// #cgo nocallback domVkCreateCommandPool
+// #cgo nocallback domVkCreateDescriptorPool
+// #cgo nocallback domVkCreateDevice
+// #cgo nocallback domVkCreateEvent
 // #cgo nocallback domVkCreateFence
+// #cgo nocallback domVkCreateFramebuffer
+// #cgo nocallback domVkCreateImage
+// #cgo nocallback domVkCreateImageView
+// #cgo nocallback domVkCreateInstance
+// #cgo nocallback domVkCreatePipelineCache
+// #cgo nocallback domVkCreatePipelineLayout
+// #cgo nocallback domVkCreateQueryPool
+// #cgo nocallback domVkCreateSampler
+// #cgo nocallback domVkCreateSemaphore
+// #cgo nocallback domVkCreateShaderModule
+// #cgo nocallback domVkCreateSwapchainKHR
+// #cgo nocallback domVkEnumeratePhysicalDevices
 // #cgo nocallback domVkGetBufferMemoryRequirements2
+// #cgo nocallback domVkGetDeviceQueue2
 // #cgo nocallback domVkGetImageMemoryRequirements2
+// #cgo nocallback domVkGetPhysicalDeviceFeatures
 // #cgo nocallback domVkGetPhysicalDeviceFormatProperties2
 // #cgo nocallback domVkGetPhysicalDeviceImageFormatProperties2
-// #cgo nocallback domVkCreateSwapchainKHR
+// #cgo nocallback domVkGetPhysicalDeviceMemoryProperties2
+// #cgo nocallback domVkGetPhysicalDeviceProperties2
 //
 // #include <stdlib.h>
 // #include "vk.h"
@@ -1653,26 +1681,20 @@ type DeviceQueueInfo2 struct {
 	QueueIndex       uint32
 }
 
-func (info *DeviceQueueInfo2) c(a *allocator) *C.VkDeviceQueueInfo2 {
-	cinfo := alloc[C.VkDeviceQueueInfo2](a)
-	*cinfo = C.VkDeviceQueueInfo2{
+func (dev *Device) Queue2(info *DeviceQueueInfo2) *Queue {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkDeviceQueueInfo2{
 		sType:            C.VkStructureType(StructureTypeDeviceQueueInfo2),
 		pNext:            buildChain(a, info.Extensions),
 		flags:            C.VkDeviceQueueCreateFlags(info.Flags),
 		queueFamilyIndex: C.uint32_t(info.QueueFamilyIndex),
 		queueIndex:       C.uint32_t(info.QueueIndex),
 	}
-	return cinfo
-}
-
-func (dev *Device) Queue2(info *DeviceQueueInfo2) *Queue {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	out := &Queue{fps: &dev.fps}
-	C.domVkGetDeviceQueue2(dev.fps[vkGetDeviceQueue2], dev.hnd, cinfo, &out.hnd)
+	C.domVkGetDeviceQueue2(dev.fps[vkGetDeviceQueue2], dev.hnd, &cinfo, &out.hnd)
 	return out
 }
 
@@ -1933,9 +1955,11 @@ func (buf *CommandBuffer) ClearDepthStencilImage(
 		safeish.SliceCastPtr[*C.VkImageSubresourceRange](ranges))
 }
 
-func (info *RenderPassBeginInfo) c(a *allocator) *C.VkRenderPassBeginInfo {
-	cinfo := alloc[C.VkRenderPassBeginInfo](a)
-	*cinfo = C.VkRenderPassBeginInfo{
+func (buf *CommandBuffer) BeginRenderPass(info *RenderPassBeginInfo, contents SubpassContents) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkRenderPassBeginInfo{
 		sType:           C.VkStructureType(StructureTypeRenderPassBeginInfo),
 		pNext:           buildChain(a, info.Extensions),
 		renderPass:      info.RenderPass.hnd,
@@ -1959,16 +1983,8 @@ func (info *RenderPassBeginInfo) c(a *allocator) *C.VkRenderPassBeginInfo {
 			panic(fmt.Sprintf("unreachable: %T", v))
 		}
 	}
-	return cinfo
-}
-
-func (buf *CommandBuffer) BeginRenderPass(info *RenderPassBeginInfo, contents SubpassContents) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
-	C.domVkCmdBeginRenderPass(buf.fps[vkCmdBeginRenderPass], buf.hnd, cinfo, C.VkSubpassContents(contents))
+	C.domVkCmdBeginRenderPass(buf.fps[vkCmdBeginRenderPass], buf.hnd, &cinfo, C.VkSubpassContents(contents))
 }
 
 func (buf *CommandBuffer) EndRenderPass() {
@@ -2948,9 +2964,11 @@ type PipelineLayoutCreateInfo struct {
 	PushConstantRanges []PushConstantRange
 }
 
-func (info *PipelineLayoutCreateInfo) c(a *allocator) *C.VkPipelineLayoutCreateInfo {
-	cinfo := alloc[C.VkPipelineLayoutCreateInfo](a)
-	*cinfo = C.VkPipelineLayoutCreateInfo{
+func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (PipelineLayout, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkPipelineLayoutCreateInfo{
 		sType:                  C.VkStructureType(StructureTypePipelineLayoutCreateInfo),
 		pNext:                  buildChain(a, info.Extensions),
 		flags:                  0,
@@ -2959,17 +2977,9 @@ func (info *PipelineLayoutCreateInfo) c(a *allocator) *C.VkPipelineLayoutCreateI
 		pushConstantRangeCount: C.uint32_t(len(info.PushConstantRanges)),
 		pPushConstantRanges:    pinSliceAsCastedPtr[*C.VkPushConstantRange](a, info.PushConstantRanges),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreatePipelineLayout(info *PipelineLayoutCreateInfo) (PipelineLayout, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	var out PipelineLayout
 	defer internalizeChain(info.Extensions, cinfo.pNext)
-	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, cinfo, nil, &out.hnd))
+	res := Result(C.domVkCreatePipelineLayout(dev.fps[vkCreatePipelineLayout], dev.hnd, &cinfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 
@@ -3293,9 +3303,11 @@ type FramebufferCreateInfo struct {
 	Layers      uint32
 }
 
-func (info *FramebufferCreateInfo) c(a *allocator) *C.VkFramebufferCreateInfo {
-	cinfo := alloc[C.VkFramebufferCreateInfo](a)
-	*cinfo = C.VkFramebufferCreateInfo{
+func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkFramebufferCreateInfo{
 		sType:           C.VkStructureType(StructureTypeFramebufferCreateInfo),
 		pNext:           buildChain(a, info.Extensions),
 		flags:           0,
@@ -3306,17 +3318,9 @@ func (info *FramebufferCreateInfo) c(a *allocator) *C.VkFramebufferCreateInfo {
 		height:          C.uint32_t(info.Height),
 		layers:          C.uint32_t(info.Layers),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateFramebuffer(info *FramebufferCreateInfo) (Framebuffer, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var fb Framebuffer
-	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, cinfo, nil, &fb.hnd))
+	res := Result(C.domVkCreateFramebuffer(dev.fps[vkCreateFramebuffer], dev.hnd, &cinfo, nil, &fb.hnd))
 	return fb, result2error(res)
 }
 
@@ -3391,23 +3395,17 @@ type SemaphoreCreateInfo struct {
 	Extensions []Extension
 }
 
-func (info *SemaphoreCreateInfo) c(a *allocator) *C.VkSemaphoreCreateInfo {
-	cinfo := alloc[C.VkSemaphoreCreateInfo](a)
-	*cinfo = C.VkSemaphoreCreateInfo{
-		sType: C.VkStructureType(StructureTypeSemaphoreCreateInfo),
-		pNext: buildChain(a, info.Extensions),
-	}
-	return cinfo
-}
-
 func (dev *Device) CreateSemaphore(info *SemaphoreCreateInfo) (Semaphore, error) {
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkSemaphoreCreateInfo{
+		sType: C.VkStructureType(StructureTypeSemaphoreCreateInfo),
+		pNext: buildChain(a, info.Extensions),
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var sem Semaphore
-	res := Result(C.domVkCreateSemaphore(dev.fps[vkCreateSemaphore], dev.hnd, cinfo, nil, &sem.hnd))
+	res := Result(C.domVkCreateSemaphore(dev.fps[vkCreateSemaphore], dev.hnd, &cinfo, nil, &sem.hnd))
 	return sem, result2error(res)
 }
 
@@ -3562,9 +3560,11 @@ type Buffer struct {
 	hnd C.VkBuffer
 }
 
-func (info *BufferCreateInfo) c(a *allocator) *C.VkBufferCreateInfo {
-	cinfo := alloc[C.VkBufferCreateInfo](a)
-	*cinfo = C.VkBufferCreateInfo{
+func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkBufferCreateInfo{
 		sType:                 C.VkStructureType(StructureTypeBufferCreateInfo),
 		pNext:                 buildChain(a, info.Extensions),
 		flags:                 C.VkBufferCreateFlags(info.Flags),
@@ -3574,17 +3574,9 @@ func (info *BufferCreateInfo) c(a *allocator) *C.VkBufferCreateInfo {
 		queueFamilyIndexCount: C.uint32_t(len(info.QueueFamilyIndices)),
 		pQueueFamilyIndices:   pinSliceAsCastedPtr[*C.uint32_t](a, info.QueueFamilyIndices),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateBuffer(info *BufferCreateInfo) (Buffer, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var buf Buffer
-	res := Result(C.domVkCreateBuffer(dev.fps[vkCreateBuffer], dev.hnd, cinfo, nil, &buf.hnd))
+	res := Result(C.domVkCreateBuffer(dev.fps[vkCreateBuffer], dev.hnd, &cinfo, nil, &buf.hnd))
 	return buf, result2error(res)
 }
 
@@ -3613,28 +3605,22 @@ type BufferMemoryRequirementsInfo2 struct {
 	Buffer     Buffer
 }
 
-func (info *BufferMemoryRequirementsInfo2) c(a *allocator) *C.VkBufferMemoryRequirementsInfo2 {
-	cinfo := alloc[C.VkBufferMemoryRequirementsInfo2](a)
-	*cinfo = C.VkBufferMemoryRequirementsInfo2{
-		sType:  C.VkStructureType(StructureTypeBufferMemoryRequirementsInfo2),
-		pNext:  buildChain(a, info.Extensions),
-		buffer: info.Buffer.hnd,
-	}
-	return cinfo
-}
-
 func (dev *Device) BufferMemoryRequirements2(info *BufferMemoryRequirementsInfo2, reqs *MemoryRequirements2) {
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkBufferMemoryRequirementsInfo2{
+		sType:  C.VkStructureType(StructureTypeBufferMemoryRequirementsInfo2),
+		pNext:  buildChain(a, info.Extensions),
+		buffer: info.Buffer.hnd,
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	creqs := C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(a, reqs.Extensions),
 	}
 	defer internalizeChain(reqs.Extensions, creqs.pNext)
-	C.domVkGetBufferMemoryRequirements2(dev.fps[vkGetBufferMemoryRequirements2], dev.hnd, cinfo, &creqs)
+	C.domVkGetBufferMemoryRequirements2(dev.fps[vkGetBufferMemoryRequirements2], dev.hnd, &cinfo, &creqs)
 
 	reqs.MemoryRequirements = safeish.Cast[MemoryRequirements](creqs.memoryRequirements)
 }
@@ -3643,17 +3629,6 @@ type MemoryAllocateInfo struct {
 	Extensions      []Extension
 	AllocationSize  DeviceSize
 	MemoryTypeIndex uint32
-}
-
-func (info *MemoryAllocateInfo) c(a *allocator) *C.VkMemoryAllocateInfo {
-	cinfo := alloc[C.VkMemoryAllocateInfo](a)
-	*cinfo = C.VkMemoryAllocateInfo{
-		sType:           C.VkStructureType(StructureTypeMemoryAllocateInfo),
-		pNext:           buildChain(a, info.Extensions),
-		allocationSize:  C.VkDeviceSize(info.AllocationSize),
-		memoryTypeIndex: C.uint32_t(info.MemoryTypeIndex),
-	}
-	return cinfo
 }
 
 // DeviceMemory is an opaque handle to a device memory object.
@@ -3666,10 +3641,15 @@ func (dev *Device) AllocateMemory(info *MemoryAllocateInfo) (DeviceMemory, error
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkMemoryAllocateInfo{
+		sType:           C.VkStructureType(StructureTypeMemoryAllocateInfo),
+		pNext:           buildChain(a, info.Extensions),
+		allocationSize:  C.VkDeviceSize(info.AllocationSize),
+		memoryTypeIndex: C.uint32_t(info.MemoryTypeIndex),
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var mem DeviceMemory
-	res := Result(C.domVkAllocateMemory(dev.fps[vkAllocateMemory], dev.hnd, cinfo, nil, &mem.hnd))
+	res := Result(C.domVkAllocateMemory(dev.fps[vkAllocateMemory], dev.hnd, &cinfo, nil, &mem.hnd))
 	return mem, result2error(res)
 }
 
@@ -3743,9 +3723,11 @@ type ImageCreateInfo struct {
 	InitialLayout      ImageLayout
 }
 
-func (info *ImageCreateInfo) c(a *allocator) *C.VkImageCreateInfo {
-	cinfo := alloc[C.VkImageCreateInfo](a)
-	*cinfo = C.VkImageCreateInfo{
+func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkImageCreateInfo{
 		sType:                 C.VkStructureType(StructureTypeImageCreateInfo),
 		pNext:                 buildChain(a, info.Extensions),
 		flags:                 C.VkImageCreateFlags(info.Flags),
@@ -3762,17 +3744,9 @@ func (info *ImageCreateInfo) c(a *allocator) *C.VkImageCreateInfo {
 		initialLayout:         C.VkImageLayout(info.InitialLayout),
 		extent:                safeish.Cast[C.VkExtent3D](info.Extent),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateImage(info *ImageCreateInfo) (Image, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var img Image
-	res := Result(C.domVkCreateImage(dev.fps[vkCreateImage], dev.hnd, cinfo, nil, &img.hnd))
+	res := Result(C.domVkCreateImage(dev.fps[vkCreateImage], dev.hnd, &cinfo, nil, &img.hnd))
 	return img, result2error(res)
 }
 
@@ -3802,24 +3776,18 @@ type EventCreateInfo struct {
 	Extensions []Extension
 }
 
-func (info *EventCreateInfo) c(a *allocator) *C.VkEventCreateInfo {
-	cinfo := alloc[C.VkEventCreateInfo](a)
-	*cinfo = C.VkEventCreateInfo{
-		sType: C.VkStructureType(StructureTypeEventCreateInfo),
-		pNext: buildChain(a, info.Extensions),
-		flags: 0,
-	}
-	return cinfo
-}
-
 func (dev *Device) CreateEvent(info *EventCreateInfo) (Event, error) {
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkEventCreateInfo{
+		sType: C.VkStructureType(StructureTypeEventCreateInfo),
+		pNext: buildChain(a, info.Extensions),
+		flags: 0,
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var ev Event
-	res := Result(C.domVkCreateEvent(dev.fps[vkCreateEvent], dev.hnd, cinfo, nil, &ev.hnd))
+	res := Result(C.domVkCreateEvent(dev.fps[vkCreateEvent], dev.hnd, &cinfo, nil, &ev.hnd))
 	return ev, result2error(res)
 }
 
@@ -3862,26 +3830,20 @@ type QueryPoolCreateInfo struct {
 	PipelineStatistics QueryPipelineStatisticFlags
 }
 
-func (info *QueryPoolCreateInfo) c(a *allocator) *C.VkQueryPoolCreateInfo {
-	cinfo := alloc[C.VkQueryPoolCreateInfo](a)
-	*cinfo = C.VkQueryPoolCreateInfo{
+func (dev *Device) CreateQueryPool(info *QueryPoolCreateInfo) (QueryPool, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkQueryPoolCreateInfo{
 		sType:              C.VkStructureType(StructureTypeQueryPoolCreateInfo),
 		pNext:              buildChain(a, info.Extensions),
 		queryType:          C.VkQueryType(info.QueryType),
 		queryCount:         C.uint32_t(info.QueryCount),
 		pipelineStatistics: C.VkQueryPipelineStatisticFlags(info.PipelineStatistics),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateQueryPool(info *QueryPoolCreateInfo) (QueryPool, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var out QueryPool
-	res := Result(C.domVkCreateQueryPool(dev.fps[vkCreateQueryPool], dev.hnd, cinfo, nil, &out.hnd))
+	res := Result(C.domVkCreateQueryPool(dev.fps[vkCreateQueryPool], dev.hnd, &cinfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 
@@ -3920,9 +3882,11 @@ type SamplerCreateInfo struct {
 	UnnormalizedCoordinates bool
 }
 
-func (info *SamplerCreateInfo) c(a *allocator) *C.VkSamplerCreateInfo {
-	cinfo := alloc[C.VkSamplerCreateInfo](a)
-	*cinfo = C.VkSamplerCreateInfo{
+func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkSamplerCreateInfo{
 		sType:                   C.VkStructureType(StructureTypeSamplerCreateInfo),
 		pNext:                   buildChain(a, info.Extensions),
 		magFilter:               C.VkFilter(info.MagFilter),
@@ -3941,17 +3905,9 @@ func (info *SamplerCreateInfo) c(a *allocator) *C.VkSamplerCreateInfo {
 		borderColor:             C.VkBorderColor(info.BorderColor),
 		unnormalizedCoordinates: vkBool(info.UnnormalizedCoordinates),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateSampler(info *SamplerCreateInfo) (Sampler, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var out Sampler
-	res := Result(C.domVkCreateSampler(dev.fps[vkCreateSampler], dev.hnd, cinfo, nil, &out.hnd))
+	res := Result(C.domVkCreateSampler(dev.fps[vkCreateSampler], dev.hnd, &cinfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 
@@ -3978,9 +3934,11 @@ type BufferViewCreateInfo struct {
 	Range      DeviceSize
 }
 
-func (info *BufferViewCreateInfo) c(a *allocator) *C.VkBufferViewCreateInfo {
-	cinfo := alloc[C.VkBufferViewCreateInfo](a)
-	*cinfo = C.VkBufferViewCreateInfo{
+func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkBufferViewCreateInfo{
 		sType:  C.VkStructureType(StructureTypeBufferViewCreateInfo),
 		pNext:  buildChain(a, info.Extensions),
 		flags:  0,
@@ -3989,17 +3947,9 @@ func (info *BufferViewCreateInfo) c(a *allocator) *C.VkBufferViewCreateInfo {
 		offset: C.VkDeviceSize(info.Offset),
 		_range: C.VkDeviceSize(info.Range),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreateBufferView(info *BufferViewCreateInfo) (BufferView, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var view BufferView
-	res := Result(C.domVkCreateBufferView(dev.fps[vkCreateBufferView], dev.hnd, cinfo, nil, &view.hnd))
+	res := Result(C.domVkCreateBufferView(dev.fps[vkCreateBufferView], dev.hnd, &cinfo, nil, &view.hnd))
 	return view, result2error(res)
 }
 
@@ -4027,26 +3977,20 @@ type PipelineCacheCreateInfo struct {
 	InitialData []byte
 }
 
-func (info *PipelineCacheCreateInfo) c(a *allocator) *C.VkPipelineCacheCreateInfo {
-	cinfo := alloc[C.VkPipelineCacheCreateInfo](a)
-	*cinfo = C.VkPipelineCacheCreateInfo{
+func (dev *Device) CreatePipelineCache(info *PipelineCacheCreateInfo) (PipelineCache, error) {
+	a := new(allocator)
+	defer a.free()
+
+	cinfo := C.VkPipelineCacheCreateInfo{
 		sType:           C.VkStructureType(StructureTypePipelineCacheCreateInfo),
 		pNext:           buildChain(a, info.Extensions),
 		flags:           0,
 		initialDataSize: C.size_t(len(info.InitialData)),
 		pInitialData:    unsafe.Pointer(unsafe.SliceData(info.InitialData)),
 	}
-	return cinfo
-}
-
-func (dev *Device) CreatePipelineCache(info *PipelineCacheCreateInfo) (PipelineCache, error) {
-	a := new(allocator)
-	defer a.free()
-
-	cinfo := info.c(a)
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var out PipelineCache
-	res := Result(C.domVkCreatePipelineCache(dev.fps[vkCreatePipelineCache], dev.hnd, cinfo, nil, &out.hnd))
+	res := Result(C.domVkCreatePipelineCache(dev.fps[vkCreatePipelineCache], dev.hnd, &cinfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 
@@ -4100,19 +4044,6 @@ type DescriptorPoolCreateInfo struct {
 	PoolSizes  []DescriptorPoolSize
 }
 
-func (info *DescriptorPoolCreateInfo) c(a *allocator) *C.VkDescriptorPoolCreateInfo {
-	cinfo := alloc[C.VkDescriptorPoolCreateInfo](a)
-	*cinfo = C.VkDescriptorPoolCreateInfo{
-		sType:         C.VkStructureType(StructureTypeDescriptorPoolCreateInfo),
-		pNext:         buildChain(a, info.Extensions),
-		flags:         C.VkDescriptorPoolCreateFlags(info.Flags),
-		maxSets:       C.uint32_t(info.MaxSets),
-		poolSizeCount: C.uint32_t(len(info.PoolSizes)),
-		pPoolSizes:    pinSliceAsCastedPtr[*C.VkDescriptorPoolSize](a, info.PoolSizes),
-	}
-	return cinfo
-}
-
 // A descriptor pool maintains a pool of descriptors, from which descriptor sets are allocated.
 // Descriptor pools are externally synchronized, meaning that the application must not
 // allocate and/or free descriptor sets from the same pool in multiple threads simultaneously.
@@ -4125,10 +4056,17 @@ func (dev *Device) CreateDescriptorPool(info *DescriptorPoolCreateInfo) (Descrip
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkDescriptorPoolCreateInfo{
+		sType:         C.VkStructureType(StructureTypeDescriptorPoolCreateInfo),
+		pNext:         buildChain(a, info.Extensions),
+		flags:         C.VkDescriptorPoolCreateFlags(info.Flags),
+		maxSets:       C.uint32_t(info.MaxSets),
+		poolSizeCount: C.uint32_t(len(info.PoolSizes)),
+		pPoolSizes:    pinSliceAsCastedPtr[*C.VkDescriptorPoolSize](a, info.PoolSizes),
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	var out DescriptorPool
-	res := Result(C.domVkCreateDescriptorPool(dev.fps[vkCreateDescriptorPool], dev.hnd, cinfo, nil, &out.hnd))
+	res := Result(C.domVkCreateDescriptorPool(dev.fps[vkCreateDescriptorPool], dev.hnd, &cinfo, nil, &out.hnd))
 	return out, result2error(res)
 }
 
@@ -4263,16 +4201,6 @@ type ImageMemoryRequirementsInfo2 struct {
 	Image      Image
 }
 
-func (info *ImageMemoryRequirementsInfo2) c(a *allocator) *C.VkImageMemoryRequirementsInfo2 {
-	cinfo := alloc[C.VkImageMemoryRequirementsInfo2](a)
-	*cinfo = C.VkImageMemoryRequirementsInfo2{
-		sType: C.VkStructureType(StructureTypeImageMemoryRequirementsInfo2),
-		pNext: buildChain(a, info.Extensions),
-		image: info.Image.hnd,
-	}
-	return cinfo
-}
-
 type MemoryRequirements2 struct {
 	Extensions         []Extension
 	MemoryRequirements MemoryRequirements
@@ -4282,14 +4210,18 @@ func (dev *Device) ImageMemoryRequirements2(info *ImageMemoryRequirementsInfo2, 
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkImageMemoryRequirementsInfo2{
+		sType: C.VkStructureType(StructureTypeImageMemoryRequirementsInfo2),
+		pNext: buildChain(a, info.Extensions),
+		image: info.Image.hnd,
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	creqs := C.VkMemoryRequirements2{
 		sType: C.VkStructureType(StructureTypeMemoryRequirements2),
 		pNext: buildChain(a, reqs.Extensions),
 	}
 	defer internalizeChain(reqs.Extensions, creqs.pNext)
-	C.domVkGetImageMemoryRequirements2(dev.fps[vkGetImageMemoryRequirements2], dev.hnd, cinfo, &creqs)
+	C.domVkGetImageMemoryRequirements2(dev.fps[vkGetImageMemoryRequirements2], dev.hnd, &cinfo, &creqs)
 	reqs.MemoryRequirements = safeish.Cast[MemoryRequirements](creqs.memoryRequirements)
 }
 
@@ -4297,18 +4229,6 @@ type DescriptorSetAllocateInfo struct {
 	Extensions     []Extension
 	DescriptorPool DescriptorPool
 	Layouts        []DescriptorSetLayout
-}
-
-func (info *DescriptorSetAllocateInfo) c(a *allocator) *C.VkDescriptorSetAllocateInfo {
-	cinfo := alloc[C.VkDescriptorSetAllocateInfo](a)
-	*cinfo = C.VkDescriptorSetAllocateInfo{
-		sType:              C.VkStructureType(StructureTypeDescriptorSetAllocateInfo),
-		pNext:              buildChain(a, info.Extensions),
-		descriptorPool:     info.DescriptorPool.hnd,
-		descriptorSetCount: C.uint32_t(len(info.Layouts)),
-		pSetLayouts:        pinSliceAsCastedPtr[*C.VkDescriptorSetLayout](a, info.Layouts),
-	}
-	return cinfo
 }
 
 type DescriptorSet struct {
@@ -4323,10 +4243,16 @@ func (dev *Device) AllocateDescriptorSets(info DescriptorSetAllocateInfo) ([]Des
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkDescriptorSetAllocateInfo{
+		sType:              C.VkStructureType(StructureTypeDescriptorSetAllocateInfo),
+		pNext:              buildChain(a, info.Extensions),
+		descriptorPool:     info.DescriptorPool.hnd,
+		descriptorSetCount: C.uint32_t(len(info.Layouts)),
+		pSetLayouts:        pinSliceAsCastedPtr[*C.VkDescriptorSetLayout](a, info.Layouts),
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	out := make([]DescriptorSet, len(info.Layouts))
-	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, cinfo, safeish.SliceCastPtr[*C.VkDescriptorSet](out)))
+	res := Result(C.domVkAllocateDescriptorSets(dev.fps[vkAllocateDescriptorSets], dev.hnd, &cinfo, safeish.SliceCastPtr[*C.VkDescriptorSet](out)))
 	return out, result2error(res)
 }
 
@@ -4563,20 +4489,6 @@ type PhysicalDeviceImageFormatInfo2 struct {
 	Flags      ImageCreateFlags
 }
 
-func (info *PhysicalDeviceImageFormatInfo2) c(a *allocator) *C.VkPhysicalDeviceImageFormatInfo2 {
-	cinfo := alloc[C.VkPhysicalDeviceImageFormatInfo2](a)
-	*cinfo = C.VkPhysicalDeviceImageFormatInfo2{
-		sType:  C.VkStructureType(StructureTypePhysicalDeviceImageFormatInfo2),
-		pNext:  buildChain(a, info.Extensions),
-		format: C.VkFormat(info.Format),
-		_type:  C.VkImageType(info.Type),
-		tiling: C.VkImageTiling(info.Tiling),
-		usage:  C.VkImageUsageFlags(info.Usage),
-		flags:  C.VkImageCreateFlags(info.Flags),
-	}
-	return cinfo
-}
-
 type ImageFormatProperties2 struct {
 	Extensions            []Extension
 	ImageFormatProperties ImageFormatProperties
@@ -4586,14 +4498,22 @@ func (dev *PhysicalDevice) ImageFormatProperties2(info *PhysicalDeviceImageForma
 	a := new(allocator)
 	defer a.free()
 
-	cinfo := info.c(a)
+	cinfo := C.VkPhysicalDeviceImageFormatInfo2{
+		sType:  C.VkStructureType(StructureTypePhysicalDeviceImageFormatInfo2),
+		pNext:  buildChain(a, info.Extensions),
+		format: C.VkFormat(info.Format),
+		_type:  C.VkImageType(info.Type),
+		tiling: C.VkImageTiling(info.Tiling),
+		usage:  C.VkImageUsageFlags(info.Usage),
+		flags:  C.VkImageCreateFlags(info.Flags),
+	}
 	defer internalizeChain(info.Extensions, cinfo.pNext)
 	cprops := C.VkImageFormatProperties2{
 		sType: C.VkStructureType(StructureTypeImageFormatProperties2),
 		pNext: buildChain(a, props.Extensions),
 	}
 	defer internalizeChain(props.Extensions, cprops.pNext)
-	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties2], dev.hnd, cinfo, &cprops))
+	res := Result(C.domVkGetPhysicalDeviceImageFormatProperties2(dev.instance.fps[vkGetPhysicalDeviceImageFormatProperties2], dev.hnd, &cinfo, &cprops))
 	props.ImageFormatProperties = safeish.Cast[ImageFormatProperties](cprops.imageFormatProperties)
 	return result2error(res)
 }
